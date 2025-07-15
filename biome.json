@@ -1,0 +1,5 @@
+{
+  "extends": [],
+  "linter": { "rules": { "recommended": true } },
+  "formatter": { "enabled": true }
+}

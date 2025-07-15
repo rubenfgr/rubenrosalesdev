@@ -202,7 +202,90 @@ Install Shadcn components when needed:
 npx shadcn@latest add button card input dialog
 ```
 
-## Common Patterns
+
+## Principios de Arquitectura
+
+- Mantén la lógica de negocio separada de la UI.
+- Usa hooks personalizados para lógica reutilizable.
+- Prefiere composición de componentes sobre herencia.
+- Los datos y la UI deben estar desacoplados: los componentes reciben datos validados y tipados.
+
+## TypeScript
+
+- Usa `strict: true` en `tsconfig.json`.
+- Declara todos los props y estados con tipos explícitos.
+- Prefiere `z.infer<typeof schema>` para tipar datos validados.
+- No uses `any` ni `as` innecesario.
+
+## Validación y Errores
+
+- Valida toda entrada/salida externa con Zod.
+- Los endpoints de API deben devolver errores claros y tipados.
+- Usa boundaries (`errorBoundary`, `pendingBoundary`) en todas las rutas.
+- Muestra mensajes de error accesibles y amigables.
+
+## Accesibilidad (refuerzo)
+
+- Usa HTML semántico siempre que sea posible.
+- Añade `aria-*` solo cuando sea necesario.
+- Usa `role="alert"` para mensajes de error.
+- Asegúrate de que todos los inputs tengan `label` asociado.
+- Testea con herramientas como Lighthouse o axe.
+
+## Ejemplo de Hook Personalizado
+
+```typescript
+// src/hooks/useIsMobile.ts
+import { useMediaQuery } from '@tanstack/react-query'
+
+export function useIsMobile() {
+  return useMediaQuery('(max-width: 768px)')
+}
+```
+
+## Organización de Archivos (detallada)
+
+- `src/components/ui/`: Solo componentes Shadcn/ui.
+- `src/components/common/`: Componentes propios reutilizables.
+- `src/hooks/`: Hooks personalizados.
+- `src/lib/`: Utilidades, helpers y validaciones.
+- `src/routes/`: Rutas file-based.
+- `src/types/`: Tipos globales y compartidos.
+
+
+## Linter y Formateador: Biome
+
+- Usa [Biome](https://biomejs.dev/) como linter y formateador para todo el código TypeScript, JavaScript, JSON, CSS y Markdown.
+- Configura Biome en la raíz del proyecto con un archivo `biome.json`.
+- Integra Biome con tu editor (VS Code: instala la extensión oficial).
+- Usa los siguientes comandos recomendados:
+  - `npx biome check .` para linting
+  - `npx biome format .` para formatear todo el proyecto
+- Añade scripts en `package.json`:
+
+```json
+{
+  "scripts": {
+    "lint": "biome check .",
+    "format": "biome format ."
+  }
+}
+```
+
+- Biome debe ejecutarse en CI antes de cada deploy.
+- No aceptes PRs que no pasen el linting y formateo de Biome.
+
+Ejemplo de configuración mínima (`biome.json`):
+
+```json
+{
+  "extends": [],
+  "linter": { "rules": { "recommended": true } },
+  "formatter": { "enabled": true }
+}
+```
+
+---
 
 - Always validate external data with Zod
 - Use route loaders for initial data, React Query for updates
