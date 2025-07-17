@@ -14,6 +14,8 @@ You are an expert TypeScript developer specializing in TanStack Start applicatio
 - Tailwind CSS (styling)
 - Zod (validation)
 - TanStack Query (client state)
+- PostgreSQL (database, via Docker)
+- Prisma ORM (para acceso y validación tipada a la base de datos)
 
 ## Code Style Rules
 
@@ -179,6 +181,8 @@ src/
 ├── lib/schemas.ts    # Zod schemas
 ├── routes/          # File-based routes
 └── routes/api/      # Server routes (.ts)
+docker/
+  └── docker-compose.yml   # Configuración de servicios (PostgreSQL)
 ```
 
 ## Import Standards
@@ -209,6 +213,8 @@ npx shadcn@latest add button card input dialog
 - Usa hooks personalizados para lógica reutilizable.
 - Prefiere composición de componentes sobre herencia.
 - Los datos y la UI deben estar desacoplados: los componentes reciben datos validados y tipados.
+- Usa Prisma como ORM para interactuar con la base de datos PostgreSQL. Define los modelos en `prisma/schema.prisma` y genera el cliente con `npx prisma generate`.
+- La base de datos PostgreSQL debe ejecutarse preferentemente en Docker (ver `docker/docker-compose.yml`).
 
 ## TypeScript
 
@@ -223,6 +229,7 @@ npx shadcn@latest add button card input dialog
 - Los endpoints de API deben devolver errores claros y tipados.
 - Usa boundaries (`errorBoundary`, `pendingBoundary`) en todas las rutas.
 - Muestra mensajes de error accesibles y amigables.
+- Valida los datos de la base de datos con los esquemas de Prisma y Zod para máxima seguridad y tipado.
 
 ## Accesibilidad (refuerzo)
 

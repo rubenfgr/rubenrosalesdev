@@ -27,6 +27,7 @@ Portfolio profesional para Ruben Rosales, desarrollador full stack web con exper
 - Los componentes de UI deben ser reutilizables y basados en Shadcn/ui.
 - Usar rutas file-based en `src/routes/` para navegación y SSR.
 - Importaciones internas siempre con el alias `@/`.
+- Todos los comentarios y código deben estar en ingles
 
 ## Buenas Prácticas
 
