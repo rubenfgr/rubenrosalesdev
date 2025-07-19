@@ -1,29 +1,47 @@
-import { PrismaClient, Certification } from '@prisma/client';
 
-const prisma = new PrismaClient();
+import { Certification } from '@prisma/client';
+import { prisma } from '../shared/prisma';
 
-export async function getAllCertifications(): Promise<Certification[]> {
+
+
+const getAllCertifications = async (): Promise<Certification[]> => {
   return prisma.certification.findMany({
     orderBy: { date: 'desc' },
     include: { user: true },
   });
-}
+};
 
-export async function getCertificationById(id: string): Promise<Certification | null> {
+
+
+const getCertificationById = async (id: string): Promise<Certification | null> => {
   return prisma.certification.findUnique({
     where: { id },
     include: { user: true },
   });
-}
+};
 
-export async function createCertification(data: Omit<Certification, 'id'>): Promise<Certification> {
+
+
+const createCertification = async (data: Omit<Certification, 'id'>): Promise<Certification> => {
   return prisma.certification.create({ data });
-}
+};
 
-export async function updateCertification(id: string, data: Partial<Certification>): Promise<Certification> {
+
+
+const updateCertification = async (id: string, data: Partial<Certification>): Promise<Certification> => {
   return prisma.certification.update({ where: { id }, data });
-}
+};
 
-export async function deleteCertification(id: string): Promise<Certification> {
+
+
+const deleteCertification = async (id: string): Promise<Certification> => {
   return prisma.certification.delete({ where: { id } });
-}
+};
+
+export const certificationService = {
+  getAllCertifications,
+  getCertificationById,
+  createCertification,
+  updateCertification,
+  deleteCertification,
+};
