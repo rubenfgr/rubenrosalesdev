@@ -11,6 +11,8 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from '~/components/ui/tabs';
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from '~/components/ui/dialog';
 import { useForm } from '@tanstack/react-form';
 import type { AnyFieldApi } from '@tanstack/react-form';
+import { useDeleteCertification } from './useDeleteCertification.hook';
+import { useUpdateCertification } from './useUpdateCertification';
 
 export const Route = createFileRoute('/admin/')({
   component: AdminDashboard,
@@ -31,22 +33,48 @@ const certificationFormSchema = z.object({
   name: z.string().min(2),
   issuer: z.string().min(2),
   date: z.string().min(4),
-  url: z.string().url().optional().or(z.literal('')),
+  url: z.string().url().or(z.literal('')),
   userId: z.string().min(1),
 });
 
 type CertificationFormValues = z.infer<typeof certificationFormSchema>;
 
 
-function AddCertificationForm() {
-  const mutation = useCreateCertification();
+function AddCertificationForm({ cert }: { cert?: CertificationDTO }) {
+  const createCertification = useCreateCertification();
+  const updateCertification = useUpdateCertification();
   const form = useForm({
     defaultValues: {
-      name: '',
-      issuer: '',
-      date: '',
-      url: '',
-      userId: '',
+      name: cert?.name || '',
+      issuer: cert?.issuer || '',
+      date: cert?.date ? new Date(cert.date).toISOString().split('T')[0] : '',
+      url: cert?.url || '',
+      userId: cert?.userId || '',
+    },
+    onSubmit: async (props: { value: CertificationFormValues }) => {
+        const { value: values } = props;
+        const data: CertificationInputDTO = {
+            name: values.name,
+            issuer: values.issuer,
+            date: new Date(values.date),
+            url: values.url || null,
+            userId: values.userId,
+        };
+        console.log('Submitting certification data:', data);
+        if (cert && cert.id) {
+          await updateCertification.mutateAsync({ id: cert.id, data });
+        } else {
+          await createCertification.mutateAsync(data);
+        }
+    },
+    validators: {
+        onChange: z.object({
+          name: z.string().min(2),
+          issuer: z.string().min(2),
+          date: z.string().min(4),
+          url: z.string().url().or(z.literal('')),
+          userId: z.string().min(1),
+        }),
     },
   });
 
@@ -149,18 +177,28 @@ function AddCertificationForm() {
         <form.Subscribe selector={state => [state.canSubmit, state.isSubmitting]}>
           {([canSubmit, isSubmitting]) => (
             <Button type="submit" disabled={!canSubmit}>
-              {isSubmitting || mutation.isPending ? 'Adding...' : 'Add Certification'}
+              {isSubmitting || createCertification.isPending ? 'Adding...' : 'Add Certification'}
             </Button>
           )}
         </form.Subscribe>
-        {mutation.isError && <div className="text-red-500 text-xs">{mutation.error.message}</div>}
-        {mutation.isSuccess && <div className="text-green-600 text-xs">Certification added!</div>}
+        {createCertification.isError && <div className="text-red-500 text-xs">{createCertification.error.message}</div>}
+        {createCertification.isSuccess && <div className="text-green-600 text-xs">Certification added!</div>}
       </form>
   );
 }
 
 export default function AdminDashboard() {
   const { data: certifications = [], isLoading, error } = useCertifications();
+  const deleteCertification = useDeleteCertification();
+
+  const handleDeleteCertification = async (data: { id: string }) => {
+    try {
+      await deleteCertification.mutateAsync(data);
+    } catch (err) {
+      console.error('Error deleting certification:', err);
+    }
+  };
+
   return (
     <div className="min-h-screen bg-gray-50 p-8">
       <Card>
@@ -230,11 +268,11 @@ export default function AdminDashboard() {
                                 <DialogHeader>
                                   <DialogTitle>Edit Certification</DialogTitle>
                                 </DialogHeader>
-                                {/* TODO: Edit Certification Form */}
+                                <AddCertificationForm cert={cert} />
                                 <div>Form goes here</div>
                               </DialogContent>
                             </Dialog>
-                            <Button size="sm" variant="destructive">Delete</Button>
+                            <Button size="sm" variant="destructive"  onClick={() => handleDeleteCertification({ id: cert.id })}>Delete</Button>
                           </td>
                         </tr>
                       ))}
