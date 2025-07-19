@@ -1,3 +1,134 @@
+import * as React from 'react';
+
+function CertificationsDataTable({ data, onEdit, onDelete }: {
+  data: CertificationDTO[];
+  onEdit: (cert: CertificationDTO) => React.ReactNode;
+  onDelete: (cert: CertificationDTO) => React.ReactNode;
+}) {
+  const [filter, setFilter] = React.useState('');
+  const [sortKey, setSortKey] = React.useState<keyof CertificationDTO | null>(null);
+  const [sortDesc, setSortDesc] = React.useState(false);
+  const [page, setPage] = React.useState(0);
+  const pageSize = 10;
+
+  // Filtering
+  const filtered = React.useMemo(() => {
+    if (!filter) return data;
+    const f = filter.toLowerCase();
+    return data.filter(cert =>
+      cert.name.toLowerCase().includes(f) ||
+      cert.issuer.toLowerCase().includes(f)
+    );
+  }, [data, filter]);
+
+  // Sorting
+  const sorted = React.useMemo(() => {
+    if (!sortKey) return filtered;
+    return [...filtered].sort((a, b) => {
+      const aValue = a[sortKey];
+      const bValue = b[sortKey];
+      if (aValue == null) return 1;
+      if (bValue == null) return -1;
+      if (typeof aValue === 'string' && typeof bValue === 'string') {
+        return sortDesc ? bValue.localeCompare(aValue) : aValue.localeCompare(bValue);
+      }
+      if (aValue < bValue) return sortDesc ? 1 : -1;
+      if (aValue > bValue) return sortDesc ? -1 : 1;
+      return 0;
+    });
+  }, [filtered, sortKey, sortDesc]);
+
+  // Pagination
+  const paged = React.useMemo(() => {
+    const start = page * pageSize;
+    return sorted.slice(start, start + pageSize);
+  }, [sorted, page, pageSize]);
+
+  // Columns
+  const columns = [
+    {
+      accessorKey: 'name',
+      header: () => (
+        <button type="button" className="font-bold" onClick={() => handleSort('name')}>Name</button>
+      ),
+      cell: (info: any) => String(info.getValue()),
+    },
+    {
+      accessorKey: 'issuer',
+      header: () => (
+        <button type="button" className="font-bold" onClick={() => handleSort('issuer')}>Issuer</button>
+      ),
+      cell: (info: any) => String(info.getValue()),
+    },
+    {
+      accessorKey: 'date',
+      header: () => (
+        <button type="button" className="font-bold" onClick={() => handleSort('date')}>Date</button>
+      ),
+      cell: (info: any) => info.row.original.date ? new Date(info.row.original.date).toLocaleDateString() : '',
+    },
+    {
+      accessorKey: 'url',
+      header: 'URL',
+      cell: (info: any) => info.row.original.url ? (
+        <a href={info.row.original.url} className="text-blue-600 underline" target="_blank" rel="noopener noreferrer">Link</a>
+      ) : (
+        <span className="text-gray-400">—</span>
+      ),
+    },
+    {
+      id: 'actions',
+      header: 'Actions',
+      cell: (info: any) => (
+        <div className="flex gap-2">
+          {onEdit(info.row.original)}
+          {onDelete(info.row.original)}
+        </div>
+      ),
+    },
+  ];
+
+  function handleSort(key: keyof CertificationDTO) {
+    if (sortKey === key) {
+      setSortDesc(d => !d);
+    } else {
+      setSortKey(key);
+      setSortDesc(false);
+    }
+  }
+
+  function handlePageChange(newPage: number) {
+    setPage(newPage);
+  }
+
+  return (
+    <div>
+      <div className="flex items-center gap-2 mb-2">
+        <input
+          type="text"
+          placeholder="Search by name or issuer..."
+          value={filter}
+          onChange={e => setFilter(e.target.value)}
+          className="border rounded px-2 py-1"
+        />
+      </div>
+      <DataTable columns={columns} data={paged} />
+      <div className="flex justify-between items-center mt-2">
+        <button
+          className="px-2 py-1 border rounded"
+          disabled={page === 0}
+          onClick={() => handlePageChange(page - 1)}
+        >Previous</button>
+        <span>Page {page + 1} of {Math.ceil(sorted.length / pageSize)}</span>
+        <button
+          className="px-2 py-1 border rounded"
+          disabled={page + 1 >= Math.ceil(sorted.length / pageSize)}
+          onClick={() => handlePageChange(page + 1)}
+        >Next</button>
+      </div>
+    </div>
+  );
+}
 import { createFileRoute } from '@tanstack/react-router';
 
 
@@ -13,6 +144,50 @@ import { useForm } from '@tanstack/react-form';
 import type { AnyFieldApi } from '@tanstack/react-form';
 import { useDeleteCertification } from './useDeleteCertification.hook';
 import { useUpdateCertification } from './useUpdateCertification';
+import type { ColumnDef } from '@tanstack/react-table';
+import { DataTable } from '~/components/ui/data-table';
+
+function certificationColumns({ onEdit, onDelete }: {
+  onEdit: (cert: CertificationDTO) => React.ReactNode;
+  onDelete: (cert: CertificationDTO) => React.ReactNode;
+}): ColumnDef<CertificationDTO>[] {
+  return [
+    {
+      accessorKey: 'name',
+      header: 'Name',
+      cell: (info) => String(info.getValue()),
+    },
+    {
+      accessorKey: 'issuer',
+      header: 'Issuer',
+      cell: (info) => String(info.getValue()),
+    },
+    {
+      accessorKey: 'date',
+      header: 'Date',
+      cell: (info: { row: { original: CertificationDTO } }) => info.row.original.date ? new Date(info.row.original.date).toLocaleDateString() : '',
+    },
+    {
+      accessorKey: 'url',
+      header: 'URL',
+      cell: (info: { row: { original: CertificationDTO } }) => info.row.original.url ? (
+        <a href={info.row.original.url} className="text-blue-600 underline" target="_blank" rel="noopener noreferrer">Link</a>
+      ) : (
+        <span className="text-gray-400">—</span>
+      ),
+    },
+    {
+      id: 'actions',
+      header: 'Actions',
+      cell: (info: { row: { original: CertificationDTO } }) => (
+        <div className="flex gap-2">
+          {onEdit(info.row.original)}
+          {onDelete(info.row.original)}
+        </div>
+      ),
+    },
+  ];
+}
 
 export const Route = createFileRoute('/admin/')({
   component: AdminDashboard,
@@ -235,50 +410,25 @@ export default function AdminDashboard() {
               ) : error ? (
                 <div className="text-red-500">{error.message}</div>
               ) : (
-                <div className="overflow-x-auto">
-                  <table className="min-w-full bg-white border rounded shadow">
-                    <thead>
-                      <tr>
-                        <th className="px-4 py-2 text-left">Name</th>
-                        <th className="px-4 py-2 text-left">Issuer</th>
-                        <th className="px-4 py-2 text-left">Date</th>
-                        <th className="px-4 py-2 text-left">URL</th>
-                        <th className="px-4 py-2 text-left">Actions</th>
-                      </tr>
-                    </thead>
-                    <tbody>
-                      {(certifications as CertificationDTO[]).map(cert => (
-                        <tr key={cert.id} className="border-t">
-                          <td className="px-4 py-2">{cert.name}</td>
-                          <td className="px-4 py-2">{cert.issuer}</td>
-                          <td className="px-4 py-2">{cert.date ? new Date(cert.date).toLocaleDateString() : ''}</td>
-                          <td className="px-4 py-2">
-                            {cert.url ? (
-                              <a href={cert.url} className="text-blue-600 underline" target="_blank" rel="noopener noreferrer">Link</a>
-                            ) : (
-                              <span className="text-gray-400">—</span>
-                            )}
-                          </td>
-                          <td className="px-4 py-2 flex gap-2">
-                            <Dialog>
-                              <DialogTrigger asChild>
-                                <Button size="sm" variant="outline">Edit</Button>
-                              </DialogTrigger>
-                              <DialogContent>
-                                <DialogHeader>
-                                  <DialogTitle>Edit Certification</DialogTitle>
-                                </DialogHeader>
-                                <AddCertificationForm cert={cert} />
-                                <div>Form goes here</div>
-                              </DialogContent>
-                            </Dialog>
-                            <Button size="sm" variant="destructive"  onClick={() => handleDeleteCertification({ id: cert.id })}>Delete</Button>
-                          </td>
-                        </tr>
-                      ))}
-                    </tbody>
-                  </table>
-                </div>
+                <CertificationsDataTable
+                  data={certifications as CertificationDTO[]}
+                  onEdit={cert => (
+                    <Dialog>
+                      <DialogTrigger asChild>
+                        <Button size="sm" variant="outline">Edit</Button>
+                      </DialogTrigger>
+                      <DialogContent>
+                        <DialogHeader>
+                          <DialogTitle>Edit Certification</DialogTitle>
+                        </DialogHeader>
+                        <AddCertificationForm cert={cert} />
+                      </DialogContent>
+                    </Dialog>
+                  )}
+                  onDelete={cert => (
+                    <Button size="sm" variant="destructive" onClick={() => handleDeleteCertification({ id: cert.id })}>Delete</Button>
+                  )}
+                />
               )}
             </TabsContent>
             <TabsContent value="projects">
