@@ -1,5 +1,22 @@
 import * as React from 'react';
 
+import { createFileRoute } from '@tanstack/react-router';
+
+
+import type { AnyFieldApi } from '@tanstack/react-form';
+import { useForm } from '@tanstack/react-form';
+import { z } from 'zod';
+import { Button } from '~/components/ui/button';
+import { Card, CardContent, CardHeader, CardTitle } from '~/components/ui/card';
+import { DataTable } from '~/components/ui/data-table';
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from '~/components/ui/dialog';
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '~/components/ui/tabs';
+import type { CertificationDTO, CertificationInputDTO } from '../../server/models/certification.model';
+import { useCertifications } from './useCertifications.hook';
+import { useCreateCertification } from './useCreateCertification.hook';
+import { useDeleteCertification } from './useDeleteCertification.hook';
+import { useUpdateCertification } from './useUpdateCertification';
+
 function CertificationsDataTable({ data, onEdit, onDelete }: {
   data: CertificationDTO[];
   onEdit: (cert: CertificationDTO) => React.ReactNode;
@@ -128,65 +145,6 @@ function CertificationsDataTable({ data, onEdit, onDelete }: {
       </div>
     </div>
   );
-}
-import { createFileRoute } from '@tanstack/react-router';
-
-
-import { useCertifications } from './useCertifications.hook';
-import type { CertificationDTO, CertificationInputDTO } from '../../server/models/certification.model';
-import { useCreateCertification } from './useCreateCertification.hook';
-import { z } from 'zod';
-import { Button } from '~/components/ui/button';
-import { Card, CardContent, CardHeader, CardTitle } from '~/components/ui/card';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '~/components/ui/tabs';
-import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from '~/components/ui/dialog';
-import { useForm } from '@tanstack/react-form';
-import type { AnyFieldApi } from '@tanstack/react-form';
-import { useDeleteCertification } from './useDeleteCertification.hook';
-import { useUpdateCertification } from './useUpdateCertification';
-import type { ColumnDef } from '@tanstack/react-table';
-import { DataTable } from '~/components/ui/data-table';
-
-function certificationColumns({ onEdit, onDelete }: {
-  onEdit: (cert: CertificationDTO) => React.ReactNode;
-  onDelete: (cert: CertificationDTO) => React.ReactNode;
-}): ColumnDef<CertificationDTO>[] {
-  return [
-    {
-      accessorKey: 'name',
-      header: 'Name',
-      cell: (info) => String(info.getValue()),
-    },
-    {
-      accessorKey: 'issuer',
-      header: 'Issuer',
-      cell: (info) => String(info.getValue()),
-    },
-    {
-      accessorKey: 'date',
-      header: 'Date',
-      cell: (info: { row: { original: CertificationDTO } }) => info.row.original.date ? new Date(info.row.original.date).toLocaleDateString() : '',
-    },
-    {
-      accessorKey: 'url',
-      header: 'URL',
-      cell: (info: { row: { original: CertificationDTO } }) => info.row.original.url ? (
-        <a href={info.row.original.url} className="text-blue-600 underline" target="_blank" rel="noopener noreferrer">Link</a>
-      ) : (
-        <span className="text-gray-400">—</span>
-      ),
-    },
-    {
-      id: 'actions',
-      header: 'Actions',
-      cell: (info: { row: { original: CertificationDTO } }) => (
-        <div className="flex gap-2">
-          {onEdit(info.row.original)}
-          {onDelete(info.row.original)}
-        </div>
-      ),
-    },
-  ];
 }
 
 export const Route = createFileRoute('/admin/')({
