@@ -17,3 +17,5 @@ export type CertificationUpdateInputDTO = z.infer<typeof CertificationUpdateInpu
 
 export const CertificationId = z.object({ id: z.string() });
 export type CertificationIdDTO = z.infer<typeof CertificationId>;
+
+export type CertificationDTO = z.infer<typeof CertificationInput> & { id: string };
