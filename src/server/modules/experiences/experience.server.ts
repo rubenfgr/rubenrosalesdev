@@ -1,11 +1,11 @@
 import { createServerFn } from "@tanstack/react-start";
 import type { ExperienceCreateDTO, ExperienceIdDTO, ExperienceUpdateDTO } from "@/shared/dto";
-import { mapExperienceInputDTO, mapExperienceUpdateInputDTO } from "@/shared/mappers";
+import { mapExperienceCreateDTO, mapExperienceUpdateDTO } from "@/shared/mappers";
 import {
   ExperienceCreateValidator,
   ExperienceIdValidator,
   ExperienceUpdateValidator,
-} from "~/shared/validators";
+} from "@/shared/validators";
 import {
   createExperience,
   deleteExperience,
@@ -27,7 +27,7 @@ export const getExperience = createServerFn({ method: "GET" })
 export const createExperienceServer = createServerFn({ method: "POST" })
   .validator((input: ExperienceCreateDTO) => ExperienceCreateValidator.parse(input))
   .handler(async (ctx) => {
-    const mapped = mapExperienceInputDTO(ctx.data);
+    const mapped = mapExperienceCreateDTO(ctx.data);
     return createExperience(mapped);
   });
 
@@ -35,7 +35,7 @@ export const updateExperienceServer = createServerFn({ method: "POST" })
   .validator((input: ExperienceUpdateDTO) => ExperienceUpdateValidator.parse(input))
   .handler(async (ctx) => {
     const { id, data } = ctx.data;
-    const mapped = mapExperienceUpdateInputDTO(data);
+    const mapped = mapExperienceUpdateDTO(data);
     return updateExperience(id, mapped);
   });
 

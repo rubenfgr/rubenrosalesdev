@@ -1,6 +1,6 @@
-import type { ProfileInputDTO } from "../dto/profile.dto";
+import type { ProfileCreateDTO } from "../dto/profile.dto";
 
-export function mapProfileInputDTO(dto: ProfileInputDTO) {
+export function mapProfileCreateDTO(dto: ProfileCreateDTO) {
   return {
     bio: dto.bio ?? null,
     avatarUrl: dto.avatarUrl ?? null,
@@ -10,7 +10,7 @@ export function mapProfileInputDTO(dto: ProfileInputDTO) {
   };
 }
 
-export function mapProfileUpdateInputDTO(data: Partial<ProfileInputDTO>) {
+export function mapProfileUpdateDTO(data: Partial<ProfileCreateDTO>) {
   return {
     ...(data.bio !== undefined && { bio: data.bio ?? null }),
     ...(data.avatarUrl !== undefined && { avatarUrl: data.avatarUrl ?? null }),

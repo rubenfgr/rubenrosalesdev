@@ -1,5 +1,6 @@
-import { PostInput, type PostInputDTO } from "@/shared/dto";
-import { mapPostInputDTO, mapPostUpdateInputDTO } from "@/shared/mappers";
+import type { PostCreateDTO } from "@/shared/dto";
+import { mapPostCreateDTO, mapPostUpdateDTO } from "@/shared/mappers";
+import { PostCreateValidator } from "@/shared/validators";
 import { createPost, deletePost, getAllPosts, getPostById, updatePost } from "./post.service";
 
 export const listPosts = async () => {
@@ -10,15 +11,15 @@ export const getPost = async (id: string) => {
   return getPostById(id);
 };
 
-export const createPostServer = async (input: PostInputDTO) => {
-  const data = PostInput.parse(input);
-  const mapped = mapPostInputDTO(data);
+export const createPostServer = async (input: PostCreateDTO) => {
+  const data = PostCreateValidator.parse(input);
+  const mapped = mapPostCreateDTO(data);
   return createPost(mapped);
 };
 
-export const updatePostServer = async (id: string, input: Partial<PostInputDTO>) => {
-  const data = PostInput.partial().parse(input);
-  const mapped = mapPostUpdateInputDTO(data);
+export const updatePostServer = async (id: string, input: Partial<PostCreateDTO>) => {
+  const data = PostCreateValidator.partial().parse(input);
+  const mapped = mapPostUpdateDTO(data);
   return updatePost(id, mapped);
 };
 

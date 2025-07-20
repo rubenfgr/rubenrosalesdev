@@ -3,16 +3,16 @@ import type {
   CertificationCreateDTO,
   CertificationIdDTO,
   CertificationUpdateDTO,
-} from "@/shared/dto/certification.dto";
+} from "@/shared/dto";
 import {
-  mapCertificationInputDTO,
-  mapCertificationUpdateInputDTO,
-} from "@/shared/mappers/certification.mapper";
+  mapCertificationCreateDTO,
+  mapCertificationUpdateDTO,
+} from "@/shared/mappers";
 import {
   CertificationCreateValidator,
   CertificationIdValidator,
   CertificationUpdateValidator,
-} from "@/shared/validators/certification.validator";
+} from "@/shared/validators";
 import { certificationService } from "./certification.service";
 
 export const listCertifications = createServerFn({ method: "GET" }).handler(async () => {
@@ -28,7 +28,7 @@ export const getCertification = createServerFn({ method: "GET" })
 export const createCertificationServer = createServerFn({ method: "POST" })
   .validator((input: CertificationCreateDTO) => CertificationCreateValidator.parse(input))
   .handler(async (ctx) => {
-    const mapped = mapCertificationInputDTO(ctx.data);
+    const mapped = mapCertificationCreateDTO(ctx.data);
     return certificationService.createCertification(mapped);
   });
 
@@ -36,7 +36,7 @@ export const updateCertificationServer = createServerFn({ method: "POST" })
   .validator((input: CertificationUpdateDTO) => CertificationUpdateValidator.parse(input))
   .handler(async (ctx) => {
     const { id, data } = ctx.data;
-    const mapped = mapCertificationUpdateInputDTO(data);
+    const mapped = mapCertificationUpdateDTO(data);
     return certificationService.updateCertification(id, mapped);
   });
 

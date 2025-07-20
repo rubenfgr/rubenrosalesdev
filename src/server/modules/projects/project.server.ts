@@ -1,13 +1,11 @@
 import { createServerFn } from "@tanstack/react-start";
+import type { ProjectCreateDTO, ProjectIdDTO, ProjectUpdateDTO } from "@/shared/dto";
+import { mapProjectCreateDTO, mapProjectUpdateDTO } from "@/shared/mappers";
 import {
-  ProjectId,
-  type ProjectIdDTO,
-  ProjectInput,
-  type ProjectInputDTO,
-  ProjectUpdateInput,
-  type ProjectUpdateInputDTO,
-} from "@/shared/dto";
-import { mapProjectInputDTO, mapProjectUpdateInputDTO } from "@/shared/mappers";
+  ProjectCreateValidator,
+  ProjectIdValidator,
+  ProjectUpdateValidator,
+} from "@/shared/validators";
 import {
   createProject,
   deleteProject,
@@ -21,29 +19,29 @@ export const listProjects = createServerFn({ method: "GET" }).handler(async () =
 });
 
 export const getProject = createServerFn({ method: "GET" })
-  .validator((input: ProjectIdDTO) => ProjectId.parse(input))
+  .validator((input: ProjectIdDTO) => ProjectIdValidator.parse(input))
   .handler(async (ctx) => {
     const { id } = ctx.data;
     return getProjectById(id);
   });
 
 export const createProjectServer = createServerFn({ method: "POST" })
-  .validator((input: ProjectInputDTO) => ProjectInput.parse(input))
+  .validator((input: ProjectCreateDTO) => ProjectCreateValidator.parse(input))
   .handler(async (ctx) => {
-    const mapped = mapProjectInputDTO(ctx.data);
+    const mapped = mapProjectCreateDTO(ctx.data);
     return createProject(mapped);
   });
 
 export const updateProjectServer = createServerFn({ method: "POST" })
-  .validator((input: ProjectUpdateInputDTO) => ProjectUpdateInput.parse(input))
+  .validator((input: ProjectUpdateDTO) => ProjectUpdateValidator.parse(input))
   .handler(async (ctx) => {
     const { id, data } = ctx.data;
-    const mapped = mapProjectUpdateInputDTO(data);
+    const mapped = mapProjectUpdateDTO(data);
     return updateProject(id, mapped);
   });
 
 export const deleteProjectServer = createServerFn({ method: "POST" })
-  .validator((input: ProjectIdDTO) => ProjectId.parse(input))
+  .validator((input: ProjectIdDTO) => ProjectIdValidator.parse(input))
   .handler(async (ctx) => {
     const { id } = ctx.data;
     return deleteProject(id);

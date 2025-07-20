@@ -1,6 +1,6 @@
-import type { PostInputDTO } from "../dto/post.dto";
+import type { PostCreateDTO } from "../dto/post.dto";
 
-export function mapPostInputDTO(dto: PostInputDTO) {
+export function mapPostCreateDTO(dto: PostCreateDTO) {
   return {
     title: dto.title,
     summary: dto.summary ?? null,
@@ -13,7 +13,7 @@ export function mapPostInputDTO(dto: PostInputDTO) {
   };
 }
 
-export function mapPostUpdateInputDTO(data: Partial<PostInputDTO>) {
+export function mapPostUpdateDTO(data: Partial<PostCreateDTO>) {
   return {
     ...(data.title !== undefined && { title: data.title }),
     ...(data.summary !== undefined && { summary: data.summary ?? null }),

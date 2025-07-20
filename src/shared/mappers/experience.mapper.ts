@@ -1,6 +1,6 @@
 import type { ExperienceCreateDTO } from "../dto/experience.dto";
 
-export function mapExperienceInputDTO(dto: ExperienceCreateDTO) {
+export function mapExperienceCreateDTO(dto: ExperienceCreateDTO) {
   return {
     company: dto.company,
     position: dto.position,
@@ -11,7 +11,7 @@ export function mapExperienceInputDTO(dto: ExperienceCreateDTO) {
   };
 }
 
-export function mapExperienceUpdateInputDTO(
+export function mapExperienceUpdateDTO(
   data: Partial<ExperienceCreateDTO>,
 ) {
   return {

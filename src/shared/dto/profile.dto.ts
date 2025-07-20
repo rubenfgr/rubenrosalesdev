@@ -1,19 +1,16 @@
-import { z } from 'zod';
+import type { z } from "zod";
+import type {
+  ProfileCreateValidator,
+  ProfileIdValidator,
+  ProfileUpdateValidator,
+} from "@/shared/validators/profile.validator";
 
-export const ProfileInput = z.object({
-  bio: z.string().nullable().optional(),
-  avatarUrl: z.string().url().nullable().optional(),
-  location: z.string().nullable().optional(),
-  website: z.string().url().nullable().optional(),
-  userId: z.string(),
-});
-export type ProfileInputDTO = z.infer<typeof ProfileInput>;
+export type ProfileIdDTO = z.infer<typeof ProfileIdValidator>;
 
-export const ProfileUpdateInput = z.object({
-  id: z.string(),
-  data: ProfileInput.partial(),
-});
-export type ProfileUpdateInputDTO = z.infer<typeof ProfileUpdateInput>;
+export type ProfileDTO = z.infer<typeof ProfileCreateValidator> & {
+  id: string;
+};
 
-export const ProfileId = z.object({ id: z.string() });
-export type ProfileIdDTO = z.infer<typeof ProfileId>;
+export type ProfileCreateDTO = z.infer<typeof ProfileCreateValidator>;
+
+export type ProfileUpdateDTO = z.infer<typeof ProfileUpdateValidator>;

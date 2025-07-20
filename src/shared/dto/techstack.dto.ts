@@ -1,16 +1,16 @@
-import { z } from 'zod';
+import type { z } from "zod";
+import type {
+  TechStackCreateValidator,
+  TechStackIdValidator,
+  TechStackUpdateValidator,
+} from "@/shared/validators/techstack.validator";
 
-export const TechStackInput = z.object({
-  name: z.string(),
-  level: z.string().nullable().optional(),
-});
-export type TechStackInputDTO = z.infer<typeof TechStackInput>;
+export type TechStackIdDTO = z.infer<typeof TechStackIdValidator>;
 
-export const TechStackUpdateInput = z.object({
-  id: z.string(),
-  data: TechStackInput.partial(),
-});
-export type TechStackUpdateInputDTO = z.infer<typeof TechStackUpdateInput>;
+export type TechStackDTO = z.infer<typeof TechStackCreateValidator> & {
+  id: string;
+};
 
-export const TechStackId = z.object({ id: z.string() });
-export type TechStackIdDTO = z.infer<typeof TechStackId>;
+export type TechStackCreateDTO = z.infer<typeof TechStackCreateValidator>;
+
+export type TechStackUpdateDTO = z.infer<typeof TechStackUpdateValidator>;

@@ -1,6 +1,6 @@
-import type { ProjectInputDTO } from "../dto/project.dto";
+import type { ProjectCreateDTO } from "../dto/project.dto";
 
-export function mapProjectInputDTO(dto: ProjectInputDTO) {
+export function mapProjectCreateDTO(dto: ProjectCreateDTO) {
   return {
     title: dto.title,
     description: dto.description,
@@ -12,7 +12,7 @@ export function mapProjectInputDTO(dto: ProjectInputDTO) {
   };
 }
 
-export function mapProjectUpdateInputDTO(data: Partial<ProjectInputDTO>) {
+export function mapProjectUpdateDTO(data: Partial<ProjectCreateDTO>) {
   return {
     ...(data.title !== undefined && { title: data.title }),
     ...(data.description !== undefined && { description: data.description }),

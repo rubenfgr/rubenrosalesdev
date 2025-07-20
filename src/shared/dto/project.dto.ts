@@ -1,21 +1,16 @@
-import { z } from 'zod';
+import type { z } from "zod";
+import type {
+  ProjectCreateValidator,
+  ProjectIdValidator,
+  ProjectUpdateValidator,
+} from "@/shared/validators/project.validator";
 
-export const ProjectInput = z.object({
-  title: z.string(),
-  description: z.string(),
-  url: z.string().nullable().optional(),
-  imageUrl: z.string().nullable().optional(),
-  startDate: z.date(),
-  endDate: z.date().nullable().optional(),
-  userId: z.string(),
-});
-export type ProjectInputDTO = z.infer<typeof ProjectInput>;
+export type ProjectIdDTO = z.infer<typeof ProjectIdValidator>;
 
-export const ProjectUpdateInput = z.object({
-  id: z.string(),
-  data: ProjectInput.partial(),
-});
-export type ProjectUpdateInputDTO = z.infer<typeof ProjectUpdateInput>;
+export type ProjectDTO = z.infer<typeof ProjectCreateValidator> & {
+  id: string;
+};
 
-export const ProjectId = z.object({ id: z.string() });
-export type ProjectIdDTO = z.infer<typeof ProjectId>;
+export type ProjectCreateDTO = z.infer<typeof ProjectCreateValidator>;
+
+export type ProjectUpdateDTO = z.infer<typeof ProjectUpdateValidator>;

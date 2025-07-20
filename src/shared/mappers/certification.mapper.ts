@@ -1,6 +1,6 @@
-import type { CertificationCreateDTO } from "../dto/certification.dto";
+import type { CertificationCreateDTO } from "@/shared/dto/certification.dto";
 
-export function mapCertificationInputDTO(dto: CertificationCreateDTO) {
+export function mapCertificationCreateDTO(dto: CertificationCreateDTO) {
   return {
     name: dto.name,
     issuer: dto.issuer,
@@ -10,7 +10,7 @@ export function mapCertificationInputDTO(dto: CertificationCreateDTO) {
   };
 }
 
-export function mapCertificationUpdateInputDTO(
+export function mapCertificationUpdateDTO(
   data: Partial<CertificationCreateDTO>,
 ) {
   return {

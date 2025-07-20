@@ -1,13 +1,13 @@
-import type { TechStackInputDTO } from "../dto/techstack.dto";
+import type { TechStackCreateDTO } from "../dto/techstack.dto";
 
-export function mapTechStackInputDTO(dto: TechStackInputDTO) {
+export function mapTechStackCreateDTO(dto: TechStackCreateDTO) {
   return {
     name: dto.name,
     level: dto.level ?? null,
   };
 }
 
-export function mapTechStackUpdateInputDTO(data: Partial<TechStackInputDTO>) {
+export function mapTechStackUpdateDTO(data: Partial<TechStackCreateDTO>) {
   return {
     ...(data.name !== undefined && { name: data.name }),
     ...(data.level !== undefined && { level: data.level ?? null }),

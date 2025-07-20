@@ -1,22 +1,17 @@
-import { z } from 'zod';
+import type { z } from "zod";
+import type {
+  PostCreateValidator,
+  PostIdValidator,
+  PostUpdateValidator,
+} from "@/shared/validators/post.validator";
 
-export const PostInput = z.object({
-  title: z.string(),
-  summary: z.string().optional(),
-  content: z.string(),
-  published: z.boolean().optional(),
-  status: z.string().optional(),
-  tags: z.array(z.string()).optional(),
-  publishedAt: z.date().optional(),
-  authorId: z.string(),
-});
-export type PostInputDTO = z.infer<typeof PostInput>;
+export type PostIdDTO = z.infer<typeof PostIdValidator>;
 
-export const PostUpdateInput = z.object({
-  id: z.string(),
-  data: PostInput.partial(),
-});
-export type PostUpdateInputDTO = z.infer<typeof PostUpdateInput>;
+export type PostDTO = z.infer<typeof PostCreateValidator> & {
+  id: string;
+};
 
-export const PostId = z.object({ id: z.string() });
-export type PostIdDTO = z.infer<typeof PostId>;
+export type PostCreateDTO = z.infer<typeof PostCreateValidator>;
+
+export type PostUpdateDTO = z.infer<typeof PostUpdateValidator>;
+
