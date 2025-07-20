@@ -23,10 +23,10 @@ import {
 } from "@/client/components/ui";
 import { useClientTranslation } from "@/client/hooks";
 import type { CertificationCreateDTO, CertificationDTO } from "@/shared/dto";
-import { useCertifications } from "./useCertifications.hook";
-import { useCreateCertification } from "./useCreateCertification.hook";
-import { useDeleteCertification } from "./useDeleteCertification.hook";
-import { useUpdateCertification } from "./useUpdateCertification";
+import { useCertifications } from "../../client/pages/admin/certifications/useCertifications.hook";
+import { useCreateCertification } from "../../client/pages/admin/certifications/useCreateCertification.hook";
+import { useDeleteCertification } from "../../client/pages/admin/certifications/useDeleteCertification.hook";
+import { useUpdateCertification } from "../../client/pages/admin/certifications/useUpdateCertification";
 
 function CertificationsDataTable({
   data,
