@@ -4,10 +4,7 @@ import type {
   CertificationIdDTO,
   CertificationUpdateDTO,
 } from "@/shared/dto";
-import {
-  mapCertificationCreateDTO,
-  mapCertificationUpdateDTO,
-} from "@/shared/mappers";
+import { mapCertificationCreateDTO, mapCertificationUpdateDTO } from "@/shared/mappers";
 import {
   CertificationCreateValidator,
   CertificationIdValidator,

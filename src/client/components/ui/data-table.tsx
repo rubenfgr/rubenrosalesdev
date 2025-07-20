@@ -1,12 +1,7 @@
-import * as React from 'react';
-import {
-  useReactTable,
-  getCoreRowModel,
-  flexRender,
-  ColumnDef,
-} from '@tanstack/react-table';
+import { type ColumnDef, flexRender, getCoreRowModel, useReactTable } from "@tanstack/react-table";
 
 interface DataTableProps<TData> {
+  // biome-ignore lint/suspicious/noExplicitAny: any
   columns: ColumnDef<TData, any>[];
   data: TData[];
 }
@@ -20,11 +15,11 @@ export function DataTable<TData>({ columns, data }: DataTableProps<TData>) {
 
   return (
     <div className="overflow-x-auto">
-      <table className="min-w-full bg-white border rounded shadow">
+      <table className="min-w-full rounded border bg-white shadow">
         <thead>
-          {table.getHeaderGroups().map(headerGroup => (
+          {table.getHeaderGroups().map((headerGroup) => (
             <tr key={headerGroup.id}>
-              {headerGroup.headers.map(header => (
+              {headerGroup.headers.map((header) => (
                 <th key={header.id} className="px-4 py-2 text-left">
                   {flexRender(header.column.columnDef.header, header.getContext())}
                 </th>
@@ -33,9 +28,9 @@ export function DataTable<TData>({ columns, data }: DataTableProps<TData>) {
           ))}
         </thead>
         <tbody>
-          {table.getRowModel().rows.map(row => (
+          {table.getRowModel().rows.map((row) => (
             <tr key={row.id} className="border-t">
-              {row.getVisibleCells().map(cell => (
+              {row.getVisibleCells().map((cell) => (
                 <td key={cell.id} className="px-4 py-2">
                   {flexRender(cell.column.columnDef.cell, cell.getContext())}
                 </td>

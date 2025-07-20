@@ -1,0 +1,8 @@
+{
+  "admin": {
+    "dashboard": {
+      "title": "Panel de control",
+      "description": "Bienvenido al panel de control del administrador. Aquí puedes gestionar el contenido, los usuarios y las configuraciones de la aplicación."
+    }
+  }
+}

@@ -2,7 +2,7 @@
 
 DOCKER_COMPOSE = docker compose -f ./docker/docker-compose.yml
 
-.PHONY: up down restart logs ps prisma-generate prisma-studio start
+.PHONY: up down restart logs ps prisma-generate prisma-studio start seed prisma-migrate reset-db
 
 up:
 	$(DOCKER_COMPOSE) up -d
@@ -25,6 +25,15 @@ prisma-generate:
 
 prisma-studio:
 	npx prisma studio
+
+prisma-seed:
+	npx prisma db seed
+
+prisma-migrate:
+	npx prisma migrate dev
+
+prisma-reset:
+	npx prisma migrate reset --force && make prisma-seed
 
 start:
 	pnpm dev

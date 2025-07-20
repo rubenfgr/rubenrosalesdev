@@ -1,5 +1,5 @@
 import type { Certification } from "@prisma/client";
-import { prisma } from "../../db/prisma";
+import { prisma } from "@/server/services/prisma";
 
 const getAllCertifications = async (): Promise<Certification[]> => {
   return prisma.certification.findMany({

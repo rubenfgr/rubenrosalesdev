@@ -4,23 +4,30 @@ const prisma = new PrismaClient();
 
 async function main() {
   // TechStack base
+  console.log('Creando TechStack...');
   const ts = await prisma.techStack.create({
     data: { name: 'TypeScript', level: 'advanced' },
   });
+  console.log('TypeScript creado:', ts);
   const react = await prisma.techStack.create({
     data: { name: 'React', level: 'advanced' },
   });
+  console.log('React creado:', react);
   const node = await prisma.techStack.create({
     data: { name: 'Node.js', level: 'advanced' },
   });
+  console.log('Node.js creado:', node);
   const prismaTech = await prisma.techStack.create({
     data: { name: 'Prisma', level: 'intermediate' },
   });
+  console.log('Prisma creado:', prismaTech);
   const tailwind = await prisma.techStack.create({
     data: { name: 'Tailwind CSS', level: 'advanced' },
   });
+  console.log('Tailwind CSS creado:', tailwind);
 
   // Crea usuario admin y su portfolio
+  console.log('Creando usuario admin...');
   const admin = await prisma.user.upsert({
     where: { email: 'admin@rubenrosales.dev' },
     update: {},
@@ -43,7 +50,7 @@ async function main() {
             summary: 'Primer post de ejemplo para el portfolio profesional.',
             content: 'Este es el primer post de ejemplo creado por el seed.',
             published: true,
-            status: 'published',
+            status: 'published', // Enum: 'draft' | 'published'
             tags: ['portfolio', 'bienvenida', 'typescript'],
             publishedAt: new Date('2024-01-02'),
             techStack: {
@@ -106,9 +113,11 @@ async function main() {
       },
     },
   });
+  console.log('Usuario admin creado:', admin);
 
   // Crea un usuario normal
-  await prisma.user.upsert({
+  console.log('Creando usuario demo...');
+  const user = await prisma.user.upsert({
     where: { email: 'user@rubenrosales.dev' },
     update: {},
     create: {
@@ -117,13 +126,14 @@ async function main() {
       role: 'USER',
     },
   });
+  console.log('Usuario demo creado:', user);
 
   console.log('Seeds insertados correctamente.');
 }
 
 main()
   .catch((e) => {
-    console.error(e);
+    console.error('Error en el seed:', e);
     process.exit(1);
   })
   .finally(async () => {
