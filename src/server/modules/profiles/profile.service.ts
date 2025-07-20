@@ -1,28 +1,47 @@
 import { PrismaClient, type Profile } from "@prisma/client";
+import { serverTranslation } from "@/server/services/use-server-translation";
 
 const prisma = new PrismaClient();
 
-export async function getAllProfiles(): Promise<Profile[]> {
+async function getAllProfiles(): Promise<Profile[]> {
   return prisma.profile.findMany({
     include: { user: true },
   });
 }
 
-export async function getProfileById(id: string): Promise<Profile | null> {
+async function getProfileById(id: string): Promise<Profile | null> {
   return prisma.profile.findUnique({
     where: { id },
     include: { user: true },
   });
 }
 
-export async function createProfile(data: Omit<Profile, "id">): Promise<Profile> {
+async function createProfile(data: Omit<Profile, "id">): Promise<Profile> {
   return prisma.profile.create({ data });
 }
 
-export async function updateProfile(id: string, data: Partial<Profile>): Promise<Profile> {
+async function updateProfile(id: string, data: Partial<Omit<Profile, "id">>): Promise<Profile> {
+  const { t } = serverTranslation();
+  const profile = await getProfileById(id);
+  if (!profile) {
+    throw new Error(t("not_found"));
+  }
   return prisma.profile.update({ where: { id }, data });
 }
 
-export async function deleteProfile(id: string): Promise<Profile> {
+async function deleteProfile(id: string): Promise<Profile> {
+  const { t } = serverTranslation();
+  const profile = await getProfileById(id);
+  if (!profile) {
+    throw new Error(t("not_found"));
+  }
   return prisma.profile.delete({ where: { id } });
 }
+
+export const profileService = {
+  getAllProfiles,
+  getProfileById,
+  createProfile,
+  updateProfile,
+  deleteProfile,
+};

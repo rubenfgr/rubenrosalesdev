@@ -6,29 +6,24 @@ import {
   TechStackIdValidator,
   TechStackUpdateValidator,
 } from "@/shared/validators";
-import {
-  createTechStack,
-  deleteTechStack,
-  getAllTechStack,
-  getTechStackById,
-  updateTechStack,
-} from "./techstack.service";
+import { techStackService } from "./techstack.service";
+
 
 export const listTechStack = createServerFn({ method: "GET" }).handler(async () => {
-  return getAllTechStack();
+  return techStackService.getAllTechStack();
 });
 
 export const getTechStack = createServerFn({ method: "GET" })
   .validator((input: TechStackIdDTO) => TechStackIdValidator.parse(input))
   .handler(async (ctx) => {
-    return getTechStackById(ctx.data.id);
+    return techStackService.getTechStackById(ctx.data.id);
   });
 
 export const createTechStackServer = createServerFn({ method: "POST" })
   .validator((input: TechStackCreateDTO) => TechStackCreateValidator.parse(input))
   .handler(async (ctx) => {
     const mapped = mapTechStackCreateDTO(ctx.data);
-    return createTechStack(mapped);
+    return techStackService.createTechStack(mapped);
   });
 
 export const updateTechStackServer = createServerFn({ method: "POST" })
@@ -36,11 +31,11 @@ export const updateTechStackServer = createServerFn({ method: "POST" })
   .handler(async (ctx) => {
     const { id, data } = ctx.data;
     const mapped = mapTechStackUpdateDTO(data);
-    return updateTechStack(id, mapped);
+    return techStackService.updateTechStack(id, mapped);
   });
 
 export const deleteTechStackServer = createServerFn({ method: "POST" })
   .validator((input: TechStackIdDTO) => TechStackIdValidator.parse(input))
   .handler(async (ctx) => {
-    return deleteTechStack(ctx.data.id);
+    return techStackService.deleteTechStack(ctx.data.id);
   });

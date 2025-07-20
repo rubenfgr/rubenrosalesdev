@@ -6,30 +6,25 @@ import {
   ProjectIdValidator,
   ProjectUpdateValidator,
 } from "@/shared/validators";
-import {
-  createProject,
-  deleteProject,
-  getAllProjects,
-  getProjectById,
-  updateProject,
-} from "./project.service";
+import { projectService } from "./project.service";
+
 
 export const listProjects = createServerFn({ method: "GET" }).handler(async () => {
-  return getAllProjects();
+  return projectService.getAllProjects();
 });
 
 export const getProject = createServerFn({ method: "GET" })
   .validator((input: ProjectIdDTO) => ProjectIdValidator.parse(input))
   .handler(async (ctx) => {
     const { id } = ctx.data;
-    return getProjectById(id);
+    return projectService.getProjectById(id);
   });
 
 export const createProjectServer = createServerFn({ method: "POST" })
   .validator((input: ProjectCreateDTO) => ProjectCreateValidator.parse(input))
   .handler(async (ctx) => {
     const mapped = mapProjectCreateDTO(ctx.data);
-    return createProject(mapped);
+    return projectService.createProject(mapped);
   });
 
 export const updateProjectServer = createServerFn({ method: "POST" })
@@ -37,12 +32,11 @@ export const updateProjectServer = createServerFn({ method: "POST" })
   .handler(async (ctx) => {
     const { id, data } = ctx.data;
     const mapped = mapProjectUpdateDTO(data);
-    return updateProject(id, mapped);
+    return projectService.updateProject(id, mapped);
   });
 
 export const deleteProjectServer = createServerFn({ method: "POST" })
   .validator((input: ProjectIdDTO) => ProjectIdValidator.parse(input))
   .handler(async (ctx) => {
-    const { id } = ctx.data;
-    return deleteProject(id);
+    return projectService.deleteProject(ctx.data.id);
   });

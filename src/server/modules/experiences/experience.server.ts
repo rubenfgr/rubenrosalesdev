@@ -6,29 +6,24 @@ import {
   ExperienceIdValidator,
   ExperienceUpdateValidator,
 } from "@/shared/validators";
-import {
-  createExperience,
-  deleteExperience,
-  getAllExperiences,
-  getExperienceById,
-  updateExperience,
-} from "./experience.service";
+import { experienceService } from "./experience.service";
+
 
 export const listExperiences = createServerFn({ method: "GET" }).handler(async () => {
-  return getAllExperiences();
+  return experienceService.getAllExperiences();
 });
 
 export const getExperience = createServerFn({ method: "GET" })
   .validator((input: ExperienceIdDTO) => ExperienceIdValidator.parse(input))
   .handler(async (ctx) => {
-    return getExperienceById(ctx.data.id);
+    return experienceService.getExperienceById(ctx.data.id);
   });
 
 export const createExperienceServer = createServerFn({ method: "POST" })
   .validator((input: ExperienceCreateDTO) => ExperienceCreateValidator.parse(input))
   .handler(async (ctx) => {
     const mapped = mapExperienceCreateDTO(ctx.data);
-    return createExperience(mapped);
+    return experienceService.createExperience(mapped);
   });
 
 export const updateExperienceServer = createServerFn({ method: "POST" })
@@ -36,11 +31,11 @@ export const updateExperienceServer = createServerFn({ method: "POST" })
   .handler(async (ctx) => {
     const { id, data } = ctx.data;
     const mapped = mapExperienceUpdateDTO(data);
-    return updateExperience(id, mapped);
+    return experienceService.updateExperience(id, mapped);
   });
 
 export const deleteExperienceServer = createServerFn({ method: "POST" })
   .validator((input: ExperienceIdDTO) => ExperienceIdValidator.parse(input))
   .handler(async (ctx) => {
-    return deleteExperience(ctx.data.id);
+    return experienceService.deleteExperience(ctx.data.id);
   });
