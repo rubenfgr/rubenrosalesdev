@@ -1,4 +1,5 @@
 // Mock the createServerFn from @tanstack/react-start
+/** biome-ignore-all lint/suspicious/noExplicitAny: mock */
 jest.mock("@tanstack/react-start", () => ({
   createServerFn: () => {
     return {

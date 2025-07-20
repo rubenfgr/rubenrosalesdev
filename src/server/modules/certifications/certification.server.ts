@@ -1,18 +1,18 @@
 import { createServerFn } from "@tanstack/react-start";
-import {
-  CertificationCreateValidator,
-  CertificationIdValidator,
-  CertificationUpdateValidator,
-} from "~/shared/validators/certification.validator";
 import type {
   CertificationCreateDTO,
   CertificationIdDTO,
   CertificationUpdateDTO,
-} from "../../../shared/dto/certification.dto";
+} from "@/shared/dto/certification.dto";
 import {
   mapCertificationInputDTO,
   mapCertificationUpdateInputDTO,
-} from "../../../shared/mappers/certification.mapper";
+} from "@/shared/mappers/certification.mapper";
+import {
+  CertificationCreateValidator,
+  CertificationIdValidator,
+  CertificationUpdateValidator,
+} from "@/shared/validators/certification.validator";
 import { certificationService } from "./certification.service";
 
 export const listCertifications = createServerFn({ method: "GET" }).handler(async () => {

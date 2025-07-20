@@ -1,45 +1,38 @@
 import { createServerFn } from "@tanstack/react-start";
+import type { ExperienceCreateDTO, ExperienceIdDTO, ExperienceUpdateDTO } from "@/shared/dto";
+import { mapExperienceInputDTO, mapExperienceUpdateInputDTO } from "@/shared/mappers";
 import {
-  type ExperienceCreateDTO,
-  ExperienceId,
-  type ExperienceIdDTO,
-  ExperienceInput,
-  type ExperienceUpdateDTO,
-  ExperienceUpdateInput,
-} from "../../shared/dto/experience.dto";
-import {
-  mapExperienceInputDTO,
-  mapExperienceUpdateInputDTO,
-} from "../../shared/mappers/experience.mapper";
+  ExperienceCreateValidator,
+  ExperienceIdValidator,
+  ExperienceUpdateValidator,
+} from "~/shared/validators";
 import {
   createExperience,
   deleteExperience,
   getAllExperiences,
   getExperienceById,
   updateExperience,
-} from "../services/experience.service";
+} from "./experience.service";
 
-export const listExperiences = createServerFn({ method: "GET" }).handler(
-  async () => {
-    return getAllExperiences();
-  },
-);
+export const listExperiences = createServerFn({ method: "GET" }).handler(async () => {
+  return getAllExperiences();
+});
 
 export const getExperience = createServerFn({ method: "GET" })
-  .validator((input: ExperienceIdDTO) => ExperienceId.parse(input))
+  .validator((input: ExperienceIdDTO) => ExperienceIdValidator.parse(input))
   .handler(async (ctx) => {
     return getExperienceById(ctx.data.id);
   });
 
 export const createExperienceServer = createServerFn({ method: "POST" })
-  .validator((input: ExperienceCreateDTO) => ExperienceInput.parse(input))
+  .validator((input: ExperienceCreateDTO) => ExperienceCreateValidator.parse(input))
   .handler(async (ctx) => {
     const mapped = mapExperienceInputDTO(ctx.data);
     return createExperience(mapped);
   });
 
 export const updateExperienceServer = createServerFn({ method: "POST" })
-  .validator((input: ExperienceUpdateDTO) => ExperienceUpdateInput.parse(input))
+  .validator((input: ExperienceUpdateDTO) => ExperienceUpdateValidator.parse(input))
   .handler(async (ctx) => {
     const { id, data } = ctx.data;
     const mapped = mapExperienceUpdateInputDTO(data);
@@ -47,7 +40,7 @@ export const updateExperienceServer = createServerFn({ method: "POST" })
   });
 
 export const deleteExperienceServer = createServerFn({ method: "POST" })
-  .validator((input: ExperienceIdDTO) => ExperienceId.parse(input))
+  .validator((input: ExperienceIdDTO) => ExperienceIdValidator.parse(input))
   .handler(async (ctx) => {
     return deleteExperience(ctx.data.id);
   });

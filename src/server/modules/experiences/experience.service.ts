@@ -1,10 +1,10 @@
-import { PrismaClient, Experience } from '@prisma/client';
+import { type Experience, PrismaClient } from "@prisma/client";
 
 const prisma = new PrismaClient();
 
 export async function getAllExperiences(): Promise<Experience[]> {
   return prisma.experience.findMany({
-    orderBy: { startDate: 'desc' },
+    orderBy: { startDate: "desc" },
     include: { techStack: true, user: true },
   });
 }
@@ -16,7 +16,9 @@ export async function getExperienceById(id: string): Promise<Experience | null> 
   });
 }
 
-export async function createExperience(data: Omit<Experience, 'id' | 'createdAt' | 'updatedAt'>): Promise<Experience> {
+export async function createExperience(
+  data: Omit<Experience, "id" | "createdAt" | "updatedAt">,
+): Promise<Experience> {
   return prisma.experience.create({ data });
 }
 

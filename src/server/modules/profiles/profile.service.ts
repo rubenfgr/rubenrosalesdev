@@ -1,4 +1,4 @@
-import { PrismaClient, Profile } from '@prisma/client';
+import { PrismaClient, type Profile } from "@prisma/client";
 
 const prisma = new PrismaClient();
 
@@ -15,7 +15,7 @@ export async function getProfileById(id: string): Promise<Profile | null> {
   });
 }
 
-export async function createProfile(data: Omit<Profile, 'id'>): Promise<Profile> {
+export async function createProfile(data: Omit<Profile, "id">): Promise<Profile> {
   return prisma.profile.create({ data });
 }
 

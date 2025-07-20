@@ -1,4 +1,4 @@
-import { TechStackInputDTO } from '../dto/techstack.model';
+import type { TechStackInputDTO } from "../dto/techstack.dto";
 
 export function mapTechStackInputDTO(dto: TechStackInputDTO) {
   return {

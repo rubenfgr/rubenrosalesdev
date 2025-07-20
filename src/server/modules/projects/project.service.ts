@@ -1,10 +1,10 @@
-import { PrismaClient, Project } from '@prisma/client';
+import { PrismaClient, type Project } from "@prisma/client";
 
 const prisma = new PrismaClient();
 
 export async function getAllProjects(): Promise<Project[]> {
   return prisma.project.findMany({
-    orderBy: { startDate: 'desc' },
+    orderBy: { startDate: "desc" },
     include: { techStack: true, user: true },
   });
 }
@@ -16,7 +16,9 @@ export async function getProjectById(id: string): Promise<Project | null> {
   });
 }
 
-export async function createProject(data: Omit<Project, 'id' | 'createdAt' | 'updatedAt'>): Promise<Project> {
+export async function createProject(
+  data: Omit<Project, "id" | "createdAt" | "updatedAt">,
+): Promise<Project> {
   return prisma.project.create({ data });
 }
 

@@ -1,10 +1,10 @@
-import { PrismaClient, TechStack } from '@prisma/client';
+import { PrismaClient, type TechStack } from "@prisma/client";
 
 const prisma = new PrismaClient();
 
 export async function getAllTechStack(): Promise<TechStack[]> {
   return prisma.techStack.findMany({
-    orderBy: { name: 'asc' },
+    orderBy: { name: "asc" },
     include: { projects: true, experiences: true, posts: true },
   });
 }
@@ -16,7 +16,7 @@ export async function getTechStackById(id: string): Promise<TechStack | null> {
   });
 }
 
-export async function createTechStack(data: Omit<TechStack, 'id'>): Promise<TechStack> {
+export async function createTechStack(data: Omit<TechStack, "id">): Promise<TechStack> {
   return prisma.techStack.create({ data });
 }
 

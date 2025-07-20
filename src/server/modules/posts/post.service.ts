@@ -1,10 +1,10 @@
-import { PrismaClient, Post } from '@prisma/client';
+import { type Post, PrismaClient } from "@prisma/client";
 
 const prisma = new PrismaClient();
 
 export async function getAllPosts(): Promise<Post[]> {
   return prisma.post.findMany({
-    orderBy: { createdAt: 'desc' },
+    orderBy: { createdAt: "desc" },
     include: { techStack: true, author: true },
   });
 }
@@ -16,7 +16,9 @@ export async function getPostById(id: string): Promise<Post | null> {
   });
 }
 
-export async function createPost(data: Omit<Post, 'id' | 'createdAt' | 'updatedAt'>): Promise<Post> {
+export async function createPost(
+  data: Omit<Post, "id" | "createdAt" | "updatedAt">,
+): Promise<Post> {
   return prisma.post.create({ data });
 }
 

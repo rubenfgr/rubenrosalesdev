@@ -1,17 +1,6 @@
-import { getAllPosts, getPostById, createPost, updatePost, deletePost } from '../services/post.service';
-import {
-  PostInput,
-  PostInputDTO,
-  PostUpdateInput,
-  PostUpdateInputDTO,
-  PostId,
-  PostIdDTO,
-} from '../../shared/dto/post.model';
-import {
-  mapPostInputDTO,
-  mapPostUpdateInputDTO,
-} from '../../shared/mappers/post.mapper';
-
+import { PostInput, type PostInputDTO } from "@/shared/dto";
+import { mapPostInputDTO, mapPostUpdateInputDTO } from "@/shared/mappers";
+import { createPost, deletePost, getAllPosts, getPostById, updatePost } from "./post.service";
 
 export const listPosts = async () => {
   return getAllPosts();

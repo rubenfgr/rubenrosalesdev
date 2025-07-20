@@ -1,12 +1,19 @@
 {
-  "include": ["**/*.ts", "**/*.tsx"],
+  "include": [
+    "**/*.ts",
+    "**/*.tsx"
+  ],
   "compilerOptions": {
     "strict": true,
     "esModuleInterop": true,
     "jsx": "react-jsx",
     "module": "ESNext",
     "moduleResolution": "Bundler",
-    "lib": ["DOM", "DOM.Iterable", "ES2022"],
+    "lib": [
+      "DOM",
+      "DOM.Iterable",
+      "ES2022"
+    ],
     "isolatedModules": true,
     "resolveJsonModule": true,
     "skipLibCheck": true,
@@ -15,21 +22,42 @@
     "forceConsistentCasingInFileNames": true,
     "baseUrl": ".",
     "noEmit": true,
-    "types": ["jest"],
+    "types": [
+      "jest"
+    ],
     "paths": {
-
-      "~/*": ["./src/*"],
-      "@/shared/*": ["./app/shared/*"  ],
+      "~/*": [
+        "./src/*"
+      ],
+      "@/shared/*": [
+        "./src/shared/*"
+      ],
       /* Server Alias */
-      "@/database": ["./app/server/database"],
-      "@/entities/*": ["./app/server/database/entities/*"],
+      "@/database": [
+        "./src/server/database"
+      ],
+      "@/entities/*": [
+        "./src/server/database/entities/*"
+      ],
       /* Client Alias */
-      "@/client/*": ["./app/client/*"],
-      "@/components/*": ["./app/client/components/*"],
-      "@/hooks/*": ["./app/client/hooks/*"],
-      "@/pages/*": ["./app/client/pages/*"],
-      "@/services/*": ["./app/client/services/*"],
-      "@/styles/*": ["./app/client/styles/*"]
+      "@/client/*": [
+        "./src/client/*"
+      ],
+      "@/components/*": [
+        "./src/client/components/*"
+      ],
+      "@/hooks/*": [
+        "./src/client/hooks/*"
+      ],
+      "@/pages/*": [
+        "./src/client/pages/*"
+      ],
+      "@/services/*": [
+        "./src/client/services/*"
+      ],
+      "@/styles/*": [
+        "./src/client/styles/*"
+      ]
     }
   }
 }

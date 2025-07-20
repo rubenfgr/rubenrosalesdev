@@ -59,7 +59,7 @@ describe("certification.service", () => {
       url: null,
       userId: "u1",
     };
-    const result = await certificationService.createCertification(data as any);
+    const result = await certificationService.createCertification(data);
     expect(mockPrisma.certification.create).toHaveBeenCalledWith({ data });
     expect(result).toBe(mockCert);
   });
