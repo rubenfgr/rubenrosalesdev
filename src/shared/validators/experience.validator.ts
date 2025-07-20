@@ -1,7 +1,7 @@
 import { z } from 'zod';
 
 
-export const ExperienceIdValidator = z.object({ id: z.string() });
+export const ExperienceIdValidator = z.object({ id: z.uuid() });
 
 export const ExperienceCreateValidator = z.object({
   company: z.string(),
@@ -13,7 +13,7 @@ export const ExperienceCreateValidator = z.object({
 });
 
 export const ExperienceUpdateValidator = z.object({
-  id: z.string(),
+  id: z.uuid(),
   data: ExperienceCreateValidator.partial(),
 });
 

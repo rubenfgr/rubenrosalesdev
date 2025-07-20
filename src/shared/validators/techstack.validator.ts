@@ -3,7 +3,7 @@ import { SKILL_LEVEL } from '../enums/skill-level.enum';
 
 export const SkillLevelEnum = z.enum(SKILL_LEVEL);
 
-export const TechStackIdValidator = z.object({ id: z.string() });
+export const TechStackIdValidator = z.object({ id: z.uuid() });
 
 export const TechStackCreateValidator = z.object({
   name: z.string(),
@@ -11,7 +11,7 @@ export const TechStackCreateValidator = z.object({
 });
 
 export const TechStackUpdateValidator = z.object({
-  id: z.string(),
+  id: z.uuid(),
   data: TechStackCreateValidator.partial(),
 });
 

@@ -14,6 +14,9 @@ import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as AdminIndexRouteImport } from './routes/admin/index'
 import { ServerRoute as ApiHealthServerRouteImport } from './routes/api/health'
+import { ServerRoute as ApiCertificationsServerRouteImport } from './routes/api/certifications'
+import { ServerRoute as ApiCertificationsIndexServerRouteImport } from './routes/api/certifications/index'
+import { ServerRoute as ApiCertificationsIdServerRouteImport } from './routes/api/certifications/$id'
 
 const rootServerRouteImport = createServerRootRoute()
 
@@ -32,6 +35,23 @@ const ApiHealthServerRoute = ApiHealthServerRouteImport.update({
   path: '/api/health',
   getParentRoute: () => rootServerRouteImport,
 } as any)
+const ApiCertificationsServerRoute = ApiCertificationsServerRouteImport.update({
+  id: '/api/certifications',
+  path: '/api/certifications',
+  getParentRoute: () => rootServerRouteImport,
+} as any)
+const ApiCertificationsIndexServerRoute =
+  ApiCertificationsIndexServerRouteImport.update({
+    id: '/',
+    path: '/',
+    getParentRoute: () => ApiCertificationsServerRoute,
+  } as any)
+const ApiCertificationsIdServerRoute =
+  ApiCertificationsIdServerRouteImport.update({
+    id: '/$id',
+    path: '/$id',
+    getParentRoute: () => ApiCertificationsServerRoute,
+  } as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
@@ -59,24 +79,42 @@ export interface RootRouteChildren {
   AdminIndexRoute: typeof AdminIndexRoute
 }
 export interface FileServerRoutesByFullPath {
+  '/api/certifications': typeof ApiCertificationsServerRouteWithChildren
   '/api/health': typeof ApiHealthServerRoute
+  '/api/certifications/$id': typeof ApiCertificationsIdServerRoute
+  '/api/certifications/': typeof ApiCertificationsIndexServerRoute
 }
 export interface FileServerRoutesByTo {
   '/api/health': typeof ApiHealthServerRoute
+  '/api/certifications/$id': typeof ApiCertificationsIdServerRoute
+  '/api/certifications': typeof ApiCertificationsIndexServerRoute
 }
 export interface FileServerRoutesById {
   __root__: typeof rootServerRouteImport
+  '/api/certifications': typeof ApiCertificationsServerRouteWithChildren
   '/api/health': typeof ApiHealthServerRoute
+  '/api/certifications/$id': typeof ApiCertificationsIdServerRoute
+  '/api/certifications/': typeof ApiCertificationsIndexServerRoute
 }
 export interface FileServerRouteTypes {
   fileServerRoutesByFullPath: FileServerRoutesByFullPath
-  fullPaths: '/api/health'
+  fullPaths:
+    | '/api/certifications'
+    | '/api/health'
+    | '/api/certifications/$id'
+    | '/api/certifications/'
   fileServerRoutesByTo: FileServerRoutesByTo
-  to: '/api/health'
-  id: '__root__' | '/api/health'
+  to: '/api/health' | '/api/certifications/$id' | '/api/certifications'
+  id:
+    | '__root__'
+    | '/api/certifications'
+    | '/api/health'
+    | '/api/certifications/$id'
+    | '/api/certifications/'
   fileServerRoutesById: FileServerRoutesById
 }
 export interface RootServerRouteChildren {
+  ApiCertificationsServerRoute: typeof ApiCertificationsServerRouteWithChildren
   ApiHealthServerRoute: typeof ApiHealthServerRoute
 }
 
@@ -107,8 +145,45 @@ declare module '@tanstack/react-start/server' {
       preLoaderRoute: typeof ApiHealthServerRouteImport
       parentRoute: typeof rootServerRouteImport
     }
+    '/api/certifications': {
+      id: '/api/certifications'
+      path: '/api/certifications'
+      fullPath: '/api/certifications'
+      preLoaderRoute: typeof ApiCertificationsServerRouteImport
+      parentRoute: typeof rootServerRouteImport
+    }
+    '/api/certifications/': {
+      id: '/api/certifications/'
+      path: '/'
+      fullPath: '/api/certifications/'
+      preLoaderRoute: typeof ApiCertificationsIndexServerRouteImport
+      parentRoute: typeof ApiCertificationsServerRoute
+    }
+    '/api/certifications/$id': {
+      id: '/api/certifications/$id'
+      path: '/$id'
+      fullPath: '/api/certifications/$id'
+      preLoaderRoute: typeof ApiCertificationsIdServerRouteImport
+      parentRoute: typeof ApiCertificationsServerRoute
+    }
   }
 }
+
+interface ApiCertificationsServerRouteChildren {
+  ApiCertificationsIdServerRoute: typeof ApiCertificationsIdServerRoute
+  ApiCertificationsIndexServerRoute: typeof ApiCertificationsIndexServerRoute
+}
+
+const ApiCertificationsServerRouteChildren: ApiCertificationsServerRouteChildren =
+  {
+    ApiCertificationsIdServerRoute: ApiCertificationsIdServerRoute,
+    ApiCertificationsIndexServerRoute: ApiCertificationsIndexServerRoute,
+  }
+
+const ApiCertificationsServerRouteWithChildren =
+  ApiCertificationsServerRoute._addFileChildren(
+    ApiCertificationsServerRouteChildren,
+  )
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
@@ -118,6 +193,7 @@ export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
   ._addFileTypes<FileRouteTypes>()
 const rootServerRouteChildren: RootServerRouteChildren = {
+  ApiCertificationsServerRoute: ApiCertificationsServerRouteWithChildren,
   ApiHealthServerRoute: ApiHealthServerRoute,
 }
 export const serverRouteTree = rootServerRouteImport

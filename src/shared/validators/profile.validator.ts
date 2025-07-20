@@ -1,6 +1,6 @@
 import { z } from 'zod';
 
-export const ProfileIdValidator = z.object({ id: z.string() });
+export const ProfileIdValidator = z.object({ id: z.uuid() });
 
 export const ProfileCreateValidator = z.object({
   bio: z.string().nullable().optional(),
@@ -11,7 +11,7 @@ export const ProfileCreateValidator = z.object({
 });
 
 export const ProfileUpdateValidator = z.object({
-  id: z.string(),
+  id: z.uuid(),
   data: ProfileCreateValidator.partial(),
 });
 
