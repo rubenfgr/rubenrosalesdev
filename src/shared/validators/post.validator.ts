@@ -1,4 +1,7 @@
 import { z } from 'zod';
+import { POST_STATUS } from '../enums/post-status.enum';
+
+export const PostStatusEnum = z.enum(POST_STATUS);
 
 export const PostIdValidator = z.object({ id: z.string() });
 
@@ -7,7 +10,7 @@ export const PostCreateValidator = z.object({
   summary: z.string().optional(),
   content: z.string(),
   published: z.boolean().optional(),
-  status: z.string().optional(),
+  status: PostStatusEnum.optional(),
   tags: z.array(z.string()).optional(),
   publishedAt: z.date().optional(),
   authorId: z.string(),

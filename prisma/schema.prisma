@@ -30,13 +30,18 @@ enum Role {
     USER
 }
 
+enum PostStatus {
+  draft
+  published
+}
+
 model Post {
     id          String          @id @default(uuid())
     title       String
     summary     String?
     content     String
     published   Boolean         @default(false)
-    status      String          @default("draft") // draft | published
+    status      PostStatus      @default(draft)
     tags        String[]
     publishedAt DateTime?
     createdAt   DateTime        @default(now())
@@ -81,10 +86,16 @@ model Experience {
     techStack   ExperienceTechStack[]
 }
 
+enum SkillLevel {
+  beginner
+  intermediate
+  advanced
+}
+
 model TechStack {
     id          String                @id @default(uuid())
     name        String
-    level       String? // e.g. 'beginner', 'intermediate', 'advanced'
+    level       SkillLevel?           // e.g. 'beginner', 'intermediate', 'advanced'
     projects    ProjectTechStack[]
     experiences ExperienceTechStack[]
     posts       PostTechStack[]
