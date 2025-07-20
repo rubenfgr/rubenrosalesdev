@@ -10,9 +10,7 @@ export function mapCertificationCreateDTO(dto: CertificationCreateDTO) {
   };
 }
 
-export function mapCertificationUpdateDTO(
-  data: Partial<CertificationCreateDTO>,
-) {
+export function mapCertificationUpdateDTO(data: Partial<CertificationCreateDTO>) {
   return {
     ...(data.name !== undefined && { name: data.name }),
     ...(data.issuer !== undefined && { issuer: data.issuer }),

@@ -1,1 +1,1 @@
-export * from './use-client-translation';
+export * from "./use-client-translation";

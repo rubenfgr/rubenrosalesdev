@@ -93,9 +93,7 @@ describe("certification.server", () => {
     expect(calledArgs[0]).toBe("id1");
     expect(calledArgs[1].name).toBe("Cert");
     // Accept both cases: url: null or url omitted
-    expect(Object.hasOwn(calledArgs[1], "url") ? calledArgs[1].url : null).toBe(
-      null,
-    );
+    expect(Object.hasOwn(calledArgs[1], "url") ? calledArgs[1].url : null).toBe(null);
     expect(result).toBe(mockCert);
   });
 

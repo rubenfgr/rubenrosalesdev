@@ -1,5 +1,4 @@
-import { z } from 'zod';
-
+import { z } from "zod";
 
 export const ExperienceIdValidator = z.object({ id: z.uuid() });
 
@@ -16,4 +15,3 @@ export const ExperienceUpdateValidator = z.object({
   id: z.uuid(),
   data: ExperienceCreateValidator.partial(),
 });
-

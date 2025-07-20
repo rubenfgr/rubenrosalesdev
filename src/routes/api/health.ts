@@ -1,10 +1,9 @@
-
 import { json } from "@tanstack/react-start";
 import { createServerFileRoute } from "@tanstack/react-start/server";
 import { serverTranslation } from "@/server/services/use-server-translation";
 
 export const ServerRoute = createServerFileRoute("/api/health").methods({
-  GET: async ({ request, params }) => {
+  GET: async () => {
     try {
       const { t } = serverTranslation();
 

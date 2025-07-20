@@ -1,3 +1,9 @@
 {
-  "welcome": "Bienvenido a nuestra aplicación"
+  "welcome": "Bienvenido a nuestra aplicación",
+  "not_found": "No encontrado",
+  "validation_error": "Error de validación",
+  "unexpected_error": "Error inesperado",
+  "certification_created": "Certificación creada correctamente",
+  "certification_updated": "Certificación actualizada correctamente",
+  "certification_deleted": "Certificación eliminada correctamente"
 }

@@ -1,5 +1,5 @@
-import { z } from 'zod';
-import { SKILL_LEVEL } from '../enums/skill-level.enum';
+import { z } from "zod";
+import { SKILL_LEVEL } from "@/shared/enums";
 
 export const SkillLevelEnum = z.enum(SKILL_LEVEL);
 
@@ -14,4 +14,3 @@ export const TechStackUpdateValidator = z.object({
   id: z.uuid(),
   data: TechStackCreateValidator.partial(),
 });
-

@@ -11,9 +11,7 @@ export function mapExperienceCreateDTO(dto: ExperienceCreateDTO) {
   };
 }
 
-export function mapExperienceUpdateDTO(
-  data: Partial<ExperienceCreateDTO>,
-) {
+export function mapExperienceUpdateDTO(data: Partial<ExperienceCreateDTO>) {
   return {
     ...(data.company !== undefined && { company: data.company }),
     ...(data.position !== undefined && { position: data.position }),

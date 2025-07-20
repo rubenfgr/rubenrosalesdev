@@ -1,22 +1,16 @@
 import type z from "zod";
 import type {
-    CertificationCreateValidator,
-    CertificationIdValidator,
-    CertificationUpdateValidator,
+  CertificationCreateValidator,
+  CertificationIdValidator,
+  CertificationUpdateValidator,
 } from "@/shared/validators/certification.validator";
-
 
 export type CertificationIdDTO = z.infer<typeof CertificationIdValidator>;
 
 export type CertificationDTO = z.infer<typeof CertificationCreateValidator> & {
-    id: string;
+  id: string;
 };
 
-export type CertificationCreateDTO = z.infer<
-    typeof CertificationCreateValidator
->;
+export type CertificationCreateDTO = z.infer<typeof CertificationCreateValidator>;
 
-export type CertificationUpdateDTO = z.infer<
-    typeof CertificationUpdateValidator
->;
-
+export type CertificationUpdateDTO = z.infer<typeof CertificationUpdateValidator>;

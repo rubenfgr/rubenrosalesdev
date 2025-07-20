@@ -1,4 +1,4 @@
-import { z } from 'zod';
+import { z } from "zod";
 
 export const ProjectIdValidator = z.object({ id: z.uuid() });
 
@@ -16,4 +16,3 @@ export const ProjectUpdateValidator = z.object({
   id: z.uuid(),
   data: ProjectCreateValidator.partial(),
 });
-

@@ -14,4 +14,3 @@ export type PostDTO = z.infer<typeof PostCreateValidator> & {
 export type PostCreateDTO = z.infer<typeof PostCreateValidator>;
 
 export type PostUpdateDTO = z.infer<typeof PostUpdateValidator>;
-

@@ -1,4 +1,4 @@
-import { z } from 'zod';
+import { z } from "zod";
 
 export const ProfileIdValidator = z.object({ id: z.uuid() });
 
@@ -14,4 +14,3 @@ export const ProfileUpdateValidator = z.object({
   id: z.uuid(),
   data: ProfileCreateValidator.partial(),
 });
-

@@ -84,6 +84,7 @@ function CertificationsDataTable({
           Name
         </button>
       ),
+      // biome-ignore lint/suspicious/noExplicitAny: any
       cell: (info: any) => String(info.getValue()),
     },
     {
@@ -93,6 +94,7 @@ function CertificationsDataTable({
           Issuer
         </button>
       ),
+      // biome-ignore lint/suspicious/noExplicitAny: any
       cell: (info: any) => String(info.getValue()),
     },
     {
@@ -102,12 +104,14 @@ function CertificationsDataTable({
           Date
         </button>
       ),
+      // biome-ignore lint/suspicious/noExplicitAny: any
       cell: (info: any) =>
         info.row.original.date ? new Date(info.row.original.date).toLocaleDateString() : "",
     },
     {
       accessorKey: "url",
       header: "URL",
+      // biome-ignore lint/suspicious/noExplicitAny: any
       cell: (info: any) =>
         info.row.original.url ? (
           <a
@@ -125,6 +129,7 @@ function CertificationsDataTable({
     {
       id: "actions",
       header: "Actions",
+      // biome-ignore lint/suspicious/noExplicitAny: any
       cell: (info: any) => (
         <div className="flex gap-2">
           {onEdit(info.row.original)}
@@ -228,8 +233,7 @@ function AddCertificationForm({ cert }: { cert?: CertificationDTO }) {
         url: values.url || null,
         userId: values.userId,
       };
-      console.log("Submitting certification data:", data);
-      if (cert && cert.id) {
+      if (cert?.id) {
         await updateCertification.mutateAsync({ id: cert.id, data });
       } else {
         await createCertification.mutateAsync(data);
