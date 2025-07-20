@@ -9,7 +9,7 @@ import appCss from "@/client/styles/app.css?url";
 import { DefaultCatchBoundary } from "~/client/components/DefaultCatchBoundary";
 import { NotFound } from "~/client/components/NotFound";
 import { seo } from "~/routes/utils/seo";
-import "@/client/services/i18n";
+import "@/shared/i18n";
 
 export const Route = createRootRouteWithContext<{
   queryClient: QueryClient;

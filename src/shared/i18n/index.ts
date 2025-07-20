@@ -1,7 +1,8 @@
 import i18n from "i18next";
 import LanguageDetector from "i18next-browser-languagedetector";
 import { initReactI18next } from "react-i18next";
-import es from "@/client/services/i18n/locales/es.json";
+import clientES from "@/shared/i18n/locales/client/es.json";
+import serverES from "@/shared/i18n/locales/server/es.json";
 
 i18n
     .use(LanguageDetector)
@@ -9,7 +10,8 @@ i18n
     .init({
         resources: {
             es: {
-                translation: es,
+                client: clientES,
+                server: serverES
             },
         },
         lng: "es",
