@@ -7,11 +7,11 @@ import {
   ProjectUpdateInputDTO,
   ProjectId,
   ProjectIdDTO,
-} from '../models/project.model';
+} from '../../shared/dto/project.model';
 import {
   mapProjectInputDTO,
   mapProjectUpdateInputDTO,
-} from '../mappers/project.mapper';
+} from '../../shared/mappers/project.mapper';
 
 
 export const listProjects = createServerFn({ method: 'GET' })

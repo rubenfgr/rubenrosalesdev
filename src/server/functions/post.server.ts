@@ -6,11 +6,11 @@ import {
   PostUpdateInputDTO,
   PostId,
   PostIdDTO,
-} from '../models/post.model';
+} from '../../shared/dto/post.model';
 import {
   mapPostInputDTO,
   mapPostUpdateInputDTO,
-} from '../mappers/post.mapper';
+} from '../../shared/mappers/post.mapper';
 
 
 export const listPosts = async () => {

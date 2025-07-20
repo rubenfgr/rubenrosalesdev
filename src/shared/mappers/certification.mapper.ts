@@ -1,6 +1,6 @@
-import { CertificationInputDTO } from '../models/certification.model';
+import type { CertificationCreateDTO } from "../dto/certification.dto";
 
-export function mapCertificationInputDTO(dto: CertificationInputDTO) {
+export function mapCertificationInputDTO(dto: CertificationCreateDTO) {
   return {
     name: dto.name,
     issuer: dto.issuer,
@@ -10,7 +10,9 @@ export function mapCertificationInputDTO(dto: CertificationInputDTO) {
   };
 }
 
-export function mapCertificationUpdateInputDTO(data: Partial<CertificationInputDTO>) {
+export function mapCertificationUpdateInputDTO(
+  data: Partial<CertificationCreateDTO>,
+) {
   return {
     ...(data.name !== undefined && { name: data.name }),
     ...(data.issuer !== undefined && { issuer: data.issuer }),

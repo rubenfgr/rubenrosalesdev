@@ -1,4 +1,4 @@
-import { PostInputDTO } from '../models/post.model';
+import { PostInputDTO } from '../dto/post.model';
 
 export function mapPostInputDTO(dto: PostInputDTO) {
   return {

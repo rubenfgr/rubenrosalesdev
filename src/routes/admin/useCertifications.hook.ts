@@ -1,5 +1,5 @@
 import { useQuery } from '@tanstack/react-query';
-import { listCertifications } from '~/server/functions/certification.server';
+import { listCertifications } from '~/server/modules/certifications/certification.server';
 
 export function useCertifications() {
   return useQuery({

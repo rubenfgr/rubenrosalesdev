@@ -1,6 +1,6 @@
-import { ExperienceInputDTO } from '../models/experience.model';
+import type { ExperienceCreateDTO } from "../dto/experience.dto";
 
-export function mapExperienceInputDTO(dto: ExperienceInputDTO) {
+export function mapExperienceInputDTO(dto: ExperienceCreateDTO) {
   return {
     company: dto.company,
     position: dto.position,
@@ -11,7 +11,9 @@ export function mapExperienceInputDTO(dto: ExperienceInputDTO) {
   };
 }
 
-export function mapExperienceUpdateInputDTO(data: Partial<ExperienceInputDTO>) {
+export function mapExperienceUpdateInputDTO(
+  data: Partial<ExperienceCreateDTO>,
+) {
   return {
     ...(data.company !== undefined && { company: data.company }),
     ...(data.position !== undefined && { position: data.position }),

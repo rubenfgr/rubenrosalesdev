@@ -1,6 +1,6 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query';
-import { deleteCertificationServer } from '~/server/functions/certification.server';
-import type { CertificationIdDTO } from '../../server/models/certification.model';
+import { deleteCertificationServer } from '~/server/modules/certifications/certification.server';
+import type { CertificationIdDTO } from '../../shared/dto/certification.dto';
 
 export function useDeleteCertification() {
   const queryClient = useQueryClient();

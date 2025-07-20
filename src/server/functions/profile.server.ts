@@ -7,11 +7,11 @@ import {
   ProfileUpdateInputDTO,
   ProfileId,
   ProfileIdDTO,
-} from '../models/profile.model';
+} from '../../shared/dto/profile.model';
 import {
   mapProfileInputDTO,
   mapProfileUpdateInputDTO,
-} from '../mappers/profile.mapper';
+} from '../../shared/mappers/profile.mapper';
 
 export const listProfiles = createServerFn({ method: 'GET' })
   .handler(async () => {

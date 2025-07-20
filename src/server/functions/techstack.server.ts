@@ -7,11 +7,11 @@ import {
   TechStackUpdateInputDTO,
   TechStackId,
   TechStackIdDTO,
-} from '../models/techstack.model';
+} from '../../shared/dto/techstack.model';
 import {
   mapTechStackInputDTO,
   mapTechStackUpdateInputDTO,
-} from '../mappers/techstack.mapper';
+} from '../../shared/mappers/techstack.mapper';
 
 export const listTechStack = createServerFn({ method: 'GET' })
   .handler(async () => {

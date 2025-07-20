@@ -17,8 +17,9 @@
     "noEmit": true,
     "types": ["jest"],
     "paths": {
+
       "~/*": ["./src/*"],
-            "@/shared/*": ["./app/shared/*"],
+      "@/shared/*": ["./app/shared/*"  ],
       /* Server Alias */
       "@/database": ["./app/server/database"],
       "@/entities/*": ["./app/server/database/entities/*"],
@@ -29,6 +30,6 @@
       "@/pages/*": ["./app/client/pages/*"],
       "@/services/*": ["./app/client/services/*"],
       "@/styles/*": ["./app/client/styles/*"]
-    },
+    }
   }
 }

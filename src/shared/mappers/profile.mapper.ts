@@ -1,4 +1,4 @@
-import { ProfileInputDTO } from '../models/profile.model';
+import { ProfileInputDTO } from '../dto/profile.model';
 
 export function mapProfileInputDTO(dto: ProfileInputDTO) {
   return {

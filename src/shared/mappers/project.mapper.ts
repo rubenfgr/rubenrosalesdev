@@ -1,4 +1,4 @@
-import { ProjectInputDTO } from '../models/project.model';
+import { ProjectInputDTO } from '../dto/project.model';
 
 export function mapProjectInputDTO(dto: ProjectInputDTO) {
   return {
