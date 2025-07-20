@@ -8,7 +8,6 @@ import {
 } from "@/shared/validators";
 import { experienceService } from "./experience.service";
 
-
 export const listExperiences = createServerFn({ method: "GET" }).handler(async () => {
   return experienceService.getAllExperiences();
 });

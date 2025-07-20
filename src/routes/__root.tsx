@@ -6,9 +6,9 @@ import { createRootRouteWithContext, HeadContent, Outlet, Scripts } from "@tanst
 import { TanStackRouterDevtools } from "@tanstack/react-router-devtools";
 import type * as React from "react";
 import appCss from "@/client/styles/app.css?url";
+import { seo } from "@/client/utils/seo";
 import { DefaultCatchBoundary } from "~/client/components/DefaultCatchBoundary";
 import { NotFound } from "~/client/components/NotFound";
-import { seo } from "~/routes/utils/seo";
 import "@/shared/i18n";
 
 export const Route = createRootRouteWithContext<{

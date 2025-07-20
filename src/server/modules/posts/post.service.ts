@@ -17,9 +17,7 @@ async function getPostById(id: string): Promise<Post | null> {
   });
 }
 
-async function createPost(
-  data: Omit<Post, "id" | "createdAt" | "updatedAt">,
-): Promise<Post> {
+async function createPost(data: Omit<Post, "id" | "createdAt" | "updatedAt">): Promise<Post> {
   return prisma.post.create({ data });
 }
 

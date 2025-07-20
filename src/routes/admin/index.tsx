@@ -1,4 +1,5 @@
 import { createFileRoute } from "@tanstack/react-router";
+import * as React from "react";
 import {
   Card,
   CardContent,
@@ -10,7 +11,7 @@ import {
   TabsTrigger,
 } from "@/client/components/ui";
 import { useClientTranslation } from "@/client/hooks";
-import CertificationsSection from "@/client/pages/admin/certifications/CertificationsSection";
+import CertificationsPage from "@/client/pages/admin/certifications/certification.page";
 
 export const Route = createFileRoute("/admin/")({
   component: AdminDashboard,
@@ -37,7 +38,7 @@ function AdminDashboard() {
               <TabsTrigger value="profile">Profile</TabsTrigger>
             </TabsList>
             <TabsContent value="certifications">
-              <CertificationsSection />
+              <CertificationsPage />
             </TabsContent>
             <TabsContent value="projects">
               <div>Manage projects</div>

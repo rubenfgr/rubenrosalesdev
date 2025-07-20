@@ -8,7 +8,6 @@ import {
 } from "@/shared/validators";
 import { techStackService } from "./techstack.service";
 
-
 export const listTechStack = createServerFn({ method: "GET" }).handler(async () => {
   return techStackService.getAllTechStack();
 });

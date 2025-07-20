@@ -8,7 +8,6 @@ import {
 } from "@/shared/validators";
 import { projectService } from "./project.service";
 
-
 export const listProjects = createServerFn({ method: "GET" }).handler(async () => {
   return projectService.getAllProjects();
 });

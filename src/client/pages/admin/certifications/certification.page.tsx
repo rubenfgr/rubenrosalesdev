@@ -7,14 +7,19 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@/client/components/ui";
+import {
+  useDeleteCertification,
+  useGetAllCertifications,
+} from "@/client/services/api/certifications";
 import type { CertificationDTO } from "@/shared/dto";
-import { AddCertificationForm, CertificationsDataTable } from "./CertificationsComponents";
-import { useCertifications } from "./useCertifications.hook";
-import { useDeleteCertification } from "./useDeleteCertification.hook";
+import { CertificationFormComponent } from "./components/certification-form.tsx/certification-form.component";
+import { CertificationsListComponent } from "./components/certifications-list/certifications-list.component";
 
-export default function CertificationsSection() {
-  const { data: certifications = [], isLoading, error } = useCertifications();
+export default function CertificationsPage() {
+  const { data: certifications = [], isLoading, error } = useGetAllCertifications();
   const deleteCertification = useDeleteCertification();
+
+  console.log("Certifications data:", certifications);
 
   const handleDeleteCertification = async (data: { id: string }) => {
     try {
@@ -36,7 +41,7 @@ export default function CertificationsSection() {
             <DialogHeader>
               <DialogTitle>Add Certification</DialogTitle>
             </DialogHeader>
-            <AddCertificationForm />
+            <CertificationFormComponent />
           </DialogContent>
         </Dialog>
       </div>
@@ -45,7 +50,7 @@ export default function CertificationsSection() {
       ) : error ? (
         <div className="text-red-500">{error.message}</div>
       ) : (
-        <CertificationsDataTable
+        <CertificationsListComponent
           data={certifications as CertificationDTO[]}
           onEdit={(cert) => (
             <Dialog>
@@ -58,7 +63,7 @@ export default function CertificationsSection() {
                 <DialogHeader>
                   <DialogTitle>Edit Certification</DialogTitle>
                 </DialogHeader>
-                <AddCertificationForm cert={cert} />
+                <CertificationFormComponent cert={cert} />
               </DialogContent>
             </Dialog>
           )}
