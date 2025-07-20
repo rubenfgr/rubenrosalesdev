@@ -1,35 +1,96 @@
 {
+  // File exclusions for watcher and search
   "files.watcherExclude": {
-    "**/routeTree.gen.ts": true
+    "**/routeTree.gen.ts": true // Ignore generated file
   },
   "search.exclude": {
-    "**/routeTree.gen.ts": true
+    "**/routeTree.gen.ts": true // Exclude from search
   },
   "files.readonlyInclude": {
-    "**/routeTree.gen.ts": true
+    "**/routeTree.gen.ts": true // Set as read-only file
   },
+
+  // Custom chat configuration paths
   "chat.modeFilesLocations": {
-    ".copilot/chatmodes": true
+    ".copilot/chatmodes": true // Chat modes location
   },
   "chat.promptFilesLocations": {
-    ".copilot/prompts": true
+    ".copilot/prompts": true // Prompts location
   },
   "chat.instructionsFilesLocations": {
-    ".copilot/instructions": true
+    ".copilot/instructions": true // Instructions location
   },
-  "files.eol": "\n",
-  "files.insertFinalNewline": true,
-  "files.trimTrailingWhitespace": true,
+
+  // File formatting rules
+  "files.eol": "\n", // Unix-style end of line
+  "files.insertFinalNewline": true, // Insert final newline
+  "files.trimTrailingWhitespace": true, // Remove trailing whitespace
+
+  // Markdown-specific configuration
   "[markdown]": {
-    "files.trimTrailingWhitespace": false,
-    "editor.formatOnSave": true
+    "files.trimTrailingWhitespace": false, // Keep trailing whitespace in Markdown
+    "editor.formatOnSave": true // Format on save
   },
+
+  // Visual ruler for line width
   "editor.rulers": [
-    100
+    100 // Show guide at column 100
   ],
+
+  // File associations for custom types
   "files.associations": {
-    "*.chatmode.md": "markdown",
-    "*.instructions.md": "markdown",
-    "*.prompt.md": "markdown"
+    "*.chatmode.md": "markdown", // Treat chatmode files as markdown
+    "*.instructions.md": "markdown", // Treat instructions files as markdown
+    "*.prompt.md": "markdown" // Treat prompt files as markdown
+  },
+
+  // Default formatter and format on save
+  "editor.defaultFormatter": "biomejs.biome", // Use Biome as main formatter
+  "editor.formatOnSave": true, // Format on save
+
+  // Disable other formatters/linters
+  "eslint.enable": false, // Disable ESLint
+  "prettier.enable": false, // Disable Prettier
+
+  // Language-specific configuration
+  "[json]": {
+    "editor.formatOnPaste": true, // Format on paste
+    "editor.formatOnSave": true, // Format on save
+    "editor.defaultFormatter": "biomejs.biome" // Use Biome
+  },
+  "[typescript]": {
+    "editor.formatOnPaste": true,
+    "editor.formatOnSave": true,
+    "editor.defaultFormatter": "biomejs.biome"
+  },
+  "[javascript]": {
+    "editor.formatOnPaste": true,
+    "editor.formatOnSave": true,
+    "editor.defaultFormatter": "biomejs.biome"
+  },
+  "[typescriptreact]": {
+    "editor.formatOnPaste": true,
+    "editor.formatOnSave": true,
+    "editor.defaultFormatter": "biomejs.biome"
+  },
+  "[javascriptreact]": {
+    "editor.formatOnPaste": true,
+    "editor.formatOnSave": true,
+    "editor.defaultFormatter": "biomejs.biome"
+  },
+
+  // Automatic code actions on save
+  "editor.codeActionsOnSave": {
+    "quickfix.biome": "explicit", // Biome quick fixes
+    "source.organizeImports.biome": "explicit", // Organize imports with Biome
+    "source.fixAll.biome": "explicit" // Apply all Biome fixes
+  },
+
+  // Formatter for JSON with comments and CSS
+  "[jsonc]": {
+    "editor.defaultFormatter": "biomejs.biome"
+  },
+  "[css]": {
+    "editor.defaultFormatter": "biomejs.biome"
   }
 }
