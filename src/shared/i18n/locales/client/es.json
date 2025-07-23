@@ -3,6 +3,24 @@
     "dashboard": {
       "title": "Panel de control",
       "description": "Bienvenido al panel de control del administrador. Aquí puedes gestionar el contenido, los usuarios y las configuraciones de la aplicación."
+    },
+    "menu": {
+      "dashboard": "Panel de control",
+      "certifications": "Certificaciones",
+      "blog": "Publicaciones del blog",
+      "projects": "Proyectos",
+      "experience": "Experiencia",
+      "techstack": "Pila tecnológica",
+      "settings": "Configuraciones",
+      "help": "Obtener ayuda",
+      "search": "Buscar",
+      "profile": "Perfil",
+      "public": "Público"
+    },
+    "user": {
+      "profile": "Perfil",
+      "notifications": "Notificaciones",
+      "logout": "Cerrar sesión"
     }
   }
 }

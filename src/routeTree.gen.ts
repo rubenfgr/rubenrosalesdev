@@ -11,8 +11,13 @@
 import { createServerRootRoute } from '@tanstack/react-start/server'
 
 import { Route as rootRouteImport } from './routes/__root'
+import { Route as AdminRouteImport } from './routes/admin'
 import { Route as IndexRouteImport } from './routes/index'
-import { Route as AdminIndexRouteImport } from './routes/admin/index'
+import { Route as AdminDashboardRouteImport } from './routes/admin/dashboard'
+import { Route as AdminCertificationsRouteImport } from './routes/admin/certifications'
+import { Route as AdminUserIndexRouteImport } from './routes/admin/user/index'
+import { Route as AdminUserProfileRouteImport } from './routes/admin/user/profile'
+import { Route as AdminUserNotificationsRouteImport } from './routes/admin/user/notifications'
 import { ServerRoute as ApiHealthServerRouteImport } from './routes/api/health'
 import { ServerRoute as ApiCertificationsServerRouteImport } from './routes/api/certifications'
 import { ServerRoute as ApiExperiencesIndexServerRouteImport } from './routes/api/experiences/index'
@@ -22,15 +27,40 @@ import { ServerRoute as ApiCertificationsIdServerRouteImport } from './routes/ap
 
 const rootServerRouteImport = createServerRootRoute()
 
+const AdminRoute = AdminRouteImport.update({
+  id: '/admin',
+  path: '/admin',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
   getParentRoute: () => rootRouteImport,
 } as any)
-const AdminIndexRoute = AdminIndexRouteImport.update({
-  id: '/admin/',
-  path: '/admin/',
-  getParentRoute: () => rootRouteImport,
+const AdminDashboardRoute = AdminDashboardRouteImport.update({
+  id: '/dashboard',
+  path: '/dashboard',
+  getParentRoute: () => AdminRoute,
+} as any)
+const AdminCertificationsRoute = AdminCertificationsRouteImport.update({
+  id: '/certifications',
+  path: '/certifications',
+  getParentRoute: () => AdminRoute,
+} as any)
+const AdminUserIndexRoute = AdminUserIndexRouteImport.update({
+  id: '/user/',
+  path: '/user/',
+  getParentRoute: () => AdminRoute,
+} as any)
+const AdminUserProfileRoute = AdminUserProfileRouteImport.update({
+  id: '/user/profile',
+  path: '/user/profile',
+  getParentRoute: () => AdminRoute,
+} as any)
+const AdminUserNotificationsRoute = AdminUserNotificationsRouteImport.update({
+  id: '/user/notifications',
+  path: '/user/notifications',
+  getParentRoute: () => AdminRoute,
 } as any)
 const ApiHealthServerRoute = ApiHealthServerRouteImport.update({
   id: '/api/health',
@@ -68,28 +98,65 @@ const ApiCertificationsIdServerRoute =
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
-  '/admin': typeof AdminIndexRoute
+  '/admin': typeof AdminRouteWithChildren
+  '/admin/certifications': typeof AdminCertificationsRoute
+  '/admin/dashboard': typeof AdminDashboardRoute
+  '/admin/user/notifications': typeof AdminUserNotificationsRoute
+  '/admin/user/profile': typeof AdminUserProfileRoute
+  '/admin/user': typeof AdminUserIndexRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
-  '/admin': typeof AdminIndexRoute
+  '/admin': typeof AdminRouteWithChildren
+  '/admin/certifications': typeof AdminCertificationsRoute
+  '/admin/dashboard': typeof AdminDashboardRoute
+  '/admin/user/notifications': typeof AdminUserNotificationsRoute
+  '/admin/user/profile': typeof AdminUserProfileRoute
+  '/admin/user': typeof AdminUserIndexRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
-  '/admin/': typeof AdminIndexRoute
+  '/admin': typeof AdminRouteWithChildren
+  '/admin/certifications': typeof AdminCertificationsRoute
+  '/admin/dashboard': typeof AdminDashboardRoute
+  '/admin/user/notifications': typeof AdminUserNotificationsRoute
+  '/admin/user/profile': typeof AdminUserProfileRoute
+  '/admin/user/': typeof AdminUserIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/admin'
+  fullPaths:
+    | '/'
+    | '/admin'
+    | '/admin/certifications'
+    | '/admin/dashboard'
+    | '/admin/user/notifications'
+    | '/admin/user/profile'
+    | '/admin/user'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/admin'
-  id: '__root__' | '/' | '/admin/'
+  to:
+    | '/'
+    | '/admin'
+    | '/admin/certifications'
+    | '/admin/dashboard'
+    | '/admin/user/notifications'
+    | '/admin/user/profile'
+    | '/admin/user'
+  id:
+    | '__root__'
+    | '/'
+    | '/admin'
+    | '/admin/certifications'
+    | '/admin/dashboard'
+    | '/admin/user/notifications'
+    | '/admin/user/profile'
+    | '/admin/user/'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
-  AdminIndexRoute: typeof AdminIndexRoute
+  AdminRoute: typeof AdminRouteWithChildren
 }
 export interface FileServerRoutesByFullPath {
   '/api/certifications': typeof ApiCertificationsServerRouteWithChildren
@@ -150,6 +217,13 @@ export interface RootServerRouteChildren {
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
+    '/admin': {
+      id: '/admin'
+      path: '/admin'
+      fullPath: '/admin'
+      preLoaderRoute: typeof AdminRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/': {
       id: '/'
       path: '/'
@@ -157,12 +231,40 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/admin/': {
-      id: '/admin/'
-      path: '/admin'
-      fullPath: '/admin'
-      preLoaderRoute: typeof AdminIndexRouteImport
-      parentRoute: typeof rootRouteImport
+    '/admin/dashboard': {
+      id: '/admin/dashboard'
+      path: '/dashboard'
+      fullPath: '/admin/dashboard'
+      preLoaderRoute: typeof AdminDashboardRouteImport
+      parentRoute: typeof AdminRoute
+    }
+    '/admin/certifications': {
+      id: '/admin/certifications'
+      path: '/certifications'
+      fullPath: '/admin/certifications'
+      preLoaderRoute: typeof AdminCertificationsRouteImport
+      parentRoute: typeof AdminRoute
+    }
+    '/admin/user/': {
+      id: '/admin/user/'
+      path: '/user'
+      fullPath: '/admin/user'
+      preLoaderRoute: typeof AdminUserIndexRouteImport
+      parentRoute: typeof AdminRoute
+    }
+    '/admin/user/profile': {
+      id: '/admin/user/profile'
+      path: '/user/profile'
+      fullPath: '/admin/user/profile'
+      preLoaderRoute: typeof AdminUserProfileRouteImport
+      parentRoute: typeof AdminRoute
+    }
+    '/admin/user/notifications': {
+      id: '/admin/user/notifications'
+      path: '/user/notifications'
+      fullPath: '/admin/user/notifications'
+      preLoaderRoute: typeof AdminUserNotificationsRouteImport
+      parentRoute: typeof AdminRoute
     }
   }
 }
@@ -213,6 +315,24 @@ declare module '@tanstack/react-start/server' {
   }
 }
 
+interface AdminRouteChildren {
+  AdminCertificationsRoute: typeof AdminCertificationsRoute
+  AdminDashboardRoute: typeof AdminDashboardRoute
+  AdminUserNotificationsRoute: typeof AdminUserNotificationsRoute
+  AdminUserProfileRoute: typeof AdminUserProfileRoute
+  AdminUserIndexRoute: typeof AdminUserIndexRoute
+}
+
+const AdminRouteChildren: AdminRouteChildren = {
+  AdminCertificationsRoute: AdminCertificationsRoute,
+  AdminDashboardRoute: AdminDashboardRoute,
+  AdminUserNotificationsRoute: AdminUserNotificationsRoute,
+  AdminUserProfileRoute: AdminUserProfileRoute,
+  AdminUserIndexRoute: AdminUserIndexRoute,
+}
+
+const AdminRouteWithChildren = AdminRoute._addFileChildren(AdminRouteChildren)
+
 interface ApiCertificationsServerRouteChildren {
   ApiCertificationsIdServerRoute: typeof ApiCertificationsIdServerRoute
   ApiCertificationsIndexServerRoute: typeof ApiCertificationsIndexServerRoute
@@ -231,7 +351,7 @@ const ApiCertificationsServerRouteWithChildren =
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
-  AdminIndexRoute: AdminIndexRoute,
+  AdminRoute: AdminRouteWithChildren,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
