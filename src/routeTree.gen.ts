@@ -21,11 +21,12 @@ import { Route as AdminProfileRouteImport } from './routes/admin/profile'
 import { Route as AdminHelpRouteImport } from './routes/admin/help'
 import { Route as AdminExperienceRouteImport } from './routes/admin/experience'
 import { Route as AdminDashboardRouteImport } from './routes/admin/dashboard'
-import { Route as AdminCertificationsRouteImport } from './routes/admin/certifications'
 import { Route as AdminBlogRouteImport } from './routes/admin/blog'
 import { Route as AdminUserIndexRouteImport } from './routes/admin/user/index'
+import { Route as AdminCertificationsIndexRouteImport } from './routes/admin/certifications/index'
 import { Route as AdminUserProfileRouteImport } from './routes/admin/user/profile'
 import { Route as AdminUserNotificationsRouteImport } from './routes/admin/user/notifications'
+import { Route as AdminCertificationsIdRouteImport } from './routes/admin/certifications/$id'
 import { ServerRoute as ApiHealthServerRouteImport } from './routes/api/health'
 import { ServerRoute as ApiCertificationsServerRouteImport } from './routes/api/certifications'
 import { ServerRoute as ApiExperiencesIndexServerRouteImport } from './routes/api/experiences/index'
@@ -85,11 +86,6 @@ const AdminDashboardRoute = AdminDashboardRouteImport.update({
   path: '/dashboard',
   getParentRoute: () => AdminRoute,
 } as any)
-const AdminCertificationsRoute = AdminCertificationsRouteImport.update({
-  id: '/certifications',
-  path: '/certifications',
-  getParentRoute: () => AdminRoute,
-} as any)
 const AdminBlogRoute = AdminBlogRouteImport.update({
   id: '/blog',
   path: '/blog',
@@ -100,6 +96,12 @@ const AdminUserIndexRoute = AdminUserIndexRouteImport.update({
   path: '/user/',
   getParentRoute: () => AdminRoute,
 } as any)
+const AdminCertificationsIndexRoute =
+  AdminCertificationsIndexRouteImport.update({
+    id: '/certifications/',
+    path: '/certifications/',
+    getParentRoute: () => AdminRoute,
+  } as any)
 const AdminUserProfileRoute = AdminUserProfileRouteImport.update({
   id: '/user/profile',
   path: '/user/profile',
@@ -108,6 +110,11 @@ const AdminUserProfileRoute = AdminUserProfileRouteImport.update({
 const AdminUserNotificationsRoute = AdminUserNotificationsRouteImport.update({
   id: '/user/notifications',
   path: '/user/notifications',
+  getParentRoute: () => AdminRoute,
+} as any)
+const AdminCertificationsIdRoute = AdminCertificationsIdRouteImport.update({
+  id: '/certifications/$id',
+  path: '/certifications/$id',
   getParentRoute: () => AdminRoute,
 } as any)
 const ApiHealthServerRoute = ApiHealthServerRouteImport.update({
@@ -148,7 +155,6 @@ export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/admin': typeof AdminRouteWithChildren
   '/admin/blog': typeof AdminBlogRoute
-  '/admin/certifications': typeof AdminCertificationsRoute
   '/admin/dashboard': typeof AdminDashboardRoute
   '/admin/experience': typeof AdminExperienceRoute
   '/admin/help': typeof AdminHelpRoute
@@ -157,14 +163,15 @@ export interface FileRoutesByFullPath {
   '/admin/settings': typeof AdminSettingsRoute
   '/admin/techstack': typeof AdminTechstackRoute
   '/admin/': typeof AdminIndexRoute
+  '/admin/certifications/$id': typeof AdminCertificationsIdRoute
   '/admin/user/notifications': typeof AdminUserNotificationsRoute
   '/admin/user/profile': typeof AdminUserProfileRoute
+  '/admin/certifications': typeof AdminCertificationsIndexRoute
   '/admin/user': typeof AdminUserIndexRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/admin/blog': typeof AdminBlogRoute
-  '/admin/certifications': typeof AdminCertificationsRoute
   '/admin/dashboard': typeof AdminDashboardRoute
   '/admin/experience': typeof AdminExperienceRoute
   '/admin/help': typeof AdminHelpRoute
@@ -173,8 +180,10 @@ export interface FileRoutesByTo {
   '/admin/settings': typeof AdminSettingsRoute
   '/admin/techstack': typeof AdminTechstackRoute
   '/admin': typeof AdminIndexRoute
+  '/admin/certifications/$id': typeof AdminCertificationsIdRoute
   '/admin/user/notifications': typeof AdminUserNotificationsRoute
   '/admin/user/profile': typeof AdminUserProfileRoute
+  '/admin/certifications': typeof AdminCertificationsIndexRoute
   '/admin/user': typeof AdminUserIndexRoute
 }
 export interface FileRoutesById {
@@ -182,7 +191,6 @@ export interface FileRoutesById {
   '/': typeof IndexRoute
   '/admin': typeof AdminRouteWithChildren
   '/admin/blog': typeof AdminBlogRoute
-  '/admin/certifications': typeof AdminCertificationsRoute
   '/admin/dashboard': typeof AdminDashboardRoute
   '/admin/experience': typeof AdminExperienceRoute
   '/admin/help': typeof AdminHelpRoute
@@ -191,8 +199,10 @@ export interface FileRoutesById {
   '/admin/settings': typeof AdminSettingsRoute
   '/admin/techstack': typeof AdminTechstackRoute
   '/admin/': typeof AdminIndexRoute
+  '/admin/certifications/$id': typeof AdminCertificationsIdRoute
   '/admin/user/notifications': typeof AdminUserNotificationsRoute
   '/admin/user/profile': typeof AdminUserProfileRoute
+  '/admin/certifications/': typeof AdminCertificationsIndexRoute
   '/admin/user/': typeof AdminUserIndexRoute
 }
 export interface FileRouteTypes {
@@ -201,7 +211,6 @@ export interface FileRouteTypes {
     | '/'
     | '/admin'
     | '/admin/blog'
-    | '/admin/certifications'
     | '/admin/dashboard'
     | '/admin/experience'
     | '/admin/help'
@@ -210,14 +219,15 @@ export interface FileRouteTypes {
     | '/admin/settings'
     | '/admin/techstack'
     | '/admin/'
+    | '/admin/certifications/$id'
     | '/admin/user/notifications'
     | '/admin/user/profile'
+    | '/admin/certifications'
     | '/admin/user'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
     | '/admin/blog'
-    | '/admin/certifications'
     | '/admin/dashboard'
     | '/admin/experience'
     | '/admin/help'
@@ -226,15 +236,16 @@ export interface FileRouteTypes {
     | '/admin/settings'
     | '/admin/techstack'
     | '/admin'
+    | '/admin/certifications/$id'
     | '/admin/user/notifications'
     | '/admin/user/profile'
+    | '/admin/certifications'
     | '/admin/user'
   id:
     | '__root__'
     | '/'
     | '/admin'
     | '/admin/blog'
-    | '/admin/certifications'
     | '/admin/dashboard'
     | '/admin/experience'
     | '/admin/help'
@@ -243,8 +254,10 @@ export interface FileRouteTypes {
     | '/admin/settings'
     | '/admin/techstack'
     | '/admin/'
+    | '/admin/certifications/$id'
     | '/admin/user/notifications'
     | '/admin/user/profile'
+    | '/admin/certifications/'
     | '/admin/user/'
   fileRoutesById: FileRoutesById
 }
@@ -381,13 +394,6 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AdminDashboardRouteImport
       parentRoute: typeof AdminRoute
     }
-    '/admin/certifications': {
-      id: '/admin/certifications'
-      path: '/certifications'
-      fullPath: '/admin/certifications'
-      preLoaderRoute: typeof AdminCertificationsRouteImport
-      parentRoute: typeof AdminRoute
-    }
     '/admin/blog': {
       id: '/admin/blog'
       path: '/blog'
@@ -402,6 +408,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AdminUserIndexRouteImport
       parentRoute: typeof AdminRoute
     }
+    '/admin/certifications/': {
+      id: '/admin/certifications/'
+      path: '/certifications'
+      fullPath: '/admin/certifications'
+      preLoaderRoute: typeof AdminCertificationsIndexRouteImport
+      parentRoute: typeof AdminRoute
+    }
     '/admin/user/profile': {
       id: '/admin/user/profile'
       path: '/user/profile'
@@ -414,6 +427,13 @@ declare module '@tanstack/react-router' {
       path: '/user/notifications'
       fullPath: '/admin/user/notifications'
       preLoaderRoute: typeof AdminUserNotificationsRouteImport
+      parentRoute: typeof AdminRoute
+    }
+    '/admin/certifications/$id': {
+      id: '/admin/certifications/$id'
+      path: '/certifications/$id'
+      fullPath: '/admin/certifications/$id'
+      preLoaderRoute: typeof AdminCertificationsIdRouteImport
       parentRoute: typeof AdminRoute
     }
   }
@@ -467,7 +487,6 @@ declare module '@tanstack/react-start/server' {
 
 interface AdminRouteChildren {
   AdminBlogRoute: typeof AdminBlogRoute
-  AdminCertificationsRoute: typeof AdminCertificationsRoute
   AdminDashboardRoute: typeof AdminDashboardRoute
   AdminExperienceRoute: typeof AdminExperienceRoute
   AdminHelpRoute: typeof AdminHelpRoute
@@ -476,14 +495,15 @@ interface AdminRouteChildren {
   AdminSettingsRoute: typeof AdminSettingsRoute
   AdminTechstackRoute: typeof AdminTechstackRoute
   AdminIndexRoute: typeof AdminIndexRoute
+  AdminCertificationsIdRoute: typeof AdminCertificationsIdRoute
   AdminUserNotificationsRoute: typeof AdminUserNotificationsRoute
   AdminUserProfileRoute: typeof AdminUserProfileRoute
+  AdminCertificationsIndexRoute: typeof AdminCertificationsIndexRoute
   AdminUserIndexRoute: typeof AdminUserIndexRoute
 }
 
 const AdminRouteChildren: AdminRouteChildren = {
   AdminBlogRoute: AdminBlogRoute,
-  AdminCertificationsRoute: AdminCertificationsRoute,
   AdminDashboardRoute: AdminDashboardRoute,
   AdminExperienceRoute: AdminExperienceRoute,
   AdminHelpRoute: AdminHelpRoute,
@@ -492,8 +512,10 @@ const AdminRouteChildren: AdminRouteChildren = {
   AdminSettingsRoute: AdminSettingsRoute,
   AdminTechstackRoute: AdminTechstackRoute,
   AdminIndexRoute: AdminIndexRoute,
+  AdminCertificationsIdRoute: AdminCertificationsIdRoute,
   AdminUserNotificationsRoute: AdminUserNotificationsRoute,
   AdminUserProfileRoute: AdminUserProfileRoute,
+  AdminCertificationsIndexRoute: AdminCertificationsIndexRoute,
   AdminUserIndexRoute: AdminUserIndexRoute,
 }
 

@@ -32,29 +32,49 @@ export const AdminPage = ({ children, ...props }: React.ComponentProps<typeof Si
               <Separator orientation="vertical" className="mr-2 data-[orientation=vertical]:h-4" />
               <Breadcrumb>
                 <BreadcrumbList>
-                  {matches
-                    .filter((m) => m.pathname !== "/" && m.pathname !== "/admin")
-                    .map((match, idx, arr) => {
-                      const isLast = idx === arr.length - 1;
-                      const name = t(`routes.${match.pathname.split("/").pop()}.title`, {
-                        defaultValue: match.pathname.split("/").pop(),
-                      });
-
+                  {(() => {
+                    // Get filtered matches (excluding root and /admin)
+                    const filtered = matches.filter(
+                      (m) => m.pathname !== "/" && m.pathname !== "/admin",
+                    );
+                    if (filtered.length === 0) return null;
+                    // For a path like /admin/certifications/b158763a-528e-41c2-b377-993d9c4a14f2
+                    // filtered = [ { pathname: '/admin/certifications/b158763a-528e-41c2-b377-993d9c4a14f2', ... } ]
+                    // We want: certifications > $id (or the actual id value)
+                    const pathSegments = filtered[0].pathname.split("/").filter(Boolean); // ["admin", "certifications", "b158763a-528e-41c2-b377-993d9c4a14f2"]
+                    // Remove 'admin' if present
+                    const segments =
+                      pathSegments[0] === "admin" ? pathSegments.slice(1) : pathSegments;
+                    return segments.map((segment, idx) => {
+                      const isLast = idx === segments.length - 1;
+                      const label = t(`routes.${segment}.title`, { defaultValue: segment });
                       return (
-                        <React.Fragment key={match.pathname}>
+                        <React.Fragment key={segment}>
                           {idx > 0 && <BreadcrumbSeparator />}
                           <BreadcrumbItem>
                             {isLast ? (
-                              <BreadcrumbPage>{name}</BreadcrumbPage>
+                              <BreadcrumbPage>{label}</BreadcrumbPage>
                             ) : (
                               <BreadcrumbLink asChild>
-                                <RouterLink to={match.pathname}>{name}</RouterLink>
+                                <RouterLink
+                                  to={
+                                    `/admin/${
+                                      segments
+                                        .slice(0, idx + 1)
+                                        .join("/")
+                                      // biome-ignore lint/suspicious/noExplicitAny: any
+                                    }` as any
+                                  }
+                                >
+                                  {label}
+                                </RouterLink>
                               </BreadcrumbLink>
                             )}
                           </BreadcrumbItem>
                         </React.Fragment>
                       );
-                    })}
+                    });
+                  })()}
                 </BreadcrumbList>
               </Breadcrumb>
             </div>
