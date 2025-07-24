@@ -6,6 +6,7 @@ export * from "./data-table";
 export * from "./dialog";
 export * from "./dropdown-menu";
 export * from "./input";
+export * from "./scroll-area";
 export * from "./separator";
 export * from "./sheet";
 export * from "./sidebar";
