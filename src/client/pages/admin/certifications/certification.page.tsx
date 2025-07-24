@@ -5,7 +5,7 @@ import {
   useGetAllCertifications,
 } from "@/client/services/api/certifications";
 import type { CertificationDTO } from "@/shared/dto";
-import { CertificationsListComponent } from "./components/certifications-list/certifications-list.component";
+import { CertificationsListComponent } from "./components/certification-list/certifications-list.component";
 
 export default function CertificationsPage() {
   const { data: certifications = [], isLoading, error } = useGetAllCertifications();

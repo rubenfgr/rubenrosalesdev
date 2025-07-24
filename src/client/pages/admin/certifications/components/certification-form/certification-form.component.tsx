@@ -12,7 +12,7 @@ import {
   certificationFormSchema,
 } from "./models/certification-form.model";
 
-export function CertificationFormComponent({ cert }: { cert?: CertificationDTO }) {
+export function CertificationFormComponent({ cert }: { cert?: CertificationDTO | null }) {
   const createCertification = useCreateCertification();
   const updateCertification = useUpdateCertification();
   const form = useForm({

@@ -34,7 +34,7 @@ export const useGetCertification = (id: string) => {
   return useQuery({
     queryKey: certificationKeys.detail(id),
     queryFn: () => getCert({ data: { id } }),
-    enabled: !!id,
+    enabled: !!id && id !== "new",
   });
 };
 

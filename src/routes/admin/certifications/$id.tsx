@@ -1,6 +1,6 @@
 import { createFileRoute } from "@tanstack/react-router";
-import CertificationDetailPage from "@/client/pages/admin/certifications/certification-detail.page";
+import CertificationFormPage from "~/client/pages/admin/certifications/certification-form.page";
 
 export const Route = createFileRoute("/admin/certifications/$id")({
-  component: CertificationDetailPage,
+  component: CertificationFormPage,
 });
