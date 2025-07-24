@@ -1,4 +1,7 @@
 {
+  "loading": "Cargando...",
+  "edit": "Editar",
+  "delete": "Eliminar",
   "routes": {
     "admin": {
       "title": "Administrador",
@@ -54,6 +57,14 @@
       "profile": "Perfil",
       "notifications": "Notificaciones",
       "logout": "Cerrar sesión"
+    },
+    "certifications": {
+      "title": "Certificaciones",
+      "createCertification": "Crear certificación",
+      "editCertification": "Editar certificación",
+      "deleteCertification": "Eliminar certificación",
+      "confirmDelete": "¿Estás seguro de que deseas eliminar esta certificación?",
+      "noCertificationsFound": "No se encontraron certificaciones."
     }
   }
 }
