@@ -13,6 +13,7 @@ import { createServerRootRoute } from '@tanstack/react-start/server'
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as AdminRouteImport } from './routes/admin'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as AdminIndexRouteImport } from './routes/admin/index'
 import { Route as AdminTechstackRouteImport } from './routes/admin/techstack'
 import { Route as AdminSettingsRouteImport } from './routes/admin/settings'
 import { Route as AdminProjectsRouteImport } from './routes/admin/projects'
@@ -43,6 +44,11 @@ const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
   getParentRoute: () => rootRouteImport,
+} as any)
+const AdminIndexRoute = AdminIndexRouteImport.update({
+  id: '/',
+  path: '/',
+  getParentRoute: () => AdminRoute,
 } as any)
 const AdminTechstackRoute = AdminTechstackRouteImport.update({
   id: '/techstack',
@@ -150,13 +156,13 @@ export interface FileRoutesByFullPath {
   '/admin/projects': typeof AdminProjectsRoute
   '/admin/settings': typeof AdminSettingsRoute
   '/admin/techstack': typeof AdminTechstackRoute
+  '/admin/': typeof AdminIndexRoute
   '/admin/user/notifications': typeof AdminUserNotificationsRoute
   '/admin/user/profile': typeof AdminUserProfileRoute
   '/admin/user': typeof AdminUserIndexRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
-  '/admin': typeof AdminRouteWithChildren
   '/admin/blog': typeof AdminBlogRoute
   '/admin/certifications': typeof AdminCertificationsRoute
   '/admin/dashboard': typeof AdminDashboardRoute
@@ -166,6 +172,7 @@ export interface FileRoutesByTo {
   '/admin/projects': typeof AdminProjectsRoute
   '/admin/settings': typeof AdminSettingsRoute
   '/admin/techstack': typeof AdminTechstackRoute
+  '/admin': typeof AdminIndexRoute
   '/admin/user/notifications': typeof AdminUserNotificationsRoute
   '/admin/user/profile': typeof AdminUserProfileRoute
   '/admin/user': typeof AdminUserIndexRoute
@@ -183,6 +190,7 @@ export interface FileRoutesById {
   '/admin/projects': typeof AdminProjectsRoute
   '/admin/settings': typeof AdminSettingsRoute
   '/admin/techstack': typeof AdminTechstackRoute
+  '/admin/': typeof AdminIndexRoute
   '/admin/user/notifications': typeof AdminUserNotificationsRoute
   '/admin/user/profile': typeof AdminUserProfileRoute
   '/admin/user/': typeof AdminUserIndexRoute
@@ -201,13 +209,13 @@ export interface FileRouteTypes {
     | '/admin/projects'
     | '/admin/settings'
     | '/admin/techstack'
+    | '/admin/'
     | '/admin/user/notifications'
     | '/admin/user/profile'
     | '/admin/user'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
-    | '/admin'
     | '/admin/blog'
     | '/admin/certifications'
     | '/admin/dashboard'
@@ -217,6 +225,7 @@ export interface FileRouteTypes {
     | '/admin/projects'
     | '/admin/settings'
     | '/admin/techstack'
+    | '/admin'
     | '/admin/user/notifications'
     | '/admin/user/profile'
     | '/admin/user'
@@ -233,6 +242,7 @@ export interface FileRouteTypes {
     | '/admin/projects'
     | '/admin/settings'
     | '/admin/techstack'
+    | '/admin/'
     | '/admin/user/notifications'
     | '/admin/user/profile'
     | '/admin/user/'
@@ -314,6 +324,13 @@ declare module '@tanstack/react-router' {
       fullPath: '/'
       preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
+    }
+    '/admin/': {
+      id: '/admin/'
+      path: '/'
+      fullPath: '/admin/'
+      preLoaderRoute: typeof AdminIndexRouteImport
+      parentRoute: typeof AdminRoute
     }
     '/admin/techstack': {
       id: '/admin/techstack'
@@ -458,6 +475,7 @@ interface AdminRouteChildren {
   AdminProjectsRoute: typeof AdminProjectsRoute
   AdminSettingsRoute: typeof AdminSettingsRoute
   AdminTechstackRoute: typeof AdminTechstackRoute
+  AdminIndexRoute: typeof AdminIndexRoute
   AdminUserNotificationsRoute: typeof AdminUserNotificationsRoute
   AdminUserProfileRoute: typeof AdminUserProfileRoute
   AdminUserIndexRoute: typeof AdminUserIndexRoute
@@ -473,6 +491,7 @@ const AdminRouteChildren: AdminRouteChildren = {
   AdminProjectsRoute: AdminProjectsRoute,
   AdminSettingsRoute: AdminSettingsRoute,
   AdminTechstackRoute: AdminTechstackRoute,
+  AdminIndexRoute: AdminIndexRoute,
   AdminUserNotificationsRoute: AdminUserNotificationsRoute,
   AdminUserProfileRoute: AdminUserProfileRoute,
   AdminUserIndexRoute: AdminUserIndexRoute,
