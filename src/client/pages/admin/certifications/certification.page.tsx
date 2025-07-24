@@ -19,8 +19,6 @@ export default function CertificationsPage() {
   const { data: certifications = [], isLoading, error } = useGetAllCertifications();
   const deleteCertification = useDeleteCertification();
 
-  console.log("Certifications data:", certifications);
-
   const handleDeleteCertification = async (data: { id: string }) => {
     try {
       await deleteCertification.mutateAsync(data);
