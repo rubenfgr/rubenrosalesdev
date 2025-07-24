@@ -1,9 +1,42 @@
 {
-  "admin": {
+  "routes": {
+    "admin": {
+      "title": "Administrador",
+      "description": "Panel de control del administrador. Aquí puedes gestionar el contenido, los usuarios y las configuraciones de la aplicación."
+    },
     "dashboard": {
       "title": "Panel de control",
       "description": "Bienvenido al panel de control del administrador. Aquí puedes gestionar el contenido, los usuarios y las configuraciones de la aplicación."
     },
+    "certifications": {
+      "title": "Certificaciones"
+    },
+    "blog": {
+      "title": "Blog"
+    },
+    "projects": {
+      "title": "Proyectos"
+    },
+    "experience": {
+      "title": "Experiencia"
+    },
+    "techstack": {
+      "title": "Pila tecnológica"
+    },
+    "settings": {
+      "title": "Configuraciones"
+    },
+    "help": {
+      "title": "Obtener ayuda"
+    },
+    "user": {
+      "title": "Usuarios"
+    },
+    "profile": {
+      "title": "Perfil"
+    }
+  },
+  "admin": {
     "menu": {
       "dashboard": "Panel de control",
       "certifications": "Certificaciones",
@@ -17,7 +50,7 @@
       "profile": "Perfil",
       "public": "Público"
     },
-    "user": {
+    "userMenu": {
       "profile": "Perfil",
       "notifications": "Notificaciones",
       "logout": "Cerrar sesión"
