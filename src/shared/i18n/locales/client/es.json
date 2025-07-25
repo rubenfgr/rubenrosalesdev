@@ -8,6 +8,7 @@
   "itemsPerPage": "Elementos por página",
   "actions": "Acciones",
   "page": "Página",
+  "columns": "Columnas",
   "routes": {
     "admin": {
       "title": "Administrador",

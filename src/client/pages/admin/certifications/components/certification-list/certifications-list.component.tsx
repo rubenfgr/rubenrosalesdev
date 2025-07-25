@@ -1,20 +1,44 @@
-import { SelectValue } from "@radix-ui/react-select";
-import { ChevronLeft, ChevronRight } from "lucide-react";
+import {
+  type ColumnDef,
+  type ColumnFiltersState,
+  flexRender,
+  getCoreRowModel,
+  getFilteredRowModel,
+  getPaginationRowModel,
+  getSortedRowModel,
+  type SortingState,
+  useReactTable,
+  type VisibilityState,
+} from "@tanstack/react-table";
+import { ArrowUpDown, ChevronDown, ChevronLeft, ChevronRight, MoreHorizontal } from "lucide-react";
 import * as React from "react";
 import {
-  DataTable,
+  Button,
+  Checkbox,
+  DropdownMenu,
+  DropdownMenuCheckboxItem,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuLabel,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
   Input,
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-} from "@/client/components/ui";
-import {
   Pagination,
   PaginationContent,
   PaginationItem,
   PaginationLink,
-} from "@/client/components/ui/pagination";
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "@/client/components/ui";
 import type { CertificationDTO } from "@/shared/dto";
 import { useClientTranslation } from "~/client/hooks";
 
@@ -27,139 +51,215 @@ export function CertificationsListComponent({
   onEdit: (cert: CertificationDTO) => React.ReactNode;
   onDelete: (cert: CertificationDTO) => React.ReactNode;
 }) {
-  const [filter, setFilter] = React.useState("");
-  const [sortKey, setSortKey] = React.useState<keyof CertificationDTO | null>(null);
-  const [sortDesc, setSortDesc] = React.useState(false);
-  const [page, setPage] = React.useState(0);
-  const pageSizeOptions = [5, 10, 20, 50];
-  const [pageSize, setPageSize] = React.useState(pageSizeOptions[1]);
   const { t } = useClientTranslation();
-
-  // Filtering
-  const filtered = React.useMemo(() => {
-    if (!filter) return data;
-    const f = filter.toLowerCase();
-    return data.filter(
-      (cert) => cert.name.toLowerCase().includes(f) || cert.issuer.toLowerCase().includes(f),
-    );
-  }, [data, filter]);
-
-  // Sorting
-  const sorted = React.useMemo(() => {
-    if (!sortKey) return filtered;
-    return [...filtered].sort((a, b) => {
-      const aValue = a[sortKey];
-      const bValue = b[sortKey];
-      if (aValue == null) return 1;
-      if (bValue == null) return -1;
-      if (typeof aValue === "string" && typeof bValue === "string") {
-        return sortDesc ? bValue.localeCompare(aValue) : aValue.localeCompare(bValue);
-      }
-      if (aValue < bValue) return sortDesc ? 1 : -1;
-      if (aValue > bValue) return sortDesc ? -1 : 1;
-      return 0;
-    });
-  }, [filtered, sortKey, sortDesc]);
-
-  // Pagination
-  const paged = React.useMemo(() => {
-    const start = page * pageSize;
-    return sorted.slice(start, start + pageSize);
-  }, [sorted, page, pageSize]);
+  const pageSizeOptions = [5, 10, 20, 50];
+  const [sorting, setSorting] = React.useState<SortingState>([]);
+  const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>([]);
+  const [columnVisibility, setColumnVisibility] = React.useState<VisibilityState>({});
+  const [rowSelection, setRowSelection] = React.useState({});
+  const [pageSize, setPageSize] = React.useState(pageSizeOptions[1]);
+  const [page, setPage] = React.useState(0);
 
   // Columns
-  type DataTableCellInfo = { getValue: () => unknown; row: { original: CertificationDTO } };
-  const columns = [
-    {
-      accessorKey: "name",
-      header: () => (
-        <button type="button" className="font-bold" onClick={() => handleSort("name")}>
-          {t("admin.certifications.name")}
-        </button>
-      ),
-      cell: (info: DataTableCellInfo) => String(info.getValue()),
-    },
-    {
-      accessorKey: "issuer",
-      header: () => (
-        <button type="button" className="font-bold" onClick={() => handleSort("issuer")}>
-          {t("admin.certifications.issuer")}
-        </button>
-      ),
-      cell: (info: DataTableCellInfo) => String(info.getValue()),
-    },
-    {
-      accessorKey: "date",
-      header: () => (
-        <button type="button" className="font-bold" onClick={() => handleSort("date")}>
-          {t("admin.certifications.date")}
-        </button>
-      ),
-      cell: (info: DataTableCellInfo) =>
-        info.row.original.date ? new Date(info.row.original.date).toLocaleDateString() : "",
-    },
-    {
-      accessorKey: "url",
-      header: "URL",
-      cell: (info: DataTableCellInfo) =>
-        info.row.original.url ? (
-          <a
-            href={info.row.original.url}
-            className="text-blue-600 underline"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            {t("admin.certifications.link")}
-          </a>
-        ) : (
-          <span className="text-gray-400">—</span>
+  const columns = React.useMemo<ColumnDef<CertificationDTO>[]>(
+    () => [
+      {
+        id: "select",
+        header: ({ table }) => (
+          <Checkbox
+            checked={
+              table.getIsAllPageRowsSelected() ||
+              (table.getIsSomePageRowsSelected() && "indeterminate")
+            }
+            onCheckedChange={(value) => table.toggleAllPageRowsSelected(!!value)}
+            aria-label="Select all"
+          />
         ),
-    },
-    {
-      id: "actions",
-      header: t("actions"),
-      cell: (info: DataTableCellInfo) => (
-        <div className="flex gap-2">
-          {onEdit(info.row.original)}
-          {onDelete(info.row.original)}
-        </div>
-      ),
-    },
-  ];
+        cell: ({ row }) => (
+          <Checkbox
+            checked={row.getIsSelected()}
+            onCheckedChange={(value) => row.toggleSelected(!!value)}
+            aria-label="Select row"
+          />
+        ),
+        enableSorting: false,
+        enableHiding: false,
+      },
+      {
+        accessorKey: "name",
+        header: ({ column }) => (
+          <Button
+            variant="ghost"
+            onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+            className="font-bold"
+          >
+            {t("admin.certifications.name")} <ArrowUpDown className="ml-2 h-4 w-4" />
+          </Button>
+        ),
+        cell: ({ row }) => <span>{row.getValue("name")}</span>,
+      },
+      {
+        accessorKey: "issuer",
+        header: ({ column }) => (
+          <Button
+            variant="ghost"
+            onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+            className="font-bold"
+          >
+            {t("admin.certifications.issuer")} <ArrowUpDown className="ml-2 h-4 w-4" />
+          </Button>
+        ),
+        cell: ({ row }) => <span>{row.getValue("issuer")}</span>,
+      },
+      {
+        accessorKey: "date",
+        header: ({ column }) => (
+          <Button
+            variant="ghost"
+            onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+            className="font-bold"
+          >
+            {t("admin.certifications.date")} <ArrowUpDown className="ml-2 h-4 w-4" />
+          </Button>
+        ),
+        cell: ({ row }) =>
+          row.original.date ? new Date(row.original.date).toLocaleDateString() : "",
+      },
+      {
+        accessorKey: "url",
+        header: () => "URL",
+        cell: ({ row }) =>
+          row.original.url ? (
+            <a
+              href={row.original.url}
+              className="text-blue-600 underline"
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              {t("admin.certifications.link")}
+            </a>
+          ) : (
+            <span className="text-gray-400">—</span>
+          ),
+      },
+      {
+        id: "actions",
+        enableHiding: false,
+        cell: ({ row }) => (
+          <DropdownMenu>
+            <DropdownMenuTrigger asChild>
+              <Button variant="ghost" className="h-8 w-8 p-0">
+                <span className="sr-only">Open menu</span>
+                <MoreHorizontal />
+              </Button>
+            </DropdownMenuTrigger>
+            <DropdownMenuContent align="end">
+              <DropdownMenuLabel>{t("actions")}</DropdownMenuLabel>
+              <DropdownMenuItem asChild>{onEdit(row.original)}</DropdownMenuItem>
+              <DropdownMenuItem asChild>{onDelete(row.original)}</DropdownMenuItem>
+            </DropdownMenuContent>
+          </DropdownMenu>
+        ),
+      },
+    ],
+    [t, onEdit, onDelete],
+  );
 
-  function handleSort(key: keyof CertificationDTO) {
-    if (sortKey === key) {
-      setSortDesc((d) => !d);
-    } else {
-      setSortKey(key);
-      setSortDesc(false);
-    }
-  }
+  const table = useReactTable({
+    data,
+    columns,
+    onSortingChange: setSorting,
+    onColumnFiltersChange: setColumnFilters,
+    getCoreRowModel: getCoreRowModel(),
+    getPaginationRowModel: getPaginationRowModel(),
+    getSortedRowModel: getSortedRowModel(),
+    getFilteredRowModel: getFilteredRowModel(),
+    onColumnVisibilityChange: setColumnVisibility,
+    onRowSelectionChange: setRowSelection,
+    state: {
+      sorting,
+      columnFilters,
+      columnVisibility,
+      rowSelection,
+      pagination: {
+        pageIndex: page,
+        pageSize,
+      },
+    },
+  });
 
-  function handlePageChange(newPage: number) {
+  const handlePageChange = (newPage: number) => {
     setPage(newPage);
-  }
-
-  const handleItemsPerPage = (value: string) => {
-    const newSize = parseInt(value, 10);
-    if (pageSizeOptions.includes(newSize)) {
-      setPageSize(newSize);
-      setPage(0);
-    }
   };
 
   return (
-    <div>
-      <div className="mb-2 flex items-center gap-2">
+    <div className="w-full">
+      <div className="flex items-center gap-2 py-4">
         <Input
-          type="text"
           placeholder={t("search")}
-          value={filter}
-          onChange={(e) => setFilter(e.target.value)}
-          className="rounded border px-2 py-1"
+          value={(table.getColumn("name")?.getFilterValue() as string) ?? ""}
+          onChange={(event) => table.getColumn("name")?.setFilterValue(event.target.value)}
+          className="max-w-xs"
         />
+        <DropdownMenu>
+          <DropdownMenuTrigger asChild>
+            <Button variant="outline" className="ml-auto">
+              {t("columns")} <ChevronDown />
+            </Button>
+          </DropdownMenuTrigger>
+          <DropdownMenuContent align="end">
+            {table
+              .getAllColumns()
+              .filter((column) => column.getCanHide())
+              .map((column) => (
+                <DropdownMenuCheckboxItem
+                  key={column.id}
+                  className="capitalize"
+                  checked={column.getIsVisible()}
+                  onCheckedChange={(value) => column.toggleVisibility(!!value)}
+                >
+                  {column.id}
+                </DropdownMenuCheckboxItem>
+              ))}
+          </DropdownMenuContent>
+        </DropdownMenu>
       </div>
-      <DataTable columns={columns} data={paged} />
+      <div className="rounded-md border">
+        <Table>
+          <TableHeader>
+            {table.getHeaderGroups().map((headerGroup) => (
+              <TableRow key={headerGroup.id}>
+                {headerGroup.headers.map((header) => (
+                  <TableHead key={header.id}>
+                    {header.isPlaceholder
+                      ? null
+                      : flexRender(header.column.columnDef.header, header.getContext())}
+                  </TableHead>
+                ))}
+              </TableRow>
+            ))}
+          </TableHeader>
+          <TableBody>
+            {table.getRowModel().rows?.length ? (
+              table.getRowModel().rows.map((row) => (
+                <TableRow key={row.id} data-state={row.getIsSelected() && "selected"}>
+                  {row.getVisibleCells().map((cell) => (
+                    <TableCell key={cell.id}>
+                      {flexRender(cell.column.columnDef.cell, cell.getContext())}
+                    </TableCell>
+                  ))}
+                </TableRow>
+              ))
+            ) : (
+              <TableRow>
+                <TableCell colSpan={columns.length} className="h-24 text-center">
+                  {t("noResults")}
+                </TableCell>
+              </TableRow>
+            )}
+          </TableBody>
+        </Table>
+      </div>
       <div className="mt-2 flex w-full items-center justify-between">
         <div className="flex items-center gap-2">
           <Pagination>
@@ -177,7 +277,7 @@ export function CertificationsListComponent({
                   <ChevronLeft />
                 </PaginationLink>
               </PaginationItem>
-              {Array.from({ length: Math.ceil(sorted.length / pageSize) }, (_, i) => (
+              {Array.from({ length: Math.ceil(data.length / pageSize) }, (_, i) => (
                 <PaginationItem key={i}>
                   <PaginationLink
                     href="#"
@@ -196,10 +296,10 @@ export function CertificationsListComponent({
                   href="#"
                   onClick={(e) => {
                     e.preventDefault();
-                    if (page + 1 < Math.ceil(sorted.length / pageSize)) handlePageChange(page + 1);
+                    if (page + 1 < Math.ceil(data.length / pageSize)) handlePageChange(page + 1);
                   }}
-                  aria-disabled={page + 1 >= Math.ceil(sorted.length / pageSize)}
-                  tabIndex={page + 1 >= Math.ceil(sorted.length / pageSize) ? -1 : 0}
+                  aria-disabled={page + 1 >= Math.ceil(data.length / pageSize)}
+                  tabIndex={page + 1 >= Math.ceil(data.length / pageSize) ? -1 : 0}
                 >
                   <ChevronRight />
                 </PaginationLink>
@@ -209,12 +309,12 @@ export function CertificationsListComponent({
         </div>
         <div className="flex items-center gap-4">
           <span className="text-nowrap text-muted-foreground text-sm">
-            {t("results")}: {sorted.length}
+            {t("results")}: {data.length}
           </span>
           <Select
             value={pageSize ? String(pageSize) : ""}
             onValueChange={(value) => {
-              handleItemsPerPage(value);
+              setPageSize(Number(value));
             }}
           >
             <SelectTrigger className="w-full">
