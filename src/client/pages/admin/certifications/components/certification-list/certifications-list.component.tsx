@@ -1,6 +1,21 @@
+import { SelectValue } from "@radix-ui/react-select";
+import { ChevronLeft, ChevronRight } from "lucide-react";
 import * as React from "react";
-import { DataTable } from "@/client/components/ui";
+import {
+  DataTable,
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+} from "@/client/components/ui";
+import {
+  Pagination,
+  PaginationContent,
+  PaginationItem,
+  PaginationLink,
+} from "@/client/components/ui/pagination";
 import type { CertificationDTO } from "@/shared/dto";
+import { useClientTranslation } from "~/client/hooks";
 
 export function CertificationsListComponent({
   data,
@@ -15,7 +30,9 @@ export function CertificationsListComponent({
   const [sortKey, setSortKey] = React.useState<keyof CertificationDTO | null>(null);
   const [sortDesc, setSortDesc] = React.useState(false);
   const [page, setPage] = React.useState(0);
-  const pageSize = 10;
+  const pageSizeOptions = [5, 10, 20, 50];
+  const [pageSize, setPageSize] = React.useState(pageSizeOptions[1]);
+  const { t } = useClientTranslation();
 
   // Filtering
   const filtered = React.useMemo(() => {
@@ -47,42 +64,43 @@ export function CertificationsListComponent({
   const paged = React.useMemo(() => {
     const start = page * pageSize;
     return sorted.slice(start, start + pageSize);
-  }, [sorted, page]);
+  }, [sorted, page, pageSize]);
 
   // Columns
+  type DataTableCellInfo = { getValue: () => unknown; row: { original: CertificationDTO } };
   const columns = [
     {
       accessorKey: "name",
       header: () => (
         <button type="button" className="font-bold" onClick={() => handleSort("name")}>
-          Name
+          {t("admin.certifications.name")}
         </button>
       ),
-      cell: (info: any) => String(info.getValue()),
+      cell: (info: DataTableCellInfo) => String(info.getValue()),
     },
     {
       accessorKey: "issuer",
       header: () => (
         <button type="button" className="font-bold" onClick={() => handleSort("issuer")}>
-          Issuer
+          {t("admin.certifications.issuer")}
         </button>
       ),
-      cell: (info: any) => String(info.getValue()),
+      cell: (info: DataTableCellInfo) => String(info.getValue()),
     },
     {
       accessorKey: "date",
       header: () => (
         <button type="button" className="font-bold" onClick={() => handleSort("date")}>
-          Date
+          {t("admin.certifications.date")}
         </button>
       ),
-      cell: (info: any) =>
+      cell: (info: DataTableCellInfo) =>
         info.row.original.date ? new Date(info.row.original.date).toLocaleDateString() : "",
     },
     {
       accessorKey: "url",
       header: "URL",
-      cell: (info: any) =>
+      cell: (info: DataTableCellInfo) =>
         info.row.original.url ? (
           <a
             href={info.row.original.url}
@@ -90,7 +108,7 @@ export function CertificationsListComponent({
             target="_blank"
             rel="noopener noreferrer"
           >
-            Link
+            {t("admin.certifications.link")}
           </a>
         ) : (
           <span className="text-gray-400">—</span>
@@ -98,8 +116,8 @@ export function CertificationsListComponent({
     },
     {
       id: "actions",
-      header: "Actions",
-      cell: (info: any) => (
+      header: t("actions"),
+      cell: (info: DataTableCellInfo) => (
         <div className="flex gap-2">
           {onEdit(info.row.original)}
           {onDelete(info.row.original)}
@@ -121,6 +139,14 @@ export function CertificationsListComponent({
     setPage(newPage);
   }
 
+  const handleItemsPerPage = (value: string) => {
+    const newSize = parseInt(value, 10);
+    if (pageSizeOptions.includes(newSize)) {
+      setPageSize(newSize);
+      setPage(0);
+    }
+  };
+
   return (
     <div>
       <div className="mb-2 flex items-center gap-2">
@@ -133,26 +159,75 @@ export function CertificationsListComponent({
         />
       </div>
       <DataTable columns={columns} data={paged} />
-      <div className="mt-2 flex items-center justify-between">
-        <button
-          type="button"
-          className="rounded border px-2 py-1"
-          disabled={page === 0}
-          onClick={() => handlePageChange(page - 1)}
-        >
-          Previous
-        </button>
-        <span>
-          Page {page + 1} of {Math.ceil(sorted.length / pageSize)}
-        </span>
-        <button
-          type="button"
-          className="rounded border px-2 py-1"
-          disabled={page + 1 >= Math.ceil(sorted.length / pageSize)}
-          onClick={() => handlePageChange(page + 1)}
-        >
-          Next
-        </button>
+      <div className="mt-2 flex w-full items-center justify-between">
+        <div className="flex items-center gap-2">
+          <Pagination>
+            <PaginationContent>
+              <PaginationItem>
+                <PaginationLink
+                  href="#"
+                  onClick={(e) => {
+                    e.preventDefault();
+                    if (page > 0) handlePageChange(page - 1);
+                  }}
+                  aria-disabled={page === 0}
+                  tabIndex={page === 0 ? -1 : 0}
+                >
+                  <ChevronLeft />
+                </PaginationLink>
+              </PaginationItem>
+              {Array.from({ length: Math.ceil(sorted.length / pageSize) }, (_, i) => (
+                <PaginationItem key={i}>
+                  <PaginationLink
+                    href="#"
+                    isActive={i === page}
+                    onClick={(e) => {
+                      e.preventDefault();
+                      handlePageChange(i);
+                    }}
+                  >
+                    {i + 1}
+                  </PaginationLink>
+                </PaginationItem>
+              ))}
+              <PaginationItem>
+                <PaginationLink
+                  href="#"
+                  onClick={(e) => {
+                    e.preventDefault();
+                    if (page + 1 < Math.ceil(sorted.length / pageSize)) handlePageChange(page + 1);
+                  }}
+                  aria-disabled={page + 1 >= Math.ceil(sorted.length / pageSize)}
+                  tabIndex={page + 1 >= Math.ceil(sorted.length / pageSize) ? -1 : 0}
+                >
+                  <ChevronRight />
+                </PaginationLink>
+              </PaginationItem>
+            </PaginationContent>
+          </Pagination>
+        </div>
+        <div className="flex items-center gap-4">
+          <span className="text-nowrap text-muted-foreground text-sm">
+            {t("results")}: {sorted.length}
+          </span>
+          <Select
+            value={pageSize ? String(pageSize) : ""}
+            onValueChange={(value) => {
+              handleItemsPerPage(value);
+            }}
+          >
+            <SelectTrigger className="w-full">
+              <SelectValue placeholder={t("itemsPerPage")} />
+            </SelectTrigger>
+            <SelectContent>
+              {pageSizeOptions.map((opt) => (
+                <SelectItem key={opt} value={String(opt)}>
+                  {opt} / {t("page")}
+                </SelectItem>
+              ))}
+            </SelectContent>
+          </Select>
+        </div>
       </div>
     </div>
   );

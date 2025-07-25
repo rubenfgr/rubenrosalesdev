@@ -2,6 +2,12 @@
   "loading": "Cargando...",
   "edit": "Editar",
   "delete": "Eliminar",
+  "results": "Resultados",
+  "search": "Buscar",
+  "noResults": "No se encontraron resultados",
+  "itemsPerPage": "Elementos por página",
+  "actions": "Acciones",
+  "page": "Página",
   "routes": {
     "admin": {
       "title": "Administrador",
@@ -64,7 +70,10 @@
       "editCertification": "Editar certificación",
       "deleteCertification": "Eliminar certificación",
       "confirmDelete": "¿Estás seguro de que deseas eliminar esta certificación?",
-      "noCertificationsFound": "No se encontraron certificaciones."
+      "name": "Nombre",
+      "issuer": "Emisor",
+      "date": "Fecha",
+      "link": "Enlace"
     }
   }
 }
