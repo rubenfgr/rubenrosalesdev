@@ -3,6 +3,7 @@ import { ChevronLeft, ChevronRight } from "lucide-react";
 import * as React from "react";
 import {
   DataTable,
+  Input,
   Select,
   SelectContent,
   SelectItem,
@@ -150,9 +151,9 @@ export function CertificationsListComponent({
   return (
     <div>
       <div className="mb-2 flex items-center gap-2">
-        <input
+        <Input
           type="text"
-          placeholder="Search by name or issuer..."
+          placeholder={t("search")}
           value={filter}
           onChange={(e) => setFilter(e.target.value)}
           className="rounded border px-2 py-1"
