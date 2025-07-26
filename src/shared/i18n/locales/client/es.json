@@ -9,6 +9,10 @@
   "actions": "Acciones",
   "page": "Página",
   "columns": "Columnas",
+  "deleteSelected": "Eliminar seleccionados",
+  "cancel": "Cancelar",
+  "continue": "Continuar",
+  "showAlert": "Mostrar alerta",
   "routes": {
     "admin": {
       "title": "Administrador",
@@ -74,7 +78,11 @@
       "name": "Nombre",
       "issuer": "Emisor",
       "date": "Fecha",
-      "link": "Enlace"
+      "link": "Enlace",
+      "deleteTitle": "Eliminar certificación",
+      "deleteDescription": "Esta acción no se puede deshacer. Se eliminará permanentemente la certificación y sus datos de nuestros servidores.",
+      "deleteMultipleTitle": "Eliminar certificaciones seleccionadas",
+      "deleteMultipleDescription": "Esta acción no se puede deshacer. Se eliminarán permanentemente las certificaciones seleccionadas y sus datos de nuestros servidores."
     }
   }
 }

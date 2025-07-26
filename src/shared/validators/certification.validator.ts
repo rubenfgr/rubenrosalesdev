@@ -2,6 +2,8 @@ import z from "zod";
 
 export const CertificationIdValidator = z.object({ id: z.uuid() });
 
+export const CertificationIdsValidator = z.object({ ids: z.array(z.uuid()) });
+
 export const CertificationCreateValidator = z.object({
   name: z.string(),
   issuer: z.string(),

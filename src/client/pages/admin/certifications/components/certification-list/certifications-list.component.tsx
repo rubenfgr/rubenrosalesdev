@@ -1,16 +1,5 @@
-import {
-  type ColumnDef,
-  type ColumnFiltersState,
-  flexRender,
-  getCoreRowModel,
-  getFilteredRowModel,
-  getPaginationRowModel,
-  getSortedRowModel,
-  type SortingState,
-  useReactTable,
-  type VisibilityState,
-} from "@tanstack/react-table";
-import { ArrowUpDown, ChevronDown, ChevronLeft, ChevronRight, MoreHorizontal } from "lucide-react";
+import { type ColumnDef, flexRender } from "@tanstack/react-table";
+import { ArrowUpDown, ChevronDown, ChevronLeft, ChevronRight, Edit, Trash } from "lucide-react";
 import * as React from "react";
 import {
   Button,
@@ -19,8 +8,6 @@ import {
   DropdownMenuCheckboxItem,
   DropdownMenuContent,
   DropdownMenuItem,
-  DropdownMenuLabel,
-  DropdownMenuSeparator,
   DropdownMenuTrigger,
   Input,
   Pagination,
@@ -40,27 +27,24 @@ import {
   TableRow,
 } from "@/client/components/ui";
 import type { CertificationDTO } from "@/shared/dto";
+import { AppButton } from "~/client/components/app-button/app-button.component";
+import { AppIconButton } from "~/client/components/app-icon-button/app-icon-button.component";
 import { useClientTranslation } from "~/client/hooks";
+import { useCertificationsList } from "./certifications-list.hook";
 
 export function CertificationsListComponent({
   data,
   onEdit,
   onDelete,
+  onDeleteMultiple,
 }: {
   data: CertificationDTO[];
-  onEdit: (cert: CertificationDTO) => React.ReactNode;
-  onDelete: (cert: CertificationDTO) => React.ReactNode;
+  onEdit: (cert: CertificationDTO) => void;
+  onDelete: (cert: CertificationDTO) => void;
+  onDeleteMultiple: (certs: CertificationDTO[]) => void;
 }) {
   const { t } = useClientTranslation();
-  const pageSizeOptions = [5, 10, 20, 50];
-  const [sorting, setSorting] = React.useState<SortingState>([]);
-  const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>([]);
-  const [columnVisibility, setColumnVisibility] = React.useState<VisibilityState>({});
-  const [rowSelection, setRowSelection] = React.useState({});
-  const [pageSize, setPageSize] = React.useState(pageSizeOptions[1]);
-  const [page, setPage] = React.useState(0);
 
-  // Columns
   const columns = React.useMemo<ColumnDef<CertificationDTO>[]>(
     () => [
       {
@@ -146,83 +130,69 @@ export function CertificationsListComponent({
         id: "actions",
         enableHiding: false,
         cell: ({ row }) => (
-          <DropdownMenu>
-            <DropdownMenuTrigger asChild>
-              <Button variant="ghost" className="h-8 w-8 p-0">
-                <span className="sr-only">Open menu</span>
-                <MoreHorizontal />
-              </Button>
-            </DropdownMenuTrigger>
-            <DropdownMenuContent align="end">
-              <DropdownMenuLabel>{t("actions")}</DropdownMenuLabel>
-              <DropdownMenuItem asChild>{onEdit(row.original)}</DropdownMenuItem>
-              <DropdownMenuItem asChild>{onDelete(row.original)}</DropdownMenuItem>
-            </DropdownMenuContent>
-          </DropdownMenu>
+          <div className="flex items-center gap-2">
+            <AppIconButton color="blue" icon={<Edit />} onClick={() => onEdit(row.original)} />
+            <AppIconButton color="red" icon={<Trash />} onClick={() => onDelete(row.original)} />
+          </div>
         ),
       },
     ],
     [t, onEdit, onDelete],
   );
 
-  const table = useReactTable({
-    data,
-    columns,
-    onSortingChange: setSorting,
-    onColumnFiltersChange: setColumnFilters,
-    getCoreRowModel: getCoreRowModel(),
-    getPaginationRowModel: getPaginationRowModel(),
-    getSortedRowModel: getSortedRowModel(),
-    getFilteredRowModel: getFilteredRowModel(),
-    onColumnVisibilityChange: setColumnVisibility,
-    onRowSelectionChange: setRowSelection,
-    state: {
-      sorting,
-      columnFilters,
-      columnVisibility,
-      rowSelection,
-      pagination: {
-        pageIndex: page,
-        pageSize,
-      },
-    },
-  });
-
-  const handlePageChange = (newPage: number) => {
-    setPage(newPage);
-  };
+  const {
+    pageSize,
+    page,
+    pageSizeOptions,
+    handlePageChange,
+    handleItemsPerPage,
+    table,
+    handleDeleteMultiple,
+  } = useCertificationsList({ data, columns, onDeleteMultiple });
 
   return (
     <div className="w-full">
-      <div className="flex items-center gap-2 py-4">
+      <div className="flex items-center justify-between gap-2 py-4">
         <Input
           placeholder={t("search")}
           value={(table.getColumn("name")?.getFilterValue() as string) ?? ""}
           onChange={(event) => table.getColumn("name")?.setFilterValue(event.target.value)}
           className="max-w-xs"
         />
-        <DropdownMenu>
-          <DropdownMenuTrigger asChild>
-            <Button variant="outline" className="ml-auto">
-              {t("columns")} <ChevronDown />
-            </Button>
-          </DropdownMenuTrigger>
-          <DropdownMenuContent align="end">
-            {table
-              .getAllColumns()
-              .filter((column) => column.getCanHide())
-              .map((column) => (
-                <DropdownMenuCheckboxItem
-                  key={column.id}
-                  className="capitalize"
-                  checked={column.getIsVisible()}
-                  onCheckedChange={(value) => column.toggleVisibility(!!value)}
-                >
-                  {column.id}
-                </DropdownMenuCheckboxItem>
-              ))}
-          </DropdownMenuContent>
-        </DropdownMenu>
+        <div className="flex items-center gap-2">
+          <DropdownMenu>
+            <DropdownMenuTrigger asChild>
+              <AppButton variant="outline" label={t("actions")} iconRight={<ChevronDown />} />
+            </DropdownMenuTrigger>
+            <DropdownMenuContent align="end">
+              <DropdownMenuItem onClick={handleDeleteMultiple} className="capitalize">
+                <Trash className="text-red-500" /> {t("deleteSelected")}
+              </DropdownMenuItem>
+            </DropdownMenuContent>
+          </DropdownMenu>
+          <DropdownMenu>
+            <DropdownMenuTrigger asChild>
+              <Button variant="outline" className="ml-auto">
+                {t("columns")} <ChevronDown />
+              </Button>
+            </DropdownMenuTrigger>
+            <DropdownMenuContent align="end">
+              {table
+                .getAllColumns()
+                .filter((column) => column.getCanHide())
+                .map((column) => (
+                  <DropdownMenuCheckboxItem
+                    key={column.id}
+                    className="capitalize"
+                    checked={column.getIsVisible()}
+                    onCheckedChange={(value) => column.toggleVisibility(!!value)}
+                  >
+                    {column.id}
+                  </DropdownMenuCheckboxItem>
+                ))}
+            </DropdownMenuContent>
+          </DropdownMenu>
+        </div>
       </div>
       <div className="rounded-md border">
         <Table>
@@ -311,12 +281,7 @@ export function CertificationsListComponent({
           <span className="text-nowrap text-muted-foreground text-sm">
             {t("results")}: {data.length}
           </span>
-          <Select
-            value={pageSize ? String(pageSize) : ""}
-            onValueChange={(value) => {
-              setPageSize(Number(value));
-            }}
-          >
+          <Select value={pageSize ? String(pageSize) : ""} onValueChange={handleItemsPerPage}>
             <SelectTrigger className="w-full">
               <SelectValue placeholder={t("itemsPerPage")} />
             </SelectTrigger>

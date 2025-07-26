@@ -41,10 +41,22 @@ const deleteCertification = async (id: string): Promise<Certification> => {
   return prisma.certification.delete({ where: { id } });
 };
 
+const deleteCertifications = async (ids: string[]): Promise<{ count: number }> => {
+  const { t } = serverTranslation();
+  const certifications = await prisma.certification.findMany({
+    where: { id: { in: ids } },
+  });
+  if (certifications.length !== ids.length) {
+    throw new Error(t("not_found"));
+  }
+  return prisma.certification.deleteMany({ where: { id: { in: ids } } });
+};
+
 export const certificationService = {
   getAllCertifications,
   getCertificationById,
   createCertification,
   updateCertification,
   deleteCertification,
+  deleteCertifications,
 };

@@ -3,6 +3,7 @@ import { useServerFn } from "@tanstack/react-start";
 import {
   createCertificationServer,
   deleteCertificationServer,
+  deleteCertificationsServer,
   getCertification,
   listCertifications,
   updateCertificationServer,
@@ -77,6 +78,20 @@ export const useDeleteCertification = () => {
     mutationFn: (data: CertificationIdDTO) => deleteCert({ data }),
     onSuccess: (_data, variables) => {
       queryClient.invalidateQueries({ queryKey: certificationKeys.detail(variables.id) });
+      queryClient.invalidateQueries({ queryKey: certificationKeys.all });
+    },
+  });
+};
+
+/**
+ * Hook para eliminar múltiples certificaciones
+ */
+export const useDeleteCertifications = () => {
+  const deleteCerts = useServerFn(deleteCertificationsServer);
+  const queryClient = useQueryClient();
+  return useMutation({
+    mutationFn: (data: { ids: string[] }) => deleteCerts({ data }),
+    onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: certificationKeys.all });
     },
   });

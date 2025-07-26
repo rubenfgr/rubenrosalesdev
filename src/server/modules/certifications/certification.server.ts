@@ -2,11 +2,13 @@ import { createServerFn } from "@tanstack/react-start";
 import type {
   CertificationCreateDTO,
   CertificationIdDTO,
+  CertificationIdsDTO,
   CertificationUpdateDTO,
 } from "@/shared/dto";
 import { mapCertificationCreateDTO, mapCertificationUpdateDTO } from "@/shared/mappers";
 import {
   CertificationCreateValidator,
+  CertificationIdsValidator,
   CertificationIdValidator,
   CertificationUpdateValidator,
 } from "@/shared/validators";
@@ -41,4 +43,12 @@ export const deleteCertificationServer = createServerFn({ method: "POST" })
   .validator((input: CertificationIdDTO) => CertificationIdValidator.parse(input))
   .handler(async (ctx) => {
     return certificationService.deleteCertification(ctx.data.id);
+  });
+
+export const deleteCertificationsServer = createServerFn({ method: "POST" })
+  .validator((input: CertificationIdsDTO) => {
+    return CertificationIdsValidator.parse(input);
+  })
+  .handler(async (ctx) => {
+    return certificationService.deleteCertifications(ctx.data.ids);
   });
