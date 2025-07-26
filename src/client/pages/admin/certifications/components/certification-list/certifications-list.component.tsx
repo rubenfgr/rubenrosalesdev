@@ -132,7 +132,7 @@ export function CertificationsListComponent({
         id: "actions",
         enableHiding: false,
         cell: ({ row }) => (
-          <div className="flex items-center gap-2">
+          <div className="flex items-center gap-3">
             <AppIconButton color="blue" icon={<Edit />} onClick={() => onEdit(row.original)} />
             <AppIconButton color="red" icon={<Trash />} onClick={() => onDelete(row.original)} />
           </div>
@@ -153,14 +153,14 @@ export function CertificationsListComponent({
   } = useCertificationsList({ data, columns, onDeleteMultiple });
 
   return (
-    <div className="max-w-full">
-      <div className="flex flex-col items-center justify-between gap-2 py-4 md:flex-row">
+    <div className="flex max-w-full flex-col gap-3">
+      <div className="flex flex-col items-center justify-between gap-3 md:flex-row">
         <Input
           placeholder={t("search")}
           value={(table.getColumn("name")?.getFilterValue() as string) ?? ""}
           onChange={(event) => table.getColumn("name")?.setFilterValue(event.target.value)}
         />
-        <div className="flex w-full items-center gap-2 md:w-auto">
+        <div className="flex w-full items-center gap-3 md:w-auto">
           <div className="w-1/2 md:w-auto">
             <DropdownMenu>
               <DropdownMenuTrigger asChild>
@@ -180,7 +180,7 @@ export function CertificationsListComponent({
           </div>
           <div className="w-1/2 md:w-auto">
             <DropdownMenu>
-              <DropdownMenuTrigger className="w-full" asChild>
+              <DropdownMenuTrigger asChild>
                 <AppButton
                   className="w-full"
                   variant="outline"
@@ -208,7 +208,7 @@ export function CertificationsListComponent({
         </div>
       </div>
       <ScrollArea className="w-[500px] min-w-full max-w-full overflow-x-auto">
-        <div className="w-max">
+        <div className="w-full">
           <Table>
             <TableHeader>
               {table.getHeaderGroups().map((headerGroup) => (
@@ -246,8 +246,8 @@ export function CertificationsListComponent({
         </div>
         <ScrollBar orientation="horizontal" />
       </ScrollArea>
-      <div className="mt-2 flex w-full items-center justify-between">
-        <div className="flex items-center gap-2">
+      <div className="flex w-full flex-col-reverse items-center justify-between gap-3 md:flex-row">
+        <div className="flex items-center gap-3">
           <Pagination>
             <PaginationContent>
               <PaginationItem>
