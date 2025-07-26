@@ -153,47 +153,58 @@ export function CertificationsListComponent({
   } = useCertificationsList({ data, columns, onDeleteMultiple });
 
   return (
-    <div className="w-full">
-      <div className="flex items-center justify-between gap-2 py-4">
+    <div className="max-w-full">
+      <div className="flex flex-col items-center justify-between gap-2 py-4 md:flex-row">
         <Input
           placeholder={t("search")}
           value={(table.getColumn("name")?.getFilterValue() as string) ?? ""}
           onChange={(event) => table.getColumn("name")?.setFilterValue(event.target.value)}
-          className="max-w-xs"
         />
-        <div className="flex items-center gap-2">
-          <DropdownMenu>
-            <DropdownMenuTrigger asChild>
-              <AppButton variant="outline" label={t("actions")} iconRight={<ChevronDown />} />
-            </DropdownMenuTrigger>
-            <DropdownMenuContent align="end">
-              <DropdownMenuItem onClick={handleDeleteMultiple} className="capitalize">
-                <Trash className="text-red-500" /> {t("deleteSelected")}
-              </DropdownMenuItem>
-            </DropdownMenuContent>
-          </DropdownMenu>
-          <DropdownMenu>
-            <DropdownMenuTrigger asChild>
-              <Button variant="outline" className="ml-auto">
-                {t("columns")} <ChevronDown />
-              </Button>
-            </DropdownMenuTrigger>
-            <DropdownMenuContent align="end">
-              {table
-                .getAllColumns()
-                .filter((column) => column.getCanHide())
-                .map((column) => (
-                  <DropdownMenuCheckboxItem
-                    key={column.id}
-                    className="capitalize"
-                    checked={column.getIsVisible()}
-                    onCheckedChange={(value) => column.toggleVisibility(!!value)}
-                  >
-                    {column.id}
-                  </DropdownMenuCheckboxItem>
-                ))}
-            </DropdownMenuContent>
-          </DropdownMenu>
+        <div className="flex w-full items-center gap-2 md:w-auto">
+          <div className="w-1/2 md:w-auto">
+            <DropdownMenu>
+              <DropdownMenuTrigger asChild>
+                <AppButton
+                  className="w-full"
+                  variant="outline"
+                  label={t("actions")}
+                  iconRight={<ChevronDown />}
+                />
+              </DropdownMenuTrigger>
+              <DropdownMenuContent align="end">
+                <DropdownMenuItem onClick={handleDeleteMultiple} className="capitalize">
+                  <Trash className="text-red-500" /> {t("deleteSelected")}
+                </DropdownMenuItem>
+              </DropdownMenuContent>
+            </DropdownMenu>
+          </div>
+          <div className="w-1/2 md:w-auto">
+            <DropdownMenu>
+              <DropdownMenuTrigger className="w-full" asChild>
+                <AppButton
+                  className="w-full"
+                  variant="outline"
+                  label={t("columns")}
+                  iconRight={<ChevronDown />}
+                />
+              </DropdownMenuTrigger>
+              <DropdownMenuContent align="end">
+                {table
+                  .getAllColumns()
+                  .filter((column) => column.getCanHide())
+                  .map((column) => (
+                    <DropdownMenuCheckboxItem
+                      key={column.id}
+                      className="capitalize"
+                      checked={column.getIsVisible()}
+                      onCheckedChange={(value) => column.toggleVisibility(!!value)}
+                    >
+                      {column.id}
+                    </DropdownMenuCheckboxItem>
+                  ))}
+              </DropdownMenuContent>
+            </DropdownMenu>
+          </div>
         </div>
       </div>
       <ScrollArea className="w-[500px] min-w-full max-w-full overflow-x-auto">

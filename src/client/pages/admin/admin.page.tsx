@@ -33,7 +33,7 @@ export const AdminPage = ({ children, ...props }: React.ComponentProps<typeof Si
 
             <div
               className={cn(
-                "flex-1 transition-all duration-300 ease-in-out",
+                "max-w-full flex-1 transition-all duration-300 ease-in-out",
                 open && !isMobile ? "ml-64" : "ml-0",
               )}
             >
