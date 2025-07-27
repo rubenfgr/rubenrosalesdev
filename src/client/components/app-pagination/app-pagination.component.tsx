@@ -7,16 +7,7 @@ import {
   PaginationItem,
   PaginationLink,
 } from "@/client/components/ui";
-
-interface AppPaginationProps {
-  page: number;
-  pageSize: number;
-  dataLength: number;
-  pageSizeOptions: number[];
-  onPageChange: (page: number) => void;
-  onPageSizeChange: (size: string) => void;
-  t: (key: string) => string;
-}
+import type { AppPaginationProps } from "./app-pagination.model";
 
 export const AppPagination: React.FC<AppPaginationProps> = ({
   page,

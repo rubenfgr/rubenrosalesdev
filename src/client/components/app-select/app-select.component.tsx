@@ -1,21 +1,8 @@
 import { ChevronDown } from "lucide-react";
 import type { FC } from "react";
 import { AppButton } from "@/client/components/app-button/app-button.component";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/client/components/ui";
-
-interface AppSelectProps {
-  value: string;
-  onValueChange: (value: string) => void;
-  options: number[];
-  placeholder: string;
-  t: (key: string) => string;
-}
+import { Select, SelectContent, SelectItem, SelectTrigger } from "@/client/components/ui";
+import type { AppSelectProps } from "./app-select.model";
 
 export const AppSelect: FC<AppSelectProps> = ({
   value,
