@@ -30,6 +30,7 @@ import {
 } from "@/client/components/ui";
 import type { CertificationDTO } from "@/shared/dto";
 import { AppButton } from "~/client/components/app-button/app-button.component";
+import { AppDropdownMenu } from "~/client/components/app-dropdown-menu/app-dropdown-menu.component";
 import { AppIconButton } from "~/client/components/app-icon-button/app-icon-button.component";
 import { useClientTranslation } from "~/client/hooks";
 import { useCertificationsList } from "./certifications-list.hook";
@@ -162,48 +163,36 @@ export function CertificationsListComponent({
         />
         <div className="flex w-full items-center gap-3 md:w-auto">
           <div className="w-1/2 md:w-auto">
-            <DropdownMenu>
-              <DropdownMenuTrigger asChild>
-                <AppButton
-                  className="w-full"
-                  variant="outline"
-                  label={t("actions")}
-                  iconRight={<ChevronDown />}
-                />
-              </DropdownMenuTrigger>
-              <DropdownMenuContent align="end">
-                <DropdownMenuItem onClick={handleDeleteMultiple} className="capitalize">
-                  <Trash className="text-red-500" /> {t("deleteSelected")}
-                </DropdownMenuItem>
-              </DropdownMenuContent>
-            </DropdownMenu>
+            <AppDropdownMenu
+              buttonLabel={t("actions")}
+              buttonClassName="w-full"
+              buttonVariant="outline"
+              buttonIconRight={<ChevronDown />}
+              disabled={table.getSelectedRowModel().rows.length === 0}
+              items={[
+                {
+                  label: t("admin.certifications.deleteMultiple"),
+                  icon: <Trash className="text-red-500" />,
+                  onClick: handleDeleteMultiple,
+                },
+              ]}
+            />
           </div>
           <div className="w-1/2 md:w-auto">
-            <DropdownMenu>
-              <DropdownMenuTrigger asChild>
-                <AppButton
-                  className="w-full"
-                  variant="outline"
-                  label={t("columns")}
-                  iconRight={<ChevronDown />}
-                />
-              </DropdownMenuTrigger>
-              <DropdownMenuContent align="end">
-                {table
-                  .getAllColumns()
-                  .filter((column) => column.getCanHide())
-                  .map((column) => (
-                    <DropdownMenuCheckboxItem
-                      key={column.id}
-                      className="capitalize"
-                      checked={column.getIsVisible()}
-                      onCheckedChange={(value) => column.toggleVisibility(!!value)}
-                    >
-                      {column.id}
-                    </DropdownMenuCheckboxItem>
-                  ))}
-              </DropdownMenuContent>
-            </DropdownMenu>
+            <AppDropdownMenu
+              buttonLabel={t("columns")}
+              buttonClassName="w-full"
+              buttonVariant="outline"
+              buttonIconRight={<ChevronDown />}
+              items={table
+                .getAllColumns()
+                .filter((column) => column.getCanHide())
+                .map((column) => ({
+                  label: column.id,
+                  onClick: () => column.toggleVisibility(),
+                  className: "capitalize",
+                }))}
+            />
           </div>
         </div>
       </div>

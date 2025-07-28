@@ -74,6 +74,7 @@
       "createCertification": "Crear certificación",
       "editCertification": "Editar certificación",
       "deleteCertification": "Eliminar certificación",
+      "deleteMultiple": "Eliminar certificaciones seleccionadas",
       "confirmDelete": "¿Estás seguro de que deseas eliminar esta certificación?",
       "name": "Nombre",
       "issuer": "Emisor",
