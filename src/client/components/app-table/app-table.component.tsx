@@ -1,5 +1,5 @@
 import { type ColumnDef, flexRender, type Table as TanstackTable } from "@tanstack/react-table";
-import { ChevronDown, Trash } from "lucide-react";
+import { Check, ChevronDown, Eye, EyeClosed, Lock, Trash } from "lucide-react";
 import { AppPagination } from "@/client/components/app-pagination/app-pagination.component";
 import {
   Input,
@@ -61,9 +61,10 @@ export function AppTable<T>({ data, columns, onDeleteMultiple }: AppTableProps<T
                 .getAllColumns()
                 .filter((column) => column.getCanHide())
                 .map((column) => ({
-                  label: String(column.id), // Ensure label is always a string
+                  label: String(column.id),
                   onClick: () => column.toggleVisibility(),
                   className: "capitalize",
+                  icon: column.getIsVisible() ? <Eye className="text-blue-500" /> : <EyeClosed />,
                 }))}
             />
           </div>

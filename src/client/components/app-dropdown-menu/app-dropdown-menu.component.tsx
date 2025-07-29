@@ -16,24 +16,28 @@ export const AppDropdownMenu: FC<AppDropdownMenuProps> = ({
   items,
   align = "end",
   disabled = false,
-}) => (
-  <DropdownMenu>
-    <DropdownMenuTrigger asChild disabled={disabled}>
-      <AppButton
-        className={`w-full justify-between ${buttonClassName}`}
-        variant={buttonVariant}
-        label={typeof buttonLabel === "string" ? buttonLabel : ""}
-        iconRight={buttonIconRight}
-      />
-    </DropdownMenuTrigger>
-    <DropdownMenuContent align={align}>
-      {items.map((item, idx) => (
-        <DropdownMenuItem key={idx} onClick={item.onClick} className={item.className}>
-          <span>
-            {item.icon} {item.label}
-          </span>
-        </DropdownMenuItem>
-      ))}
-    </DropdownMenuContent>
-  </DropdownMenu>
-);
+}) => {
+  console.log("AppDropdownMenu rendered with items:", items);
+
+  return (
+    <DropdownMenu>
+      <DropdownMenuTrigger asChild disabled={disabled}>
+        <AppButton
+          className={`w-full justify-between ${buttonClassName}`}
+          variant={buttonVariant}
+          label={typeof buttonLabel === "string" ? buttonLabel : ""}
+          iconRight={buttonIconRight}
+        />
+      </DropdownMenuTrigger>
+      <DropdownMenuContent align={align}>
+        {items.map((item, idx) => (
+          <DropdownMenuItem key={idx} onClick={item.onClick} className={item.className}>
+            <span className="flex items-center gap-2">
+              {item.icon} {item.label}
+            </span>
+          </DropdownMenuItem>
+        ))}
+      </DropdownMenuContent>
+    </DropdownMenu>
+  );
+};
