@@ -9,20 +9,15 @@ import {
     useReactTable,
 } from "@tanstack/react-table";
 import * as React from "react";
-import type { CertificationDTO } from "@/shared/dto";
 import { useClientTranslation } from "~/client/hooks";
 
-interface UseCertificationsListArgs {
-    data: CertificationDTO[];
-    columns: ColumnDef<CertificationDTO>[];
-    onDeleteMultiple: (certs: CertificationDTO[]) => void;
+export interface AppTableProps<T> {
+    data: T[];
+    columns: ColumnDef<T>[];
 }
 
-export const useCertificationsList = ({
-    data,
-    columns,
-    onDeleteMultiple,
-}: UseCertificationsListArgs) => {
+export const useAppTable = <T>({ data, columns
+}: AppTableProps<T>) => {
     const pageSizeOptions = [5, 10, 20, 50];
     const [pageSize, setPageSize] = React.useState(pageSizeOptions[1]);
     const [page, setPage] = React.useState(0);
@@ -32,16 +27,6 @@ export const useCertificationsList = ({
     const [rowSelection, setRowSelection] = React.useState({});
 
     const { t } = useClientTranslation();
-
-    const handlePageChange = (newPage: number) => {
-        setPage(newPage);
-    };
-
-    const handleItemsPerPage = (value: string) => {
-        const newSize = Number(value);
-        setPageSize(newSize);
-        setPage(0);
-    };
 
     const table = useReactTable({
         data,
@@ -66,21 +51,23 @@ export const useCertificationsList = ({
         },
     });
 
-    const handleDeleteMultiple = () => {
-        const selectedCerts = table.getSelectedRowModel().rows.map((row) => row.original);
-        if (selectedCerts.length > 0) {
-            onDeleteMultiple(selectedCerts);
-        }
+    const handlePageChange = (newPage: number) => {
+        setPage(newPage);
+    };
+
+    const handleItemsPerPage = (value: string) => {
+        const newSize = Number(value);
+        setPageSize(newSize);
+        setPage(0);
     };
 
     return {
-        pageSize,
-        page,
-        pageSizeOptions,
-        handlePageChange,
-        handleItemsPerPage,
         table,
-        handleDeleteMultiple,
-        t
+        handleItemsPerPage,
+        handlePageChange,
+        page,
+        pageSize,
+        pageSizeOptions,
+        t,
     };
-}
+};

@@ -76,7 +76,6 @@ export const AppPagination: React.FC<AppPaginationProps> = ({
           onValueChange={onPageSizeChange}
           options={pageSizeOptions}
           placeholder={t("itemsPerPage")}
-          t={t}
         />
       </div>
     </div>

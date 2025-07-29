@@ -3,5 +3,4 @@ export interface AppSelectProps {
   onValueChange: (value: string) => void;
   options: number[];
   placeholder: string;
-  t: (key: string) => string;
 }

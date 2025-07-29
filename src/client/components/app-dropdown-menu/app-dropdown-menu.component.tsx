@@ -29,7 +29,9 @@ export const AppDropdownMenu: FC<AppDropdownMenuProps> = ({
     <DropdownMenuContent align={align}>
       {items.map((item, idx) => (
         <DropdownMenuItem key={idx} onClick={item.onClick} className={item.className}>
-          {item.icon} {item.label}
+          <span>
+            {item.icon} {item.label}
+          </span>
         </DropdownMenuItem>
       ))}
     </DropdownMenuContent>
