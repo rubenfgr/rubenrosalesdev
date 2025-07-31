@@ -5,6 +5,9 @@ import type {
   CertificationIdValidator,
   CertificationUpdateValidator,
 } from "@/shared/validators/certification.validator";
+import type { CertificationListParams } from "@/shared/validators/certification-list.validator";
+
+export type CertificationListParamsDTO = CertificationListParams;
 
 export type CertificationIdDTO = z.infer<typeof CertificationIdValidator>;
 

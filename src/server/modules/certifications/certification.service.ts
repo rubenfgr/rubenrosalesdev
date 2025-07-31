@@ -1,10 +1,22 @@
-import type { Certification } from "@prisma/client";
+import type { Certification, Prisma } from "@prisma/client";
 import { prisma } from "@/server/services/prisma";
 import { serverTranslation } from "@/server/services/use-server-translation";
+import type { CertificationListParams } from "@/shared/validators/certification-list.validator";
 
-const getAllCertifications = async (): Promise<Certification[]> => {
+const getAllCertifications = async (
+  params: CertificationListParams = {},
+): Promise<Certification[]> => {
+  const { page = 1, pageSize = 20, filter, sort } = params;
+  const where = filter ? (filter as Prisma.CertificationWhereInput) : undefined;
+  let orderBy: Prisma.CertificationOrderByWithRelationInput = { date: "desc" };
+  if (sort?.field && sort?.direction) {
+    orderBy = { [sort.field]: sort.direction } as Prisma.CertificationOrderByWithRelationInput;
+  }
   return prisma.certification.findMany({
-    orderBy: { date: "desc" },
+    skip: (page - 1) * pageSize,
+    take: pageSize,
+    where,
+    orderBy,
     include: { user: true },
   });
 };

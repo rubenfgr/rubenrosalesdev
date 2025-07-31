@@ -16,14 +16,27 @@ import type {
 import { certificationKeys } from "./certifications.keys";
 
 /**
- * Hook to fetch all certifications
+ * Hook to fetch certifications with pagination, filter, and sorting
  */
-export const useGetAllCertifications = () => {
+export interface UseGetAllCertificationsParams {
+  page?: number;
+  pageSize?: number;
+  filter?: Record<string, unknown>;
+  sort?: { field: string; direction: 'asc' | 'desc' };
+}
+
+export const useGetAllCertifications = (params: UseGetAllCertificationsParams = {}) => {
   const getAllCertifications = useServerFn(listCertifications);
 
   return useQuery({
-    queryKey: certificationKeys.all,
-    queryFn: () => getAllCertifications(),
+    queryKey: [
+      ...certificationKeys.all,
+      params.page,
+      params.pageSize,
+      params.filter,
+      params.sort,
+    ],
+    queryFn: () => getAllCertifications({ data: params }),
   });
 };
 

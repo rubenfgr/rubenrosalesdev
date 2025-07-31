@@ -5,6 +5,7 @@ import type {
   CertificationIdsDTO,
   CertificationUpdateDTO,
 } from "@/shared/dto";
+import type { CertificationListParamsDTO } from "@/shared/dto/certification.dto";
 import { mapCertificationCreateDTO, mapCertificationUpdateDTO } from "@/shared/mappers";
 import {
   CertificationCreateValidator,
@@ -12,11 +13,14 @@ import {
   CertificationIdValidator,
   CertificationUpdateValidator,
 } from "@/shared/validators";
+import { CertificationListParamsValidator } from "@/shared/validators/certification-list.validator";
 import { certificationService } from "./certification.service";
 
-export const listCertifications = createServerFn({ method: "GET" }).handler(async () => {
-  return certificationService.getAllCertifications();
-});
+export const listCertifications = createServerFn({ method: "GET" })
+  .validator((input: CertificationListParamsDTO) => CertificationListParamsValidator.parse(input))
+  .handler(async (ctx) => {
+    return certificationService.getAllCertifications(ctx.data);
+  });
 
 export const getCertification = createServerFn({ method: "GET" })
   .validator((input: CertificationIdDTO) => CertificationIdValidator.parse(input))
