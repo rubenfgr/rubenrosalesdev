@@ -2,11 +2,15 @@ import type { ColumnDef, Row as TanstackRow, Table as TanstackTable } from "@tan
 import { ArrowUpDown, Edit, Trash } from "lucide-react";
 import * as React from "react";
 import { Button, Checkbox } from "@/client/components/ui";
+import { useGetAllCertifications } from "@/client/services/api/certifications/certifications.hooks";
 import type { CertificationDTO } from "@/shared/dto";
 import { AppIconButton } from "~/client/components/app-icon-button/app-icon-button.component";
-import { AppTable } from "~/client/components/app-table/app-table.component";
+// import { AppTable } from "~/client/components/app-table/app-table.component";
+import { AppTableServer } from "~/client/components/app-table/app-table-server.component";
 import { useClientTranslation } from "~/client/hooks";
 
+// IMPLEMENTACIÓN ORIGINAL COMENTADA PARA REFERENCIA
+/*
 export function CertificationsListComponent({
   data,
   onEdit,
@@ -19,7 +23,34 @@ export function CertificationsListComponent({
   onDeleteMultiple: (certs: CertificationDTO[]) => void;
 }) {
   const { t } = useClientTranslation();
+  const columns = React.useMemo<ColumnDef<CertificationDTO>[]>(...);
+  return (
+    <div className="flex max-w-full flex-col gap-3">
+      <AppTable data={data} columns={columns} onDeleteMultiple={onDeleteMultiple} />
+    </div>
+  );
+}
+*/
 
+// NUEVA IMPLEMENTACIÓN CON PAGINACIÓN SERVER-SIDE
+export function CertificationsListComponent({
+  onEdit,
+  onDelete,
+  onDeleteMultiple,
+}: {
+  onEdit: (cert: CertificationDTO) => void;
+  onDelete: (cert: CertificationDTO) => void;
+  onDeleteMultiple: (certs: CertificationDTO[]) => void;
+}) {
+  const { t } = useClientTranslation();
+  const [page, setPage] = React.useState(1);
+  const [pageSize, setPageSize] = React.useState(20);
+  const [filter, setFilter] = React.useState("");
+  const [sort, setSort] = React.useState<{ field: string; direction: "asc" | "desc" } | undefined>(
+    undefined,
+  );
+
+  // Columnas igual que antes
   const columns = React.useMemo<ColumnDef<CertificationDTO>[]>(
     () => [
       {
@@ -53,7 +84,11 @@ export function CertificationsListComponent({
         }) => (
           <Button
             variant="ghost"
-            onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+            onClick={() => {
+              const isAsc = column.getIsSorted() === "asc";
+              column.toggleSorting(isAsc);
+              setSort({ field: "name", direction: isAsc ? "desc" : "asc" });
+            }}
             className="font-bold"
           >
             {t("admin.certifications.name")} <ArrowUpDown className="ml-2 h-4 w-4" />
@@ -72,7 +107,11 @@ export function CertificationsListComponent({
         }) => (
           <Button
             variant="ghost"
-            onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+            onClick={() => {
+              const isAsc = column.getIsSorted() === "asc";
+              column.toggleSorting(isAsc);
+              setSort({ field: "issuer", direction: isAsc ? "desc" : "asc" });
+            }}
             className="font-bold"
           >
             {t("admin.certifications.issuer")} <ArrowUpDown className="ml-2 h-4 w-4" />
@@ -91,7 +130,11 @@ export function CertificationsListComponent({
         }) => (
           <Button
             variant="ghost"
-            onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+            onClick={() => {
+              const isAsc = column.getIsSorted() === "asc";
+              column.toggleSorting(isAsc);
+              setSort({ field: "date", direction: isAsc ? "desc" : "asc" });
+            }}
             className="font-bold"
           >
             {t("admin.certifications.date")} <ArrowUpDown className="ml-2 h-4 w-4" />
@@ -131,9 +174,31 @@ export function CertificationsListComponent({
     [t, onEdit, onDelete],
   );
 
+  const { data, isLoading } = useGetAllCertifications({
+    page,
+    pageSize,
+    filter: filter ? { name: { contains: filter } } : undefined,
+    sort,
+  });
+
+  const rows = data?.data ?? [];
+  const total = data?.total ?? 0;
+
   return (
     <div className="flex max-w-full flex-col gap-3">
-      <AppTable data={data} columns={columns} onDeleteMultiple={onDeleteMultiple} />
+      <AppTableServer
+        data={rows}
+        columns={columns}
+        page={page}
+        pageSize={pageSize}
+        total={total}
+        onPageChange={setPage}
+        onPageSizeChange={setPageSize}
+        onDeleteMultiple={onDeleteMultiple}
+        isLoading={isLoading}
+        onFilterChange={setFilter}
+        filterValue={filter}
+      />
     </div>
   );
 }

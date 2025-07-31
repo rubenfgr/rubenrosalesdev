@@ -5,20 +5,24 @@ import type { CertificationListParams } from "@/shared/validators/certification-
 
 const getAllCertifications = async (
   params: CertificationListParams = {},
-): Promise<Certification[]> => {
+): Promise<{ data: Certification[]; total: number }> => {
   const { page = 1, pageSize = 20, filter, sort } = params;
   const where = filter ? (filter as Prisma.CertificationWhereInput) : undefined;
   let orderBy: Prisma.CertificationOrderByWithRelationInput = { date: "desc" };
   if (sort?.field && sort?.direction) {
     orderBy = { [sort.field]: sort.direction } as Prisma.CertificationOrderByWithRelationInput;
   }
-  return prisma.certification.findMany({
-    skip: (page - 1) * pageSize,
-    take: pageSize,
-    where,
-    orderBy,
-    include: { user: true },
-  });
+  const [data, total] = await Promise.all([
+    prisma.certification.findMany({
+      skip: (page - 1) * pageSize,
+      take: pageSize,
+      where,
+      orderBy,
+      include: { user: true },
+    }),
+    prisma.certification.count({ where }),
+  ]);
+  return { data, total };
 };
 
 const getCertificationById = async (id: string): Promise<Certification | null> => {

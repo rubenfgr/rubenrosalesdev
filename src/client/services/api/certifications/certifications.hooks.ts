@@ -28,6 +28,7 @@ export interface UseGetAllCertificationsParams {
 export const useGetAllCertifications = (params: UseGetAllCertificationsParams = {}) => {
   const getAllCertifications = useServerFn(listCertifications);
 
+  const hasParams = Object.keys(params).length > 0;
   return useQuery({
     queryKey: [
       ...certificationKeys.all,
@@ -36,7 +37,11 @@ export const useGetAllCertifications = (params: UseGetAllCertificationsParams = 
       params.filter,
       params.sort,
     ],
-    queryFn: () => getAllCertifications({ data: params }),
+    queryFn: () => hasParams ? getAllCertifications({ data: params }) : getAllCertifications({ data: {} }),
+    select: (result) => ({
+      data: result?.data ?? [],
+      total: result?.total ?? 0,
+    }),
   });
 };
 
