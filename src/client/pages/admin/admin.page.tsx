@@ -93,7 +93,7 @@ export const AdminPage = ({ children, ...props }: React.ComponentProps<typeof Si
                   </Breadcrumb>
                 </div>
               </header>
-              <div className="flex flex-1 flex-col gap-4 p-4 pt-0">{children}</div>
+              <div className="mb-40 flex flex-1 flex-col gap-4 p-4 pt-0">{children}</div>
             </div>
           </SidebarProvider>
         )}
