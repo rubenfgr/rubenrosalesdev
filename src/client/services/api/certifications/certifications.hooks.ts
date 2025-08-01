@@ -22,7 +22,7 @@ export interface UseGetAllCertificationsParams {
   page?: number;
   pageSize?: number;
   filter?: Record<string, unknown>;
-  sort?: { field: string; direction: 'asc' | 'desc' };
+  sort?: { field: string; direction: "asc" | "desc" };
 }
 
 export const useGetAllCertifications = (params: UseGetAllCertificationsParams = {}) => {
@@ -30,14 +30,9 @@ export const useGetAllCertifications = (params: UseGetAllCertificationsParams = 
 
   const hasParams = Object.keys(params).length > 0;
   return useQuery({
-    queryKey: [
-      ...certificationKeys.all,
-      params.page,
-      params.pageSize,
-      params.filter,
-      params.sort,
-    ],
-    queryFn: () => hasParams ? getAllCertifications({ data: params }) : getAllCertifications({ data: {} }),
+    queryKey: [...certificationKeys.all, params.page, params.pageSize, params.filter, params.sort],
+    queryFn: () =>
+      hasParams ? getAllCertifications({ data: params }) : getAllCertifications({ data: {} }),
     select: (result) => ({
       data: result?.data ?? [],
       total: result?.total ?? 0,
