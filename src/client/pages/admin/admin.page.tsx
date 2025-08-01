@@ -13,6 +13,9 @@ import {
   SidebarTrigger,
 } from "@/client/components/ui";
 import { useClientTranslation } from "@/client/hooks";
+import { useTheme } from "@/client/hooks/use-theme";
+import { Button } from "@/client/components/ui/button";
+import { Moon, Sun } from "lucide-react";
 import { cn } from "~/client/utils";
 import { AdminSidebarComponent } from "./components/admin-sidebar.component";
 import {
@@ -24,6 +27,7 @@ export const AdminPage = ({ children, ...props }: React.ComponentProps<typeof Si
   const matches = useMatches();
   const { t } = useClientTranslation();
 
+  const [theme, toggleTheme] = useTheme();
   return (
     <AdminSidebarStateProvider>
       <AdminSidebarStateContext.Consumer>
@@ -38,7 +42,7 @@ export const AdminPage = ({ children, ...props }: React.ComponentProps<typeof Si
               )}
             >
               <header className="flex h-16 max-w-full shrink-0 items-center gap-2 transition-[width,height] ease-linear group-has-data-[collapsible=icon]/sidebar-wrapper:h-12">
-                <div className="flex items-center gap-2 px-4">
+                <div className="flex items-center gap-2 px-4 flex-1">
                   <SidebarTrigger className="-ml-1" />
                   <Separator
                     orientation="vertical"
@@ -91,6 +95,16 @@ export const AdminPage = ({ children, ...props }: React.ComponentProps<typeof Si
                       })()}
                     </BreadcrumbList>
                   </Breadcrumb>
+                </div>
+                <div className="flex items-center pr-4">
+                  <Button
+                    variant="ghost"
+                    size="icon"
+                    aria-label={theme === "dark" ? "Switch to light mode" : "Switch to dark mode"}
+                    onClick={toggleTheme}
+                  >
+                    {theme === "dark" ? <Sun className="size-5" /> : <Moon className="size-5" />}
+                  </Button>
                 </div>
               </header>
               <div className="mb-40 flex flex-1 flex-col gap-4 p-4 pt-0">{children}</div>
