@@ -2,7 +2,7 @@ import type * as React from "react";
 
 export function Table({ children, ...props }: React.HTMLAttributes<HTMLTableElement>) {
   return (
-    <table className="min-w-full rounded border bg-white shadow" {...props}>
+    <table className="min-w-full rounded border bg-card text-card-foreground shadow" {...props}>
       {children}
     </table>
   );

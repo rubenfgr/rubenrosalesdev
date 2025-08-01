@@ -72,12 +72,12 @@ export function AppTable<T>({ data, columns, onDeleteMultiple }: AppTableProps<T
       </div>
       <ScrollArea className="w-[500px] min-w-full max-w-full overflow-x-auto">
         <div className="w-full">
-          <Table>
-            <TableHeader>
+          <Table className="bg-card text-card-foreground border border-border rounded-md shadow-sm">
+            <TableHeader className="bg-muted text-muted-foreground">
               {table.getHeaderGroups().map((headerGroup) => (
                 <TableRow key={headerGroup.id}>
                   {headerGroup.headers.map((header) => (
-                    <TableHead key={header.id}>
+                    <TableHead key={header.id} className="bg-muted text-muted-foreground">
                       {header.isPlaceholder
                         ? null
                         : flexRender(header.column.columnDef.header, header.getContext())}
@@ -89,9 +89,9 @@ export function AppTable<T>({ data, columns, onDeleteMultiple }: AppTableProps<T
             <TableBody>
               {table.getRowModel().rows?.length ? (
                 table.getRowModel().rows.map((row) => (
-                  <TableRow key={row.id} data-state={row.getIsSelected() && "selected"}>
+                  <TableRow key={row.id} data-state={row.getIsSelected() && "selected"} className="hover:bg-accent/60">
                     {row.getVisibleCells().map((cell) => (
-                      <TableCell key={cell.id}>
+                      <TableCell key={cell.id} className="border-border">
                         {flexRender(cell.column.columnDef.cell, cell.getContext())}
                       </TableCell>
                     ))}
@@ -99,7 +99,7 @@ export function AppTable<T>({ data, columns, onDeleteMultiple }: AppTableProps<T
                 ))
               ) : (
                 <TableRow>
-                  <TableCell colSpan={columns.length} className="h-24 text-center">
+                  <TableCell colSpan={columns.length} className="h-24 text-center text-muted-foreground">
                     {t("noResults")}
                   </TableCell>
                 </TableRow>

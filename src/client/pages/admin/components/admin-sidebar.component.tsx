@@ -27,14 +27,16 @@ export function AdminSidebarComponent({
       {...props}
       className={`transition-all duration-300 ease-in-out ${open ? "w-64" : "w-0"}`}
     >
-      <div className="flex h-screen flex-col bg-white">
+      <div className="flex h-screen flex-col border-sidebar-border border-r bg-sidebar text-sidebar-foreground">
         <SidebarHeader>
           <SidebarMenu>
             <SidebarMenuItem>
               <SidebarMenuButton asChild className="data-[slot=sidebar-menu-button]:!p-1.5">
                 <a href="/admin">
                   <Box className="!size-5" />
-                  <span className="font-semibold text-base">Ruben Rosales Dev</span>
+                  <span className="font-semibold text-base text-sidebar-foreground">
+                    Ruben Rosales Dev
+                  </span>
                 </a>
               </SidebarMenuButton>
             </SidebarMenuItem>
