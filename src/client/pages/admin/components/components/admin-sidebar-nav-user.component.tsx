@@ -1,5 +1,6 @@
 import { useNavigate } from "@tanstack/react-router";
 import { Bell, EllipsisVertical, LogOut, UserCircle2 } from "lucide-react";
+import { useContext } from "react";
 import { Avatar, AvatarFallback, AvatarImage } from "@/client/components/ui";
 import { useClientTranslation } from "@/client/hooks";
 import {
@@ -11,12 +12,8 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import {
-  SidebarMenu,
-  SidebarMenuButton,
-  SidebarMenuItem,
-  useSidebar,
-} from "@/components/ui/sidebar";
+import { SidebarMenu, SidebarMenuButton, SidebarMenuItem } from "@/components/ui/sidebar";
+import { AdminSidebarStateContext } from "../admin-sidebar-state.context";
 
 export function AdminSidebarNavUserComponent({
   user,
@@ -27,9 +24,9 @@ export function AdminSidebarNavUserComponent({
     avatar: string;
   };
 }) {
-  const { isMobile } = useSidebar();
   const { t } = useClientTranslation();
   const navigate = useNavigate();
+  const { isMobile } = useContext(AdminSidebarStateContext);
 
   const handleProfileClick = () => {
     navigate({
