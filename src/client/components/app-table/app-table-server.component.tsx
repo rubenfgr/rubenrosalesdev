@@ -48,6 +48,7 @@ export function AppTableServer<T>({
     <>
       <div className="flex flex-col items-center justify-between gap-3 md:flex-row">
         <Input
+          autoComplete="off"
           placeholder={t("search")}
           value={filterValue}
           onChange={(event) => onFilterChange?.(event.target.value)}

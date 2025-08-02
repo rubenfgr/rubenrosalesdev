@@ -7,7 +7,31 @@ const getAllCertifications = async (
   params: CertificationListParams = {},
 ): Promise<{ data: Certification[]; total: number }> => {
   const { page = 1, pageSize = 20, filter, sort } = params;
-  const where = filter ? (filter as Prisma.CertificationWhereInput) : undefined;
+  let where: Prisma.CertificationWhereInput | undefined;
+
+  if (filter) {
+    where = {};
+    // Process each filter property
+    Object.entries(filter).forEach(([key, value]) => {
+      if (typeof value === "object" && value !== null && "contains" in value) {
+        // If it's a 'contains' filter, use case-insensitive mode
+        where = {
+          ...where,
+          [key]: {
+            contains: (value as { contains: string }).contains,
+            mode: "insensitive",
+          },
+        } as Prisma.CertificationWhereInput;
+      } else {
+        // For other filter types, keep original behavior
+        where = {
+          ...where,
+          [key]: value,
+        } as Prisma.CertificationWhereInput;
+      }
+    });
+  }
+
   let orderBy: Prisma.CertificationOrderByWithRelationInput = { date: "desc" };
   if (sort?.field && sort?.direction) {
     orderBy = { [sort.field]: sort.direction } as Prisma.CertificationOrderByWithRelationInput;

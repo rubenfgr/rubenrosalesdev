@@ -1,5 +1,5 @@
 import { type ColumnDef, getCoreRowModel, useReactTable } from "@tanstack/react-table";
-import { useTranslation } from "react-i18next";
+import { useClientTranslation } from "@/client/hooks";
 
 interface UseAppTableServerProps<T> {
   data: T[];
@@ -7,7 +7,7 @@ interface UseAppTableServerProps<T> {
 }
 
 export function useAppTableServer<T>({ data, columns }: UseAppTableServerProps<T>) {
-  const { t } = useTranslation();
+  const { t } = useClientTranslation();
   const table = useReactTable<T>({
     data,
     columns,
@@ -15,7 +15,6 @@ export function useAppTableServer<T>({ data, columns }: UseAppTableServerProps<T
     manualPagination: true,
     manualFiltering: true,
     manualSorting: true,
-    // No pagination state here, handled by parent
   });
   return { t, table };
 }
