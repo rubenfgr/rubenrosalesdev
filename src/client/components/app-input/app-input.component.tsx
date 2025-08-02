@@ -16,6 +16,7 @@ export function AppInput({ label, field, ...props }: AppInputProps) {
         </Label>
         <Input
           autoComplete="off"
+          spellCheck={false}
           id={field.name}
           name={field.name}
           value={field.state.value}
@@ -56,5 +57,5 @@ export function AppInput({ label, field, ...props }: AppInputProps) {
     );
   }
 
-  return <Input autoComplete="off" {...props} />;
+  return <Input autoComplete="off" spellCheck={false} {...props} />;
 }

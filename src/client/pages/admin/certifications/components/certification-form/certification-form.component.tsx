@@ -1,19 +1,23 @@
 import { useForm } from "@tanstack/react-form";
 import { AppInput } from "@/client/components/app-input/app-input.component";
 import { Button } from "@/client/components/ui";
+import { useClientTranslation } from "@/client/hooks";
 import {
   useCreateCertification,
   useUpdateCertification,
 } from "@/client/services/api/certifications";
 import type { CertificationCreateDTO, CertificationDTO } from "@/shared/dto";
+import type { CertificationFormValues } from "./models/certification-form.model";
 import {
-  type CertificationFormValues,
-  certificationFormSchema,
+  getCertificationFieldValidators,
+  getCertificationFormSchema,
 } from "./models/certification-form.model";
 
 export function CertificationFormComponent({ cert }: { cert?: CertificationDTO | null }) {
   const createCertification = useCreateCertification();
   const updateCertification = useUpdateCertification();
+  const { t } = useClientTranslation();
+  const fieldValidators = getCertificationFieldValidators(t);
   const form = useForm({
     defaultValues: {
       name: cert?.name || "",
@@ -38,7 +42,7 @@ export function CertificationFormComponent({ cert }: { cert?: CertificationDTO |
       }
     },
     validators: {
-      onChange: certificationFormSchema,
+      onSubmit: getCertificationFormSchema(t),
     },
   });
 
@@ -51,19 +55,19 @@ export function CertificationFormComponent({ cert }: { cert?: CertificationDTO |
       }}
       className="space-y-4"
     >
-      <form.Field name="name">
+      <form.Field name="name" validators={fieldValidators.name}>
         {(field) => <AppInput label="Name" field={field} placeholder="Name" />}
       </form.Field>
-      <form.Field name="issuer">
+      <form.Field name="issuer" validators={fieldValidators.issuer}>
         {(field) => <AppInput label="Issuer" field={field} placeholder="Issuer" />}
       </form.Field>
-      <form.Field name="date">
+      <form.Field name="date" validators={fieldValidators.date}>
         {(field) => <AppInput label="Date" field={field} type="date" placeholder="Date" />}
       </form.Field>
-      <form.Field name="url">
+      <form.Field name="url" validators={fieldValidators.url}>
         {(field) => <AppInput label="URL" field={field} placeholder="URL" />}
       </form.Field>
-      <form.Field name="userId">
+      <form.Field name="userId" validators={fieldValidators.userId}>
         {(field) => <AppInput label="User ID" field={field} placeholder="User ID" />}
       </form.Field>
       <form.Subscribe selector={(state) => [state.canSubmit, state.isSubmitting]}>
