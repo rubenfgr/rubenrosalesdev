@@ -1,7 +1,5 @@
 import { SelectValue } from "@radix-ui/react-select";
-import { ChevronDown } from "lucide-react";
 import type { FC } from "react";
-import { AppButton } from "@/client/components/app-button/app-button.component";
 import { Select, SelectContent, SelectItem, SelectTrigger } from "@/client/components/ui";
 import { useClientTranslation } from "~/client/hooks";
 import type { AppSelectProps } from "./app-select.model";

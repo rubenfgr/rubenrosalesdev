@@ -8,10 +8,8 @@ import {
   SidebarMenu,
   SidebarMenuButton,
   SidebarMenuItem,
-  useSidebar,
 } from "@/components/ui/sidebar";
 import { ScrollArea, Separator } from "~/client/components/ui";
-import { cn } from "~/client/utils";
 import { adminSidebarMenu } from "./admin-sidebar-menu.model";
 import { AdminSidebarNavMainComponent } from "./components/admin-sidebar-nav-main.component";
 import { AdminSidebarNavSecondaryComponent } from "./components/admin-sidebar-nav-secondary.component";

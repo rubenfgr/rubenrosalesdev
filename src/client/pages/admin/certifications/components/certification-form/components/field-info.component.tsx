@@ -1,5 +1,4 @@
 import type { AnyFieldApi } from "@tanstack/react-form";
-import * as React from "react";
 
 export function FieldInfoComponent({ field }: { field: AnyFieldApi }) {
   return (

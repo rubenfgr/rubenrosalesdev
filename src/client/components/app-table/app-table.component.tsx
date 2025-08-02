@@ -1,5 +1,5 @@
-import { type ColumnDef, flexRender, type Table as TanstackTable } from "@tanstack/react-table";
-import { Check, ChevronDown, Eye, EyeClosed, Lock, Trash } from "lucide-react";
+import { type ColumnDef, flexRender } from "@tanstack/react-table";
+import { ChevronDown, Eye, EyeClosed, Trash } from "lucide-react";
 import { AppPagination } from "@/client/components/app-pagination/app-pagination.component";
 import {
   Input,

@@ -1,5 +1,4 @@
 import { useParams } from "@tanstack/react-router";
-import * as React from "react";
 import { useGetCertification } from "@/client/services/api/certifications";
 import { CertificationFormComponent } from "./components/certification-form/certification-form.component";
 
