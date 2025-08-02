@@ -1,11 +1,11 @@
 import { useForm } from "@tanstack/react-form";
+import { AppInput } from "@/client/components/app-input/app-input.component";
 import { Button } from "@/client/components/ui";
 import {
   useCreateCertification,
   useUpdateCertification,
 } from "@/client/services/api/certifications";
 import type { CertificationCreateDTO, CertificationDTO } from "@/shared/dto";
-import { FieldInfoComponent } from "./components/field-info.component";
 import {
   type CertificationFormValues,
   certificationFormSchema,
@@ -52,100 +52,19 @@ export function CertificationFormComponent({ cert }: { cert?: CertificationDTO |
       className="space-y-4"
     >
       <form.Field name="name">
-        {(field) => (
-          <div>
-            <label htmlFor={field.name} className="mb-1 block font-medium text-sm">
-              Name
-            </label>
-            <input
-              id={field.name}
-              name={field.name}
-              placeholder="Name"
-              value={field.state.value}
-              onBlur={field.handleBlur}
-              onChange={(e) => field.handleChange(e.target.value)}
-              className="w-full rounded border px-3 py-2"
-            />
-            <FieldInfoComponent field={field} />
-          </div>
-        )}
+        {(field) => <AppInput label="Name" field={field} placeholder="Name" />}
       </form.Field>
       <form.Field name="issuer">
-        {(field) => (
-          <div>
-            <label htmlFor={field.name} className="mb-1 block font-medium text-sm">
-              Issuer
-            </label>
-            <input
-              id={field.name}
-              name={field.name}
-              placeholder="Issuer"
-              value={field.state.value}
-              onBlur={field.handleBlur}
-              onChange={(e) => field.handleChange(e.target.value)}
-              className="w-full rounded border px-3 py-2"
-            />
-            <FieldInfoComponent field={field} />
-          </div>
-        )}
+        {(field) => <AppInput label="Issuer" field={field} placeholder="Issuer" />}
       </form.Field>
       <form.Field name="date">
-        {(field) => (
-          <div>
-            <label htmlFor={field.name} className="mb-1 block font-medium text-sm">
-              Date
-            </label>
-            <input
-              id={field.name}
-              name={field.name}
-              type="date"
-              placeholder="Date"
-              value={field.state.value}
-              onBlur={field.handleBlur}
-              onChange={(e) => field.handleChange(e.target.value)}
-              className="w-full rounded border px-3 py-2"
-            />
-            <FieldInfoComponent field={field} />
-          </div>
-        )}
+        {(field) => <AppInput label="Date" field={field} type="date" placeholder="Date" />}
       </form.Field>
       <form.Field name="url">
-        {(field) => (
-          <div>
-            <label htmlFor={field.name} className="mb-1 block font-medium text-sm">
-              URL
-            </label>
-            <input
-              id={field.name}
-              name={field.name}
-              placeholder="URL"
-              value={field.state.value}
-              onBlur={field.handleBlur}
-              onChange={(e) => field.handleChange(e.target.value)}
-              className="w-full rounded border px-3 py-2"
-            />
-            <FieldInfoComponent field={field} />
-          </div>
-        )}
+        {(field) => <AppInput label="URL" field={field} placeholder="URL" />}
       </form.Field>
       <form.Field name="userId">
-        {(field) => (
-          <div>
-            <label htmlFor={field.name} className="mb-1 block font-medium text-sm">
-              User ID
-            </label>
-            <input
-              id={field.name}
-              name={field.name}
-              placeholder="User ID"
-              value={field.state.value}
-              onBlur={field.handleBlur}
-              onChange={(e) => field.handleChange(e.target.value)}
-              className="w-full rounded border px-3 py-2"
-            />
-            <FieldInfoComponent field={field} />
-          </div>
-        )}
+        {(field) => <AppInput label="User ID" field={field} placeholder="User ID" />}
       </form.Field>
       <form.Subscribe selector={(state) => [state.canSubmit, state.isSubmitting]}>
         {([canSubmit, isSubmitting]) => (

@@ -1,8 +1,9 @@
 import { type ColumnDef, flexRender } from "@tanstack/react-table";
 import { ChevronDown, Eye, EyeClosed, Trash } from "lucide-react";
+import { AppInput } from "@/client/components/app-input/app-input.component";
 import { AppPagination } from "@/client/components/app-pagination/app-pagination.component";
 import {
-  Input,
+  Button,
   ScrollArea,
   ScrollBar,
   Table,
@@ -28,10 +29,12 @@ export function AppTable<T>({ data, columns, onDeleteMultiple }: AppTableProps<T
   return (
     <>
       <div className="flex flex-col items-center justify-between gap-3 md:flex-row">
-        <Input
+        <AppInput
           placeholder={t("search")}
           value={(table.getColumn("name")?.getFilterValue() as string) ?? ""}
-          onChange={(event) => table.getColumn("name")?.setFilterValue(event.target.value)}
+          onChange={(event: React.ChangeEvent<HTMLInputElement>) =>
+            table.getColumn("name")?.setFilterValue(event.target.value)
+          }
         />
         <div className="flex w-full items-center gap-3 md:w-auto">
           <div className="w-1/2 md:w-auto">
