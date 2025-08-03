@@ -42,6 +42,7 @@ export function CertificationFormComponent({ cert }: { cert?: CertificationDTO |
       }
     },
     validators: {
+      onChange: getCertificationFormSchema(t),
       onSubmit: getCertificationFormSchema(t),
     },
   });
@@ -55,55 +56,45 @@ export function CertificationFormComponent({ cert }: { cert?: CertificationDTO |
       }}
       className="space-y-4"
     >
-      <form.Field name="name" validators={fieldValidators.name}>
-        {(field) => (
-          <AppInput
-            label={t("admin.certifications.form.name")}
-            field={field}
-            placeholder={t("admin.certifications.form.name")}
-          />
-        )}
-      </form.Field>
-      <form.Field name="issuer" validators={fieldValidators.issuer}>
-        {(field) => (
-          <AppInput
-            label={t("admin.certifications.form.issuer")}
-            field={field}
-            placeholder={t("admin.certifications.form.issuer")}
-          />
-        )}
-      </form.Field>
-      <form.Field name="date" validators={fieldValidators.date}>
-        {(field) => (
-          <AppInput
-            label={t("admin.certifications.form.date")}
-            field={field}
-            type="date"
-            placeholder={t("admin.certifications.form.date")}
-          />
-        )}
-      </form.Field>
-      <form.Field name="url" validators={fieldValidators.url}>
-        {(field) => (
-          <AppInput
-            label={t("admin.certifications.form.url")}
-            field={field}
-            placeholder={t("admin.certifications.form.url")}
-          />
-        )}
-      </form.Field>
-      <form.Field name="userId" validators={fieldValidators.userId}>
-        {(field) => (
-          <AppInput
-            label={t("admin.certifications.form.userId")}
-            field={field}
-            placeholder={t("admin.certifications.form.userId")}
-          />
-        )}
-      </form.Field>
-      <form.Subscribe selector={(state) => [state.canSubmit, state.isSubmitting]}>
-        {([canSubmit, isSubmitting]) => (
-          <Button type="submit" disabled={!canSubmit}>
+      <AppInput
+        form={form}
+        fieldName="name"
+        label={t("admin.certifications.form.name")}
+        validators={fieldValidators.name}
+        placeholder={t("admin.certifications.form.name")}
+      />
+      <AppInput
+        form={form}
+        fieldName="issuer"
+        label={t("admin.certifications.form.issuer")}
+        validators={fieldValidators.issuer}
+        placeholder={t("admin.certifications.form.issuer")}
+      />
+      <AppInput
+        form={form}
+        fieldName="date"
+        label={t("admin.certifications.form.date")}
+        validators={fieldValidators.date}
+        placeholder={t("admin.certifications.form.date")}
+        type="date"
+      />
+      <AppInput
+        form={form}
+        fieldName="url"
+        label={t("admin.certifications.form.url")}
+        validators={fieldValidators.url}
+        placeholder={t("admin.certifications.form.url")}
+      />
+      <AppInput
+        form={form}
+        fieldName="userId"
+        label={t("admin.certifications.form.userId")}
+        validators={fieldValidators.userId}
+        placeholder={t("admin.certifications.form.userId")}
+      />
+      <form.Subscribe selector={(state) => [state.canSubmit, state.isSubmitting, state.isValid]}>
+        {([canSubmit, isSubmitting, isValid]) => (
+          <Button type="submit" disabled={!canSubmit || !isValid || isSubmitting}>
             {isSubmitting || createCertification.isPending ? "Adding..." : "Add Certification"}
           </Button>
         )}
