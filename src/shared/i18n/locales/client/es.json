@@ -85,6 +85,11 @@
       "deleteMultipleTitle": "Eliminar certificaciones seleccionadas",
       "deleteMultipleDescription": "Esta acción no se puede deshacer. Se eliminarán permanentemente las certificaciones seleccionadas y sus datos de nuestros servidores.",
       "form": {
+        "name": "Nombre",
+        "issuer": "Emisor",
+        "date": "Fecha",
+        "url": "URL",
+        "user": "Usuario",
         "validations": {
           "name_required": "El nombre es obligatorio y debe tener al menos 2 caracteres.",
           "issuer_required": "El emisor es obligatorio y debe tener al menos 2 caracteres.",

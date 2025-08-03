@@ -56,19 +56,50 @@ export function CertificationFormComponent({ cert }: { cert?: CertificationDTO |
       className="space-y-4"
     >
       <form.Field name="name" validators={fieldValidators.name}>
-        {(field) => <AppInput label="Name" field={field} placeholder="Name" />}
+        {(field) => (
+          <AppInput
+            label={t("admin.certifications.form.name")}
+            field={field}
+            placeholder={t("admin.certifications.form.name")}
+          />
+        )}
       </form.Field>
       <form.Field name="issuer" validators={fieldValidators.issuer}>
-        {(field) => <AppInput label="Issuer" field={field} placeholder="Issuer" />}
+        {(field) => (
+          <AppInput
+            label={t("admin.certifications.form.issuer")}
+            field={field}
+            placeholder={t("admin.certifications.form.issuer")}
+          />
+        )}
       </form.Field>
       <form.Field name="date" validators={fieldValidators.date}>
-        {(field) => <AppInput label="Date" field={field} type="date" placeholder="Date" />}
+        {(field) => (
+          <AppInput
+            label={t("admin.certifications.form.date")}
+            field={field}
+            type="date"
+            placeholder={t("admin.certifications.form.date")}
+          />
+        )}
       </form.Field>
       <form.Field name="url" validators={fieldValidators.url}>
-        {(field) => <AppInput label="URL" field={field} placeholder="URL" />}
+        {(field) => (
+          <AppInput
+            label={t("admin.certifications.form.url")}
+            field={field}
+            placeholder={t("admin.certifications.form.url")}
+          />
+        )}
       </form.Field>
       <form.Field name="userId" validators={fieldValidators.userId}>
-        {(field) => <AppInput label="User ID" field={field} placeholder="User ID" />}
+        {(field) => (
+          <AppInput
+            label={t("admin.certifications.form.userId")}
+            field={field}
+            placeholder={t("admin.certifications.form.userId")}
+          />
+        )}
       </form.Field>
       <form.Subscribe selector={(state) => [state.canSubmit, state.isSubmitting]}>
         {([canSubmit, isSubmitting]) => (
