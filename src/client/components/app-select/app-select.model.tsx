@@ -1,6 +1,5 @@
-export interface AppSelectProps {
-  value: string;
-  onValueChange: (value: string) => void;
-  options: number[];
-  placeholder: string;
+export interface SelectOption<TValue = string> {
+  value: TValue;
+  label: string;
+  disabled?: boolean;
 }

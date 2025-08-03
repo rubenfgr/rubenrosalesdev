@@ -89,7 +89,9 @@
         "issuer": "Emisor",
         "date": "Fecha",
         "url": "URL",
-        "user": "Usuario",
+        "userId": "Usuario",
+        "userId.placeholder": "Seleccionar usuario...",
+        "userId.empty": "No se encontraron usuarios",
         "validations": {
           "name_required": "El nombre es obligatorio y debe tener al menos 2 caracteres.",
           "issuer_required": "El emisor es obligatorio y debe tener al menos 2 caracteres.",

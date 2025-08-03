@@ -1,0 +1,24 @@
+{
+  "form": {
+    "name_required": "Name is required and must be at least 2 characters.",
+    "issuer_required": "Issuer is required and must be at least 2 characters.",
+    "date_required": "Date is required.",
+    "url_invalid": "URL must be valid.",
+    "user_id_required": "User ID is required.",
+    "userId.placeholder": "Select user...",
+    "userId.empty": "No users found"
+  },
+  "admin": {
+    "certifications": {
+      "form": {
+        "name": "Name",
+        "issuer": "Issuer",
+        "date": "Date",
+        "url": "URL",
+        "userId": "User",
+        "userId.placeholder": "Select user...",
+        "userId.empty": "No users found"
+      }
+    }
+  }
+}
