@@ -2,7 +2,7 @@ import { useForm } from "@tanstack/react-form";
 import { AppInput } from "@/client/components/app-input/app-input.component";
 import { AppSelect } from "@/client/components/app-select";
 import { Button } from "@/client/components/ui";
-import { useClientTranslation } from "@/client/hooks";
+import { useClientTranslation, useUserSelect } from "@/client/hooks";
 import {
   useCreateCertification,
   useUpdateCertification,
@@ -14,20 +14,14 @@ import {
   getCertificationFormSchema,
 } from "./models/certification-form.model";
 
-// Mock users data - this should come from an API later
-const mockUsers = [
-  { value: "user-1", label: "John Doe (john@example.com)" },
-  { value: "user-2", label: "Jane Smith (jane@example.com)" },
-  { value: "user-3", label: "Bob Johnson (bob@example.com)" },
-  { value: "user-4", label: "Alice Brown (alice@example.com)" },
-  { value: "user-5", label: "Charlie Wilson (charlie@example.com)" },
-];
-
 export function CertificationFormComponent({ cert }: { cert?: CertificationDTO | null }) {
   const createCertification = useCreateCertification();
   const updateCertification = useUpdateCertification();
   const { t } = useClientTranslation();
   const fieldValidators = getCertificationFieldValidators(t);
+
+  // Hook for user selection with infinite scroll
+  const userSelect = useUserSelect();
   const form = useForm({
     defaultValues: {
       name: cert?.name || "",
@@ -101,8 +95,12 @@ export function CertificationFormComponent({ cert }: { cert?: CertificationDTO |
         label={t("admin.certifications.form.userId")}
         validators={fieldValidators.userId}
         placeholder={t("admin.certifications.form.userId.placeholder")}
-        options={mockUsers}
+        options={userSelect.options}
         searchable={true}
+        loading={userSelect.isLoading}
+        onSearch={userSelect.onSearch}
+        hasMore={userSelect.hasMore}
+        onLoadMore={userSelect.loadMore}
         emptyText={t("admin.certifications.form.userId.empty")}
       />
       <form.Subscribe selector={(state) => [state.canSubmit, state.isSubmitting, state.isValid]}>

@@ -1,7 +1,7 @@
 import { SelectValue } from "@radix-ui/react-select";
 import type { FieldApi, FormApi } from "@tanstack/react-form";
 import { Check, ChevronDown, Loader2 } from "lucide-react";
-import { useId, useMemo, useState } from "react";
+import { useEffect, useId, useMemo, useRef, useState } from "react";
 import {
   Command,
   CommandEmpty,
@@ -20,6 +20,37 @@ import {
 } from "@/client/components/ui";
 import { cn } from "@/client/utils";
 import type { SelectOption } from "./app-select.model";
+
+// Hook para detectar scroll infinito
+const useInfiniteScroll = (onLoadMore: (() => void) | undefined, hasMore: boolean) => {
+  const sentinelRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    if (!onLoadMore || !hasMore) return;
+
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting) {
+          onLoadMore();
+        }
+      },
+      { threshold: 1.0 },
+    );
+
+    const sentinel = sentinelRef.current;
+    if (sentinel) {
+      observer.observe(sentinel);
+    }
+
+    return () => {
+      if (sentinel) {
+        observer.unobserve(sentinel);
+      }
+    };
+  }, [onLoadMore, hasMore]);
+
+  return sentinelRef;
+};
 
 // Helper function to extract error message from TanStack Form field errors
 function getErrorMessage(errors: unknown): string {
@@ -68,13 +99,16 @@ export interface AppSelectProps<TValue = string> {
   label?: string;
   error?: string;
   hint?: string;
-  // biome-ignore lint/suspicious/noExplicitAny: FieldApi has complex generic signature
-  field?: FieldApi<unknown, TValue, unknown>;
-  // For FormField integration
-  // biome-ignore lint/suspicious/noExplicitAny: FormAPI generic type
-  form?: FormApi<any, any>;
+  // Infinite scroll support
+  hasMore?: boolean;
+  onLoadMore?: () => void;
+  // Field and form support with proper typing
+  // biome-ignore lint/suspicious/noExplicitAny: TanStack Form types are complex
+  field?: any;
+  // biome-ignore lint/suspicious/noExplicitAny: TanStack Form types are complex
+  form?: any;
   fieldName?: string;
-  // biome-ignore lint/suspicious/noExplicitAny: validators type
+  // biome-ignore lint/suspicious/noExplicitAny: TanStack Form validators type
   validators?: any;
 }
 
@@ -92,6 +126,8 @@ export function AppSelect<TValue = string>({
   label,
   error,
   hint,
+  hasMore = false,
+  onLoadMore,
   field,
   form,
   fieldName,
@@ -100,6 +136,9 @@ export function AppSelect<TValue = string>({
   const [open, setOpen] = useState(false);
   const [searchQuery, setSearchQuery] = useState("");
   const selectId = useId();
+
+  // Hook para scroll infinito
+  const sentinelRef = useInfiniteScroll(onLoadMore, hasMore);
 
   // Filter options based on search query
   const filteredOptions = useMemo(() => {
@@ -190,6 +229,18 @@ export function AppSelect<TValue = string>({
                                 {option.label}
                               </CommandItem>
                             ))}
+                            {/* Sentinel element for infinite scroll */}
+                            {hasMore && (
+                              <div
+                                ref={sentinelRef}
+                                className="flex items-center justify-center py-2"
+                              >
+                                <Loader2 className="h-4 w-4 animate-spin" />
+                                <span className="ml-2 text-muted-foreground text-sm">
+                                  Loading more...
+                                </span>
+                              </div>
+                            )}
                           </CommandGroup>
                         )}
                       </CommandList>
@@ -330,6 +381,15 @@ export function AppSelect<TValue = string>({
                           {option.label}
                         </CommandItem>
                       ))}
+                      {/* Sentinel element for infinite scroll */}
+                      {hasMore && (
+                        <div ref={sentinelRef} className="flex items-center justify-center py-2">
+                          <Loader2 className="h-4 w-4 animate-spin" />
+                          <span className="ml-2 text-muted-foreground text-sm">
+                            Loading more...
+                          </span>
+                        </div>
+                      )}
                     </CommandGroup>
                   )}
                 </CommandList>
@@ -459,6 +519,15 @@ export function AppSelect<TValue = string>({
                           {option.label}
                         </CommandItem>
                       ))}
+                      {/* Sentinel element for infinite scroll */}
+                      {hasMore && (
+                        <div ref={sentinelRef} className="flex items-center justify-center py-2">
+                          <Loader2 className="h-4 w-4 animate-spin" />
+                          <span className="ml-2 text-muted-foreground text-sm">
+                            Loading more...
+                          </span>
+                        </div>
+                      )}
                     </CommandGroup>
                   )}
                 </CommandList>
@@ -579,6 +648,13 @@ export function AppSelect<TValue = string>({
                       {option.label}
                     </CommandItem>
                   ))}
+                  {/* Sentinel element for infinite scroll */}
+                  {hasMore && (
+                    <div ref={sentinelRef} className="flex items-center justify-center py-2">
+                      <Loader2 className="h-4 w-4 animate-spin" />
+                      <span className="ml-2 text-muted-foreground text-sm">Loading more...</span>
+                    </div>
+                  )}
                 </CommandGroup>
               )}
             </CommandList>
