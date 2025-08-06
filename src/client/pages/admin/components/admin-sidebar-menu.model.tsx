@@ -16,7 +16,7 @@ export const adminSidebarMenu = {
   user: {
     name: "rubenfgr",
     email: "rubenfranciscogr@outlook.com",
-    avatar: "/avatars/shadcn.jpg",
+    avatar: "/avatars/rubenfgr-logo.svg",
   },
   navMain: [
     {
