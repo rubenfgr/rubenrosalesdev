@@ -158,7 +158,7 @@ export function CertificationsListComponent({
     [t, onEdit, onDelete],
   );
 
-  const { data, isLoading } = useGetAllCertifications({
+  const { data, isLoading } = useGetAllCertifications(true, {
     page,
     pageSize,
     filter: filter ? { name: { contains: filter } } : undefined,

@@ -4,7 +4,6 @@ import { Button } from "@/client/components/ui";
 import {
   useDeleteCertification,
   useDeleteCertifications,
-  useGetAllCertifications,
 } from "@/client/services/api/certifications";
 import type { CertificationDTO } from "@/shared/dto";
 import { AppAlertDialogComponent } from "~/client/components/app-alert-dialog/app-alert-dialog.component";
@@ -12,7 +11,6 @@ import { useClientTranslation } from "~/client/hooks";
 import { CertificationsListComponent } from "./components/certification-list/certifications-list.component";
 
 export default function CertificationsPage() {
-  const { data: certifications = [], isLoading, error } = useGetAllCertifications();
   const deleteCertification = useDeleteCertification();
   const deleteCertifications = useDeleteCertifications();
   const navigate = useNavigate();
@@ -89,18 +87,11 @@ export default function CertificationsPage() {
           {t("admin.certifications.createCertification")}
         </Button>
       </div>
-      {isLoading ? (
-        <div>{t("loading")}...</div>
-      ) : error ? (
-        <div className="text-red-500">{error.message}</div>
-      ) : (
-        <CertificationsListComponent
-          data={certifications as CertificationDTO[]}
-          onEdit={navigateToUpdateCertification}
-          onDelete={handleRequestDeleteCertification}
-          onDeleteMultiple={handleRequestDeleteCertifications}
-        />
-      )}
+      <CertificationsListComponent
+        onEdit={navigateToUpdateCertification}
+        onDelete={handleRequestDeleteCertification}
+        onDeleteMultiple={handleRequestDeleteCertifications}
+      />
       <AppAlertDialogComponent
         isOpen={openAlertDelete}
         onConfirm={handleConfirmDeleteCertification}
