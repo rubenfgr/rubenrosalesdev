@@ -4,6 +4,15 @@ import { Button } from "../ui";
 import type { AppButtonProps } from "./app-button.model";
 
 export const AppButton = React.forwardRef<HTMLButtonElement, AppButtonProps>((props, ref) => {
+  const variant = props.variant || "default";
+
+  const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
+    if (props.onClick) {
+      props.onClick(event);
+    }
+  };
+
+  // Extract custom props to avoid passing them to DOM
   const { iconLeft, iconRight, label, ...buttonProps } = props;
 
   return (
@@ -11,14 +20,15 @@ export const AppButton = React.forwardRef<HTMLButtonElement, AppButtonProps>((pr
       ref={ref}
       disabled={buttonProps.disabled}
       size={"default"}
+      variant={variant}
+      onClick={handleClick}
       className={cn(
         "!cursor-pointer",
-        props.variant === "destructive" ? "bg-red-500 text-white hover:bg-red-600" : "",
-        props.variant === "outline" ? "border border-gray-300 text-gray-700 hover:bg-gray-100" : "",
-        props.variant === "default" ? "bg-blue-500 text-white hover:bg-blue-600" : "",
+        variant === "destructive" ? "bg-red-500 text-white hover:bg-red-600" : "",
+        variant === "outline" ? "border border-gray-300 text-gray-700 hover:bg-gray-100" : "",
+        variant === "default" ? "bg-blue-500 text-white hover:bg-blue-600" : "",
         buttonProps.className || "",
       )}
-      {...buttonProps}
     >
       <span className="flex items-center gap-2">
         {!!iconLeft && iconLeft}
