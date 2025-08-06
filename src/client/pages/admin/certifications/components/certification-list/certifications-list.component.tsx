@@ -5,34 +5,9 @@ import { Button, Checkbox } from "@/client/components/ui";
 import { useGetAllCertifications } from "@/client/services/api/certifications/certifications.hooks";
 import type { CertificationDTO } from "@/shared/dto";
 import { AppIconButton } from "~/client/components/app-icon-button/app-icon-button.component";
-// import { AppTable } from "~/client/components/app-table/app-table.component";
 import { AppTableServer } from "~/client/components/app-table/app-table-server.component";
 import { useClientTranslation } from "~/client/hooks";
 
-// IMPLEMENTACIÓN ORIGINAL COMENTADA PARA REFERENCIA
-/*
-export function CertificationsListComponent({
-  data,
-  onEdit,
-  onDelete,
-  onDeleteMultiple,
-}: {
-  data: CertificationDTO[];
-  onEdit: (cert: CertificationDTO) => void;
-  onDelete: (cert: CertificationDTO) => void;
-  onDeleteMultiple: (certs: CertificationDTO[]) => void;
-}) {
-  const { t } = useClientTranslation();
-  const columns = React.useMemo<ColumnDef<CertificationDTO>[]>(...);
-  return (
-    <div className="flex max-w-full flex-col gap-3">
-      <AppTable data={data} columns={columns} onDeleteMultiple={onDeleteMultiple} />
-    </div>
-  );
-}
-*/
-
-// NUEVA IMPLEMENTACIÓN CON PAGINACIÓN SERVER-SIDE
 export function CertificationsListComponent({
   onEdit,
   onDelete,
@@ -50,7 +25,15 @@ export function CertificationsListComponent({
     undefined,
   );
 
-  // Columnas igual que antes
+  const handleOnPageSizeChange = (newPageSize: number) => {
+    setPageSize(newPageSize);
+    setPage(1);
+  };
+
+  const handleOnPageChange = (newPage: number) => {
+    setPage(newPage + 1);
+  };
+
   const columns = React.useMemo<ColumnDef<CertificationDTO>[]>(
     () => [
       {
@@ -189,11 +172,11 @@ export function CertificationsListComponent({
       <AppTableServer
         data={rows}
         columns={columns}
-        page={page}
+        page={page - 1}
         pageSize={pageSize}
         total={total}
-        onPageChange={setPage}
-        onPageSizeChange={setPageSize}
+        onPageChange={handleOnPageChange}
+        onPageSizeChange={handleOnPageSizeChange}
         onDeleteMultiple={onDeleteMultiple}
         isLoading={isLoading}
         onFilterChange={setFilter}
