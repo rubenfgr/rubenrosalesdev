@@ -17,8 +17,6 @@ export const AppDropdownMenu: FC<AppDropdownMenuProps> = ({
   align = "end",
   disabled = false,
 }) => {
-  console.log("AppDropdownMenu rendered with items:", items);
-
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild disabled={disabled}>
