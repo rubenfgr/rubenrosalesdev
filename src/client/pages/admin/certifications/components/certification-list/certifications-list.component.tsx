@@ -1,4 +1,5 @@
 import type { ColumnDef, Row as TanstackRow, Table as TanstackTable } from "@tanstack/react-table";
+import { format } from "date-fns";
 import { ArrowUpDown, Edit, Trash } from "lucide-react";
 import * as React from "react";
 import { Button, Checkbox } from "@/client/components/ui";
@@ -124,7 +125,7 @@ export function CertificationsListComponent({
           </Button>
         ),
         cell: ({ row }: { row: TanstackRow<CertificationDTO> }) =>
-          row.original.date ? new Date(row.original.date).toLocaleDateString() : "",
+          row.original.date ? format(new Date(row.original.date), "yyyy-MM-dd") : "",
       },
       {
         accessorKey: "url",
