@@ -74,7 +74,10 @@ export const AppPagination: React.FC<AppPaginationProps> = ({
         <AppSelect
           value={pageSize ? String(pageSize) : ""}
           onValueChange={onPageSizeChange}
-          options={pageSizeOptions}
+          options={pageSizeOptions.map((size) => ({
+            value: String(size),
+            label: String(size),
+          }))}
           placeholder={t("itemsPerPage")}
         />
       </div>
