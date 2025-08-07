@@ -1,17 +1,12 @@
 import * as React from "react";
 import { cn } from "~/client/utils";
 import { Button } from "../ui";
+import { useAppButton } from "./app-button.hook";
 import type { AppButtonProps } from "./app-button.model";
 
 export const AppButton = React.forwardRef<HTMLButtonElement, AppButtonProps>((props, ref) => {
-  const variant = props.variant || "default";
-
-  const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
-    if (props.onClick) {
-      props.onClick(event);
-    }
-  };
-
+  const { variant, handleClick } = useAppButton(props);
+  
   // Extract custom props to avoid passing them to DOM
   const { iconLeft, iconRight, label, ...buttonProps } = props;
 
