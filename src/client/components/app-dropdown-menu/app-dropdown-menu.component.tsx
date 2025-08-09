@@ -18,7 +18,7 @@ export const AppDropdownMenu: FC<AppDropdownMenuProps> = ({
   disabled = false,
 }) => {
   return (
-    <DropdownMenu>
+    <DropdownMenu modal={false}>
       <DropdownMenuTrigger asChild disabled={disabled}>
         <AppButton
           className={`w-full justify-between ${buttonClassName}`}

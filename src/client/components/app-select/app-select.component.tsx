@@ -262,7 +262,11 @@ export function AppSelect<TValue = string>({
                 <PopoverTrigger asChild>
                   <AppButton
                     disabled={disabled}
-                    className={cn("w-full justify-between", errorMessage && "border-red-500", className)}
+                    className={cn(
+                      "w-full justify-between",
+                      errorMessage && "border-red-500",
+                      className,
+                    )}
                     variant={"outline"}
                     label={fieldSelectedOption?.label || placeholder}
                     iconRight={<ChevronDown className="h-4 w-4 opacity-50" />}
