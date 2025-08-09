@@ -1,4 +1,3 @@
-import { SelectValue } from "@radix-ui/react-select";
 import type { FieldApi, FormApi } from "@tanstack/react-form";
 import { Check, ChevronDown, Loader2 } from "lucide-react";
 import { useEffect, useId, useMemo, useRef, useState } from "react";
@@ -13,12 +12,9 @@ import {
   Popover,
   PopoverContent,
   PopoverTrigger,
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
 } from "@/client/components/ui";
 import { cn } from "@/client/utils";
+import { AppButton } from "../app-button/app-button.component";
 import type { SelectOption } from "./app-select.model";
 
 // Hook para detectar scroll infinito
@@ -262,45 +258,52 @@ export function AppSelect<TValue = string>({
               <Label htmlFor={field.name} className="block font-medium text-sm">
                 {label}
               </Label>
-              <Select
-                value={fieldValue ? String(fieldValue) : ""}
-                onValueChange={(stringValue) => {
-                  const option = options.find((opt) => String(opt.value) === stringValue);
-                  if (option) {
-                    field.handleChange(option.value);
-                  }
-                }}
-                disabled={disabled}
-              >
-                <SelectTrigger
-                  id={field.name}
-                  className={cn(errorMessage && "border-red-500", className)}
-                  onBlur={field.handleBlur}
-                >
-                  <SelectValue placeholder={placeholder} />
-                </SelectTrigger>
-                <SelectContent>
-                  {loading ? (
-                    <div className="flex items-center justify-center py-6">
-                      <Loader2 className="h-4 w-4 animate-spin" />
-                    </div>
-                  ) : options.length === 0 ? (
-                    <div className="py-6 text-center text-muted-foreground text-sm">
-                      {emptyText}
-                    </div>
-                  ) : (
-                    options.map((option) => (
-                      <SelectItem
-                        key={String(option.value)}
-                        value={String(option.value)}
-                        disabled={option.disabled}
-                      >
-                        {option.label}
-                      </SelectItem>
-                    ))
-                  )}
-                </SelectContent>
-              </Select>
+              <Popover open={open} onOpenChange={setOpen}>
+                <PopoverTrigger asChild>
+                  <AppButton
+                    disabled={disabled}
+                    className={cn("w-full justify-between", errorMessage && "border-red-500", className)}
+                    variant={"outline"}
+                    label={fieldSelectedOption?.label || placeholder}
+                    iconRight={<ChevronDown className="h-4 w-4 opacity-50" />}
+                  />
+                </PopoverTrigger>
+                <PopoverContent className="w-[--radix-popover-trigger-width] p-0">
+                  <Command shouldFilter={false}>
+                    <CommandList>
+                      {loading ? (
+                        <div className="flex items-center justify-center py-6">
+                          <Loader2 className="h-4 w-4 animate-spin" />
+                        </div>
+                      ) : options.length === 0 ? (
+                        <CommandEmpty>{emptyText}</CommandEmpty>
+                      ) : (
+                        <CommandGroup>
+                          {options.map((option) => (
+                            <CommandItem
+                              key={String(option.value)}
+                              value={option.label}
+                              onSelect={() => {
+                                field.handleChange(option.value);
+                                setOpen(false);
+                              }}
+                              disabled={option.disabled}
+                            >
+                              <Check
+                                className={cn(
+                                  "mr-2 h-4 w-4",
+                                  fieldValue === option.value ? "opacity-100" : "opacity-0",
+                                )}
+                              />
+                              {option.label}
+                            </CommandItem>
+                          ))}
+                        </CommandGroup>
+                      )}
+                    </CommandList>
+                  </Command>
+                </PopoverContent>
+              </Popover>
               {errorMessage && (
                 <p className="text-red-600 text-sm" role="alert">
                   {errorMessage}
@@ -411,43 +414,52 @@ export function AppSelect<TValue = string>({
         <Label htmlFor={field.name} className="block font-medium text-sm">
           {label}
         </Label>
-        <Select
-          value={fieldValue ? String(fieldValue) : ""}
-          onValueChange={(stringValue) => {
-            const option = options.find((opt) => String(opt.value) === stringValue);
-            if (option) {
-              field.handleChange(option.value);
-            }
-          }}
-          disabled={disabled}
-        >
-          <SelectTrigger
-            id={field.name}
-            className={cn(errorMessage && "border-red-500", className)}
-            onBlur={field.handleBlur}
-          >
-            <SelectValue placeholder={placeholder} />
-          </SelectTrigger>
-          <SelectContent>
-            {loading ? (
-              <div className="flex items-center justify-center py-6">
-                <Loader2 className="h-4 w-4 animate-spin" />
-              </div>
-            ) : options.length === 0 ? (
-              <div className="py-6 text-center text-muted-foreground text-sm">{emptyText}</div>
-            ) : (
-              options.map((option) => (
-                <SelectItem
-                  key={String(option.value)}
-                  value={String(option.value)}
-                  disabled={option.disabled}
-                >
-                  {option.label}
-                </SelectItem>
-              ))
-            )}
-          </SelectContent>
-        </Select>
+        <Popover open={open} onOpenChange={setOpen}>
+          <PopoverTrigger asChild>
+            <AppButton
+              disabled={disabled}
+              className={cn("w-full justify-between", errorMessage && "border-red-500", className)}
+              variant={"outline"}
+              label={fieldSelectedOption?.label || placeholder}
+              iconRight={<ChevronDown className="h-4 w-4 opacity-50" />}
+            />
+          </PopoverTrigger>
+          <PopoverContent className="w-[--radix-popover-trigger-width] p-0">
+            <Command shouldFilter={false}>
+              <CommandList>
+                {loading ? (
+                  <div className="flex items-center justify-center py-6">
+                    <Loader2 className="h-4 w-4 animate-spin" />
+                  </div>
+                ) : options.length === 0 ? (
+                  <CommandEmpty>{emptyText}</CommandEmpty>
+                ) : (
+                  <CommandGroup>
+                    {options.map((option) => (
+                      <CommandItem
+                        key={String(option.value)}
+                        value={option.label}
+                        onSelect={() => {
+                          field.handleChange(option.value);
+                          setOpen(false);
+                        }}
+                        disabled={option.disabled}
+                      >
+                        <Check
+                          className={cn(
+                            "mr-2 h-4 w-4",
+                            fieldValue === option.value ? "opacity-100" : "opacity-0",
+                          )}
+                        />
+                        {option.label}
+                      </CommandItem>
+                    ))}
+                  </CommandGroup>
+                )}
+              </CommandList>
+            </Command>
+          </PopoverContent>
+        </Popover>
         {errorMessage && (
           <p className="text-red-600 text-sm" role="alert">
             {errorMessage}
@@ -550,39 +562,52 @@ export function AppSelect<TValue = string>({
         <Label htmlFor={selectId} className="block font-medium text-sm">
           {label}
         </Label>
-        <Select
-          value={value ? String(value) : ""}
-          onValueChange={(stringValue) => {
-            const option = options.find((opt) => String(opt.value) === stringValue);
-            if (option) {
-              onValueChange?.(option.value);
-            }
-          }}
-          disabled={disabled}
-        >
-          <SelectTrigger id={selectId} className={cn(error && "border-red-500", className)}>
-            <SelectValue placeholder={placeholder} />
-          </SelectTrigger>
-          <SelectContent>
-            {loading ? (
-              <div className="flex items-center justify-center py-6">
-                <Loader2 className="h-4 w-4 animate-spin" />
-              </div>
-            ) : options.length === 0 ? (
-              <div className="py-6 text-center text-muted-foreground text-sm">{emptyText}</div>
-            ) : (
-              options.map((option) => (
-                <SelectItem
-                  key={String(option.value)}
-                  value={String(option.value)}
-                  disabled={option.disabled}
-                >
-                  {option.label}
-                </SelectItem>
-              ))
-            )}
-          </SelectContent>
-        </Select>
+        <Popover open={open} onOpenChange={setOpen}>
+          <PopoverTrigger asChild>
+            <AppButton
+              disabled={disabled}
+              className={cn("w-full justify-between", error && "border-red-500", className)}
+              variant={"outline"}
+              label={selectedOption?.label || placeholder}
+              iconRight={<ChevronDown className="h-4 w-4 opacity-50" />}
+            />
+          </PopoverTrigger>
+          <PopoverContent className="w-[--radix-popover-trigger-width] p-0">
+            <Command shouldFilter={false}>
+              <CommandList>
+                {loading ? (
+                  <div className="flex items-center justify-center py-6">
+                    <Loader2 className="h-4 w-4 animate-spin" />
+                  </div>
+                ) : options.length === 0 ? (
+                  <CommandEmpty>{emptyText}</CommandEmpty>
+                ) : (
+                  <CommandGroup>
+                    {options.map((option) => (
+                      <CommandItem
+                        key={String(option.value)}
+                        value={option.label}
+                        onSelect={() => {
+                          onValueChange?.(option.value);
+                          setOpen(false);
+                        }}
+                        disabled={option.disabled}
+                      >
+                        <Check
+                          className={cn(
+                            "mr-2 h-4 w-4",
+                            value === option.value ? "opacity-100" : "opacity-0",
+                          )}
+                        />
+                        {option.label}
+                      </CommandItem>
+                    ))}
+                  </CommandGroup>
+                )}
+              </CommandList>
+            </Command>
+          </PopoverContent>
+        </Popover>
         {error && (
           <p className="text-red-600 text-sm" role="alert">
             {error}
@@ -666,38 +691,51 @@ export function AppSelect<TValue = string>({
 
   // Basic select without label - non-searchable
   return (
-    <Select
-      value={value ? String(value) : ""}
-      onValueChange={(stringValue) => {
-        const option = options.find((opt) => String(opt.value) === stringValue);
-        if (option) {
-          onValueChange?.(option.value);
-        }
-      }}
-      disabled={disabled}
-    >
-      <SelectTrigger className={className}>
-        <SelectValue placeholder={placeholder} />
-      </SelectTrigger>
-      <SelectContent>
-        {loading ? (
-          <div className="flex items-center justify-center py-6">
-            <Loader2 className="h-4 w-4 animate-spin" />
-          </div>
-        ) : options.length === 0 ? (
-          <div className="py-6 text-center text-muted-foreground text-sm">{emptyText}</div>
-        ) : (
-          options.map((option) => (
-            <SelectItem
-              key={String(option.value)}
-              value={String(option.value)}
-              disabled={option.disabled}
-            >
-              {option.label}
-            </SelectItem>
-          ))
-        )}
-      </SelectContent>
-    </Select>
+    <Popover open={open} onOpenChange={setOpen}>
+      <PopoverTrigger asChild>
+        <AppButton
+          disabled={disabled}
+          className={cn("w-full justify-between", className)}
+          variant={"outline"}
+          label={selectedOption?.label || placeholder}
+          iconRight={<ChevronDown className="h-4 w-4 opacity-50" />}
+        />
+      </PopoverTrigger>
+      <PopoverContent className="w-[--radix-popover-trigger-width] p-0">
+        <Command shouldFilter={false}>
+          <CommandList>
+            {loading ? (
+              <div className="flex items-center justify-center py-6">
+                <Loader2 className="h-4 w-4 animate-spin" />
+              </div>
+            ) : options.length === 0 ? (
+              <CommandEmpty>{emptyText}</CommandEmpty>
+            ) : (
+              <CommandGroup>
+                {options.map((option) => (
+                  <CommandItem
+                    key={String(option.value)}
+                    value={option.label}
+                    onSelect={() => {
+                      onValueChange?.(option.value);
+                      setOpen(false);
+                    }}
+                    disabled={option.disabled}
+                  >
+                    <Check
+                      className={cn(
+                        "mr-2 h-4 w-4",
+                        value === option.value ? "opacity-100" : "opacity-0",
+                      )}
+                    />
+                    {option.label}
+                  </CommandItem>
+                ))}
+              </CommandGroup>
+            )}
+          </CommandList>
+        </Command>
+      </PopoverContent>
+    </Popover>
   );
 }
