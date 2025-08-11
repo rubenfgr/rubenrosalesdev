@@ -1,6 +1,5 @@
 import { type ColumnDef, flexRender } from "@tanstack/react-table";
 import { ChevronDown, Eye, EyeClosed, Trash } from "lucide-react";
-import { AppInput } from "@/client/components/app-input/app-input.component";
 import { AppPagination } from "@/client/components/app-pagination/app-pagination.component";
 import {
   ScrollArea,
@@ -13,6 +12,7 @@ import {
   TableRow,
 } from "@/client/components/ui";
 import { AppDropdownMenu } from "../app-dropdown-menu/app-dropdown-menu.component";
+import { AppInput } from "../app-input/app-input.component";
 import { useAppTableServer } from "./app-table-server.hook";
 
 interface AppTableServerProps<T> {
