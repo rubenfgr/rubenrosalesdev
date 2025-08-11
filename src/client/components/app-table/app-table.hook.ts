@@ -1,5 +1,4 @@
 import {
-  type ColumnDef,
   type ColumnFiltersState,
   getCoreRowModel,
   getFilteredRowModel,
@@ -10,13 +9,9 @@ import {
 } from "@tanstack/react-table";
 import * as React from "react";
 import { useClientTranslation } from "~/client/hooks";
+import type { AppTableProps } from "./app-table.model";
 
-export interface AppTableProps<T> {
-  data: T[];
-  columns: ColumnDef<T>[];
-}
-
-export const useAppTable = <T>({ data, columns }: AppTableProps<T>) => {
+export const useAppTable = <T>({ data, columns, onDeleteMultiple }: AppTableProps<T>) => {
   const pageSizeOptions = [5, 10, 20, 50];
   const [pageSize, setPageSize] = React.useState(pageSizeOptions[1]);
   const [page, setPage] = React.useState(0);
@@ -60,6 +55,12 @@ export const useAppTable = <T>({ data, columns }: AppTableProps<T>) => {
     setPage(0);
   };
 
+  const handleDeleteMultiple = () => {
+    const selectedOriginal = table.getSelectedRowModel().rows.map((row) => row.original);
+    onDeleteMultiple(selectedOriginal);
+    table.resetRowSelection();
+  };
+
   return {
     table,
     handleItemsPerPage,
@@ -68,5 +69,6 @@ export const useAppTable = <T>({ data, columns }: AppTableProps<T>) => {
     pageSize,
     pageSizeOptions,
     t,
+    handleDeleteMultiple,
   };
 };

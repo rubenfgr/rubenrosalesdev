@@ -14,20 +14,7 @@ import {
 import { AppDropdownMenu } from "../app-dropdown-menu/app-dropdown-menu.component";
 import { AppInput } from "../app-input/app-input.component";
 import { useAppTableServer } from "./app-table-server.hook";
-
-interface AppTableServerProps<T> {
-  columns: ColumnDef<T>[];
-  data: T[];
-  page: number;
-  pageSize: number;
-  total: number;
-  onPageChange: (page: number) => void;
-  onPageSizeChange: (size: number) => void;
-  onDeleteMultiple: (items: T[]) => void;
-  isLoading?: boolean;
-  onFilterChange?: (filter: string) => void;
-  filterValue?: string;
-}
+import type { AppTableServerProps } from "./app-table-server.model";
 
 export function AppTableServer<T>({
   columns,
@@ -42,7 +29,11 @@ export function AppTableServer<T>({
   onFilterChange,
   filterValue = "",
 }: AppTableServerProps<T>) {
-  const { t, table } = useAppTableServer<T>({ data, columns });
+  const { t, table, handleDeleteMultiple } = useAppTableServer<T>({
+    data,
+    columns,
+    onDeleteMultiple,
+  });
 
   return (
     <>
@@ -64,10 +55,7 @@ export function AppTableServer<T>({
                 {
                   label: t("admin.certifications.deleteMultiple"),
                   icon: <Trash className="text-red-500" />,
-                  onClick: () =>
-                    onDeleteMultiple(
-                      table.getSelectedRowModel().rows.map((row: { original: T }) => row.original),
-                    ),
+                  onClick: handleDeleteMultiple,
                 },
               ]}
             />

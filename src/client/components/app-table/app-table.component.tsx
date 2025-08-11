@@ -1,8 +1,7 @@
-import { type ColumnDef, flexRender } from "@tanstack/react-table";
+import { flexRender } from "@tanstack/react-table";
 import { ChevronDown, Eye, EyeClosed, Trash } from "lucide-react";
 import { AppPagination } from "@/client/components/app-pagination/app-pagination.component";
 import {
-  Button,
   ScrollArea,
   ScrollBar,
   Table,
@@ -15,16 +14,19 @@ import {
 import { AppDropdownMenu } from "../app-dropdown-menu/app-dropdown-menu.component";
 import { AppInput } from "../app-input/app-input.component";
 import { useAppTable } from "./app-table.hook";
+import type { AppTableProps } from "./app-table.model";
 
-interface AppTableProps<T> {
-  data: T[];
-  columns: ColumnDef<T>[];
-  onDeleteMultiple: (items: T[]) => void;
-}
-
-export function AppTable<T>({ data, columns, onDeleteMultiple }: AppTableProps<T>) {
-  const { pageSize, page, pageSizeOptions, handlePageChange, handleItemsPerPage, t, table } =
-    useAppTable<T>({ data, columns });
+export function AppTable<T>(props: AppTableProps<T>) {
+  const {
+    pageSize,
+    page,
+    pageSizeOptions,
+    handlePageChange,
+    handleItemsPerPage,
+    t,
+    table,
+    handleDeleteMultiple,
+  } = useAppTable<T>(props);
 
   return (
     <>
@@ -48,8 +50,7 @@ export function AppTable<T>({ data, columns, onDeleteMultiple }: AppTableProps<T
                 {
                   label: t("admin.certifications.deleteMultiple"),
                   icon: <Trash className="text-red-500" />,
-                  onClick: () =>
-                    onDeleteMultiple(table.getSelectedRowModel().rows.map((row) => row.original)),
+                  onClick: handleDeleteMultiple,
                 },
               ]}
             />
@@ -107,7 +108,7 @@ export function AppTable<T>({ data, columns, onDeleteMultiple }: AppTableProps<T
               ) : (
                 <TableRow>
                   <TableCell
-                    colSpan={columns.length}
+                    colSpan={props.columns.length}
                     className="h-24 text-center text-muted-foreground"
                   >
                     {t("noResults")}

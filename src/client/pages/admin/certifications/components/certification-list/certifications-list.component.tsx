@@ -6,7 +6,7 @@ import { Button, Checkbox } from "@/client/components/ui";
 import { useGetAllCertifications } from "@/client/services/api/certifications/certifications.hooks";
 import type { CertificationDTO } from "@/shared/dto";
 import { AppIconButton } from "~/client/components/app-icon-button/app-icon-button.component";
-import { AppTableServer } from "~/client/components/app-table/app-table-server.component";
+import { AppTableServer } from "~/client/components/app-table-server/app-table-server.component";
 import { useClientTranslation } from "~/client/hooks";
 
 export function CertificationsListComponent({
