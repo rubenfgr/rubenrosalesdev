@@ -47,7 +47,6 @@ export function CertificationFormComponent({ cert }: { cert?: CertificationDTO |
       }
     },
     validators: {
-      onChange: getCertificationFormSchema(t),
       onSubmit: getCertificationFormSchema(t),
     },
   });
@@ -65,21 +64,21 @@ export function CertificationFormComponent({ cert }: { cert?: CertificationDTO |
         form={form}
         fieldName="name"
         validators={fieldValidators.name}
-        label={t("admin.certifications.form.name")}
+        label={`${t("admin.certifications.form.name")} *`}
         placeholder={t("admin.certifications.form.name")}
       />
       <AppInput
         form={form}
         fieldName="issuer"
         validators={fieldValidators.issuer}
-        label={t("admin.certifications.form.issuer")}
+        label={`${t("admin.certifications.form.issuer")} *`}
         placeholder={t("admin.certifications.form.issuer")}
       />
       <AppDatepicker
         form={form}
         fieldName="date"
         validators={fieldValidators.date}
-        label={t("admin.certifications.form.date")}
+        label={`${t("admin.certifications.form.date")} *`}
         placeholder={t("admin.certifications.form.date")}
       />
       <AppInput
@@ -92,7 +91,7 @@ export function CertificationFormComponent({ cert }: { cert?: CertificationDTO |
       <AppSelect
         form={form}
         fieldName="userId"
-        label={t("admin.certifications.form.userId")}
+        label={`${t("admin.certifications.form.userId")} *`}
         validators={fieldValidators.userId}
         placeholder={t("admin.certifications.form.userId.placeholder")}
         options={userSelect.options}
@@ -103,9 +102,9 @@ export function CertificationFormComponent({ cert }: { cert?: CertificationDTO |
         onLoadMore={userSelect.loadMore}
         emptyText={t("admin.certifications.form.userId.empty")}
       />
-      <form.Subscribe selector={(state) => [state.canSubmit, state.isSubmitting, state.isValid]}>
-        {([canSubmit, isSubmitting, isValid]) => (
-          <Button type="submit" disabled={!canSubmit || !isValid || isSubmitting}>
+      <form.Subscribe selector={(state) => [state.isSubmitting]}>
+        {([isSubmitting]) => (
+          <Button type="submit" disabled={isSubmitting || createCertification.isPending}>
             {isSubmitting || createCertification.isPending ? "Adding..." : "Add Certification"}
           </Button>
         )}
