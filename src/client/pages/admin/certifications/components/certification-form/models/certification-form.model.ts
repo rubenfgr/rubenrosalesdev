@@ -5,7 +5,7 @@ function createBaseValidators(t: (key: string) => string) {
   return {
     name: z.string().min(2, { message: t("admin.certifications.form.validations.name_required") }),
     issuer: z.string().min(2, { message: t("admin.certifications.form.validations.issuer_required") }),
-    date: z.string().min(4, { message: t("admin.certifications.form.validations.date_required") }),
+    date: z.date({ message: t("admin.certifications.form.validations.date_required") }),
     url: z.string().url({ message: t("admin.certifications.form.validations.url_invalid") }).or(z.literal("")),
     userId: z.string().min(1, { message: t("admin.certifications.form.validations.user_id_required") }),
   };
@@ -17,20 +17,19 @@ export function getCertificationFieldValidators(t: (key: string) => string) {
 
   return {
     name: {
-      onchange: validators.name,
+      onChange: validators.name,
     },
     issuer: {
-      onSubmit: validators.issuer,
+      onChange: validators.issuer,
     },
     date: {
-      onSubmit: validators.date,
+      onChange: validators.date,
     },
     url: {
       onChange: validators.url,
-      onSubmit: validators.url,
     },
     userId: {
-      onSubmit: validators.userId,
+      onChange: validators.userId,
     },
   };
 }
