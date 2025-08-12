@@ -10,12 +10,65 @@ export interface AppInputProps extends InputHTMLAttributes<HTMLInputElement> {
   error?: string;
   hint?: string;
   field?: AnyFieldApi;
+  // Field and form support with proper typing
+  // biome-ignore lint/suspicious/noExplicitAny: TanStack Form types are complex
+  form?: any;
+  fieldName?: string;
+  // biome-ignore lint/suspicious/noExplicitAny: TanStack Form validators type
+  validators?: any;
 }
 
-export function AppInput({ label, error, hint, field, className, ...props }: AppInputProps) {
+export function AppInput({
+  label,
+  error,
+  hint,
+  field,
+  className,
+  form,
+  fieldName,
+  validators,
+  ...props
+}: AppInputProps) {
   const inputId = useId();
 
-  // Input connected to TanStack Form field
+  // If form and fieldName are provided, create a FormField
+  if (form && fieldName && label) {
+    return (
+      <form.Field name={fieldName} validators={validators}>
+        {/* biome-ignore lint/suspicious/noExplicitAny: TanStack Form field callback has implicit any type */}
+        {(field: any) => {
+          const rawError = field.state.meta.touchedErrors || field.state.meta.errors;
+          const errorMessage = getErrorMessage(rawError);
+
+          return (
+            <div className="space-y-1">
+              <Label htmlFor={field.name} className="block font-medium text-sm">
+                {label}
+              </Label>
+              <Input
+                autoComplete="off"
+                spellCheck={false}
+                id={field.name}
+                name={field.name}
+                value={field.state.value || ""}
+                onBlur={field.handleBlur}
+                onChange={(e) => field.handleChange(e.target.value)}
+                className={cn(errorMessage && "border-red-500", className)}
+                {...props}
+              />
+              {errorMessage && (
+                <p className="text-red-600 text-sm" role="alert">
+                  {errorMessage}
+                </p>
+              )}
+            </div>
+          );
+        }}
+      </form.Field>
+    );
+  }
+
+  // Input connected to TanStack Form field (legacy mode)
   if (field && label) {
     const errorMessage =
       field.state.meta.isTouched && !field.state.meta.isValid
