@@ -8,6 +8,7 @@ import {
   useUpdateCertification,
 } from "@/client/services/api/certifications";
 import type { CertificationCreateDTO, CertificationDTO } from "@/shared/dto";
+import { AppDatepicker } from "~/client/components/app-datepicker";
 import type { CertificationFormValues } from "./models/certification-form.model";
 import {
   getCertificationFieldValidators,
@@ -74,13 +75,12 @@ export function CertificationFormComponent({ cert }: { cert?: CertificationDTO |
         label={t("admin.certifications.form.issuer")}
         placeholder={t("admin.certifications.form.issuer")}
       />
-      <AppInput
+      <AppDatepicker
         form={form}
         fieldName="date"
         validators={fieldValidators.date}
         label={t("admin.certifications.form.date")}
         placeholder={t("admin.certifications.form.date")}
-        type="date"
       />
       <AppInput
         form={form}
