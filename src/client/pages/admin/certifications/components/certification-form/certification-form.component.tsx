@@ -27,7 +27,7 @@ export function CertificationFormComponent({ cert }: { cert?: CertificationDTO |
     defaultValues: {
       name: cert?.name || "",
       issuer: cert?.issuer || "",
-      date: cert?.date ? new Date(cert.date).toISOString().split("T")[0] : "",
+      date: cert?.date ? new Date(cert.date) : new Date(),
       url: cert?.url || "",
       userId: cert?.userId || "",
     },
