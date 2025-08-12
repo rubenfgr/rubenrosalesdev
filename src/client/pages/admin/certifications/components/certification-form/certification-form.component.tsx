@@ -60,43 +60,35 @@ export function CertificationFormComponent({ cert }: { cert?: CertificationDTO |
       }}
       className="space-y-4"
     >
-      <form.Field name="name" validators={fieldValidators.name}>
-        {(field) => (
-          <AppInput
-            field={field}
-            label={t("admin.certifications.form.name")}
-            placeholder={t("admin.certifications.form.name")}
-          />
-        )}
-      </form.Field>
-      <form.Field name="issuer" validators={fieldValidators.issuer}>
-        {(field) => (
-          <AppInput
-            field={field}
-            label={t("admin.certifications.form.issuer")}
-            placeholder={t("admin.certifications.form.issuer")}
-          />
-        )}
-      </form.Field>
-      <form.Field name="date" validators={fieldValidators.date}>
-        {(field) => (
-          <AppInput
-            field={field}
-            label={t("admin.certifications.form.date")}
-            placeholder={t("admin.certifications.form.date")}
-            type="date"
-          />
-        )}
-      </form.Field>
-      <form.Field name="url" validators={fieldValidators.url}>
-        {(field) => (
-          <AppInput
-            field={field}
-            label={t("admin.certifications.form.url")}
-            placeholder={t("admin.certifications.form.url")}
-          />
-        )}
-      </form.Field>
+      <AppInput
+        form={form}
+        fieldName="name"
+        validators={fieldValidators.name}
+        label={t("admin.certifications.form.name")}
+        placeholder={t("admin.certifications.form.name")}
+      />
+      <AppInput
+        form={form}
+        fieldName="issuer"
+        validators={fieldValidators.issuer}
+        label={t("admin.certifications.form.issuer")}
+        placeholder={t("admin.certifications.form.issuer")}
+      />
+      <AppInput
+        form={form}
+        fieldName="date"
+        validators={fieldValidators.date}
+        label={t("admin.certifications.form.date")}
+        placeholder={t("admin.certifications.form.date")}
+        type="date"
+      />
+      <AppInput
+        form={form}
+        fieldName="url"
+        validators={fieldValidators.url}
+        label={t("admin.certifications.form.url")}
+        placeholder={t("admin.certifications.form.url")}
+      />
       <AppSelect
         form={form}
         fieldName="userId"
