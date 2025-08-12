@@ -1,6 +1,5 @@
-import type { FieldApi, FormApi } from "@tanstack/react-form";
 import { Check, ChevronDown, Loader2 } from "lucide-react";
-import { useEffect, useId, useMemo, useRef, useState } from "react";
+import { useId, useMemo, useState } from "react";
 import {
   Command,
   CommandEmpty,
@@ -14,72 +13,10 @@ import {
   PopoverTrigger,
 } from "@/client/components/ui";
 import { cn } from "@/client/utils";
+import { useInfiniteScroll } from "~/shared/hooks/use-infinite-scroll.hook";
+import getErrorMessage from "~/shared/utils/get-error-message.util";
 import { AppButton } from "../app-button/app-button.component";
 import type { SelectOption } from "./app-select.model";
-
-// Hook para detectar scroll infinito
-const useInfiniteScroll = (onLoadMore: (() => void) | undefined, hasMore: boolean) => {
-  const sentinelRef = useRef<HTMLDivElement>(null);
-
-  useEffect(() => {
-    if (!onLoadMore || !hasMore) return;
-
-    const observer = new IntersectionObserver(
-      ([entry]) => {
-        if (entry.isIntersecting) {
-          onLoadMore();
-        }
-      },
-      { threshold: 1.0 },
-    );
-
-    const sentinel = sentinelRef.current;
-    if (sentinel) {
-      observer.observe(sentinel);
-    }
-
-    return () => {
-      if (sentinel) {
-        observer.unobserve(sentinel);
-      }
-    };
-  }, [onLoadMore, hasMore]);
-
-  return sentinelRef;
-};
-
-// Helper function to extract error message from TanStack Form field errors
-function getErrorMessage(errors: unknown): string {
-  if (!errors) return "";
-  if (typeof errors === "string") return errors;
-  if (Array.isArray(errors)) {
-    return errors
-      .map((e) =>
-        typeof e === "object" && e !== null && "message" in e
-          ? (e as { message: string }).message
-          : String(e),
-      )
-      .join(", ");
-  }
-  if (typeof errors === "object" && errors !== null) {
-    if ("message" in errors) {
-      return (errors as { message: string }).message;
-    }
-    // Handle nested Zod error structures
-    if ("errors" in errors && Array.isArray((errors as { errors: unknown[] }).errors)) {
-      const nested = (errors as { errors: unknown[] }).errors;
-      if (
-        nested.length > 0 &&
-        typeof nested[0] === "object" &&
-        nested[0] !== null &&
-        "message" in nested[0]
-      ) {
-        return (nested[0] as { message: string }).message;
-      }
-    }
-  }
-  return String(errors);
-}
 
 export interface AppSelectProps<TValue = string> {
   value?: TValue;
