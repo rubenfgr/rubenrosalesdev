@@ -1,103 +1,26 @@
-import type { FieldApi, FormApi } from "@tanstack/react-form";
+import type { AnyFieldApi } from "@tanstack/react-form";
 import type { InputHTMLAttributes } from "react";
 import { useId } from "react";
 import { Input, Label } from "@/client/components/ui";
 import { cn } from "@/client/utils";
-
-// Helper function to extract error message from TanStack Form field errors
-function getErrorMessage(errors: unknown): string {
-  if (!errors) return "";
-  if (typeof errors === "string") return errors;
-  if (Array.isArray(errors)) {
-    return errors
-      .map((e) =>
-        typeof e === "object" && e !== null && "message" in e
-          ? (e as { message: string }).message
-          : String(e),
-      )
-      .join(", ");
-  }
-  if (typeof errors === "object" && errors !== null) {
-    if ("message" in errors) {
-      return (errors as { message: string }).message;
-    }
-    // Handle nested Zod error structures
-    if ("errors" in errors && Array.isArray((errors as any).errors)) {
-      const nested = (errors as any).errors;
-      if (nested.length > 0 && typeof nested[0]?.message === "string") {
-        return nested[0].message;
-      }
-    }
-  }
-  return String(errors);
-}
+import getErrorMessage from "@/shared/utils/get-error-message.util";
 
 export interface AppInputProps extends InputHTMLAttributes<HTMLInputElement> {
   label?: string;
   error?: string;
   hint?: string;
-  field?: FieldApi<unknown, string, unknown>;
-  // For FormField integration
-  // biome-ignore lint/suspicious/noExplicitAny: FormAPI generic type
-  form?: FormApi<any, any>;
-  fieldName?: string;
-  // biome-ignore lint/suspicious/noExplicitAny: validators type
-  validators?: any;
+  field?: AnyFieldApi;
 }
 
-export function AppInput({
-  label,
-  error,
-  hint,
-  field,
-  form,
-  fieldName,
-  validators,
-  className,
-  ...props
-}: AppInputProps) {
+export function AppInput({ label, error, hint, field, className, ...props }: AppInputProps) {
   const inputId = useId();
 
-  // If form and fieldName are provided, create a FormField
-  if (form && fieldName && label) {
-    return (
-      <form.Field name={fieldName} validators={validators}>
-        {(field) => {
-          const rawError = field.state.meta.touchedErrors || field.state.meta.errors;
-          const errorMessage = getErrorMessage(rawError);
-
-          return (
-            <div className="space-y-1">
-              <Label htmlFor={field.name} className="block font-medium text-sm">
-                {label}
-              </Label>
-              <Input
-                autoComplete="off"
-                spellCheck={false}
-                id={field.name}
-                name={field.name}
-                value={field.state.value}
-                onBlur={field.handleBlur}
-                onChange={(e) => field.handleChange(e.target.value)}
-                className={cn(errorMessage && "border-red-500", className)}
-                {...props}
-              />
-              {errorMessage && (
-                <p className="text-red-600 text-sm" role="alert">
-                  {errorMessage}
-                </p>
-              )}
-            </div>
-          );
-        }}
-      </form.Field>
-    );
-  }
-
-  // If field is provided directly (legacy mode)
-  if (label && field) {
-    const rawError = field.state.meta.touchedErrors || field.state.meta.errors;
-    const errorMessage = getErrorMessage(rawError);
+  // Input connected to TanStack Form field
+  if (field && label) {
+    const errorMessage =
+      field.state.meta.isTouched && !field.state.meta.isValid
+        ? getErrorMessage(field.state.meta.errors)
+        : "";
 
     return (
       <div className="space-y-1">
@@ -109,7 +32,7 @@ export function AppInput({
           spellCheck={false}
           id={field.name}
           name={field.name}
-          value={field.state.value}
+          value={field.state.value || ""}
           onBlur={field.handleBlur}
           onChange={(e) => field.handleChange(e.target.value)}
           className={cn(errorMessage && "border-red-500", className)}
@@ -124,7 +47,7 @@ export function AppInput({
     );
   }
 
-  // Standalone input with optional error/hint
+  // Standalone input with label
   if (label) {
     return (
       <div className="space-y-1">
