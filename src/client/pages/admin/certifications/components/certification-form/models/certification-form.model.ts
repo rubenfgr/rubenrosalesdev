@@ -18,18 +18,23 @@ export function getCertificationFieldValidators(t: (key: string) => string) {
   return {
     name: {
       onChange: validators.name,
+      onSubmit: validators.name,
     },
     issuer: {
       onChange: validators.issuer,
+      onSubmit: validators.issuer,
     },
     date: {
       onChange: validators.date,
+      onSubmit: validators.date,
     },
     url: {
       onChange: validators.url,
+      onSubmit: validators.url,
     },
     userId: {
       onChange: validators.userId,
+      onSubmit: validators.userId,
     },
   };
 }
