@@ -1,4 +1,4 @@
-import { type ColumnDef, flexRender } from "@tanstack/react-table";
+import { flexRender } from "@tanstack/react-table";
 import { ChevronDown, Eye, EyeClosed, Trash } from "lucide-react";
 import { AppPagination } from "@/client/components/app-pagination/app-pagination.component";
 import {
