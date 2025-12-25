@@ -68,7 +68,7 @@ function RouteComponent() {
             <Button
               variant="outline"
               className="w-full"
-              onClick={() => window.open("mailto:rubenfranciscogr@outlook.com")}
+              onClick={() => (window.location.href = "mailto:rubenfranciscogr@outlook.com")}
             >
               Enviar Email
             </Button>
