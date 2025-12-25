@@ -1,0 +1,338 @@
+{
+  "../../../../../~start/default-client-entry.tsx": {
+    "file": "assets/main-B7px9dvT.js",
+    "name": "main",
+    "src": "../../../../../~start/default-client-entry.tsx",
+    "isEntry": true,
+    "dynamicImports": [
+      "src/routes/admin.tsx?tsr-split=component",
+      "src/routes/admin/techstack.tsx?tsr-split=component",
+      "src/routes/admin/settings.tsx?tsr-split=component",
+      "src/routes/admin/projects.tsx?tsr-split=component",
+      "src/routes/admin/profile.tsx?tsr-split=component",
+      "src/routes/admin/help.tsx?tsr-split=component",
+      "src/routes/admin/experience.tsx?tsr-split=component",
+      "src/routes/admin/dashboard.tsx?tsr-split=component",
+      "src/routes/admin/blog.tsx?tsr-split=component",
+      "src/routes/admin/user/index.tsx?tsr-split=component",
+      "src/routes/admin/certifications/index.tsx?tsr-split=component",
+      "src/routes/admin/user/profile.tsx?tsr-split=component",
+      "src/routes/admin/user/notifications.tsx?tsr-split=component",
+      "src/routes/admin/certifications/$id.tsx?tsr-split=component"
+    ],
+    "assets": [
+      "assets/app-BDtZHmLm.css"
+    ]
+  },
+  "/home/runner/work/rubenrosalesdev/rubenrosalesdev/src/client/styles/app.css": {
+    "file": "assets/app-BDtZHmLm.css",
+    "src": "/home/runner/work/rubenrosalesdev/rubenrosalesdev/src/client/styles/app.css"
+  },
+  "_app-select.component-c7S_V5Bl.js": {
+    "file": "assets/app-select.component-c7S_V5Bl.js",
+    "name": "app-select.component",
+    "imports": [
+      "_styles.util-DMqo7Rll.js",
+      "../../../../../~start/default-client-entry.tsx",
+      "_use-client-translation-BtezIT-M.js",
+      "_button-DTbsAa5K.js"
+    ]
+  },
+  "_brain-CeAAXgQd.js": {
+    "file": "assets/brain-CeAAXgQd.js",
+    "name": "brain",
+    "imports": [
+      "_styles.util-DMqo7Rll.js"
+    ]
+  },
+  "_button-DTbsAa5K.js": {
+    "file": "assets/button-DTbsAa5K.js",
+    "name": "button",
+    "imports": [
+      "../../../../../~start/default-client-entry.tsx",
+      "_styles.util-DMqo7Rll.js"
+    ]
+  },
+  "_card-B53amPQL.js": {
+    "file": "assets/card-B53amPQL.js",
+    "name": "card",
+    "imports": [
+      "../../../../../~start/default-client-entry.tsx",
+      "_styles.util-DMqo7Rll.js"
+    ]
+  },
+  "_circle-question-mark-Qe30GHRs.js": {
+    "file": "assets/circle-question-mark-Qe30GHRs.js",
+    "name": "circle-question-mark",
+    "imports": [
+      "_styles.util-DMqo7Rll.js"
+    ]
+  },
+  "_circle-user-round-BpyrkjxY.js": {
+    "file": "assets/circle-user-round-BpyrkjxY.js",
+    "name": "circle-user-round",
+    "imports": [
+      "_styles.util-DMqo7Rll.js"
+    ]
+  },
+  "_cpu-LuaCiOdc.js": {
+    "file": "assets/cpu-LuaCiOdc.js",
+    "name": "cpu",
+    "imports": [
+      "_styles.util-DMqo7Rll.js"
+    ]
+  },
+  "_folder-kanban-9GGGeiTO.js": {
+    "file": "assets/folder-kanban-9GGGeiTO.js",
+    "name": "folder-kanban",
+    "imports": [
+      "_styles.util-DMqo7Rll.js"
+    ]
+  },
+  "_page-placeholder.component-CzIlykYY.js": {
+    "file": "assets/page-placeholder.component-CzIlykYY.js",
+    "name": "page-placeholder.component",
+    "imports": [
+      "../../../../../~start/default-client-entry.tsx",
+      "_button-DTbsAa5K.js",
+      "_styles.util-DMqo7Rll.js",
+      "_card-B53amPQL.js"
+    ]
+  },
+  "_rss-7QQW89jw.js": {
+    "file": "assets/rss-7QQW89jw.js",
+    "name": "rss",
+    "imports": [
+      "_styles.util-DMqo7Rll.js"
+    ]
+  },
+  "_scroll-area-C2-dIXXN.js": {
+    "file": "assets/scroll-area-C2-dIXXN.js",
+    "name": "scroll-area",
+    "imports": [
+      "../../../../../~start/default-client-entry.tsx",
+      "_use-client-translation-BtezIT-M.js",
+      "_button-DTbsAa5K.js",
+      "_styles.util-DMqo7Rll.js"
+    ]
+  },
+  "_settings-2-CeV0URk-.js": {
+    "file": "assets/settings-2-CeV0URk-.js",
+    "name": "settings-2",
+    "imports": [
+      "_styles.util-DMqo7Rll.js"
+    ]
+  },
+  "_shield-check-m6rRs2Q4.js": {
+    "file": "assets/shield-check-m6rRs2Q4.js",
+    "name": "shield-check",
+    "imports": [
+      "_styles.util-DMqo7Rll.js"
+    ]
+  },
+  "_styles.util-DMqo7Rll.js": {
+    "file": "assets/styles.util-DMqo7Rll.js",
+    "name": "styles.util",
+    "imports": [
+      "../../../../../~start/default-client-entry.tsx"
+    ]
+  },
+  "_use-client-translation-BtezIT-M.js": {
+    "file": "assets/use-client-translation-BtezIT-M.js",
+    "name": "use-client-translation",
+    "imports": [
+      "_styles.util-DMqo7Rll.js",
+      "../../../../../~start/default-client-entry.tsx",
+      "_button-DTbsAa5K.js"
+    ]
+  },
+  "src/routes/admin.tsx?tsr-split=component": {
+    "file": "assets/admin-De5zefIq.js",
+    "name": "admin",
+    "src": "src/routes/admin.tsx?tsr-split=component",
+    "isDynamicEntry": true,
+    "imports": [
+      "../../../../../~start/default-client-entry.tsx",
+      "_button-DTbsAa5K.js",
+      "_styles.util-DMqo7Rll.js",
+      "_use-client-translation-BtezIT-M.js",
+      "_scroll-area-C2-dIXXN.js",
+      "_shield-check-m6rRs2Q4.js",
+      "_rss-7QQW89jw.js",
+      "_folder-kanban-9GGGeiTO.js",
+      "_brain-CeAAXgQd.js",
+      "_cpu-LuaCiOdc.js",
+      "_circle-user-round-BpyrkjxY.js",
+      "_settings-2-CeV0URk-.js",
+      "_circle-question-mark-Qe30GHRs.js"
+    ]
+  },
+  "src/routes/admin/blog.tsx?tsr-split=component": {
+    "file": "assets/blog-DPzJ9LmR.js",
+    "name": "blog",
+    "src": "src/routes/admin/blog.tsx?tsr-split=component",
+    "isDynamicEntry": true,
+    "imports": [
+      "../../../../../~start/default-client-entry.tsx",
+      "_page-placeholder.component-CzIlykYY.js",
+      "_rss-7QQW89jw.js",
+      "_button-DTbsAa5K.js",
+      "_styles.util-DMqo7Rll.js",
+      "_card-B53amPQL.js"
+    ]
+  },
+  "src/routes/admin/certifications/$id.tsx?tsr-split=component": {
+    "file": "assets/_id-DQNnqiGi.js",
+    "name": "_id",
+    "src": "src/routes/admin/certifications/$id.tsx?tsr-split=component",
+    "isDynamicEntry": true,
+    "imports": [
+      "../../../../../~start/default-client-entry.tsx",
+      "_app-select.component-c7S_V5Bl.js",
+      "_button-DTbsAa5K.js",
+      "_use-client-translation-BtezIT-M.js",
+      "_styles.util-DMqo7Rll.js"
+    ]
+  },
+  "src/routes/admin/certifications/index.tsx?tsr-split=component": {
+    "file": "assets/index-ByyZsoHV.js",
+    "name": "index",
+    "src": "src/routes/admin/certifications/index.tsx?tsr-split=component",
+    "isDynamicEntry": true,
+    "imports": [
+      "../../../../../~start/default-client-entry.tsx",
+      "_button-DTbsAa5K.js",
+      "_app-select.component-c7S_V5Bl.js",
+      "_use-client-translation-BtezIT-M.js",
+      "_styles.util-DMqo7Rll.js",
+      "_scroll-area-C2-dIXXN.js"
+    ]
+  },
+  "src/routes/admin/dashboard.tsx?tsr-split=component": {
+    "file": "assets/dashboard-BzLt6ajs.js",
+    "name": "dashboard",
+    "src": "src/routes/admin/dashboard.tsx?tsr-split=component",
+    "isDynamicEntry": true,
+    "imports": [
+      "../../../../../~start/default-client-entry.tsx",
+      "_card-B53amPQL.js",
+      "_shield-check-m6rRs2Q4.js",
+      "_rss-7QQW89jw.js",
+      "_folder-kanban-9GGGeiTO.js",
+      "_brain-CeAAXgQd.js",
+      "_cpu-LuaCiOdc.js",
+      "_circle-user-round-BpyrkjxY.js",
+      "_styles.util-DMqo7Rll.js"
+    ]
+  },
+  "src/routes/admin/experience.tsx?tsr-split=component": {
+    "file": "assets/experience-DMiRz-hf.js",
+    "name": "experience",
+    "src": "src/routes/admin/experience.tsx?tsr-split=component",
+    "isDynamicEntry": true,
+    "imports": [
+      "../../../../../~start/default-client-entry.tsx",
+      "_page-placeholder.component-CzIlykYY.js",
+      "_brain-CeAAXgQd.js",
+      "_button-DTbsAa5K.js",
+      "_styles.util-DMqo7Rll.js",
+      "_card-B53amPQL.js"
+    ]
+  },
+  "src/routes/admin/help.tsx?tsr-split=component": {
+    "file": "assets/help-B2trHMgq.js",
+    "name": "help",
+    "src": "src/routes/admin/help.tsx?tsr-split=component",
+    "isDynamicEntry": true,
+    "imports": [
+      "../../../../../~start/default-client-entry.tsx",
+      "_button-DTbsAa5K.js",
+      "_card-B53amPQL.js",
+      "_styles.util-DMqo7Rll.js",
+      "_circle-question-mark-Qe30GHRs.js"
+    ]
+  },
+  "src/routes/admin/profile.tsx?tsr-split=component": {
+    "file": "assets/profile-9WbciHsV.js",
+    "name": "profile",
+    "src": "src/routes/admin/profile.tsx?tsr-split=component",
+    "isDynamicEntry": true,
+    "imports": [
+      "../../../../../~start/default-client-entry.tsx",
+      "_page-placeholder.component-CzIlykYY.js",
+      "_circle-user-round-BpyrkjxY.js",
+      "_button-DTbsAa5K.js",
+      "_styles.util-DMqo7Rll.js",
+      "_card-B53amPQL.js"
+    ]
+  },
+  "src/routes/admin/projects.tsx?tsr-split=component": {
+    "file": "assets/projects-Bfx0g9yP.js",
+    "name": "projects",
+    "src": "src/routes/admin/projects.tsx?tsr-split=component",
+    "isDynamicEntry": true,
+    "imports": [
+      "../../../../../~start/default-client-entry.tsx",
+      "_page-placeholder.component-CzIlykYY.js",
+      "_folder-kanban-9GGGeiTO.js",
+      "_button-DTbsAa5K.js",
+      "_styles.util-DMqo7Rll.js",
+      "_card-B53amPQL.js"
+    ]
+  },
+  "src/routes/admin/settings.tsx?tsr-split=component": {
+    "file": "assets/settings-B2DMDRXc.js",
+    "name": "settings",
+    "src": "src/routes/admin/settings.tsx?tsr-split=component",
+    "isDynamicEntry": true,
+    "imports": [
+      "../../../../../~start/default-client-entry.tsx",
+      "_page-placeholder.component-CzIlykYY.js",
+      "_settings-2-CeV0URk-.js",
+      "_button-DTbsAa5K.js",
+      "_styles.util-DMqo7Rll.js",
+      "_card-B53amPQL.js"
+    ]
+  },
+  "src/routes/admin/techstack.tsx?tsr-split=component": {
+    "file": "assets/techstack-CKkpAOuc.js",
+    "name": "techstack",
+    "src": "src/routes/admin/techstack.tsx?tsr-split=component",
+    "isDynamicEntry": true,
+    "imports": [
+      "../../../../../~start/default-client-entry.tsx",
+      "_page-placeholder.component-CzIlykYY.js",
+      "_cpu-LuaCiOdc.js",
+      "_button-DTbsAa5K.js",
+      "_styles.util-DMqo7Rll.js",
+      "_card-B53amPQL.js"
+    ]
+  },
+  "src/routes/admin/user/index.tsx?tsr-split=component": {
+    "file": "assets/index-CEUYRvvH.js",
+    "name": "index",
+    "src": "src/routes/admin/user/index.tsx?tsr-split=component",
+    "isDynamicEntry": true,
+    "imports": [
+      "../../../../../~start/default-client-entry.tsx"
+    ]
+  },
+  "src/routes/admin/user/notifications.tsx?tsr-split=component": {
+    "file": "assets/notifications-BIbOVMjS.js",
+    "name": "notifications",
+    "src": "src/routes/admin/user/notifications.tsx?tsr-split=component",
+    "isDynamicEntry": true,
+    "imports": [
+      "../../../../../~start/default-client-entry.tsx"
+    ]
+  },
+  "src/routes/admin/user/profile.tsx?tsr-split=component": {
+    "file": "assets/profile-9mTQAQAq.js",
+    "name": "profile",
+    "src": "src/routes/admin/user/profile.tsx?tsr-split=component",
+    "isDynamicEntry": true,
+    "imports": [
+      "../../../../../~start/default-client-entry.tsx"
+    ]
+  }
+}
