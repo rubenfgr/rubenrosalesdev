@@ -25,7 +25,10 @@ export interface UseGetAllCertificationsParams {
   sort?: { field: string; direction: "asc" | "desc" };
 }
 
-export const useGetAllCertifications = (isEnabled: boolean, params: UseGetAllCertificationsParams = {}) => {
+export const useGetAllCertifications = (
+  isEnabled: boolean,
+  params: UseGetAllCertificationsParams = {},
+) => {
   const getAllCertifications = useServerFn(listCertifications);
 
   const hasParams = Object.keys(params).length > 0;
@@ -37,7 +40,7 @@ export const useGetAllCertifications = (isEnabled: boolean, params: UseGetAllCer
       data: result?.data ?? [],
       total: result?.total ?? 0,
     }),
-    enabled: isEnabled
+    enabled: isEnabled,
   });
 };
 

@@ -4,10 +4,17 @@ import { z } from "zod";
 function createBaseValidators(t: (key: string) => string) {
   return {
     name: z.string().min(2, { message: t("admin.certifications.form.validations.name_required") }),
-    issuer: z.string().min(2, { message: t("admin.certifications.form.validations.issuer_required") }),
+    issuer: z
+      .string()
+      .min(2, { message: t("admin.certifications.form.validations.issuer_required") }),
     date: z.date({ message: t("admin.certifications.form.validations.date_required") }),
-    url: z.string().url({ message: t("admin.certifications.form.validations.url_invalid") }).or(z.literal("")),
-    userId: z.string().min(1, { message: t("admin.certifications.form.validations.user_id_required") }),
+    url: z
+      .string()
+      .url({ message: t("admin.certifications.form.validations.url_invalid") })
+      .or(z.literal("")),
+    userId: z
+      .string()
+      .min(1, { message: t("admin.certifications.form.validations.user_id_required") }),
   };
 }
 

@@ -1,4 +1,4 @@
-import { type ColumnDef, getCoreRowModel, useReactTable } from "@tanstack/react-table";
+import { getCoreRowModel, useReactTable } from "@tanstack/react-table";
 import { useClientTranslation } from "@/client/hooks";
 import type { UseAppTableServerProps } from "./app-table-server.model";
 
