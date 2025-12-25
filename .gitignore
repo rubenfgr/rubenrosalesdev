@@ -18,3 +18,7 @@ yarn.lock
 /playwright/.cache/
 
 /src/routeTree.gen.ts
+
+# Build artifacts
+.tanstack
+.nitro
