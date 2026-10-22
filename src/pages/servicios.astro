@@ -15,7 +15,7 @@ import Layout from '../layouts/Layout.astro';
     title="Servicios"
     lead="Automatización, aplicaciones web y apps móviles para pymes y profesionales. Siempre con la misma regla: la solución más sencilla que resuelva el problema."
   >
-    <div class="list">{services.map((s) => <ServiceBlock service={s} detailed />)}</div>
+    <div class="list">{services.map((s) => <ServiceBlock service={s} detailed level="h2" />)}</div>
     <p class="cta"><a class="btn btn-primary" href="/contacto">Cuéntame qué quieres resolver</a></p>
   </Section>
 </Layout>

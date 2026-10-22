@@ -14,7 +14,7 @@ const { posts, featuredFirst = false } = Astro.props;
     <p>Todavía no hay artículos.</p>
   ) : (
     <div class="list">
-      {posts.map((p, i) => <PostCard post={p} featured={featuredFirst && i === 0} />)}
+      {posts.map((p, i) => <PostCard post={p} featured={featuredFirst && i === 0} level="h2" />)}
     </div>
   )
 }

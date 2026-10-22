@@ -6,13 +6,15 @@ import TagList from './TagList.astro';
 interface Props {
   post: Post;
   featured?: boolean;
+  level?: 'h2' | 'h3';
 }
-const { post, featured = false } = Astro.props;
+const { post, featured = false, level = 'h3' } = Astro.props;
+const Heading = featured ? 'h2' : level;
 ---
 
 <article class:list={['card', { featured }]}>
   <PostMeta post={post} />
-  {featured ? <h2><a href={postUrl(post)}>{post.data.title}</a></h2> : <h3><a href={postUrl(post)}>{post.data.title}</a></h3>}
+  <Heading><a href={postUrl(post)}>{post.data.title}</a></Heading>
   <p class="desc">{post.data.description}</p>
   <TagList tags={post.data.tags} />
 </article>

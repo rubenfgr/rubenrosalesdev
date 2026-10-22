@@ -66,13 +66,14 @@ const editUrl = `${site.repo}/edit/main/src/content/blog/${post.id}/index.md`;
 <style>
   .shell {
     display: grid;
+    grid-template-columns: minmax(0, 1fr);
     gap: var(--space-6);
     padding-top: var(--space-7);
     grid-template-areas: 'toc' 'article' 'recent';
   }
   .toc-mobile { grid-area: toc; }
   .toc-aside { display: none; grid-area: tocside; }
-  .article { grid-area: article; min-width: 0; display: grid; gap: var(--space-5); align-content: start; }
+  .article { grid-area: article; min-width: 0; display: grid; grid-template-columns: minmax(0, 1fr); gap: var(--space-5); align-content: start; }
   .recent { grid-area: recent; }
   .head { display: grid; gap: var(--space-3); }
   .cover { width: 100%; height: auto; border-radius: var(--radius-lg); }

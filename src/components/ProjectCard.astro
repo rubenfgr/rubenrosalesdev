@@ -3,9 +3,10 @@ import type { CollectionEntry } from 'astro:content';
 
 interface Props {
   project: CollectionEntry<'projects'>;
+  level?: 'h2' | 'h3';
 }
 
-const { project } = Astro.props;
+const { project, level: Heading = 'h3' } = Astro.props;
 const { title, summary, category, context, stack, result, resultVerified } = project.data;
 const contextLabel = { profesional: 'Experiencia profesional', propio: 'Proyecto propio', cliente: 'Cliente' }[context];
 const categoryLabel = { automatizacion: 'Automatización', web: 'Web', movil: 'Móvil', iot: 'IoT' }[category];
@@ -13,7 +14,7 @@ const categoryLabel = { automatizacion: 'Automatización', web: 'Web', movil: 'M
 
 <article class="card">
   <p class="meta">{categoryLabel} · {contextLabel}</p>
-  <h3><a href={`/proyectos/${project.id}`}>{title}</a></h3>
+  <Heading><a href={`/proyectos/${project.id}`}>{title}</a></Heading>
   <p>{summary}</p>
   {resultVerified && result && <p class="result"><strong>Resultado:</strong> {result}</p>}
   <ul class="stack">{stack.map((s) => <li>{s}</li>)}</ul>
@@ -30,9 +31,9 @@ const categoryLabel = { automatizacion: 'Automatización', web: 'Web', movil: 'M
     border-radius: var(--radius-lg);
   }
   .meta { font-size: var(--font-size-caption); color: var(--color-foreground-muted); }
-  h3 { font-size: var(--font-size-h4); font-stretch: var(--font-width-body); }
-  h3 a { color: var(--color-foreground); text-decoration: none; }
-  h3 a:hover { color: var(--color-primary); text-decoration: underline; }
+  h2, h3 { font-size: var(--font-size-h4); font-stretch: var(--font-width-body); }
+  :is(h2, h3) a { color: var(--color-foreground); text-decoration: none; }
+  :is(h2, h3) a:hover { color: var(--color-primary); text-decoration: underline; }
   .stack { list-style: none; margin: 0; padding: 0; display: flex; flex-wrap: wrap; gap: var(--space-2); }
   .stack li {
     padding: var(--space-1) var(--space-2);
