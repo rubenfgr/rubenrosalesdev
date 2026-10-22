@@ -1,0 +1,70 @@
+---
+import { Monitor, Moon, Sun } from '@lucide/astro';
+---
+
+<button type="button" class="theme-toggle" data-theme-toggle aria-label="Tema: sistema">
+  <span data-icon="system"><Monitor size={20} stroke-width={1.5} aria-hidden="true" /></span>
+  <span data-icon="light" hidden><Sun size={20} stroke-width={1.5} aria-hidden="true" /></span>
+  <span data-icon="dark" hidden><Moon size={20} stroke-width={1.5} aria-hidden="true" /></span>
+</button>
+
+<script>
+  type Mode = 'system' | 'light' | 'dark';
+  const order: Mode[] = ['system', 'light', 'dark'];
+  const labels: Record<Mode, string> = { system: 'sistema', light: 'claro', dark: 'oscuro' };
+
+  const read = (): Mode => {
+    try {
+      const v = localStorage.getItem('theme');
+      return v === 'light' || v === 'dark' ? v : 'system';
+    } catch {
+      return 'system';
+    }
+  };
+
+  const apply = (mode: Mode) => {
+    const root = document.documentElement;
+    if (mode === 'system') root.removeAttribute('data-theme');
+    else root.setAttribute('data-theme', mode);
+    try {
+      if (mode === 'system') localStorage.removeItem('theme');
+      else localStorage.setItem('theme', mode);
+    } catch {
+      /* sin persistencia */
+    }
+  };
+
+  document.querySelectorAll<HTMLButtonElement>('[data-theme-toggle]').forEach((btn) => {
+    const render = (mode: Mode) => {
+      btn.setAttribute('aria-label', `Tema: ${labels[mode]}. Cambiar`);
+      btn.querySelectorAll<HTMLElement>('[data-icon]').forEach((el) => {
+        el.hidden = el.dataset.icon !== mode;
+      });
+    };
+    let mode = read();
+    render(mode);
+    btn.addEventListener('click', () => {
+      mode = order[(order.indexOf(mode) + 1) % order.length] as Mode;
+      apply(mode);
+      render(mode);
+    });
+  });
+</script>
+
+<style>
+  .theme-toggle {
+    display: inline-grid;
+    place-items: center;
+    width: var(--space-7);
+    height: var(--space-7);
+    padding: 0;
+    background: transparent;
+    color: var(--color-foreground);
+    border: var(--border-width-thin) solid transparent;
+    border-radius: var(--radius-md);
+    cursor: pointer;
+  }
+  .theme-toggle:hover { background: var(--color-surface-alt); }
+  .theme-toggle [data-icon] { display: inline-flex; }
+  .theme-toggle [hidden] { display: none; }
+</style>

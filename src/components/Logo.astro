@@ -1,0 +1,25 @@
+---
+import horizontal from '../../design-system/logo/logo-horizontal.svg?raw';
+import symbol from '../../design-system/logo/symbol.svg?raw';
+
+interface Props {
+  variant?: 'horizontal' | 'symbol';
+}
+
+const { variant = 'horizontal' } = Astro.props;
+
+// El SVG original usa colores fijos; se sustituyen por los tokens de marca
+// para que el logo siga el tema claro/oscuro.
+const svg = (variant === 'symbol' ? symbol : horizontal)
+  .replaceAll('fill="#2B3533"', 'fill="var(--color-brand-mark)"')
+  .replaceAll('fill="#285A6E"', 'fill="var(--color-brand-piece)"')
+  .replace('<svg ', '<svg class="logo-svg" focusable="false" ');
+---
+
+<span class:list={['logo', variant]} set:html={svg} />
+
+<style is:global>
+  .logo { display: inline-flex; line-height: 0; }
+  .logo-svg { height: var(--space-6); width: auto; }
+  .logo.symbol .logo-svg { height: var(--space-6); }
+</style>

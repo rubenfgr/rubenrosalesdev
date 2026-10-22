@@ -1,0 +1,55 @@
+---
+import { legalLinks, site } from '../data/site';
+import Logo from './Logo.astro';
+---
+
+<footer class="footer">
+  <div class="container footer-inner">
+    <div class="about">
+      <Logo />
+      <p>{site.tagline}</p>
+    </div>
+    <nav aria-label="Legal">
+      <ul>
+        {legalLinks.map((l) => <li><a href={l.href}>{l.label}</a></li>)}
+      </ul>
+    </nav>
+    <nav aria-label="Perfiles">
+      <ul>
+        <li><a href={site.github} rel="me noopener">GitHub</a></li>
+        <li><a href={site.linkedin} rel="me noopener">LinkedIn</a></li>
+      </ul>
+    </nav>
+  </div>
+</footer>
+
+<style>
+  .footer {
+    margin-top: var(--space-section);
+    padding-block: var(--space-7);
+    border-top: var(--border-width-thin) solid var(--color-border);
+    background: var(--color-surface);
+    font-size: var(--font-size-label);
+  }
+  .footer-inner {
+    display: grid;
+    gap: var(--space-6);
+  }
+  .about { display: grid; gap: var(--space-3); max-width: var(--container-text); }
+  .about p { color: var(--color-foreground-muted); }
+  ul {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-2) var(--space-5);
+  }
+  a { color: var(--color-foreground); }
+  a:hover { color: var(--color-primary); }
+
+  @media (min-width: 40rem) {
+    .footer-inner { grid-template-columns: 1fr auto auto; align-items: start; }
+    ul { flex-direction: column; }
+  }
+</style>

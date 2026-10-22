@@ -1,0 +1,182 @@
+---
+import { Menu, X } from '@lucide/astro';
+import { navLinks } from '../data/site';
+import Logo from './Logo.astro';
+import ThemeToggle from './ThemeToggle.astro';
+
+const path = Astro.url.pathname.replace(/\/$/, '') || '/';
+const isCurrent = (href: string) => path === href || path.startsWith(`${href}/`);
+---
+
+<header class="nav" data-nav>
+  <div class="container nav-inner">
+    <a href="/" class="brand" aria-label="Rubén Rosales, inicio">
+      <Logo />
+      <span class="descriptor">Software, automatización e IA</span>
+    </a>
+
+    <nav class="links" aria-label="Principal">
+      <ul id="menu" class="menu" data-menu>
+        {
+          navLinks.map((l) => (
+            <li>
+              <a href={l.href} aria-current={isCurrent(l.href) ? 'page' : undefined}>
+                {l.label}
+              </a>
+            </li>
+          ))
+        }
+        <li class="cta-item"><a class="btn btn-primary" href="/contacto">Contacto</a></li>
+      </ul>
+    </nav>
+
+    <div class="actions">
+      <ThemeToggle />
+      <button
+        type="button"
+        class="menu-btn"
+        aria-expanded="false"
+        aria-controls="menu"
+        aria-label="Abrir menú"
+        data-menu-btn
+      >
+        <span class="icon-open"><Menu size={20} stroke-width={1.5} aria-hidden="true" /></span>
+        <span class="icon-close"><X size={20} stroke-width={1.5} aria-hidden="true" /></span>
+      </button>
+    </div>
+  </div>
+</header>
+
+<script>
+  const nav = document.querySelector<HTMLElement>('[data-nav]');
+  const btn = document.querySelector<HTMLButtonElement>('[data-menu-btn]');
+  const menu = document.querySelector<HTMLElement>('[data-menu]');
+
+  if (nav && btn && menu) {
+    const setOpen = (open: boolean, returnFocus = false) => {
+      btn.setAttribute('aria-expanded', String(open));
+      btn.setAttribute('aria-label', open ? 'Cerrar menú' : 'Abrir menú');
+      nav.toggleAttribute('data-open', open);
+      if (open) menu.querySelector<HTMLElement>('a')?.focus();
+      else if (returnFocus) btn.focus();
+    };
+
+    btn.addEventListener('click', () => setOpen(btn.getAttribute('aria-expanded') !== 'true'));
+
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape' && btn.getAttribute('aria-expanded') === 'true') setOpen(false, true);
+    });
+
+    // Al pasar a escritorio el menú vuelve a mostrarse en línea.
+    matchMedia('(min-width: 40rem)').addEventListener('change', (e) => {
+      if (e.matches) setOpen(false);
+    });
+
+    const onScroll = () => nav.toggleAttribute('data-scrolled', window.scrollY > 0);
+    onScroll();
+    addEventListener('scroll', onScroll, { passive: true });
+  }
+</script>
+
+<style>
+  .nav {
+    position: fixed;
+    inset: 0 0 auto 0;
+    z-index: var(--z-sticky);
+    height: var(--nav-height);
+    padding-top: env(safe-area-inset-top);
+    box-sizing: content-box;
+    background: var(--color-background);
+    border-bottom: var(--border-width-thin) solid transparent;
+  }
+  .nav[data-scrolled] { border-bottom-color: var(--color-border); }
+
+  .nav-inner {
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--space-4);
+  }
+
+  .brand {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--space-3);
+    text-decoration: none;
+    color: var(--color-foreground);
+  }
+  .descriptor {
+    display: none;
+    font-size: var(--font-size-label);
+    font-weight: var(--font-weight-medium);
+    line-height: var(--line-height-normal);
+    color: var(--color-foreground-muted);
+  }
+
+  .links { margin-inline-start: auto; }
+  .menu {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    align-items: center;
+    gap: var(--space-5);
+  }
+  .menu a:not(.btn) {
+    color: var(--color-foreground);
+    text-decoration: none;
+    font-weight: var(--font-weight-medium);
+  }
+  .menu a:not(.btn):hover,
+  .menu a[aria-current='page'] {
+    color: var(--color-primary);
+  }
+  .menu a[aria-current='page']:not(.btn) {
+    text-decoration: underline;
+    text-decoration-thickness: var(--border-width-thick);
+    text-underline-offset: var(--space-2);
+  }
+
+  .actions { display: flex; align-items: center; gap: var(--space-1); }
+  .menu-btn {
+    display: none;
+    place-items: center;
+    width: var(--space-7);
+    height: var(--space-7);
+    padding: 0;
+    background: transparent;
+    color: var(--color-foreground);
+    border: 0;
+    border-radius: var(--radius-md);
+    cursor: pointer;
+  }
+  .menu-btn:hover { background: var(--color-surface-alt); }
+  .icon-close { display: none; }
+  .nav[data-open] .icon-open { display: none; }
+  .nav[data-open] .icon-close { display: inline-flex; }
+
+  @media (min-width: 64rem) {
+    .descriptor { display: inline; }
+  }
+
+  @media (max-width: 39.99rem) {
+    .menu-btn { display: inline-grid; }
+    .links { position: static; margin: 0; }
+    .menu {
+      display: none;
+      position: absolute;
+      inset: calc(var(--nav-height) + env(safe-area-inset-top)) 0 auto 0;
+      flex-direction: column;
+      align-items: stretch;
+      gap: var(--space-1);
+      padding: var(--space-4) var(--container-padding) var(--space-5);
+      background: var(--color-background);
+      border-bottom: var(--border-width-thin) solid var(--color-border);
+    }
+    .nav[data-open] .menu { display: flex; }
+    .menu a:not(.btn) { display: block; padding: var(--space-3) 0; }
+    .cta-item { margin-top: var(--space-3); }
+    .cta-item .btn { justify-content: center; width: 100%; }
+  }
+</style>
