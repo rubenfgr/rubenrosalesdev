@@ -43,9 +43,10 @@ export const demoSchema = z.object({
 
 export const aboutSchema = z.object({
   principles: z.array(z.object({ title: z.string(), text: z.string() })),
+  technologies: z.array(z.object({ group: z.string(), items: z.array(z.string()).min(1) })),
   education: z.array(z.string()),
 });
 
-export const contactSchema = z.object({ serviceOptions: z.array(z.string()).min(1) });
+export const contactSchema = z.object({ serviceOptions: z.array(z.string()).min(1), responseTime: z.string() });
 
 export type Service = z.infer<typeof serviceSchema>;

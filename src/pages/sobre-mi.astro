@@ -3,7 +3,7 @@ import { aboutData } from '../data/site';
 import Section from '../components/Section.astro';
 import Layout from '../layouts/Layout.astro';
 
-const { principles, education } = aboutData;
+const { principles, technologies, education } = aboutData;
 ---
 
 <Layout
@@ -32,7 +32,14 @@ const { principles, education } = aboutData;
       <ul>{principles.map((p) => <li><strong>{p.title}</strong> {p.text}</li>)}</ul>
 
       <h2>Tecnologías</h2>
-      <p>[VERIFICAR: lista final de tecnologías]</p>
+      <dl class="tech">
+        {technologies.map((t) => (
+          <>
+            <dt>{t.group}</dt>
+            <dd>{t.items.join(', ')}</dd>
+          </>
+        ))}
+      </dl>
 
       <h2>Formación</h2>
       <ul>{education.map((e) => <li>{e}</li>)}</ul>
@@ -43,5 +50,8 @@ const { principles, education } = aboutData;
 <style>
   .prose { max-width: var(--measure); display: grid; gap: var(--space-4); }
   .prose h2 { font-size: var(--font-size-h3); margin-top: var(--space-5); }
+  .tech { margin: 0; display: grid; gap: var(--space-1) var(--space-4); grid-template-columns: max-content 1fr; }
+  .tech dt { font-weight: var(--font-weight-medium); }
+  .tech dd { margin: 0; color: var(--color-foreground-muted); }
   .prose ul { margin: 0; padding-inline-start: var(--space-5); display: grid; gap: var(--space-2); }
 </style>

@@ -17,7 +17,7 @@ En el panel de Cloudflare: Workers & Pages → Create → importar el repositori
 
 | Dónde | Nombre | Para qué |
 |---|---|---|
-| Variable de build | `PUBLIC_CF_ANALYTICS_TOKEN` | Token de Cloudflare Web Analytics (si no existe, no se carga el script) |
+| Variable de build | `PUBLIC_CF_ANALYTICS_TOKEN` | Token de Cloudflare Web Analytics (si no existe, no se carga el script). **Antes de definirla, añade a `/cookies` un párrafo sobre la medición** y confirma con un profesional si el tráfico de la UE requiere aviso o consentimiento. |
 | Variable de build | `GUARDS_STRICT=1` | Activar **solo al lanzar**: hace que el build falle si queda algún `[VERIFICAR`, un resultado sin verificar o un borrador enlazado. Equivale a usar `pnpm build:prod`. |
 | Secretos del Worker | `GMAIL_*`, `CONTACT_TO` | Ver [formulario-contacto.md](formulario-contacto.md) |
 

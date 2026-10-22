@@ -20,5 +20,71 @@
   "education": [
     "Técnico Superior en Desarrollo de Aplicaciones Web — I.E.S. Al-Ándalus",
     "Técnico Superior en Desarrollo de Aplicaciones Multiplataforma — I.E.S. Al-Ándalus"
+  ],
+  "technologies": [
+    {
+      "group": "Frontend",
+      "items": [
+        "React",
+        "Next.js",
+        "Angular"
+      ]
+    },
+    {
+      "group": "Móvil",
+      "items": [
+        "React Native",
+        "Flutter",
+        "Expo",
+        "Ionic"
+      ]
+    },
+    {
+      "group": "Backend",
+      "items": [
+        "Node.js",
+        "NestJS"
+      ]
+    },
+    {
+      "group": "IA",
+      "items": [
+        "OpenAI",
+        "Anthropic",
+        "RAG",
+        "Agentes",
+        "n8n"
+      ]
+    },
+    {
+      "group": "Integraciones",
+      "items": [
+        "APIs",
+        "CRM/ERP",
+        "Webhooks",
+        "OAuth"
+      ]
+    },
+    {
+      "group": "DevOps",
+      "items": [
+        "Docker",
+        "CI/CD",
+        "Linux",
+        "Despliegues",
+        "Cloud"
+      ]
+    },
+    {
+      "group": "Datos",
+      "items": [
+        "PostgreSQL",
+        "PGVector",
+        "MySQL",
+        "MariaDB",
+        "MongoDB",
+        "Redis"
+      ]
+    }
   ]
 }
