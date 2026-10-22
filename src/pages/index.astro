@@ -93,7 +93,8 @@ const featured = (await getCollection('projects', (p) => p.data.published && p.d
     overflow: hidden;
   }
   .hero-inner { position: relative; z-index: var(--z-raised); display: grid; gap: var(--space-5); }
-  .hero h1 { max-width: 20ch; }
+  .hero h1 { max-width: 20ch;
+    min-width: 0; }
   .lead { max-width: var(--measure); font-size: var(--font-size-lead); color: var(--color-foreground-muted); }
   .ctas { display: flex; flex-wrap: wrap; gap: var(--space-4); }
   .grid { display: grid; gap: var(--grid-gutter); }

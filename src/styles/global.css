@@ -38,6 +38,8 @@ h3 {
   line-height: var(--line-height-snug);
   letter-spacing: var(--letter-spacing-heading);
   margin: 0;
+  overflow-wrap: break-word;
+  hyphens: auto;
 }
 
 h1 {

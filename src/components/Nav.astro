@@ -11,7 +11,8 @@ const isCurrent = (href: string) => path === href || path.startsWith(`${href}/`)
 <header class="nav" data-nav>
   <div class="container nav-inner">
     <a href="/" class="brand" aria-label="Rubén Rosales, inicio">
-      <Logo />
+      <span class="logo-wide"><Logo /></span>
+      <span class="logo-narrow"><Logo variant="symbol" /></span>
       <span class="descriptor">Software, automatización e IA</span>
     </a>
 
@@ -105,6 +106,11 @@ const isCurrent = (href: string) => path === href || path.startsWith(`${href}/`)
     gap: var(--space-3);
     text-decoration: none;
     color: var(--color-foreground);
+  }
+  .logo-narrow { display: none; }
+  @media (max-width: 25.99rem) {
+    .logo-wide { display: none; }
+    .logo-narrow { display: inline-flex; }
   }
   .descriptor {
     display: none;
