@@ -1,12 +1,10 @@
 ---
-import { getCollection } from 'astro:content';
 import ProjectCard from '../components/ProjectCard.astro';
 import Section from '../components/Section.astro';
 import Layout from '../layouts/Layout.astro';
+import { getProjects } from '../lib/projects';
 
-const projects = (await getCollection('projects', (p) => p.data.published)).sort(
-  (a, b) => a.data.order - b.data.order,
-);
+const projects = await getProjects();
 ---
 
 <Layout

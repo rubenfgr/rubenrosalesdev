@@ -1,5 +1,4 @@
 ---
-import { getCollection } from 'astro:content';
 import HeroMotif from '../components/HeroMotif.astro';
 import ProcessDemo from '../components/ProcessDemo.astro';
 import ProjectCard from '../components/ProjectCard.astro';
@@ -7,10 +6,9 @@ import Section from '../components/Section.astro';
 import ServiceBlock from '../components/ServiceBlock.astro';
 import { services } from '../data/services';
 import Layout from '../layouts/Layout.astro';
+import { getProjects } from '../lib/projects';
 
-const featured = (await getCollection('projects', (p) => p.data.published && p.data.featured))
-  .sort((a, b) => a.data.order - b.data.order)
-  .slice(0, 3);
+const featured = (await getProjects(true)).slice(0, 3);
 ---
 
 <Layout>

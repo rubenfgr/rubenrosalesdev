@@ -1,0 +1,40 @@
+---
+import type { GetStaticPaths } from 'astro';
+import { render } from 'astro:content';
+import Layout from '../../layouts/Layout.astro';
+import { getProjects } from '../../lib/projects';
+import '../../styles/prose.css';
+
+export const getStaticPaths = (async () => {
+  const projects = await getProjects();
+  return projects.map((project) => ({ params: { slug: project.id }, props: { project } }));
+}) satisfies GetStaticPaths;
+
+const { project } = Astro.props;
+const { Content } = await render(project);
+const { title, summary, stack, context, result, resultVerified } = project.data;
+const contextLabel = { profesional: 'Experiencia profesional', propio: 'Proyecto propio', cliente: 'Cliente' }[context];
+---
+
+<Layout title={title} description={summary}>
+  <article class="container wrap">
+    <p class="back"><a href="/proyectos">← Proyectos</a></p>
+    <header class="head">
+      <p class="meta">{contextLabel}</p>
+      <h1>{title}</h1>
+      <p class="lead">{summary}</p>
+      {resultVerified && result && <p><strong>Resultado:</strong> {result}</p>}
+      <ul class="stack">{stack.map((s) => <li>{s}</li>)}</ul>
+    </header>
+    <div class="prose"><Content /></div>
+  </article>
+</Layout>
+
+<style>
+  .wrap { padding-top: var(--space-8); display: grid; gap: var(--space-6); }
+  .head { display: grid; gap: var(--space-4); max-width: var(--measure); }
+  .meta { font-size: var(--font-size-label); color: var(--color-foreground-muted); }
+  .lead { font-size: var(--font-size-lead); color: var(--color-foreground-muted); }
+  .stack { list-style: none; margin: 0; padding: 0; display: flex; flex-wrap: wrap; gap: var(--space-2); }
+  .stack li { padding: var(--space-1) var(--space-2); font-size: var(--font-size-caption); background: var(--color-surface-alt); border-radius: var(--radius-sm); }
+</style>
