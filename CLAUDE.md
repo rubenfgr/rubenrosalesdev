@@ -27,7 +27,7 @@ Web pública de rubenrosales.dev: servicios, proyectos y blog. Astro estático, 
 
 ## Comandos
 
-Ver `package.json`. Antes de dar una tarea por terminada: check de tipos, build y revisión visual en claro y oscuro.
+Ver `package.json`. Antes de dar una tarea por terminada: check de tipos, build y revisión visual.
 
 ## Blog
 

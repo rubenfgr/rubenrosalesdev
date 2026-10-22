@@ -43,17 +43,6 @@ const light = codeTheme('rr-light', 'light', {
   function: '#635234',
   punctuation: '#444F4C',
 });
-const dark = codeTheme('rr-dark', 'dark', {
-  background: '#2B3533',
-  foreground: '#E6E8E3',
-  comment: '#9AA39F',
-  keyword: '#7FB0C2',
-  string: '#A9B68F',
-  number: '#D88A72',
-  function: '#CDB582',
-  punctuation: '#B9BFB9',
-});
-
 export default defineConfig({
   site: 'https://rubenrosales.dev',
   // Sin sesiones (no se crea KV) y con imágenes optimizadas en el build (no se usa el binding de Images).
@@ -74,9 +63,8 @@ export default defineConfig({
   integrations: [
     sitemap(),
     expressiveCode({
-      themes: /** @type {Loose} */ ([light, dark]),
-      themeCssSelector: (theme) => `[data-theme='${theme.type}']`,
-      useDarkModeMediaQuery: true,
+      themes: /** @type {Loose} */ ([light]),
+      useDarkModeMediaQuery: false,
       styleOverrides: {
         borderRadius: 'var(--radius-md)',
         borderColor: 'var(--color-border)',

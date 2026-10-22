@@ -2,7 +2,6 @@
 import { Menu, X } from '@lucide/astro';
 import { navLinks } from '../data/site';
 import Logo from './Logo.astro';
-import ThemeToggle from './ThemeToggle.astro';
 
 const path = Astro.url.pathname.replace(/\/$/, '') || '/';
 const isCurrent = (href: string) => path === href || path.startsWith(`${href}/`);
@@ -33,7 +32,6 @@ const isCurrent = (href: string) => path === href || path.startsWith(`${href}/`)
     </nav>
 
     <div class="actions">
-      <ThemeToggle />
       <button
         type="button"
         class="menu-btn"
