@@ -1,0 +1,122 @@
+---
+const steps = [
+  { title: 'Llega el pedido.', text: 'Un email con el pedido en PDF.' },
+  { title: 'Se extraen los datos.', text: 'Cliente, productos, cantidades y fecha de entrega.' },
+  { title: 'Se validan.', text: 'Contra el catálogo y la ficha del cliente.' },
+  {
+    title: 'Se registra o se avisa.',
+    text: 'Si todo cuadra, se da de alta en el programa de gestión. Si algo no cuadra, se avisa a una persona con el motivo.',
+  },
+];
+---
+
+<div class="demo" data-demo>
+  <p class="tag">Ejemplo ilustrativo</p>
+
+  <div class="frame">
+    <p class="before"><strong>Antes:</strong> Una persona abre el email, lee el PDF y teclea cada línea del pedido.</p>
+
+    <ol class="steps">
+      {
+        steps.map((s, i) => (
+          <li data-step>
+            <span class="num" aria-hidden="true">{i + 1}</span>
+            <div>
+              <h3>{s.title}</h3>
+              <p>{s.text}</p>
+            </div>
+          </li>
+        ))
+      }
+    </ol>
+
+    <div class="controls" data-controls hidden>
+      <button type="button" class="btn btn-secondary" data-prev>Anterior</button>
+      <span class="count" data-count></span>
+      <button type="button" class="btn btn-secondary" data-next>Siguiente</button>
+    </div>
+    <p class="visually-hidden" aria-live="polite" data-live></p>
+
+    <p class="after"><strong>Después:</strong> La persona solo revisa las excepciones.</p>
+  </div>
+
+  <p class="fine">
+    La IA no decide sola: cuando un dato no es fiable, el pedido queda pendiente de revisión humana.
+  </p>
+</div>
+
+<script>
+  document.querySelectorAll<HTMLElement>('[data-demo]').forEach((root) => {
+    const steps = [...root.querySelectorAll<HTMLElement>('[data-step]')];
+    const controls = root.querySelector<HTMLElement>('[data-controls]');
+    const prev = root.querySelector<HTMLButtonElement>('[data-prev]');
+    const next = root.querySelector<HTMLButtonElement>('[data-next]');
+    const count = root.querySelector<HTMLElement>('[data-count]');
+    const live = root.querySelector<HTMLElement>('[data-live]');
+    if (!controls || !prev || !next || !count || !live) return;
+
+    let i = 0;
+    root.classList.add('enhanced');
+    controls.hidden = false;
+
+    const show = (n: number, announce: boolean) => {
+      i = Math.min(Math.max(n, 0), steps.length - 1);
+      steps.forEach((s, idx) => {
+        s.hidden = idx !== i;
+      });
+      count.textContent = `Paso ${i + 1} de ${steps.length}`;
+      prev.disabled = i === 0;
+      next.disabled = i === steps.length - 1;
+      const step = steps[i];
+      if (announce && step) live.textContent = `Paso ${i + 1} de ${steps.length}: ${step.textContent?.replace(/\s+/g, ' ').trim()}`;
+    };
+
+    prev.addEventListener('click', () => show(i - 1, true));
+    next.addEventListener('click', () => show(i + 1, true));
+    root.addEventListener('keydown', (e) => {
+      if (e.key === 'ArrowLeft') show(i - 1, true);
+      if (e.key === 'ArrowRight') show(i + 1, true);
+    });
+    show(0, false);
+  });
+</script>
+
+<style>
+  .demo { display: grid; gap: var(--space-4); max-width: var(--container-text); }
+  .tag {
+    justify-self: start;
+    padding: var(--space-1) var(--space-3);
+    font-size: var(--font-size-caption);
+    font-weight: var(--font-weight-medium);
+    color: var(--color-info);
+    background: var(--color-info-surface);
+    border-radius: var(--radius-sm);
+  }
+  .frame {
+    display: grid;
+    gap: var(--space-5);
+    padding: var(--space-5);
+    background: var(--color-surface);
+    border: var(--border-width-thin) solid var(--color-border);
+    border-radius: var(--radius-lg);
+  }
+  .steps { list-style: none; margin: 0; padding: 0; display: grid; gap: var(--space-4); }
+  .steps li { display: grid; grid-template-columns: var(--space-6) 1fr; gap: var(--space-3); }
+  .steps li[hidden] { display: none; }
+  .num {
+    display: grid;
+    place-items: center;
+    width: var(--space-6);
+    height: var(--space-6);
+    border-radius: var(--radius-md);
+    background: var(--color-primary);
+    color: var(--color-primary-foreground);
+    font-variant-numeric: tabular-nums;
+    font-weight: var(--font-weight-medium);
+  }
+  h3 { font-stretch: var(--font-width-body); font-size: var(--font-size-body); letter-spacing: 0; }
+  .controls { display: flex; align-items: center; gap: var(--space-4); flex-wrap: wrap; }
+  .count { font-size: var(--font-size-label); color: var(--color-foreground-muted); font-variant-numeric: tabular-nums; }
+  .btn:disabled { opacity: 0.5; cursor: not-allowed; }
+  .fine { font-size: var(--font-size-label); color: var(--color-foreground-muted); }
+</style>

@@ -1,0 +1,45 @@
+---
+import type { Service } from '../data/services';
+
+interface Props {
+  service: Service;
+  detailed?: boolean;
+}
+
+const { service, detailed = false } = Astro.props;
+---
+
+<article class="service">
+  <h3>{service.title}</h3>
+  <p>{service.summary}</p>
+  <ul>{service.points.map((p) => <li>{p}</li>)}</ul>
+  {
+    detailed && (
+      <dl>
+        <dt>Para quién es</dt>
+        <dd>{service.forWhom}</dd>
+        <dt>Qué recibes</dt>
+        <dd>{service.receive}</dd>
+        <dt>Cuándo no lo recomiendo</dt>
+        <dd>{service.notRecommended}</dd>
+      </dl>
+    )
+  }
+</article>
+
+<style>
+  .service {
+    display: grid;
+    gap: var(--space-4);
+    align-content: start;
+    padding: var(--space-5);
+    background: var(--color-surface);
+    border: var(--border-width-thin) solid var(--color-border);
+    border-radius: var(--radius-lg);
+  }
+  h3 { font-size: var(--font-size-h4); font-stretch: var(--font-width-body); letter-spacing: 0; }
+  ul { margin: 0; padding-inline-start: var(--space-5); display: grid; gap: var(--space-2); }
+  dl { margin: 0; display: grid; gap: var(--space-1); }
+  dt { font-weight: var(--font-weight-medium); margin-top: var(--space-3); }
+  dd { margin: 0; color: var(--color-foreground-muted); }
+</style>

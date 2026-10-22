@@ -1,0 +1,24 @@
+---
+import ContactForm from '../components/ContactForm.astro';
+import Section from '../components/Section.astro';
+import Layout from '../layouts/Layout.astro';
+---
+
+<Layout
+  title="Contacto"
+  description="Cuéntame qué quieres resolver. Te respondo con una primera valoración y, si tiene sentido, con los siguientes pasos."
+>
+  <Section
+    as="h1"
+    id="contacto"
+    title="Cuéntame qué quieres resolver"
+    lead="Describe el proceso o la idea con tus palabras. Te respondo con una primera valoración y, si tiene sentido, con los siguientes pasos."
+  >
+    <p class="fine">[VERIFICAR: plazo de respuesta que Rubén puede cumplir siempre]</p>
+    <ContactForm />
+  </Section>
+</Layout>
+
+<style>
+  .fine { margin-bottom: var(--space-5); color: var(--color-foreground-muted); }
+</style>

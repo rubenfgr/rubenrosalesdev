@@ -1,0 +1,54 @@
+---
+import Section from '../components/Section.astro';
+import Layout from '../layouts/Layout.astro';
+
+const principles = [
+  ['Claridad antes que complejidad.', 'Si no se puede explicar en una frase, todavía no está bien planteado.'],
+  ['Sin sobreingeniería.', 'La solución más sencilla que funciona suele ser la que mejor envejece.'],
+  ['Comunicación directa.', 'Te digo lo que pienso, incluido cuando algo no merece la pena.'],
+  ['Pensado para durar.', 'Código mantenible, documentado y sin dependencias innecesarias.'],
+] as const;
+---
+
+<Layout
+  title="Sobre mí"
+  description="Arquitecto de soluciones y desarrollador. Tecnología para resolver problemas concretos de negocio, sin añadir capas."
+>
+  <Section
+    as="h1"
+    id="sobre-mi"
+    title="Sobre mí"
+    lead="Arquitecto de soluciones y desarrollador. Me dedico a que la tecnología resuelva problemas concretos de negocio, no a añadir capas."
+  >
+    <div class="prose">
+      <p>
+        Llevo más de 7 años diseñando y desarrollando software en proyectos de sectores muy distintos:
+        inmobiliario, agrícola, clínicas, automoción, gimnasios, perfumería y educación. He trabajado en
+        todo el recorrido: entender el problema, revisar requisitos, diseñar la arquitectura, desarrollar
+        y poner en producción.
+      </p>
+      <p>
+        Hoy me centro en automatización de procesos, integración de IA y aplicaciones web y móviles para
+        pymes y profesionales.
+      </p>
+
+      <h2>Principios</h2>
+      <ul>{principles.map(([t, d]) => <li><strong>{t}</strong> {d}</li>)}</ul>
+
+      <h2>Tecnologías</h2>
+      <p>[VERIFICAR: lista final de tecnologías]</p>
+
+      <h2>Formación</h2>
+      <ul>
+        <li>Técnico Superior en Desarrollo de Aplicaciones Web — I.E.S. Al-Ándalus</li>
+        <li>Técnico Superior en Desarrollo de Aplicaciones Multiplataforma — I.E.S. Al-Ándalus</li>
+      </ul>
+    </div>
+  </Section>
+</Layout>
+
+<style>
+  .prose { max-width: var(--measure); display: grid; gap: var(--space-4); }
+  .prose h2 { font-size: var(--font-size-h3); margin-top: var(--space-5); }
+  .prose ul { margin: 0; padding-inline-start: var(--space-5); display: grid; gap: var(--space-2); }
+</style>

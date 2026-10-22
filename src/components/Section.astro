@@ -1,0 +1,30 @@
+---
+interface Props {
+  title: string;
+  lead?: string;
+  id?: string;
+  as?: 'h1' | 'h2';
+}
+
+const { title, lead, id, as: Tag = 'h2' } = Astro.props;
+---
+
+<section class="section" id={id} aria-labelledby={id ? `${id}-t` : undefined}>
+  <div class="container">
+    <header class="head">
+      <Tag id={id ? `${id}-t` : undefined}>{title}</Tag>
+      {lead && <p class="lead">{lead}</p>}
+    </header>
+    <slot />
+  </div>
+</section>
+
+<style>
+  .section { padding-top: var(--space-section); }
+  .head { display: grid; gap: var(--space-4); margin-bottom: var(--space-7); }
+  .lead {
+    max-width: var(--measure);
+    font-size: var(--font-size-lead);
+    color: var(--color-foreground-muted);
+  }
+</style>

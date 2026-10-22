@@ -1,0 +1,19 @@
+---
+import Layout from '../layouts/Layout.astro';
+---
+
+<Layout title="Página no encontrada" noindex>
+  <div class="container wrap">
+    <h1>Esta página no existe</h1>
+    <p>Puede que el enlace haya cambiado. Prueba desde el inicio o en el blog.</p>
+    <p class="ctas">
+      <a class="btn btn-primary" href="/">Ir al inicio</a>
+      <a class="btn btn-secondary" href="/blog">Ir al blog</a>
+    </p>
+  </div>
+</Layout>
+
+<style>
+  .wrap { padding-top: var(--space-9); display: grid; gap: var(--space-4); justify-items: start; }
+  .ctas { display: flex; gap: var(--space-4); flex-wrap: wrap; }
+</style>

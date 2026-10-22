@@ -1,0 +1,26 @@
+---
+import Section from '../components/Section.astro';
+import ServiceBlock from '../components/ServiceBlock.astro';
+import { services } from '../data/services';
+import Layout from '../layouts/Layout.astro';
+---
+
+<Layout
+  title="Servicios"
+  description="Automatización, aplicaciones web y apps móviles para pymes y profesionales, con la solución más sencilla que resuelva el problema."
+>
+  <Section
+    as="h1"
+    id="servicios"
+    title="Servicios"
+    lead="Automatización, aplicaciones web y apps móviles para pymes y profesionales. Siempre con la misma regla: la solución más sencilla que resuelva el problema."
+  >
+    <div class="list">{services.map((s) => <ServiceBlock service={s} detailed />)}</div>
+    <p class="cta"><a class="btn btn-primary" href="/contacto">Cuéntame qué quieres resolver</a></p>
+  </Section>
+</Layout>
+
+<style>
+  .list { display: grid; gap: var(--grid-gutter); max-width: var(--container-text); }
+  .cta { margin-top: var(--space-6); }
+</style>

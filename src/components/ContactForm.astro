@@ -1,0 +1,117 @@
+---
+const options = ['Automatización e IA', 'Aplicación web', 'App móvil', 'No lo tengo claro'];
+---
+
+<form class="form" method="post" action="/api/contacto" data-contact novalidate>
+  <div class="field">
+    <label for="nombre">Nombre</label>
+    <input id="nombre" name="nombre" type="text" autocomplete="name" required maxlength="100" />
+    <p class="error" data-error-for="nombre" hidden></p>
+  </div>
+  <div class="field">
+    <label for="email">Email</label>
+    <input id="email" name="email" type="email" autocomplete="email" required maxlength="200" />
+    <p class="error" data-error-for="email" hidden></p>
+  </div>
+  <div class="field">
+    <label for="empresa">Empresa <span class="opt">(opcional)</span></label>
+    <input id="empresa" name="empresa" type="text" autocomplete="organization" maxlength="150" />
+  </div>
+  <div class="field">
+    <label for="servicio">¿Qué necesitas?</label>
+    <select id="servicio" name="servicio">
+      <option value="">Selecciona una opción</option>
+      {options.map((o) => <option value={o}>{o}</option>)}
+    </select>
+  </div>
+  <div class="field">
+    <label for="mensaje">Mensaje</label>
+    <textarea id="mensaje" name="mensaje" rows="6" required minlength="10" maxlength="4000"></textarea>
+    <p class="error" data-error-for="mensaje" hidden></p>
+  </div>
+
+  <!-- Antispam: campo señuelo (los humanos no lo ven) y marca de tiempo. -->
+  <div class="visually-hidden" aria-hidden="true">
+    <label>No rellenar <input type="text" name="web" tabindex="-1" autocomplete="off" /></label>
+  </div>
+  <input type="hidden" name="t" value="" data-t />
+
+  <p class="legal">
+    Al enviar este formulario, tus datos se usarán solo para responder a tu solicitud. Más información
+    en la <a href="/privacidad">Política de privacidad</a>.
+  </p>
+
+  <button type="submit" class="btn btn-primary">Enviar</button>
+  <p class="status" role="status" data-status></p>
+</form>
+
+<script>
+  const form = document.querySelector<HTMLFormElement>('[data-contact]');
+  if (form) {
+    const t = form.querySelector<HTMLInputElement>('[data-t]');
+    if (t) t.value = String(Date.now());
+    const status = form.querySelector<HTMLElement>('[data-status]');
+
+    const messages: Record<string, string> = {
+      nombre: 'Escribe tu nombre.',
+      email: 'Escribe un email válido.',
+      mensaje: 'Cuéntame un poco más (mínimo 10 caracteres).',
+    };
+
+    const validate = () => {
+      let first: HTMLElement | null = null;
+      for (const name of Object.keys(messages)) {
+        const input = form.elements.namedItem(name) as HTMLInputElement | null;
+        const err = form.querySelector<HTMLElement>(`[data-error-for="${name}"]`);
+        if (!input || !err) continue;
+        const ok = input.checkValidity();
+        err.hidden = ok;
+        err.textContent = ok ? '' : (messages[name] ?? '');
+        input.setAttribute('aria-invalid', String(!ok));
+        if (ok) input.removeAttribute('aria-describedby');
+        else input.setAttribute('aria-describedby', err.id || (err.id = `err-${name}`));
+        if (!ok && !first) first = input;
+      }
+      (first as HTMLElement | null)?.focus();
+      return !first;
+    };
+
+    form.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      if (!status || !validate()) return;
+      status.textContent = 'Enviando…';
+      try {
+        const res = await fetch(form.action, { method: 'POST', body: new FormData(form) });
+        if (!res.ok) throw new Error(String(res.status));
+        status.textContent = 'Gracias. He recibido tu mensaje y te responderé lo antes posible.';
+        form.reset();
+      } catch {
+        status.textContent =
+          'No se ha podido enviar el mensaje. Prueba de nuevo o escríbeme a [VERIFICAR: email de contacto].';
+      }
+    });
+  }
+</script>
+
+<style>
+  .form { display: grid; gap: var(--space-5); max-width: var(--container-text); }
+  .field { display: grid; gap: var(--space-2); }
+  label { font-weight: var(--font-weight-medium); }
+  .opt { font-weight: var(--font-weight-regular); color: var(--color-foreground-muted); }
+  input, select, textarea {
+    width: 100%;
+    padding: var(--space-3);
+    font: inherit;
+    color: var(--color-foreground);
+    background: var(--color-surface);
+    border: var(--border-width-thin) solid var(--color-border-strong);
+    border-radius: var(--radius-md);
+  }
+  input[aria-invalid='true'], textarea[aria-invalid='true'] {
+    border-color: var(--color-destructive);
+    border-width: var(--border-width-thick);
+  }
+  .error { color: var(--color-destructive); font-size: var(--font-size-label); }
+  .legal, .status { font-size: var(--font-size-label); color: var(--color-foreground-muted); }
+  .btn { justify-self: start; }
+</style>

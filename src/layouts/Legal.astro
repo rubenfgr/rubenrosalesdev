@@ -1,0 +1,25 @@
+---
+import Layout from './Layout.astro';
+
+interface Props {
+  title: string;
+  description: string;
+}
+
+const { title, description } = Astro.props;
+---
+
+<Layout title={title} description={description}>
+  <article class="container legal">
+    <h1>{title}</h1>
+    <slot />
+  </article>
+</Layout>
+
+<style is:global>
+  .legal { padding-top: var(--space-8); max-width: calc(var(--container-text) + 2 * var(--container-padding)); }
+  .legal h2 { font-size: var(--font-size-h4); font-stretch: var(--font-width-body); letter-spacing: 0; margin-top: var(--space-7); }
+  .legal h1 + * { margin-top: var(--space-5); }
+  .legal p, .legal ul { margin-top: var(--space-3); }
+  .legal ul { padding-inline-start: var(--space-5); }
+</style>

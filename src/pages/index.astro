@@ -1,10 +1,107 @@
 ---
+import { getCollection } from 'astro:content';
+import HeroMotif from '../components/HeroMotif.astro';
+import ProcessDemo from '../components/ProcessDemo.astro';
+import ProjectCard from '../components/ProjectCard.astro';
+import Section from '../components/Section.astro';
+import ServiceBlock from '../components/ServiceBlock.astro';
+import { services } from '../data/services';
 import Layout from '../layouts/Layout.astro';
+
+const featured = (await getCollection('projects', (p) => p.data.published && p.data.featured))
+  .sort((a, b) => a.data.order - b.data.order)
+  .slice(0, 3);
 ---
 
 <Layout>
-  <div class="container">
-    <h1>Base del proyecto</h1>
-    <p>Provisional hasta la Fase 2.</p>
-  </div>
+  <section class="hero">
+    <HeroMotif />
+    <div class="container hero-inner">
+      <h1>Software y automatizaciones para que tu negocio funcione con menos trabajo manual.</h1>
+      <p class="lead">
+        Soy Rubén Rosales. Diseño y desarrollo aplicaciones web y móviles, automatizaciones e
+        integraciones con IA para pymes y profesionales. Antes de proponer nada, entiendo cómo trabajas
+        y te digo qué merece la pena hacer y qué no.
+      </p>
+      <p class="ctas">
+        <a class="btn btn-primary" href="/contacto">Cuéntame qué quieres resolver</a>
+        <a class="btn btn-secondary" href="/proyectos">Ver proyectos</a>
+      </p>
+    </div>
+  </section>
+
+  <Section
+    id="servicios"
+    title="En qué puedo ayudarte"
+    lead="Tres tipos de trabajo, un mismo criterio: resolver un problema concreto con la solución más sencilla que funcione."
+  >
+    <div class="grid">{services.map((s) => <ServiceBlock service={s} />)}</div>
+  </Section>
+
+  <Section
+    id="demo"
+    title="Así se ve una automatización"
+    lead="Un ejemplo ilustrativo: un pedido que llega por email y termina registrado en el programa de gestión sin que nadie lo teclee."
+  >
+    <ProcessDemo />
+  </Section>
+
+  {
+    featured.length > 0 && (
+      <Section
+        id="proyectos"
+        title="Experiencia"
+        lead="Una selección de sistemas en los que he trabajado: automatización documental, integraciones y aplicaciones de gestión."
+      >
+        <div class="grid">{featured.map((p) => <ProjectCard project={p} />)}</div>
+        <p class="more"><a href="/proyectos">Ver todos los proyectos</a></p>
+      </Section>
+    )
+  }
+
+  <Section id="empezar" title="Cómo empezamos">
+    <ol class="steps">
+      <li><strong>Una conversación.</strong> Me cuentas qué te quita tiempo. Sin compromiso y sin jerga.</li>
+      <li><strong>Una propuesta clara.</strong> Qué haría, qué no, cuánto cuesta y cuánto cuesta mantenerlo.</li>
+      <li><strong>Una primera entrega.</strong> Empiezo por la parte que más trabajo te ahorra, para que lo notes pronto.</li>
+    </ol>
+    <p class="fine">Si lo que necesitas se resuelve con una herramienta que ya existe, te lo diré antes de construir nada.</p>
+  </Section>
+
+  <Section id="sobre-mi" title="Quién está detrás">
+    <div class="about">
+      <p>
+        Soy Rubén Rosales. Llevo más de 7 años diseñando y desarrollando software para sectores muy
+        distintos: inmobiliario, agrícola, clínicas, automoción, gimnasios y educación. Mi trabajo empieza
+        por entender el problema y termina en algo que se pueda mantener sin depender de mí para todo.
+      </p>
+      <p><a href="/sobre-mi">Más sobre mí</a></p>
+    </div>
+  </Section>
+
+  <Section id="cierre" title="¿Tienes un proceso que te quita horas cada semana?">
+    <p><a class="btn btn-primary" href="/contacto">Cuéntamelo</a></p>
+  </Section>
 </Layout>
+
+<style>
+  .hero {
+    position: relative;
+    margin-top: calc(var(--nav-height) * -1);
+    padding-top: calc(var(--nav-height) + var(--space-9));
+    padding-bottom: var(--space-9);
+    overflow: hidden;
+  }
+  .hero-inner { position: relative; z-index: var(--z-raised); display: grid; gap: var(--space-5); }
+  .hero h1 { max-width: 20ch; }
+  .lead { max-width: var(--measure); font-size: var(--font-size-lead); color: var(--color-foreground-muted); }
+  .ctas { display: flex; flex-wrap: wrap; gap: var(--space-4); }
+  .grid { display: grid; gap: var(--grid-gutter); }
+  .steps { margin: 0; padding-inline-start: var(--space-5); display: grid; gap: var(--space-3); max-width: var(--measure); }
+  .fine { margin-top: var(--space-5); font-size: var(--font-size-label); color: var(--color-foreground-muted); }
+  .about { display: grid; gap: var(--space-4); max-width: var(--measure); }
+  .more { margin-top: var(--space-5); }
+  @media (min-width: 64rem) {
+    .grid { grid-template-columns: repeat(3, 1fr); }
+  }
+</style>
