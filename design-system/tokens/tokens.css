@@ -1,0 +1,343 @@
+/* =====================================================================
+   rubenrosales.dev — Design tokens
+   Fuente de verdad. Primitivos (--rr-<familia>-<paso>) + semánticos
+   (--color-*, --font-*, --space-*, ...). Los componentes usan SOLO
+   semánticos; los primitivos solo se referencian desde este archivo.
+   Tema: [data-theme="light"|"dark"] y, sin atributo, prefers-color-scheme.
+   ===================================================================== */
+
+:root {
+  /* ---------- Primitivos: color ---------- */
+
+  /* Stone — neutro mineral (caliza, granito, pizarra) */
+  --rr-stone-50:  #F4F5F2;
+  --rr-stone-100: #E6E8E3;
+  --rr-stone-200: #D4D8D2;
+  --rr-stone-300: #B9BFB9;
+  --rr-stone-400: #9AA39F;
+  --rr-stone-500: #7A847F;
+  --rr-stone-600: #5C6662;
+  --rr-stone-700: #444F4C;
+  --rr-stone-800: #333E3B;
+  --rr-stone-900: #2B3533;
+  --rr-stone-950: #1E2725;
+
+  /* Sea — mar de fondo (primario) */
+  --rr-sea-50:  #EEF5F8;
+  --rr-sea-100: #D5E7EE;
+  --rr-sea-200: #ADCFDC;
+  --rr-sea-300: #7FB0C2;
+  --rr-sea-400: #5592A8;
+  --rr-sea-500: #3A768D;
+  --rr-sea-600: #285A6E;
+  --rr-sea-700: #214B5C;
+  --rr-sea-800: #1B3C4A;
+  --rr-sea-900: #152F3A;
+  --rr-sea-950: #0E2029;
+
+  /* Lichen — liquen (secundario, éxito) */
+  --rr-lichen-50:  #F2F4EE;
+  --rr-lichen-100: #E2E7D9;
+  --rr-lichen-200: #C7D0B5;
+  --rr-lichen-300: #A9B68F;
+  --rr-lichen-400: #8E9C73;
+  --rr-lichen-500: #7D8B63;
+  --rr-lichen-600: #64714E;
+  --rr-lichen-700: #4F5A3E;
+  --rr-lichen-800: #3D4631;
+  --rr-lichen-900: #2D3425;
+  --rr-lichen-950: #1C2117;
+
+  /* Esparto — acento cálido, aviso */
+  --rr-esparto-50:  #F8F4EA;
+  --rr-esparto-100: #EFE6D0;
+  --rr-esparto-200: #E0CEA6;
+  --rr-esparto-300: #CDB582;
+  --rr-esparto-400: #B79E6A;
+  --rr-esparto-500: #9E8453;
+  --rr-esparto-600: #7F6941;
+  --rr-esparto-700: #635234;
+  --rr-esparto-800: #4A3D28;
+  --rr-esparto-900: #33291C;
+  --rr-esparto-950: #211B12;
+
+  /* Almagra — tierra roja (error / destructivo) */
+  --rr-almagra-50:  #FAF0EC;
+  --rr-almagra-100: #F3DAD1;
+  --rr-almagra-200: #E7B4A3;
+  --rr-almagra-300: #D88A72;
+  --rr-almagra-400: #C4654A;
+  --rr-almagra-500: #A84A31;
+  --rr-almagra-600: #8E3B26;
+  --rr-almagra-700: #73301F;
+  --rr-almagra-800: #5A2619;
+  --rr-almagra-900: #421C13;
+  --rr-almagra-950: #2A110B;
+
+  /* ---------- Tipografía ---------- */
+  --font-family-sans: "Archivo Variable", "Archivo", system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+  --font-family-mono: ui-monospace, "SFMono-Regular", "JetBrains Mono", Menlo, Consolas, monospace;
+
+  --font-width-display: 118%;   /* eje wdth de Archivo */
+  --font-width-body: 100%;
+
+  --font-weight-regular: 400;
+  --font-weight-medium: 500;
+  --font-weight-strong: 620;    /* titulares y wordmark */
+
+  /* Escala 1.25 (tercera mayor), base 1rem. Los tres mayores fluyen con clamp. */
+  --font-size-caption: 0.8rem;                                   /* 12.8px */
+  --font-size-label:   0.875rem;                                 /* 14px  */
+  --font-size-body:    1rem;                                     /* 16px  */
+  --font-size-lead:    1.25rem;                                  /* 20px  */
+  --font-size-h4:      1.5625rem;                                /* 25px  */
+  --font-size-h3:      clamp(1.5625rem, 1.3rem + 1.1vw, 1.953rem); /* 25→31px */
+  --font-size-h2:      clamp(1.953rem, 1.5rem + 1.9vw, 2.441rem);  /* 31→39px */
+  --font-size-display: clamp(2.441rem, 1.7rem + 3.2vw, 3.815rem);  /* 39→61px */
+
+  --line-height-tight: 1.1;   /* display */
+  --line-height-snug: 1.2;    /* headings */
+  --line-height-normal: 1.45; /* labels, UI */
+  --line-height-relaxed: 1.6; /* body */
+
+  --letter-spacing-display: -0.015em;
+  --letter-spacing-heading: -0.01em;
+  --letter-spacing-body: 0;
+
+  --measure: 66ch;            /* longitud máxima de línea en texto corrido */
+
+  /* ---------- Espaciado (base 4px) ---------- */
+  --space-0: 0;
+  --space-1: 0.25rem;  /* 4  */
+  --space-2: 0.5rem;   /* 8  */
+  --space-3: 0.75rem;  /* 12 */
+  --space-4: 1rem;     /* 16 */
+  --space-5: 1.5rem;   /* 24 */
+  --space-6: 2rem;     /* 32 */
+  --space-7: 3rem;     /* 48 */
+  --space-8: 4rem;     /* 64 */
+  --space-9: 6rem;     /* 96 */
+  --space-10: 8rem;    /* 128 */
+
+  /* ---------- Layout ---------- */
+  --container-max: 72rem;     /* 1152px */
+  --container-text: 42rem;    /* columnas de lectura */
+  --container-padding: clamp(1.25rem, 4vw, 3rem);
+  --space-section: clamp(4rem, 3rem + 5vw, 8rem); /* separación vertical entre secciones (64→128px) */
+  --nav-height: 4rem;                              /* navegación fija */
+  --grid-columns: 12;
+  --grid-gutter: clamp(1rem, 2.5vw, 2rem);
+  /* Breakpoints (referencia; las media queries no aceptan var()):
+     sm 40rem (640) · md 64rem (1024) · lg 80rem (1280) */
+  --breakpoint-sm: 40rem;
+  --breakpoint-md: 64rem;
+  --breakpoint-lg: 80rem;
+
+  /* ---------- Geometría ---------- */
+  --radius-none: 0;
+  --radius-sm: 2px;
+  --radius-md: 4px;
+  --radius-lg: 6px;      /* máximo: tarjetas, paneles */
+  --radius-full: 9999px; /* solo avatares o indicadores circulares */
+
+  --border-width-thin: 1px;
+  --border-width-thick: 2px;
+  --focus-ring-width: 2px;
+  --focus-ring-offset: 3px;
+
+  /* ---------- Elevación (sombras tintadas en stone, nunca negras) ---------- */
+  --shadow-sm: 0 1px 2px rgb(30 39 37 / 0.08);
+  --shadow-md: 0 2px 4px rgb(30 39 37 / 0.06), 0 8px 24px rgb(30 39 37 / 0.08);
+
+  --z-base: 0;
+  --z-raised: 10;
+  --z-sticky: 100;
+  --z-overlay: 1000;
+  --z-modal: 1100;
+  --z-toast: 1200;
+
+  /* ---------- Movimiento ---------- */
+  --duration-fast: 120ms;   /* hover, foco */
+  --duration-base: 200ms;   /* desplegables, cambios de estado */
+  --duration-slow: 320ms;   /* entradas de panel */
+  --duration-ambient: 120s; /* único movimiento ambiental permitido: motivo del hero */
+  --ease-out: cubic-bezier(0.2, 0, 0, 1);
+  --ease-in-out: cubic-bezier(0.4, 0, 0.2, 1);
+
+  /* ---------- Iconos (Lucide) ---------- */
+  --icon-size-sm: 16px;
+  --icon-size-md: 20px;
+  --icon-size-lg: 24px;
+  --icon-stroke: 1.5;
+
+  /* ---------- Gráficos (orden de uso) ---------- */
+  --chart-1: var(--rr-sea-600);
+  --chart-2: var(--rr-esparto-400);
+  --chart-3: var(--rr-lichen-700);
+  --chart-4: var(--rr-almagra-400);
+  --chart-5: var(--rr-sea-300);
+  --chart-6: var(--rr-stone-500);
+}
+
+/* ---------- Tema claro (por defecto) ---------- */
+:root,
+[data-theme="light"] {
+  color-scheme: light;
+
+  --color-background: var(--rr-stone-100);
+  --color-surface: var(--rr-stone-50);
+  --color-surface-alt: var(--rr-stone-200);
+
+  --color-foreground: var(--rr-stone-900);
+  --color-foreground-muted: var(--rr-stone-600);
+  --color-foreground-subtle: var(--rr-stone-500);   /* solo texto grande o no esencial */
+  --color-foreground-inverse: var(--rr-stone-50);
+
+  --color-border: var(--rr-stone-200);
+  --color-border-strong: var(--rr-stone-500);
+
+  --color-primary: var(--rr-sea-600);
+  --color-primary-hover: var(--rr-sea-700);
+  --color-primary-foreground: var(--rr-stone-50);
+  --color-secondary: var(--rr-lichen-700);
+  --color-secondary-foreground: var(--rr-stone-50);
+  --color-accent: var(--rr-esparto-400);            /* decorativo, nunca texto */
+
+  --color-focus: var(--rr-sea-600);
+
+  --color-success: var(--rr-lichen-700);
+  --color-warning: var(--rr-esparto-700);
+  --color-destructive: var(--rr-almagra-600);
+  --color-info: var(--rr-sea-700);
+
+  --color-brand-mark: var(--rr-stone-900);
+  --color-brand-piece: var(--rr-sea-600);
+
+  --color-info-surface: var(--rr-sea-50);
+  --color-success-surface: var(--rr-lichen-50);
+  --color-warning-surface: var(--rr-esparto-50);
+  --color-destructive-surface: var(--rr-almagra-50);
+
+  --color-code-background: var(--rr-stone-50);
+  --color-code-foreground: var(--rr-stone-900);
+  --color-code-comment: var(--rr-stone-600);
+  --color-code-keyword: var(--rr-sea-600);
+  --color-code-string: var(--rr-lichen-700);
+  --color-code-number: var(--rr-almagra-600);
+  --color-code-function: var(--rr-esparto-700);
+  --color-code-punctuation: var(--rr-stone-700);
+}
+
+/* ---------- Tema oscuro ---------- */
+[data-theme="dark"] {
+  color-scheme: dark;
+
+  --color-background: var(--rr-stone-950);
+  --color-surface: var(--rr-stone-900);
+  --color-surface-alt: var(--rr-stone-800);
+
+  --color-foreground: var(--rr-stone-100);
+  --color-foreground-muted: var(--rr-stone-400);
+  --color-foreground-subtle: var(--rr-stone-500);
+  --color-foreground-inverse: var(--rr-stone-900);
+
+  --color-border: var(--rr-stone-800);
+  --color-border-strong: var(--rr-stone-500);
+
+  --color-primary: var(--rr-sea-300);
+  --color-primary-hover: var(--rr-sea-200);
+  --color-primary-foreground: var(--rr-stone-950);
+  --color-secondary: var(--rr-lichen-300);
+  --color-secondary-foreground: var(--rr-stone-950);
+  --color-accent: var(--rr-esparto-400);
+
+  --color-focus: var(--rr-sea-300);
+
+  --color-success: var(--rr-lichen-300);
+  --color-warning: var(--rr-esparto-300);
+  --color-destructive: var(--rr-almagra-300);
+  --color-info: var(--rr-sea-200);
+
+  --color-brand-mark: var(--rr-stone-100);
+  --color-brand-piece: var(--rr-sea-300);
+
+  --color-info-surface: var(--rr-sea-950);
+  --color-success-surface: var(--rr-lichen-950);
+  --color-warning-surface: var(--rr-esparto-950);
+  --color-destructive-surface: var(--rr-almagra-950);
+
+  --color-code-background: var(--rr-stone-900);
+  --color-code-foreground: var(--rr-stone-100);
+  --color-code-comment: var(--rr-stone-400);
+  --color-code-keyword: var(--rr-sea-300);
+  --color-code-string: var(--rr-lichen-300);
+  --color-code-number: var(--rr-almagra-300);
+  --color-code-function: var(--rr-esparto-300);
+  --color-code-punctuation: var(--rr-stone-300);
+
+  --shadow-sm: 0 1px 2px rgb(0 0 0 / 0.3);
+  --shadow-md: 0 2px 4px rgb(0 0 0 / 0.25), 0 8px 24px rgb(0 0 0 / 0.3);
+}
+
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    color-scheme: dark;
+
+    --color-background: var(--rr-stone-950);
+    --color-surface: var(--rr-stone-900);
+    --color-surface-alt: var(--rr-stone-800);
+
+    --color-foreground: var(--rr-stone-100);
+    --color-foreground-muted: var(--rr-stone-400);
+    --color-foreground-subtle: var(--rr-stone-500);
+    --color-foreground-inverse: var(--rr-stone-900);
+
+    --color-border: var(--rr-stone-800);
+    --color-border-strong: var(--rr-stone-500);
+
+    --color-primary: var(--rr-sea-300);
+    --color-primary-hover: var(--rr-sea-200);
+    --color-primary-foreground: var(--rr-stone-950);
+    --color-secondary: var(--rr-lichen-300);
+    --color-secondary-foreground: var(--rr-stone-950);
+    --color-accent: var(--rr-esparto-400);
+
+    --color-focus: var(--rr-sea-300);
+
+    --color-success: var(--rr-lichen-300);
+    --color-warning: var(--rr-esparto-300);
+    --color-destructive: var(--rr-almagra-300);
+    --color-info: var(--rr-sea-200);
+
+    --color-brand-mark: var(--rr-stone-100);
+    --color-brand-piece: var(--rr-sea-300);
+
+    --color-info-surface: var(--rr-sea-950);
+    --color-success-surface: var(--rr-lichen-950);
+    --color-warning-surface: var(--rr-esparto-950);
+    --color-destructive-surface: var(--rr-almagra-950);
+
+    --color-code-background: var(--rr-stone-900);
+    --color-code-foreground: var(--rr-stone-100);
+    --color-code-comment: var(--rr-stone-400);
+    --color-code-keyword: var(--rr-sea-300);
+    --color-code-string: var(--rr-lichen-300);
+    --color-code-number: var(--rr-almagra-300);
+    --color-code-function: var(--rr-esparto-300);
+    --color-code-punctuation: var(--rr-stone-300);
+
+    --shadow-sm: 0 1px 2px rgb(0 0 0 / 0.3);
+    --shadow-md: 0 2px 4px rgb(0 0 0 / 0.25), 0 8px 24px rgb(0 0 0 / 0.3);
+  }
+}
+
+/* ---------- Movimiento reducido ---------- */
+/* --duration-ambient no se anula aquí: el componente que la use debe
+   declarar `animation: none` bajo esta misma media query. */
+@media (prefers-reduced-motion: reduce) {
+  :root {
+    --duration-fast: 0ms;
+    --duration-base: 0ms;
+    --duration-slow: 0ms;
+  }
+}
