@@ -1,0 +1,34 @@
+{
+  "main": [
+    {
+      "href": "/servicios",
+      "label": "Servicios"
+    },
+    {
+      "href": "/proyectos",
+      "label": "Proyectos"
+    },
+    {
+      "href": "/sobre-mi",
+      "label": "Cómo trabajo"
+    },
+    {
+      "href": "/blog",
+      "label": "Blog"
+    }
+  ],
+  "legal": [
+    {
+      "href": "/aviso-legal",
+      "label": "Aviso legal"
+    },
+    {
+      "href": "/privacidad",
+      "label": "Privacidad"
+    },
+    {
+      "href": "/cookies",
+      "label": "Cookies"
+    }
+  ]
+}

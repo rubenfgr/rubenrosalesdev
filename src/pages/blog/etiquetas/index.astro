@@ -1,0 +1,30 @@
+---
+import Section from '../../../components/Section.astro';
+import Layout from '../../../layouts/Layout.astro';
+import { getPosts, tagCounts } from '../../../lib/blog';
+
+const tags = tagCounts(await getPosts());
+---
+
+<Layout title="Etiquetas del blog" description="Todas las etiquetas del blog con el número de artículos de cada una.">
+  <Section as="h1" id="etiquetas" title="Etiquetas">
+    {
+      tags.length === 0 ? (
+        <p>Todavía no hay etiquetas.</p>
+      ) : (
+        <ul class="tags">
+          {tags.map(([t, n]) => <li><a href={`/blog/etiquetas/${t}`}>{t} <span>({n})</span></a></li>)}
+        </ul>
+      )
+    }
+    <p class="back"><a href="/blog">← Todos los artículos</a></p>
+  </Section>
+</Layout>
+
+<style>
+  .tags { list-style: none; margin: 0; padding: 0; display: flex; flex-wrap: wrap; gap: var(--space-3); }
+  .tags a { display: inline-block; padding: var(--space-2) var(--space-3); background: var(--color-surface-alt); color: var(--color-foreground); border-radius: var(--radius-md); text-decoration: none; }
+  .tags a:hover { color: var(--color-primary); }
+  .tags span { color: var(--color-foreground-muted); font-variant-numeric: tabular-nums; }
+  .back { margin-top: var(--space-6); }
+</style>

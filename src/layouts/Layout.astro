@@ -8,9 +8,10 @@ interface Props {
   title?: string;
   description?: string;
   noindex?: boolean;
+  ogType?: 'website' | 'article';
 }
 
-const { title, description = site.description, noindex = false } = Astro.props;
+const { title, description = site.description, noindex = false, ogType = 'website' } = Astro.props;
 const fullTitle = title ? `${title} · ${site.name}` : site.title;
 const canonical = new URL(Astro.url.pathname, site.url).href;
 ---
@@ -24,8 +25,9 @@ const canonical = new URL(Astro.url.pathname, site.url).href;
     <meta name="description" content={description} />
     <link rel="canonical" href={canonical} />
     <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+    <link rel="alternate" type="application/rss+xml" title="Blog de Rubén Rosales" href="/rss.xml" />
     {noindex && <meta name="robots" content="noindex" />}
-    <meta property="og:type" content="website" />
+    <meta property="og:type" content={ogType} />
     <meta property="og:locale" content="es_ES" />
     <meta property="og:site_name" content={site.name} />
     <meta property="og:title" content={fullTitle} />

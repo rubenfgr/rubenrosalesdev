@@ -1,0 +1,22 @@
+---
+import type { GetStaticPaths } from 'astro';
+import BlogIndex from '../../../components/BlogIndex.astro';
+import Layout from '../../../layouts/Layout.astro';
+import { getPosts, POSTS_PER_PAGE } from '../../../lib/blog';
+
+export const getStaticPaths = (async () => {
+  const posts = await getPosts();
+  const total = Math.ceil(posts.length / POSTS_PER_PAGE);
+  return Array.from({ length: Math.max(0, total - 1) }, (_, i) => ({
+    params: { page: String(i + 2) },
+    props: { posts },
+  }));
+}) satisfies GetStaticPaths;
+
+const { page } = Astro.params;
+const { posts } = Astro.props;
+---
+
+<Layout title={`Blog, página ${page}`} description="Notas prácticas sobre automatización, IA aplicada y software para negocio.">
+  <BlogIndex posts={posts} page={Number(page)} />
+</Layout>

@@ -1,0 +1,24 @@
+---
+interface Props {
+  tags: readonly string[];
+}
+const { tags } = Astro.props;
+---
+
+<ul class="tags" aria-label="Etiquetas">
+  {tags.map((t) => <li><a href={`/blog/etiquetas/${t}`}>{t}</a></li>)}
+</ul>
+
+<style>
+  .tags { list-style: none; margin: 0; padding: 0; display: flex; flex-wrap: wrap; gap: var(--space-2); }
+  a {
+    display: inline-block;
+    padding: var(--space-1) var(--space-2);
+    font-size: var(--font-size-caption);
+    color: var(--color-foreground);
+    background: var(--color-surface-alt);
+    border-radius: var(--radius-sm);
+    text-decoration: none;
+  }
+  a:hover { color: var(--color-primary); text-decoration: underline; }
+</style>

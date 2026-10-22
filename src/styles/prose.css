@@ -1,0 +1,61 @@
+/* Estilos del contenido Markdown del blog. */
+.prose { font-size: var(--font-size-body); line-height: var(--line-height-relaxed); max-width: var(--measure); }
+.prose > * + * { margin-top: var(--space-4); }
+.prose h2 { font-size: var(--font-size-h3); margin-top: var(--space-7); }
+.prose h3 { font-size: var(--font-size-h4); font-stretch: var(--font-width-body); letter-spacing: 0; margin-top: var(--space-6); }
+.prose h4 { margin-top: var(--space-5); }
+.prose ul, .prose ol { padding-inline-start: var(--space-5); display: grid; gap: var(--space-2); }
+.prose img { max-width: 100%; height: auto; border-radius: var(--radius-md); }
+.prose blockquote {
+  margin-inline: 0;
+  padding-inline-start: var(--space-4);
+  border-inline-start: var(--border-width-thick) solid var(--color-border-strong);
+  color: var(--color-foreground-muted);
+}
+.prose :not(pre) > code {
+  padding: 0.1em var(--space-1);
+  font-family: var(--font-family-mono);
+  font-size: 0.9em;
+  background: var(--color-code-background);
+  border: var(--border-width-thin) solid var(--color-border);
+  border-radius: var(--radius-sm);
+}
+.prose table { border-collapse: collapse; width: 100%; font-variant-numeric: tabular-nums; }
+.prose th, .prose td { padding: var(--space-2) var(--space-3); border: var(--border-width-thin) solid var(--color-border); text-align: start; }
+.prose hr { border: 0; border-top: var(--border-width-thin) solid var(--color-border); }
+
+/* Anclas de encabezado */
+.prose :is(h2, h3, h4) { position: relative; }
+.prose .anchor {
+  margin-inline-start: var(--space-2);
+  color: var(--color-foreground-subtle);
+  text-decoration: none;
+  opacity: 0;
+  transition: opacity var(--duration-fast) var(--ease-out);
+}
+.prose :is(h2, h3, h4):hover .anchor,
+.prose .anchor:focus-visible { opacity: 1; }
+@media (hover: none) { .prose .anchor { opacity: 1; } }
+
+/* Admoniciones */
+.admonition {
+  padding: var(--space-4);
+  border-inline-start: var(--border-width-thick) solid var(--admonition-color);
+  border-radius: var(--radius-md);
+  background: var(--admonition-surface);
+}
+.admonition-note { --admonition-color: var(--color-info); --admonition-surface: var(--color-info-surface); }
+.admonition-tip { --admonition-color: var(--color-success); --admonition-surface: var(--color-success-surface); }
+.admonition-warning { --admonition-color: var(--color-warning); --admonition-surface: var(--color-warning-surface); }
+.admonition-danger { --admonition-color: var(--color-destructive); --admonition-surface: var(--color-destructive-surface); }
+.prose .admonition-title {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  margin: 0;
+  font-weight: var(--font-weight-medium);
+  color: var(--admonition-color);
+}
+.admonition-icon { flex: none; }
+.prose .admonition-body { margin-top: var(--space-2); }
+.prose .admonition-body > * + * { margin-top: var(--space-3); }

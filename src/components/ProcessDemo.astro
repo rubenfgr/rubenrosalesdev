@@ -1,24 +1,16 @@
 ---
-const steps = [
-  { title: 'Llega el pedido.', text: 'Un email con el pedido en PDF.' },
-  { title: 'Se extraen los datos.', text: 'Cliente, productos, cantidades y fecha de entrega.' },
-  { title: 'Se validan.', text: 'Contra el catálogo y la ficha del cliente.' },
-  {
-    title: 'Se registra o se avisa.',
-    text: 'Si todo cuadra, se da de alta en el programa de gestión. Si algo no cuadra, se avisa a una persona con el motivo.',
-  },
-];
+import { demoData as demo } from '../data/site';
 ---
 
 <div class="demo" data-demo>
-  <p class="tag">Ejemplo ilustrativo</p>
+  <p class="tag">{demo.label}</p>
 
   <div class="frame">
-    <p class="before"><strong>Antes:</strong> Una persona abre el email, lee el PDF y teclea cada línea del pedido.</p>
+    <p class="before"><strong>Antes:</strong> {demo.before}</p>
 
     <ol class="steps">
       {
-        steps.map((s, i) => (
+        demo.steps.map((s, i) => (
           <li data-step>
             <span class="num" aria-hidden="true">{i + 1}</span>
             <div>
@@ -37,12 +29,10 @@ const steps = [
     </div>
     <p class="visually-hidden" aria-live="polite" data-live></p>
 
-    <p class="after"><strong>Después:</strong> La persona solo revisa las excepciones.</p>
+    <p class="after"><strong>Después:</strong> {demo.after}</p>
   </div>
 
-  <p class="fine">
-    La IA no decide sola: cuando un dato no es fiable, el pedido queda pendiente de revisión humana.
-  </p>
+  <p class="fine">{demo.fine}</p>
 </div>
 
 <script>

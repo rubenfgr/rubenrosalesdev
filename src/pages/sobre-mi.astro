@@ -1,13 +1,9 @@
 ---
+import { aboutData } from '../data/site';
 import Section from '../components/Section.astro';
 import Layout from '../layouts/Layout.astro';
 
-const principles = [
-  ['Claridad antes que complejidad.', 'Si no se puede explicar en una frase, todavía no está bien planteado.'],
-  ['Sin sobreingeniería.', 'La solución más sencilla que funciona suele ser la que mejor envejece.'],
-  ['Comunicación directa.', 'Te digo lo que pienso, incluido cuando algo no merece la pena.'],
-  ['Pensado para durar.', 'Código mantenible, documentado y sin dependencias innecesarias.'],
-] as const;
+const { principles, education } = aboutData;
 ---
 
 <Layout
@@ -33,16 +29,13 @@ const principles = [
       </p>
 
       <h2>Principios</h2>
-      <ul>{principles.map(([t, d]) => <li><strong>{t}</strong> {d}</li>)}</ul>
+      <ul>{principles.map((p) => <li><strong>{p.title}</strong> {p.text}</li>)}</ul>
 
       <h2>Tecnologías</h2>
       <p>[VERIFICAR: lista final de tecnologías]</p>
 
       <h2>Formación</h2>
-      <ul>
-        <li>Técnico Superior en Desarrollo de Aplicaciones Web — I.E.S. Al-Ándalus</li>
-        <li>Técnico Superior en Desarrollo de Aplicaciones Multiplataforma — I.E.S. Al-Ándalus</li>
-      </ul>
+      <ul>{education.map((e) => <li>{e}</li>)}</ul>
     </div>
   </Section>
 </Layout>

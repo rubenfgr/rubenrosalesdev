@@ -1,0 +1,33 @@
+---
+import { postUrl, type Post } from '../lib/blog';
+
+interface Props {
+  posts: Post[];
+  currentId?: string;
+}
+const { posts, currentId } = Astro.props;
+---
+
+<nav class="recent" aria-labelledby="recent-t">
+  <h2 id="recent-t">Artículos recientes</h2>
+  <ul>
+    {
+      posts.map((p) => (
+        <li>
+          <a href={postUrl(p)} aria-current={p.id === currentId ? 'page' : undefined}>{p.data.title}</a>
+        </li>
+      ))
+    }
+  </ul>
+  <a class="all" href="/blog/archivo">Ver archivo</a>
+</nav>
+
+<style>
+  .recent { display: grid; gap: var(--space-3); font-size: var(--font-size-label); }
+  h2 { font-size: var(--font-size-label); font-stretch: var(--font-width-body); letter-spacing: 0; font-weight: var(--font-weight-medium); color: var(--color-foreground-muted); }
+  ul { list-style: none; margin: 0; padding: 0; display: grid; gap: var(--space-2); }
+  li a { color: var(--color-foreground); text-decoration: none; }
+  li a:hover { color: var(--color-primary); text-decoration: underline; }
+  li a[aria-current='page'] { color: var(--color-primary); font-weight: var(--font-weight-medium); }
+  .all { font-weight: var(--font-weight-medium); }
+</style>

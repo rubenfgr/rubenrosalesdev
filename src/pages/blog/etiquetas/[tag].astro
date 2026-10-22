@@ -1,0 +1,29 @@
+---
+import type { GetStaticPaths } from 'astro';
+import BlogList from '../../../components/BlogList.astro';
+import Section from '../../../components/Section.astro';
+import Layout from '../../../layouts/Layout.astro';
+import { getPosts, tagCounts } from '../../../lib/blog';
+
+export const getStaticPaths = (async () => {
+  const posts = await getPosts();
+  return tagCounts(posts).map(([tag]) => ({
+    params: { tag },
+    props: { posts: posts.filter((p) => p.data.tags.includes(tag)) },
+  }));
+}) satisfies GetStaticPaths;
+
+const { tag } = Astro.params;
+const { posts } = Astro.props;
+---
+
+<Layout title={`Artículos con «${tag}»`} description={`Todos los artículos del blog con la etiqueta «${tag}».`}>
+  <Section as="h1" id="etiqueta" title={`Todos los artículos con «${tag}»`}>
+    <BlogList posts={posts} />
+    <p class="back"><a href="/blog/etiquetas">← Etiquetas</a></p>
+  </Section>
+</Layout>
+
+<style>
+  .back { margin-top: var(--space-6); }
+</style>

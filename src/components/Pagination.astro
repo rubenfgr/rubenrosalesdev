@@ -1,0 +1,37 @@
+---
+import { pageUrl } from '../lib/blog';
+
+interface Props {
+  page: number;
+  totalPages: number;
+}
+const { page, totalPages } = Astro.props;
+const pages = Array.from({ length: totalPages }, (_, i) => i + 1);
+---
+
+{
+  totalPages > 1 && (
+    <nav class="pagination" aria-label="Paginación">
+      {page > 1 ? <a href={pageUrl(page - 1)} rel="prev">← Más recientes</a> : <span aria-hidden="true" />}
+      <ul>
+        {pages.map((n) => <li><a href={pageUrl(n)} aria-current={n === page ? 'page' : undefined}>{n}</a></li>)}
+      </ul>
+      {page < totalPages ? <a href={pageUrl(page + 1)} rel="next">Más antiguos →</a> : <span aria-hidden="true" />}
+    </nav>
+  )
+}
+
+<style>
+  .pagination { display: flex; align-items: center; justify-content: space-between; gap: var(--space-4); margin-top: var(--space-6); flex-wrap: wrap; }
+  ul { list-style: none; margin: 0; padding: 0; display: flex; gap: var(--space-2); }
+  ul a {
+    display: inline-grid;
+    place-items: center;
+    min-width: var(--space-6);
+    padding: var(--space-1) var(--space-2);
+    border-radius: var(--radius-md);
+    text-decoration: none;
+    font-variant-numeric: tabular-nums;
+  }
+  ul a[aria-current='page'] { background: var(--color-primary); color: var(--color-primary-foreground); }
+</style>

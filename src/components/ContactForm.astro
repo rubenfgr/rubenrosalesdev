@@ -1,7 +1,7 @@
 ---
-import { owner } from '../data/site';
+import { contactData, owner } from '../data/site';
 
-const options = ['Automatización e IA', 'Aplicación web', 'App móvil', 'No lo tengo claro'];
+const options = contactData.serviceOptions;
 ---
 
 <form class="form" method="post" action="/api/contacto" data-contact data-email={owner.email} novalidate>

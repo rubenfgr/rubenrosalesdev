@@ -1,0 +1,36 @@
+---
+import { formatDate, readingTime, type Post } from '../lib/blog';
+
+interface Props {
+  post: Post;
+}
+const { post } = Astro.props;
+const { date, updated } = post.data;
+---
+
+<p class="meta">
+  <time datetime={date.toISOString()}>{formatDate(date)}</time>
+  <span aria-hidden="true">·</span>
+  <span>{readingTime(post.body)} min de lectura</span>
+  {
+    updated && (
+      <>
+        <span aria-hidden="true">·</span>
+        <span>
+          Actualizado el <time datetime={updated.toISOString()}>{formatDate(updated)}</time>
+        </span>
+      </>
+    )
+  }
+</p>
+
+<style>
+  .meta {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-1) var(--space-2);
+    font-size: var(--font-size-label);
+    color: var(--color-foreground-muted);
+    font-variant-numeric: tabular-nums;
+  }
+</style>

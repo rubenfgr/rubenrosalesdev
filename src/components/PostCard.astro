@@ -1,0 +1,28 @@
+---
+import { postUrl, type Post } from '../lib/blog';
+import PostMeta from './PostMeta.astro';
+import TagList from './TagList.astro';
+
+interface Props {
+  post: Post;
+  featured?: boolean;
+}
+const { post, featured = false } = Astro.props;
+---
+
+<article class:list={['card', { featured }]}>
+  <PostMeta post={post} />
+  {featured ? <h2><a href={postUrl(post)}>{post.data.title}</a></h2> : <h3><a href={postUrl(post)}>{post.data.title}</a></h3>}
+  <p class="desc">{post.data.description}</p>
+  <TagList tags={post.data.tags} />
+</article>
+
+<style>
+  .card { display: grid; gap: var(--space-3); padding-block: var(--space-5); border-bottom: var(--border-width-thin) solid var(--color-border); }
+  .featured { padding: var(--space-5); background: var(--color-surface); border: var(--border-width-thin) solid var(--color-border); border-radius: var(--radius-lg); }
+  h2, h3 { font-size: var(--font-size-h4); font-stretch: var(--font-width-body); letter-spacing: 0; }
+  .featured h2 { font-size: var(--font-size-h3); font-stretch: var(--font-width-display); letter-spacing: var(--letter-spacing-heading); }
+  h2 a, h3 a { color: var(--color-foreground); text-decoration: none; }
+  h2 a:hover, h3 a:hover { color: var(--color-primary); text-decoration: underline; }
+  .desc { color: var(--color-foreground-muted); max-width: var(--measure); }
+</style>

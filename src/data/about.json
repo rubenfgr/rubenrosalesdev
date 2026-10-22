@@ -1,0 +1,24 @@
+{
+  "principles": [
+    {
+      "title": "Claridad antes que complejidad.",
+      "text": "Si no se puede explicar en una frase, todavía no está bien planteado."
+    },
+    {
+      "title": "Sin sobreingeniería.",
+      "text": "La solución más sencilla que funciona suele ser la que mejor envejece."
+    },
+    {
+      "title": "Comunicación directa.",
+      "text": "Te digo lo que pienso, incluido cuando algo no merece la pena."
+    },
+    {
+      "title": "Pensado para durar.",
+      "text": "Código mantenible, documentado y sin dependencias innecesarias."
+    }
+  ],
+  "education": [
+    "Técnico Superior en Desarrollo de Aplicaciones Web — I.E.S. Al-Ándalus",
+    "Técnico Superior en Desarrollo de Aplicaciones Multiplataforma — I.E.S. Al-Ándalus"
+  ]
+}

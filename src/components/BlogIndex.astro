@@ -1,0 +1,24 @@
+---
+import { POSTS_PER_PAGE, type Post } from '../lib/blog';
+import BlogList from './BlogList.astro';
+import Pagination from './Pagination.astro';
+import Section from './Section.astro';
+
+interface Props {
+  posts: Post[];
+  page: number;
+}
+const { posts, page } = Astro.props;
+const totalPages = Math.max(1, Math.ceil(posts.length / POSTS_PER_PAGE));
+const slice = posts.slice((page - 1) * POSTS_PER_PAGE, page * POSTS_PER_PAGE);
+---
+
+<Section as="h1" id="blog" title="Blog" lead="Notas prácticas sobre automatización, IA aplicada y software para negocio.">
+  <BlogList posts={slice} featuredFirst={page === 1} />
+  <Pagination page={page} totalPages={totalPages} />
+  <p class="links"><a href="/blog/etiquetas">Etiquetas</a> · <a href="/blog/archivo">Archivo</a> · <a href="/rss.xml">RSS</a></p>
+</Section>
+
+<style>
+  .links { margin-top: var(--space-6); }
+</style>

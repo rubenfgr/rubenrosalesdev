@@ -1,0 +1,41 @@
+---
+import Section from '../../components/Section.astro';
+import Layout from '../../layouts/Layout.astro';
+import { formatDate, getPosts, postUrl } from '../../lib/blog';
+
+const posts = await getPosts();
+const byYear = new Map<number, typeof posts>();
+for (const p of posts) {
+  const y = p.data.date.getUTCFullYear();
+  byYear.set(y, [...(byYear.get(y) ?? []), p]);
+}
+---
+
+<Layout title="Archivo del blog" description="Todos los artículos del blog agrupados por año.">
+  <Section as="h1" id="archivo" title="Archivo">
+    {posts.length === 0 && <p>Todavía no hay artículos.</p>}
+    {
+      [...byYear.entries()].map(([year, items]) => (
+        <section class="year">
+          <h2>{year}</h2>
+          <ul>
+            {items.map((p) => (
+              <li>
+                <time datetime={p.data.date.toISOString()}>{formatDate(p.data.date)}</time>
+                <a href={postUrl(p)}>{p.data.title}</a>
+              </li>
+            ))}
+          </ul>
+        </section>
+      ))
+    }
+  </Section>
+</Layout>
+
+<style>
+  .year { margin-bottom: var(--space-6); }
+  .year h2 { font-size: var(--font-size-h3); margin-bottom: var(--space-3); }
+  ul { list-style: none; margin: 0; padding: 0; display: grid; gap: var(--space-2); }
+  li { display: flex; gap: var(--space-4); flex-wrap: wrap; }
+  time { color: var(--color-foreground-muted); font-variant-numeric: tabular-nums; min-width: 12ch; }
+</style>

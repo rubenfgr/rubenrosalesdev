@@ -1,0 +1,73 @@
+---
+import type { MarkdownHeading } from 'astro';
+
+interface Props {
+  headings: MarkdownHeading[];
+  variant: 'aside' | 'details';
+}
+const { headings, variant } = Astro.props;
+const items = headings.filter((h) => h.depth === 2 || h.depth === 3);
+---
+
+{
+  items.length > 0 && (
+    variant === 'details' ? (
+      <details class="toc toc-details">
+        <summary>En este artículo</summary>
+        <ul>
+          {items.map((h) => <li class={`d${h.depth}`}><a href={`#${h.slug}`} data-toc-link>{h.text}</a></li>)}
+        </ul>
+      </details>
+    ) : (
+      <nav class="toc toc-aside" aria-labelledby="toc-t">
+        <h2 id="toc-t">En este artículo</h2>
+        <ul>
+          {items.map((h) => <li class={`d${h.depth}`}><a href={`#${h.slug}`} data-toc-link>{h.text}</a></li>)}
+        </ul>
+      </nav>
+    )
+  )
+}
+
+<script>
+  // Scrollspy: marca el enlace del encabezado visible. Sin JS el índice sigue siendo una lista de enlaces.
+  const links = [...document.querySelectorAll<HTMLAnchorElement>('[data-toc-link]')];
+  const targets = links
+    .map((a) => document.getElementById(decodeURIComponent(a.hash.slice(1))))
+    .filter((el): el is HTMLElement => !!el);
+
+  if (targets.length && 'IntersectionObserver' in window) {
+    const visible = new Set<string>();
+    const mark = () => {
+      const current = targets.find((t) => visible.has(t.id)) ?? null;
+      links.forEach((a) => {
+        const on = !!current && decodeURIComponent(a.hash.slice(1)) === current.id;
+        if (on) a.setAttribute('aria-current', 'location');
+        else a.removeAttribute('aria-current');
+      });
+    };
+    const io = new IntersectionObserver(
+      (entries) => {
+        for (const e of entries) {
+          if (e.isIntersecting) visible.add(e.target.id);
+          else visible.delete(e.target.id);
+        }
+        mark();
+      },
+      { rootMargin: '0px 0px -70% 0px' },
+    );
+    targets.forEach((t) => io.observe(t));
+  }
+</script>
+
+<style>
+  .toc { font-size: var(--font-size-label); }
+  h2, summary { font-size: var(--font-size-label); font-stretch: var(--font-width-body); letter-spacing: 0; font-weight: var(--font-weight-medium); color: var(--color-foreground-muted); }
+  summary { cursor: pointer; padding: var(--space-2) 0; }
+  ul { list-style: none; margin: var(--space-2) 0 0; padding: 0; display: grid; gap: var(--space-2); border-inline-start: var(--border-width-thin) solid var(--color-border); }
+  li { padding-inline-start: var(--space-3); }
+  li.d3 { padding-inline-start: var(--space-5); }
+  a { color: var(--color-foreground-muted); text-decoration: none; }
+  a:hover { color: var(--color-primary); }
+  a[aria-current] { color: var(--color-primary); font-weight: var(--font-weight-medium); }
+</style>
