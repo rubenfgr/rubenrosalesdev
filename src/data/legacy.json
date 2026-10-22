@@ -1,5 +1,5 @@
 {
-  "note": "URLs de la web antigua (Next.js con localePrefix always: solo existen /es/... y /en/...). Fuente de la tabla de redirecciones.",
+  "note": "URLs de la web antigua (Next.js con localePrefix always: solo existen /es/... y /en/...). Fuente de la tabla de redirecciones. Las páginas /servicios, /proyectos, /sobre-mi y /contacto ya no existen (todo está en la landing): ver \"landingRedirects\".",
   "prefixes": [
     "/es",
     "/en"
@@ -11,19 +11,19 @@
     },
     {
       "from": "/services",
-      "to": "/servicios"
+      "to": "/"
     },
     {
       "from": "/services/*",
-      "to": "/servicios"
+      "to": "/"
     },
     {
       "from": "/projects",
-      "to": "/proyectos"
+      "to": "/"
     },
     {
       "from": "/about",
-      "to": "/sobre-mi"
+      "to": "/"
     },
     {
       "from": "/blog",
@@ -110,5 +110,11 @@
     "control-inventario": null,
     "control-remoto-iot": null,
     "red-videovigilancia": null
-  }
+  },
+  "landingRedirects": [
+    "/servicios",
+    "/proyectos",
+    "/sobre-mi",
+    "/contacto"
+  ]
 }

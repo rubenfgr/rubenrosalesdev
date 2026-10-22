@@ -1,0 +1,36 @@
+---
+import type { Project } from '../lib/projects';
+import ProjectCard from './ProjectCard.astro';
+
+interface Props {
+  projects: Project[];
+}
+const { projects } = Astro.props;
+---
+
+{
+  projects.length === 0 ? (
+    <p>Estoy preparando esta sección. Si quieres conocer mi experiencia, <a href="#contacto">escríbeme</a>.</p>
+  ) : (
+    <div class="scroller" role="region" aria-label="Proyectos (desplázate en horizontal)" tabindex="0">
+      <ul>
+        {projects.map((p) => <li><ProjectCard project={p} level="h3" /></li>)}
+      </ul>
+    </div>
+  )
+}
+
+<style>
+  .scroller {
+    overflow-x: auto;
+    scroll-snap-type: x mandatory;
+    padding-bottom: var(--space-4);
+    /* Que el scroll llegue al borde de la pantalla, alineado con el contenedor */
+    margin-inline: calc(var(--container-padding) * -1);
+    padding-inline: var(--container-padding);
+    scroll-padding-inline: var(--container-padding);
+  }
+  ul { list-style: none; margin: 0; padding: 0; display: flex; gap: var(--grid-gutter); }
+  li { flex: 0 0 min(24rem, 85%); scroll-snap-align: start; display: grid; }
+  li :global(.card) { height: 100%; }
+</style>

@@ -1,0 +1,73 @@
+---
+import { aboutData } from '../data/site';
+
+const { principles, technologies, education } = aboutData;
+---
+
+<div class="about">
+  <div class="prose">
+    <p>
+      Llevo más de 7 años diseñando y desarrollando software en proyectos de sectores muy distintos:
+      inmobiliario, agrícola, clínicas, automoción, gimnasios, perfumería y educación. He trabajado en todo
+      el recorrido: entender el problema, revisar requisitos, diseñar la arquitectura, desarrollar y poner
+      en producción.
+    </p>
+    <p>
+      Hoy me centro en automatización de procesos, integración de IA y aplicaciones web y móviles para
+      pymes y profesionales.
+    </p>
+  </div>
+
+  <h3>Principios</h3>
+  <ul class="cards">
+    {principles.map((p) => <li><strong>{p.title}</strong><span>{p.text}</span></li>)}
+  </ul>
+
+  <h3>Tecnologías</h3>
+  <div class="techgrid">
+    {
+      technologies.map((t) => (
+        <section class="techgroup">
+          <h4>{t.group}</h4>
+          <ul class="chips">{t.items.map((i) => <li>{i}</li>)}</ul>
+        </section>
+      ))
+    }
+  </div>
+
+  <h3>Formación</h3>
+  <ul class="edu">{education.map((e) => <li>{e}</li>)}</ul>
+</div>
+
+<style>
+  .about { display: grid; grid-template-columns: minmax(0, 1fr); gap: var(--space-5); }
+  .prose { max-width: var(--measure); display: grid; gap: var(--space-4); }
+  h3 { margin-top: var(--space-5); }
+  .cards, .techgrid { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: minmax(0, 1fr); gap: var(--grid-gutter); }
+  .cards li {
+    display: grid;
+    gap: var(--space-2);
+    align-content: start;
+    padding: var(--space-5);
+    background: var(--color-surface);
+    border: var(--border-width-thin) solid var(--color-border);
+    border-inline-start: var(--border-width-thick) solid var(--color-primary);
+    border-radius: var(--radius-lg);
+  }
+  .cards span { color: var(--color-foreground-muted); }
+  .techgroup {
+    display: grid;
+    gap: var(--space-3);
+    align-content: start;
+    padding: var(--space-5);
+    background: var(--color-surface);
+    border: var(--border-width-thin) solid var(--color-border);
+    border-radius: var(--radius-lg);
+  }
+  h4 { font-size: var(--font-size-body); font-weight: var(--font-weight-medium); }
+  .chips { list-style: none; margin: 0; padding: 0; display: flex; flex-wrap: wrap; gap: var(--space-2); }
+  .chips li { padding: var(--space-1) var(--space-3); font-size: var(--font-size-label); background: var(--color-surface-alt); border-radius: var(--radius-sm); }
+  .edu { margin: 0; padding-inline-start: var(--space-5); display: grid; gap: var(--space-2); max-width: var(--measure); }
+  @media (min-width: 40rem) { .cards, .techgrid { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+  @media (min-width: 64rem) { .techgrid { grid-template-columns: repeat(3, minmax(0, 1fr)); } }
+</style>

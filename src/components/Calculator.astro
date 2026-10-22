@@ -28,7 +28,7 @@ const fmtEur = new Intl.NumberFormat('es-ES', { style: 'currency', currency: 'EU
     <p class="big"><strong data-hours-month>{fmtNum.format(monthHours)}</strong> <span>{c.results.month}</span></p>
     <p class="big"><strong data-cost-month>{fmtEur.format(monthHours * initial.rate)}</strong> <span>{c.results.cost}</span></p>
     <p class="big"><strong data-cost-year>{fmtEur.format(monthHours * initial.rate * 12)}</strong> <span>{c.results.year}</span></p>
-    <p><a class="btn btn-primary" href="/contacto">{c.cta}</a></p>
+    <p><a class="btn btn-primary" href="#contacto">{c.cta}</a></p>
   </div>
 </div>
 

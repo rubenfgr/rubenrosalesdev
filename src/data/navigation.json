@@ -1,15 +1,15 @@
 {
   "main": [
     {
-      "href": "/servicios",
+      "href": "/#servicios",
       "label": "Servicios"
     },
     {
-      "href": "/proyectos",
+      "href": "/#proyectos",
       "label": "Proyectos"
     },
     {
-      "href": "/sobre-mi",
+      "href": "/#empezar",
       "label": "Cómo trabajo"
     },
     {

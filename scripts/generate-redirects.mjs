@@ -32,13 +32,15 @@ for (const prefix of legacy.prefixes) {
     rows.push([`${prefix}/blog/${slug}`, liveBlog.has(slug) ? `/blog/${slug}` : '/blog']);
   }
   for (const [old, next] of Object.entries(legacy.projects)) {
-    rows.push([`${prefix}/projects/${old}`, next && liveProjects.has(next) ? `/proyectos/${next}` : '/proyectos']);
+    rows.push([`${prefix}/projects/${old}`, next && liveProjects.has(next) ? `/proyectos/${next}` : '/']);
   }
   for (const p of legacy.pages) {
     rows.push([`${prefix}${p.from}`, p.to]);
     if (p.from === '') rows.push([`${prefix}/`, p.to]);
   }
 }
+// Páginas que ahora viven en la landing
+for (const from of legacy.landingRedirects) rows.push([from, '/']);
 // Reglas con comodín al final (Cloudflare evalúa en orden; las estáticas primero).
 rows.sort((a, b) => Number(a[0].includes('*')) - Number(b[0].includes('*')));
 // Resto de rutas con prefijo: /es/x → /x (el español ya no lleva prefijo); /en/x → inicio.

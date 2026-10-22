@@ -1,10 +1,12 @@
 ---
+import About from '../components/About.astro';
 import Calculator from '../components/Calculator.astro';
+import ContactBlock from '../components/ContactBlock.astro';
 import FactStrip from '../components/FactStrip.astro';
 import HeroMotif from '../components/HeroMotif.astro';
 import HeroVisual from '../components/HeroVisual.astro';
 import ProcessDemo from '../components/ProcessDemo.astro';
-import ProjectCard from '../components/ProjectCard.astro';
+import ProjectsScroll from '../components/ProjectsScroll.astro';
 import Section from '../components/Section.astro';
 import ServiceBlock from '../components/ServiceBlock.astro';
 import ToolsStrip from '../components/ToolsStrip.astro';
@@ -13,7 +15,7 @@ import { homeData } from '../data/site';
 import Layout from '../layouts/Layout.astro';
 import { getProjects } from '../lib/projects';
 
-const featured = (await getProjects(true)).slice(0, 3);
+const projects = await getProjects();
 ---
 
 <Layout>
@@ -31,8 +33,8 @@ const featured = (await getProjects(true)).slice(0, 3);
           y te digo qué merece la pena hacer y qué no.
         </p>
         <p class="ctas">
-          <a class="btn btn-primary" href="/contacto">Cuéntame qué quieres resolver</a>
-          <a class="btn btn-secondary" href="/proyectos">Ver proyectos</a>
+          <a class="btn btn-primary" href="#contacto">Cuéntame qué quieres resolver</a>
+          <a class="btn btn-secondary" href="#proyectos">Ver proyectos</a>
         </p>
       </div>
       <div class="hero-visual"><HeroVisual /></div>
@@ -48,7 +50,7 @@ const featured = (await getProjects(true)).slice(0, 3);
     title="En qué puedo ayudarte"
     lead="Tres tipos de trabajo, un mismo criterio: resolver un problema concreto con la solución más sencilla que funcione."
   >
-    <div class="grid">{services.map((s) => <ServiceBlock service={s} />)}</div>
+    <div class="grid">{services.map((s) => <ServiceBlock service={s} detailed />)}</div>
   </Section>
 
   <Section
@@ -63,18 +65,13 @@ const featured = (await getProjects(true)).slice(0, 3);
     <Calculator />
   </Section>
 
-  {
-    featured.length > 0 && (
-      <Section
-        id="proyectos"
-        title="Experiencia"
-        lead="Una selección de sistemas en los que he trabajado: automatización documental, integraciones y aplicaciones de gestión."
-      >
-        <div class="grid">{featured.map((p) => <ProjectCard project={p} />)}</div>
-        <p class="more"><a href="/proyectos">Ver todos los proyectos</a></p>
-      </Section>
-    )
-  }
+  <Section
+    id="proyectos"
+    title="Experiencia"
+    lead="Una selección de sistemas en los que he trabajado: automatización documental, integraciones y aplicaciones de gestión."
+  >
+    <ProjectsScroll projects={projects} />
+  </Section>
 
   <Section id="empezar" title="Cómo empezamos">
     <ol class="steps">
@@ -85,20 +82,18 @@ const featured = (await getProjects(true)).slice(0, 3);
     <p class="fine">Si lo que necesitas se resuelve con una herramienta que ya existe, te lo diré antes de construir nada.</p>
   </Section>
 
-  <Section id="sobre-mi" tone="alt" title="Quién está detrás">
-    <div class="about">
-      <p>
-        Soy Rubén Rosales. Llevo más de 7 años diseñando y desarrollando software para sectores muy
-        distintos: inmobiliario, agrícola, clínicas, automoción, gimnasios y educación. Mi trabajo empieza
-        por entender el problema y termina en algo que se pueda mantener sin depender de mí para todo.
-      </p>
-      <p><a href="/sobre-mi">Más sobre mí</a></p>
-    </div>
+  <Section id="sobre-mi" tone="alt" title="Quién está detrás" lead="Arquitecto de soluciones y desarrollador. Me dedico a que la tecnología resuelva problemas concretos de negocio, no a añadir capas.">
+    <About />
   </Section>
 
   <Section id="cierre" tone="primary" title="¿Tienes un proceso que te quita horas cada semana?">
-    <p><a class="btn btn-inverse" href="/contacto">Cuéntamelo</a></p>
+    <p><a class="btn btn-inverse" href="#contacto">Cuéntamelo</a></p>
   </Section>
+
+  <Section id="contacto" title="Cuéntame qué quieres resolver" lead="Describe el proceso o la idea con tus palabras. Te respondo con una primera valoración y, si tiene sentido, con los siguientes pasos.">
+    <ContactBlock />
+  </Section>
+
 </Layout>
 
 <style>
@@ -138,8 +133,6 @@ const featured = (await getProjects(true)).slice(0, 3);
     font-variant-numeric: tabular-nums;
   }
   .fine { margin-top: var(--space-5); font-size: var(--font-size-label); color: var(--color-foreground-muted); }
-  .about { display: grid; gap: var(--space-4); max-width: var(--measure); }
-  .more { margin-top: var(--space-5); }
   @media (min-width: 64rem) {
     .hero-inner { grid-template-columns: minmax(0, 1.15fr) minmax(0, 1fr); }
     .grid, .steps { grid-template-columns: repeat(3, minmax(0, 1fr)); }
