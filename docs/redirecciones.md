@@ -77,7 +77,6 @@ Todas son 301. El destino de artículos y proyectos depende de qué contenido es
 | `/es` | `/` |
 | `/es/` | `/` |
 | `/es/services` | `/servicios` |
-| `/es/services/*` | `/servicios` |
 | `/es/projects` | `/proyectos` |
 | `/es/about` | `/sobre-mi` |
 | `/es/blog` | `/blog` |
@@ -155,11 +154,12 @@ Todas son 301. El destino de artículos y proyectos depende de qué contenido es
 | `/en` | `/` |
 | `/en/` | `/` |
 | `/en/services` | `/servicios` |
-| `/en/services/*` | `/servicios` |
 | `/en/projects` | `/proyectos` |
 | `/en/about` | `/sobre-mi` |
 | `/en/blog` | `/blog` |
 | `/en/legal-notice` | `/aviso-legal` |
 | `/en/privacy-policy` | `/privacidad` |
+| `/es/services/*` | `/servicios` |
+| `/en/services/*` | `/servicios` |
 | `/es/*` | `/:splat` |
 | `/en/*` | `/` |

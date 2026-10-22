@@ -1,0 +1,42 @@
+# Formulario de contacto (Gmail)
+
+El formulario envía a `POST /api/contacto` (un endpoint del Worker de Cloudflare). El endpoint valida los datos, aplica el antispam (campo señuelo y tiempo mínimo de 3 s, más comprobación de origen) y envía un email con la **API de Gmail** usando OAuth2. El visitante queda en `Reply-To`, así que basta responder al email recibido.
+
+## Variables (solo en el entorno, nunca en el repo)
+
+| Variable | Qué es |
+|---|---|
+| `GMAIL_CLIENT_ID` | ID de cliente OAuth de Google Cloud |
+| `GMAIL_CLIENT_SECRET` | Secreto del cliente OAuth |
+| `GMAIL_REFRESH_TOKEN` | Refresh token con el permiso `gmail.send` |
+| `GMAIL_SENDER` | Cuenta de Gmail desde la que se envía (la autorizada) |
+| `CONTACT_TO` | Dirección que recibe los mensajes (p. ej. `hola@rubenrosales.dev` si ya reenvía a tu Gmail, o la propia cuenta de Gmail) |
+
+Sin ellas, el endpoint responde 503 y el formulario muestra el aviso de error con el email de contacto.
+
+En producción se definen como **secretos del Worker** (`pnpm exec wrangler secret put GMAIL_CLIENT_ID`, etc., o en el panel de Cloudflare). En local, copia `.dev.vars.example` a `.dev.vars`.
+
+## Cómo obtener las credenciales
+
+1. En [Google Cloud Console](https://console.cloud.google.com/) crea un proyecto y activa la **Gmail API**.
+2. En «Pantalla de consentimiento de OAuth», tipo **Externo**. **Publica la app («En producción»)**: con el estado «Testing» el refresh token caduca a los 7 días.
+3. Crea un **ID de cliente OAuth** de tipo «Aplicación web» con `https://developers.google.com/oauthplayground` como URI de redirección.
+4. En [OAuth 2.0 Playground](https://developers.google.com/oauthplayground) (engranaje → «Use your own OAuth credentials»), autoriza el permiso `https://www.googleapis.com/auth/gmail.send` con la cuenta de Gmail y pulsa «Exchange authorization code for tokens». Copia el `refresh_token`.
+5. Guarda los valores como secretos (arriba).
+
+Google mostrará una pantalla de «app no verificada» al autorizar: es normal si la usas solo tú.
+
+## Cuándo deja de funcionar
+
+Según la [documentación de Google](https://developers.google.com/identity/protocols/oauth2#expiration), un refresh token deja de valer si:
+
+- la app sigue en estado «Testing» (7 días),
+- cambias la contraseña de la cuenta de Google y el token tiene permisos de Gmail,
+- pasan 6 meses sin usarlo,
+- revocas el acceso, o se superan 100 tokens por cuenta y cliente.
+
+Si el formulario empieza a fallar (el Worker registra `contacto: fallo al enviar token 400`), repite los pasos 4 y 5. Conviene enviarte un mensaje de prueba cada pocos meses.
+
+## Antispam
+
+El endpoint no tiene límite de peticiones propio. Si hiciera falta, se añade una regla de limitación en Cloudflare (WAF) sobre `/api/contacto`.

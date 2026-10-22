@@ -6,3 +6,4 @@ dist/
 .wrangler/
 redesign-kit/
 public/_redirects
+.dev.vars

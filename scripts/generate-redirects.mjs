@@ -39,6 +39,8 @@ for (const prefix of legacy.prefixes) {
     if (p.from === '') rows.push([`${prefix}/`, p.to]);
   }
 }
+// Reglas con comodín al final (Cloudflare evalúa en orden; las estáticas primero).
+rows.sort((a, b) => Number(a[0].includes('*')) - Number(b[0].includes('*')));
 // Resto de rutas con prefijo: /es/x → /x (el español ya no lleva prefijo); /en/x → inicio.
 rows.push(['/es/*', '/:splat'], ['/en/*', '/']);
 

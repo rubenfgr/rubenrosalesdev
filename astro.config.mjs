@@ -1,7 +1,8 @@
 // @ts-check
 import { unified } from '@astrojs/markdown-remark';
 import sitemap from '@astrojs/sitemap';
-import { defineConfig } from 'astro/config';
+import cloudflare from '@astrojs/cloudflare';
+import { defineConfig, envField } from 'astro/config';
 import expressiveCode from 'astro-expressive-code';
 import remarkDirective from 'remark-directive';
 import rehypeHeadingAnchors from './src/plugins/rehype-heading-anchors.ts';
@@ -55,6 +56,19 @@ const dark = codeTheme('rr-dark', 'dark', {
 
 export default defineConfig({
   site: 'https://rubenrosales.dev',
+  // Sin sesiones (no se crea KV) y con imágenes optimizadas en el build (no se usa el binding de Images).
+  adapter: cloudflare({ imageService: 'compile' }),
+  session: false,
+  // Secretos del formulario de contacto: solo variables de entorno, nunca en el repo.
+  env: {
+    schema: {
+      GMAIL_CLIENT_ID: envField.string({ context: 'server', access: 'secret', optional: true }),
+      GMAIL_CLIENT_SECRET: envField.string({ context: 'server', access: 'secret', optional: true }),
+      GMAIL_REFRESH_TOKEN: envField.string({ context: 'server', access: 'secret', optional: true }),
+      GMAIL_SENDER: envField.string({ context: 'server', access: 'secret', optional: true }),
+      CONTACT_TO: envField.string({ context: 'server', access: 'secret', optional: true }),
+    },
+  },
   trailingSlash: 'never',
   build: { format: 'file' },
   integrations: [
