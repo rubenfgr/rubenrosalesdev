@@ -1,0 +1,59 @@
+{
+  "facts": [
+    {
+      "value": "+7 años",
+      "label": "diseñando y desarrollando software"
+    },
+    {
+      "value": "6 sectores",
+      "label": "inmobiliario, agrícola, clínicas, automoción, gimnasios y educación"
+    },
+    {
+      "value": "48 horas",
+      "label": "plazo máximo de respuesta"
+    }
+  ],
+  "toolsLabel": "Conecto lo que ya usas",
+  "tools": [
+    {
+      "icon": "mail",
+      "label": "Email"
+    },
+    {
+      "icon": "file-text",
+      "label": "PDF y facturas"
+    },
+    {
+      "icon": "table",
+      "label": "Hojas de cálculo"
+    },
+    {
+      "icon": "database",
+      "label": "CRM y ERP"
+    },
+    {
+      "icon": "form",
+      "label": "Formularios"
+    },
+    {
+      "icon": "plug",
+      "label": "APIs"
+    }
+  ],
+  "calculator": {
+    "title": "Haz la cuenta",
+    "lead": "Pon tus números y mira cuánto tiempo y dinero se va en una tarea repetitiva. Es una estimación con tus datos, no una promesa de ahorro.",
+    "fields": {
+      "people": "Personas que la hacen",
+      "hours": "Horas por semana, por persona",
+      "rate": "Coste por hora (€)"
+    },
+    "note": "Valores de ejemplo: cámbialos por los tuyos.",
+    "results": {
+      "month": "horas al mes",
+      "cost": "al mes",
+      "year": "al año"
+    },
+    "cta": "Cuéntame tu caso"
+  }
+}

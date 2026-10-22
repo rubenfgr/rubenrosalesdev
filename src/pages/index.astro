@@ -1,10 +1,15 @@
 ---
+import Calculator from '../components/Calculator.astro';
+import FactStrip from '../components/FactStrip.astro';
 import HeroMotif from '../components/HeroMotif.astro';
+import HeroVisual from '../components/HeroVisual.astro';
 import ProcessDemo from '../components/ProcessDemo.astro';
 import ProjectCard from '../components/ProjectCard.astro';
 import Section from '../components/Section.astro';
 import ServiceBlock from '../components/ServiceBlock.astro';
+import ToolsStrip from '../components/ToolsStrip.astro';
 import { services } from '../data/services';
+import { homeData } from '../data/site';
 import Layout from '../layouts/Layout.astro';
 import { getProjects } from '../lib/projects';
 
@@ -15,21 +20,31 @@ const featured = (await getProjects(true)).slice(0, 3);
   <section class="hero">
     <HeroMotif />
     <div class="container hero-inner">
-      <h1>Software y automatizaciones para que tu negocio funcione con menos trabajo manual.</h1>
-      <p class="lead">
-        Soy Rubén Rosales. Diseño y desarrollo aplicaciones web y móviles, automatizaciones e
-        integraciones con IA para pymes y profesionales. Antes de proponer nada, entiendo cómo trabajas
-        y te digo qué merece la pena hacer y qué no.
-      </p>
-      <p class="ctas">
-        <a class="btn btn-primary" href="/contacto">Cuéntame qué quieres resolver</a>
-        <a class="btn btn-secondary" href="/proyectos">Ver proyectos</a>
-      </p>
+      <div class="hero-text">
+        <h1>
+          Software y automatizaciones para que tu negocio funcione con{' '}
+          <span class="em">menos trabajo manual.</span>
+        </h1>
+        <p class="lead">
+          Soy Rubén Rosales. Diseño y desarrollo aplicaciones web y móviles, automatizaciones e
+          integraciones con IA para pymes y profesionales. Antes de proponer nada, entiendo cómo trabajas
+          y te digo qué merece la pena hacer y qué no.
+        </p>
+        <p class="ctas">
+          <a class="btn btn-primary" href="/contacto">Cuéntame qué quieres resolver</a>
+          <a class="btn btn-secondary" href="/proyectos">Ver proyectos</a>
+        </p>
+      </div>
+      <div class="hero-visual"><HeroVisual /></div>
     </div>
   </section>
 
+  <FactStrip />
+  <div class="tools-wrap"><ToolsStrip /></div>
+
   <Section
     id="servicios"
+    tone="alt"
     title="En qué puedo ayudarte"
     lead="Tres tipos de trabajo, un mismo criterio: resolver un problema concreto con la solución más sencilla que funcione."
   >
@@ -42,6 +57,10 @@ const featured = (await getProjects(true)).slice(0, 3);
     lead="Un ejemplo ilustrativo: un pedido que llega por email y termina registrado en el programa de gestión sin que nadie lo teclee."
   >
     <ProcessDemo />
+  </Section>
+
+  <Section id="cuenta" tone="alt" title={homeData.calculator.title} lead={homeData.calculator.lead}>
+    <Calculator />
   </Section>
 
   {
@@ -59,14 +78,14 @@ const featured = (await getProjects(true)).slice(0, 3);
 
   <Section id="empezar" title="Cómo empezamos">
     <ol class="steps">
-      <li><strong>Una conversación.</strong> Me cuentas qué te quita tiempo. Sin compromiso y sin jerga.</li>
-      <li><strong>Una propuesta clara.</strong> Qué haría, qué no, cuánto cuesta y cuánto cuesta mantenerlo.</li>
-      <li><strong>Una primera entrega.</strong> Empiezo por la parte que más trabajo te ahorra, para que lo notes pronto.</li>
+      <li><span class="n" aria-hidden="true">1</span><span><strong>Una conversación.</strong> Me cuentas qué te quita tiempo. Sin compromiso y sin jerga.</span></li>
+      <li><span class="n" aria-hidden="true">2</span><span><strong>Una propuesta clara.</strong> Qué haría, qué no, cuánto cuesta y cuánto cuesta mantenerlo.</span></li>
+      <li><span class="n" aria-hidden="true">3</span><span><strong>Una primera entrega.</strong> Empiezo por la parte que más trabajo te ahorra, para que lo notes pronto.</span></li>
     </ol>
     <p class="fine">Si lo que necesitas se resuelve con una herramienta que ya existe, te lo diré antes de construir nada.</p>
   </Section>
 
-  <Section id="sobre-mi" title="Quién está detrás">
+  <Section id="sobre-mi" tone="alt" title="Quién está detrás">
     <div class="about">
       <p>
         Soy Rubén Rosales. Llevo más de 7 años diseñando y desarrollando software para sectores muy
@@ -77,8 +96,8 @@ const featured = (await getProjects(true)).slice(0, 3);
     </div>
   </Section>
 
-  <Section id="cierre" title="¿Tienes un proceso que te quita horas cada semana?">
-    <p><a class="btn btn-primary" href="/contacto">Cuéntamelo</a></p>
+  <Section id="cierre" tone="primary" title="¿Tienes un proceso que te quita horas cada semana?">
+    <p><a class="btn btn-inverse" href="/contacto">Cuéntamelo</a></p>
   </Section>
 </Layout>
 
@@ -86,21 +105,43 @@ const featured = (await getProjects(true)).slice(0, 3);
   .hero {
     position: relative;
     margin-top: calc(var(--nav-height) * -1);
-    padding-top: calc(var(--nav-height) + var(--space-9));
-    padding-bottom: var(--space-9);
+    padding-top: calc(var(--nav-height) + var(--space-8));
+    padding-bottom: var(--space-8);
     overflow: hidden;
   }
-  .hero-inner { position: relative; z-index: var(--z-raised); display: grid; gap: var(--space-5); }
-  .hero h1 { max-width: 20ch;
-    min-width: 0; }
+  .hero-inner { position: relative; z-index: var(--z-raised); display: grid; grid-template-columns: minmax(0, 1fr); gap: var(--space-7); align-items: center; }
+  .hero-text { display: grid; grid-template-columns: minmax(0, 1fr); gap: var(--space-5); }
+  .em { color: var(--color-primary); }
   .lead { max-width: var(--measure); font-size: var(--font-size-lead); color: var(--color-foreground-muted); }
   .ctas { display: flex; flex-wrap: wrap; gap: var(--space-4); }
-  .grid { display: grid; gap: var(--grid-gutter); }
-  .steps { margin: 0; padding-inline-start: var(--space-5); display: grid; gap: var(--space-3); max-width: var(--measure); }
+  .tools-wrap { margin-top: var(--space-6); }
+  .grid { display: grid; grid-template-columns: minmax(0, 1fr); gap: var(--grid-gutter); }
+  .steps { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: minmax(0, 1fr); gap: var(--grid-gutter); }
+  .steps li {
+    display: grid;
+    gap: var(--space-3);
+    align-content: start;
+    padding: var(--space-5);
+    background: var(--color-surface);
+    border: var(--border-width-thin) solid var(--color-border);
+    border-radius: var(--radius-lg);
+  }
+  .n {
+    display: grid;
+    place-items: center;
+    width: var(--space-6);
+    height: var(--space-6);
+    border-radius: var(--radius-md);
+    background: var(--color-primary);
+    color: var(--color-primary-foreground);
+    font-weight: var(--font-weight-medium);
+    font-variant-numeric: tabular-nums;
+  }
   .fine { margin-top: var(--space-5); font-size: var(--font-size-label); color: var(--color-foreground-muted); }
   .about { display: grid; gap: var(--space-4); max-width: var(--measure); }
   .more { margin-top: var(--space-5); }
   @media (min-width: 64rem) {
-    .grid { grid-template-columns: repeat(3, 1fr); }
+    .hero-inner { grid-template-columns: minmax(0, 1.15fr) minmax(0, 1fr); }
+    .grid, .steps { grid-template-columns: repeat(3, minmax(0, 1fr)); }
   }
 </style>

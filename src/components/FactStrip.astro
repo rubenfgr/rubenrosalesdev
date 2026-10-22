@@ -1,0 +1,43 @@
+---
+import { homeData } from '../data/site';
+---
+
+<div class="container">
+  <dl class="facts">
+    {
+      homeData.facts.map((f) => (
+        <div class="fact">
+          <dt>{f.value}</dt>
+          <dd>{f.label}</dd>
+        </div>
+      ))
+    }
+  </dl>
+</div>
+
+<style>
+  .facts {
+    margin: 0;
+    display: grid;
+    grid-template-columns: minmax(0, 1fr);
+    background: var(--color-surface);
+    border: var(--border-width-thin) solid var(--color-border);
+    border-radius: var(--radius-lg);
+    overflow: hidden;
+  }
+  .fact { padding: var(--space-5); display: grid; gap: var(--space-1); }
+  .fact + .fact { border-top: var(--border-width-thin) solid var(--color-border); }
+  dt {
+    font-size: var(--font-size-h3);
+    font-stretch: var(--font-width-display);
+    font-weight: var(--font-weight-strong);
+    letter-spacing: var(--letter-spacing-heading);
+    line-height: var(--line-height-snug);
+    color: var(--color-primary);
+  }
+  dd { margin: 0; color: var(--color-foreground-muted); font-size: var(--font-size-label); }
+  @media (min-width: 40rem) {
+    .facts { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+    .fact + .fact { border-top: 0; border-inline-start: var(--border-width-thin) solid var(--color-border); }
+  }
+</style>

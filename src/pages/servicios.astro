@@ -12,6 +12,7 @@ import Layout from '../layouts/Layout.astro';
   <Section
     as="h1"
     id="servicios"
+    tone="alt"
     title="Servicios"
     lead="Automatización, aplicaciones web y apps móviles para pymes y profesionales. Siempre con la misma regla: la solución más sencilla que resuelva el problema."
   >
@@ -21,6 +22,7 @@ import Layout from '../layouts/Layout.astro';
 </Layout>
 
 <style>
-  .list { display: grid; gap: var(--grid-gutter); max-width: var(--container-text); }
+  .list { display: grid; grid-template-columns: minmax(0, 1fr); gap: var(--grid-gutter); }
+  @media (min-width: 64rem) { .list { grid-template-columns: repeat(3, minmax(0, 1fr)); } }
   .cta { margin-top: var(--space-6); }
 </style>

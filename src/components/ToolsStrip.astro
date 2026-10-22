@@ -1,0 +1,35 @@
+---
+import { Database, FileSpreadsheet, FileText, ClipboardList, Mail, Plug } from '@lucide/astro';
+import { homeData } from '../data/site';
+
+const icons = { mail: Mail, 'file-text': FileText, table: FileSpreadsheet, database: Database, form: ClipboardList, plug: Plug };
+---
+
+<div class="container tools">
+  <p class="label">{homeData.toolsLabel}</p>
+  <ul>
+    {
+      homeData.tools.map((t) => {
+        const Icon = icons[t.icon];
+        return <li><Icon size={20} stroke-width={1.5} aria-hidden="true" /> {t.label}</li>;
+      })
+    }
+  </ul>
+</div>
+
+<style>
+  .tools { display: grid; gap: var(--space-3); }
+  .label { font-size: var(--font-size-label); font-weight: var(--font-weight-medium); color: var(--color-foreground-muted); }
+  ul { list-style: none; margin: 0; padding: 0; display: flex; flex-wrap: wrap; gap: var(--space-3); }
+  li {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--space-2);
+    padding: var(--space-2) var(--space-4);
+    font-size: var(--font-size-label);
+    background: var(--color-surface);
+    border: var(--border-width-thin) solid var(--color-border);
+    border-radius: var(--radius-md);
+  }
+  li :global(svg) { color: var(--color-primary); }
+</style>

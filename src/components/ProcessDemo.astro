@@ -13,7 +13,7 @@ import { demoData as demo } from '../data/site';
         demo.steps.map((s, i) => (
           <li data-step>
             <span class="num" aria-hidden="true">{i + 1}</span>
-            <div>
+            <div class="body">
               <h3>{s.title}</h3>
               <p>{s.text}</p>
             </div>
@@ -22,7 +22,7 @@ import { demoData as demo } from '../data/site';
       }
     </ol>
 
-    <div class="controls" data-controls hidden>
+    <div class="controls" data-controls>
       <button type="button" class="btn btn-secondary" data-prev>Anterior</button>
       <span class="count" data-count></span>
       <button type="button" class="btn btn-secondary" data-next>Siguiente</button>
@@ -46,13 +46,15 @@ import { demoData as demo } from '../data/site';
     if (!controls || !prev || !next || !count || !live) return;
 
     let i = 0;
-    root.classList.add('enhanced');
-    controls.hidden = false;
+    controls.dataset.ready = '';
 
+    // Todos los pasos siguen visibles; el actual se resalta y los anteriores se marcan como hechos.
     const show = (n: number, announce: boolean) => {
       i = Math.min(Math.max(n, 0), steps.length - 1);
       steps.forEach((s, idx) => {
-        s.hidden = idx !== i;
+        s.dataset.state = idx < i ? 'done' : idx === i ? 'current' : 'next';
+        if (idx === i) s.setAttribute('aria-current', 'step');
+        else s.removeAttribute('aria-current');
       });
       count.textContent = `Paso ${i + 1} de ${steps.length}`;
       prev.disabled = i === 0;
@@ -72,7 +74,7 @@ import { demoData as demo } from '../data/site';
 </script>
 
 <style>
-  .demo { display: grid; gap: var(--space-4); max-width: var(--container-text); }
+  .demo { display: grid; grid-template-columns: minmax(0, 1fr); gap: var(--space-4); max-width: var(--container-text); }
   .tag {
     justify-self: start;
     padding: var(--space-1) var(--space-3);
@@ -84,16 +86,34 @@ import { demoData as demo } from '../data/site';
   }
   .frame {
     display: grid;
+    grid-template-columns: minmax(0, 1fr);
     gap: var(--space-5);
     padding: var(--space-5);
-    background: var(--color-surface);
+    background: var(--color-background);
     border: var(--border-width-thin) solid var(--color-border);
     border-radius: var(--radius-lg);
   }
-  .steps { list-style: none; margin: 0; padding: 0; display: grid; gap: var(--space-4); }
-  .steps li { display: grid; grid-template-columns: var(--space-6) 1fr; gap: var(--space-3); }
-  .steps li[hidden] { display: none; }
+  .steps { list-style: none; margin: 0; padding: 0; display: grid; }
+  .steps li {
+    position: relative;
+    display: grid;
+    grid-template-columns: var(--space-6) minmax(0, 1fr);
+    gap: var(--space-4);
+    padding-bottom: var(--space-5);
+  }
+  .steps li:last-child { padding-bottom: 0; }
+  /* Conector vertical entre pasos */
+  .steps li:not(:last-child)::before {
+    content: '';
+    position: absolute;
+    inset-inline-start: calc(var(--space-6) / 2 - var(--border-width-thin));
+    top: var(--space-6);
+    bottom: 0;
+    width: var(--border-width-thick);
+    background: var(--color-border);
+  }
   .num {
+    z-index: var(--z-raised);
     display: grid;
     place-items: center;
     width: var(--space-6);
@@ -101,12 +121,36 @@ import { demoData as demo } from '../data/site';
     border-radius: var(--radius-md);
     background: var(--color-primary);
     color: var(--color-primary-foreground);
+    border: var(--border-width-thin) solid var(--color-primary);
     font-variant-numeric: tabular-nums;
     font-weight: var(--font-weight-medium);
+    transition: background-color var(--duration-base) var(--ease-out);
+  }
+  /* Sin JS no hay estado y todos los pasos usan el estilo principal */
+  .steps li[data-state='next'] .num {
+    background: var(--color-surface-alt);
+    color: var(--color-foreground);
+    border-color: var(--color-border-strong);
+  }
+  .steps li[data-state='done'] .num {
+    background: var(--color-success-surface);
+    color: var(--color-success);
+    border-color: var(--color-success);
+  }
+  .steps li[data-state='done']::before { background: var(--color-success); }
+  .steps li[data-state='current'] .body {
+    padding: var(--space-3) var(--space-4);
+    margin-block: calc(var(--space-3) * -1);
+    background: var(--color-info-surface);
+    border-radius: var(--radius-md);
   }
   h3 { font-stretch: var(--font-width-body); font-size: var(--font-size-body); letter-spacing: 0; }
-  .controls { display: flex; align-items: center; gap: var(--space-4); flex-wrap: wrap; }
+  .controls { display: flex; align-items: center; gap: var(--space-4); flex-wrap: wrap; visibility: hidden; }
+  .controls[data-ready] { visibility: visible; }
   .count { font-size: var(--font-size-label); color: var(--color-foreground-muted); font-variant-numeric: tabular-nums; }
   .btn:disabled { opacity: 0.5; cursor: not-allowed; }
+  .before, .after { padding: var(--space-3) var(--space-4); border-radius: var(--radius-md); }
+  .before { background: var(--color-warning-surface); }
+  .after { background: var(--color-success-surface); }
   .fine { font-size: var(--font-size-label); color: var(--color-foreground-muted); }
 </style>

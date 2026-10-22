@@ -1,0 +1,86 @@
+---
+import { ArrowDown, CircleCheck, FileText, Mail, UserRound } from '@lucide/astro';
+
+const fields = ['Cliente', 'Productos', 'Cantidades', 'Fecha de entrega'];
+---
+
+<figure class="visual" role="group" aria-label="Ejemplo ilustrativo: un pedido por email que se registra sin teclearlo">
+  <p class="tag">Ejemplo ilustrativo</p>
+
+  <div class="panel">
+    <p class="title"><Mail size={16} stroke-width={1.5} aria-hidden="true" /> Llega un pedido por email</p>
+    <p class="file"><FileText size={16} stroke-width={1.5} aria-hidden="true" /> pedido.pdf</p>
+  </div>
+
+  <span class="arrow" aria-hidden="true"><ArrowDown size={20} stroke-width={1.5} /></span>
+
+  <div class="panel">
+    <p class="title">Se extraen y validan los datos</p>
+    <ul class="chips">
+      {fields.map((f) => <li><CircleCheck size={14} stroke-width={1.5} aria-hidden="true" /> {f}</li>)}
+    </ul>
+  </div>
+
+  <span class="arrow" aria-hidden="true"><ArrowDown size={20} stroke-width={1.5} /></span>
+
+  <div class="outcomes">
+    <p class="ok"><CircleCheck size={16} stroke-width={1.5} aria-hidden="true" /> Si todo cuadra: registrado en el programa de gestión</p>
+    <p class="review"><UserRound size={16} stroke-width={1.5} aria-hidden="true" /> Si algo no cuadra: se avisa a una persona</p>
+  </div>
+</figure>
+
+<style>
+  .visual {
+    margin: 0;
+    display: grid;
+    grid-template-columns: minmax(0, 1fr);
+    gap: var(--space-2);
+    padding: var(--space-5);
+    background: var(--color-surface);
+    border: var(--border-width-thin) solid var(--color-border);
+    border-radius: var(--radius-lg);
+    box-shadow: var(--shadow-md);
+  }
+  .tag {
+    justify-self: start;
+    padding: var(--space-1) var(--space-3);
+    font-size: var(--font-size-caption);
+    font-weight: var(--font-weight-medium);
+    color: var(--color-info);
+    background: var(--color-info-surface);
+    border-radius: var(--radius-sm);
+    margin-bottom: var(--space-2);
+  }
+  .panel {
+    display: grid;
+    gap: var(--space-2);
+    padding: var(--space-4);
+    background: var(--color-background);
+    border: var(--border-width-thin) solid var(--color-border);
+    border-radius: var(--radius-md);
+  }
+  .title, .file, .outcomes p {
+    display: flex;
+    align-items: center;
+    gap: var(--space-2);
+    font-size: var(--font-size-label);
+  }
+  .title { font-weight: var(--font-weight-medium); }
+  .file { color: var(--color-foreground-muted); font-family: var(--font-family-mono); }
+  .arrow { justify-self: center; color: var(--color-foreground-subtle); line-height: 0; }
+  .chips { list-style: none; margin: 0; padding: 0; display: flex; flex-wrap: wrap; gap: var(--space-2); }
+  .chips li {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--space-1);
+    padding: var(--space-1) var(--space-2);
+    font-size: var(--font-size-caption);
+    color: var(--color-success);
+    background: var(--color-success-surface);
+    border-radius: var(--radius-sm);
+  }
+  .outcomes { display: grid; gap: var(--space-2); }
+  .outcomes p { padding: var(--space-3); border-radius: var(--radius-md); }
+  .ok { color: var(--color-success); background: var(--color-success-surface); }
+  .review { color: var(--color-warning); background: var(--color-warning-surface); }
+</style>

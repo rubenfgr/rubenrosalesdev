@@ -11,7 +11,8 @@
     ],
     "forWhom": "Para negocios con procesos repetitivos que ya no se resuelven con una herramienta sencilla: datos que pasan entre varios sistemas, documentos con formatos distintos o reglas propias. Si basta con una automatización ya hecha, te lo diré.",
     "receive": "La aplicación o automatización funcionando, documentación de uso y una explicación de qué hace falta para mantenerla.",
-    "notRecommended": "Si el proceso cambia cada semana, primero hay que ordenarlo; automatizar el desorden solo lo acelera."
+    "notRecommended": "Si el proceso cambia cada semana, primero hay que ordenarlo; automatizar el desorden solo lo acelera.",
+    "icon": "workflow"
   },
   {
     "id": "web",
@@ -25,7 +26,8 @@
     ],
     "forWhom": "Para pymes y profesionales que necesitan una aplicación que funcione en su día a día: conectada con sus sistemas, con usuarios y permisos, y que se pueda mantener. Las webs sencillas hoy se montan con muchas herramientas; entro cuando hay algo más de fondo.",
     "receive": "La aplicación o automatización funcionando, documentación de uso y una explicación de qué hace falta para mantenerla.",
-    "notRecommended": "Si una herramienta existente cubre el 90 % de lo que necesitas, normalmente sale más a cuenta adaptarla."
+    "notRecommended": "Si una herramienta existente cubre el 90 % de lo que necesitas, normalmente sale más a cuenta adaptarla.",
+    "icon": "layout-dashboard"
   },
   {
     "id": "movil",
@@ -39,6 +41,7 @@
     ],
     "forWhom": "Para equipos o negocios que necesitan una app conectada con su sistema, con funcionamiento sin conexión, avisos o publicación en las tiendas. Si una web bien hecha basta, te lo diré.",
     "receive": "La aplicación o automatización funcionando, documentación de uso y una explicación de qué hace falta para mantenerla.",
-    "notRecommended": "Si tus usuarios solo la abrirían de vez en cuando, una web bien hecha suele bastar."
+    "notRecommended": "Si tus usuarios solo la abrirían de vez en cuando, una web bien hecha suele bastar.",
+    "icon": "smartphone"
   }
 ]

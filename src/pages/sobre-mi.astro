@@ -1,6 +1,6 @@
 ---
-import { aboutData } from '../data/site';
 import Section from '../components/Section.astro';
+import { aboutData } from '../data/site';
 import Layout from '../layouts/Layout.astro';
 
 const { principles, technologies, education } = aboutData;
@@ -27,31 +27,69 @@ const { principles, technologies, education } = aboutData;
         Hoy me centro en automatización de procesos, integración de IA y aplicaciones web y móviles para
         pymes y profesionales.
       </p>
-
-      <h2>Principios</h2>
-      <ul>{principles.map((p) => <li><strong>{p.title}</strong> {p.text}</li>)}</ul>
-
-      <h2>Tecnologías</h2>
-      <dl class="tech">
-        {technologies.map((t) => (
-          <>
-            <dt>{t.group}</dt>
-            <dd>{t.items.join(', ')}</dd>
-          </>
-        ))}
-      </dl>
-
-      <h2>Formación</h2>
-      <ul>{education.map((e) => <li>{e}</li>)}</ul>
     </div>
+  </Section>
+
+  <Section id="principios" tone="alt" title="Principios">
+    <ul class="cards">
+      {principles.map((p) => <li><strong>{p.title}</strong><span>{p.text}</span></li>)}
+    </ul>
+  </Section>
+
+  <Section id="tecnologias" title="Tecnologías">
+    <div class="techgrid">
+      {
+        technologies.map((t) => (
+          <section class="techgroup">
+            <h3>{t.group}</h3>
+            <ul class="chips">{t.items.map((i) => <li>{i}</li>)}</ul>
+          </section>
+        ))
+      }
+    </div>
+  </Section>
+
+  <Section id="formacion" tone="alt" title="Formación">
+    <ul class="edu">{education.map((e) => <li>{e}</li>)}</ul>
   </Section>
 </Layout>
 
 <style>
-  .prose { max-width: var(--measure); display: grid; gap: var(--space-4); }
-  .prose h2 { font-size: var(--font-size-h3); margin-top: var(--space-5); }
-  .tech { margin: 0; display: grid; gap: var(--space-1) var(--space-4); grid-template-columns: max-content 1fr; }
-  .tech dt { font-weight: var(--font-weight-medium); }
-  .tech dd { margin: 0; color: var(--color-foreground-muted); }
-  .prose ul { margin: 0; padding-inline-start: var(--space-5); display: grid; gap: var(--space-2); }
+  .prose { max-width: var(--measure); display: grid; grid-template-columns: minmax(0, 1fr); gap: var(--space-4); }
+  .cards, .techgrid { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: minmax(0, 1fr); gap: var(--grid-gutter); }
+  .cards li {
+    display: grid;
+    gap: var(--space-2);
+    align-content: start;
+    padding: var(--space-5);
+    background: var(--color-background);
+    border: var(--border-width-thin) solid var(--color-border);
+    border-inline-start: var(--border-width-thick) solid var(--color-primary);
+    border-radius: var(--radius-lg);
+  }
+  .cards span { color: var(--color-foreground-muted); }
+  .techgroup {
+    display: grid;
+    gap: var(--space-3);
+    align-content: start;
+    padding: var(--space-5);
+    background: var(--color-surface);
+    border: var(--border-width-thin) solid var(--color-border);
+    border-radius: var(--radius-lg);
+  }
+  .techgroup h3 { font-size: var(--font-size-h4); font-stretch: var(--font-width-body); letter-spacing: 0; }
+  .chips { list-style: none; margin: 0; padding: 0; display: flex; flex-wrap: wrap; gap: var(--space-2); }
+  .chips li {
+    padding: var(--space-1) var(--space-3);
+    font-size: var(--font-size-label);
+    background: var(--color-surface-alt);
+    border-radius: var(--radius-sm);
+  }
+  .edu { margin: 0; padding-inline-start: var(--space-5); display: grid; gap: var(--space-2); max-width: var(--measure); }
+  @media (min-width: 40rem) {
+    .cards, .techgrid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  }
+  @media (min-width: 64rem) {
+    .techgrid { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+  }
 </style>

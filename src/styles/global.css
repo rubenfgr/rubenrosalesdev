@@ -38,7 +38,7 @@ h3 {
   line-height: var(--line-height-snug);
   letter-spacing: var(--letter-spacing-heading);
   margin: 0;
-  overflow-wrap: break-word;
+  overflow-wrap: anywhere;
   hyphens: auto;
 }
 
@@ -46,6 +46,9 @@ h1 {
   font-size: var(--font-size-display);
   line-height: var(--line-height-tight);
   letter-spacing: var(--letter-spacing-display);
+}
+@media (max-width: 25.99rem) {
+  h1 { font-stretch: var(--font-width-body); }
 }
 h2 { font-size: var(--font-size-h2); }
 h3 { font-size: var(--font-size-h3); }
@@ -129,4 +132,13 @@ a:hover { color: var(--color-primary-hover); }
 .btn-secondary:hover {
   background: var(--color-surface-alt);
   color: var(--color-foreground);
+}
+
+.btn-inverse {
+  background: var(--color-primary-foreground);
+  color: var(--color-primary);
+}
+.btn-inverse:hover {
+  background: var(--color-surface-alt);
+  color: var(--color-primary-hover);
 }

@@ -25,6 +25,7 @@ export const navigationSchema = z.object({ main: z.array(link), legal: z.array(l
 
 export const serviceSchema = z.object({
   id: z.enum(['automatizacion', 'web', 'movil']),
+  icon: z.enum(['workflow', 'layout-dashboard', 'smartphone']),
   title: z.string(),
   summary: z.string(),
   points: z.array(z.string()).min(1),
@@ -50,3 +51,17 @@ export const aboutSchema = z.object({
 export const contactSchema = z.object({ serviceOptions: z.array(z.string()).min(1), responseTime: z.string() });
 
 export type Service = z.infer<typeof serviceSchema>;
+
+export const homeSchema = z.object({
+  facts: z.array(z.object({ value: z.string(), label: z.string() })).min(1),
+  toolsLabel: z.string(),
+  tools: z.array(z.object({ icon: z.enum(['mail', 'file-text', 'table', 'database', 'form', 'plug']), label: z.string() })),
+  calculator: z.object({
+    title: z.string(),
+    lead: z.string(),
+    fields: z.object({ people: z.string(), hours: z.string(), rate: z.string() }),
+    note: z.string(),
+    results: z.object({ month: z.string(), cost: z.string(), year: z.string() }),
+    cta: z.string(),
+  }),
+});

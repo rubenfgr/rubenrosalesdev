@@ -1,0 +1,99 @@
+---
+import { homeData } from '../data/site';
+const c = homeData.calculator;
+const initial = { people: 2, hours: 5, rate: 15 };
+const monthHours = initial.people * initial.hours * (52 / 12);
+const fmtNum = new Intl.NumberFormat('es-ES', { maximumFractionDigits: 0 });
+const fmtEur = new Intl.NumberFormat('es-ES', { style: 'currency', currency: 'EUR', maximumFractionDigits: 0 });
+---
+
+<div class="calc" data-calc>
+  <div class="inputs">
+    <div class="field">
+      <label for="calc-people">{c.fields.people}</label>
+      <input id="calc-people" type="number" inputmode="numeric" min="1" step="1" value={initial.people} data-people />
+    </div>
+    <div class="field">
+      <label for="calc-hours">{c.fields.hours}</label>
+      <input id="calc-hours" type="number" inputmode="decimal" min="0" step="0.5" value={initial.hours} data-hours />
+    </div>
+    <div class="field">
+      <label for="calc-rate">{c.fields.rate}</label>
+      <input id="calc-rate" type="number" inputmode="decimal" min="0" step="1" value={initial.rate} data-rate />
+    </div>
+    <p class="note">{c.note}</p>
+  </div>
+
+  <div class="results" aria-live="polite" data-results>
+    <p class="big"><strong data-hours-month>{fmtNum.format(monthHours)}</strong> <span>{c.results.month}</span></p>
+    <p class="big"><strong data-cost-month>{fmtEur.format(monthHours * initial.rate)}</strong> <span>{c.results.cost}</span></p>
+    <p class="big"><strong data-cost-year>{fmtEur.format(monthHours * initial.rate * 12)}</strong> <span>{c.results.year}</span></p>
+    <p><a class="btn btn-primary" href="/contacto">{c.cta}</a></p>
+  </div>
+</div>
+
+<script>
+  const root = document.querySelector<HTMLElement>('[data-calc]');
+  if (root) {
+    const q = (s: string) => root.querySelector<HTMLInputElement>(s);
+    const out = (s: string) => root.querySelector<HTMLElement>(s);
+    const people = q('[data-people]');
+    const hours = q('[data-hours]');
+    const rate = q('[data-rate]');
+    const hm = out('[data-hours-month]');
+    const cm = out('[data-cost-month]');
+    const cy = out('[data-cost-year]');
+    const num = new Intl.NumberFormat('es-ES', { maximumFractionDigits: 0 });
+    const eur = new Intl.NumberFormat('es-ES', { style: 'currency', currency: 'EUR', maximumFractionDigits: 0 });
+    const WEEKS_PER_MONTH = 52 / 12;
+
+    const update = () => {
+      if (!people || !hours || !rate || !hm || !cm || !cy) return;
+      const p = Math.max(0, Number(people.value) || 0);
+      const h = Math.max(0, Number(hours.value) || 0);
+      const r = Math.max(0, Number(rate.value) || 0);
+      const monthHours = p * h * WEEKS_PER_MONTH;
+      hm.textContent = num.format(monthHours);
+      cm.textContent = eur.format(monthHours * r);
+      cy.textContent = eur.format(monthHours * r * 12);
+    };
+    root.addEventListener('input', update);
+    update();
+  }
+</script>
+
+<style>
+  .calc { display: grid; grid-template-columns: minmax(0, 1fr); gap: var(--space-6); }
+  .inputs, .results {
+    display: grid;
+    gap: var(--space-4);
+    align-content: start;
+    padding: var(--space-5);
+    background: var(--color-surface);
+    border: var(--border-width-thin) solid var(--color-border);
+    border-radius: var(--radius-lg);
+  }
+  .field { display: grid; gap: var(--space-2); }
+  label { font-weight: var(--font-weight-medium); }
+  input {
+    width: 100%;
+    padding: var(--space-3);
+    font: inherit;
+    font-variant-numeric: tabular-nums;
+    color: var(--color-foreground);
+    background: var(--color-background);
+    border: var(--border-width-thin) solid var(--color-border-strong);
+    border-radius: var(--radius-md);
+  }
+  .note { font-size: var(--font-size-label); color: var(--color-foreground-muted); }
+  .big { display: flex; align-items: baseline; gap: var(--space-2); flex-wrap: wrap; color: var(--color-foreground-muted); }
+  .big strong {
+    font-size: var(--font-size-h3);
+    font-stretch: var(--font-width-display);
+    font-weight: var(--font-weight-strong);
+    font-variant-numeric: tabular-nums;
+    color: var(--color-foreground);
+    line-height: var(--line-height-snug);
+  }
+  @media (min-width: 64rem) { .calc { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+</style>

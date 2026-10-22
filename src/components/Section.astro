@@ -4,12 +4,13 @@ interface Props {
   lead?: string;
   id?: string;
   as?: 'h1' | 'h2';
+  tone?: 'default' | 'alt' | 'primary';
 }
 
-const { title, lead, id, as: Tag = 'h2' } = Astro.props;
+const { title, lead, id, as: Tag = 'h2', tone = 'default' } = Astro.props;
 ---
 
-<section class="section" id={id} aria-labelledby={id ? `${id}-t` : undefined}>
+<section class:list={['section', tone, { band: tone !== 'default' }]} id={id} aria-labelledby={id ? `${id}-t` : undefined}>
   <div class="container">
     <header class="head">
       <Tag id={id ? `${id}-t` : undefined}>{title}</Tag>
@@ -20,11 +21,29 @@ const { title, lead, id, as: Tag = 'h2' } = Astro.props;
 </section>
 
 <style>
-  .section { padding-top: var(--space-section); }
-  .head { display: grid; gap: var(--space-4); margin-bottom: var(--space-7); }
+  .section { padding-block: calc(var(--space-section) / 2); }
+  .band { padding-block: var(--space-section); }
+  .alt {
+    background: var(--color-surface);
+    border-block: var(--border-width-thin) solid var(--color-border);
+  }
+  .primary {
+    background: var(--color-primary);
+    color: var(--color-primary-foreground);
+  }
+  .primary :global(a:not(.btn)) { color: inherit; }
+  .head { display: grid; grid-template-columns: minmax(0, 1fr); gap: var(--space-4); margin-bottom: var(--space-7); }
+  .head::before {
+    content: '';
+    width: var(--space-7);
+    height: var(--border-width-thick);
+    background: var(--color-accent);
+  }
   .lead {
     max-width: var(--measure);
     font-size: var(--font-size-lead);
     color: var(--color-foreground-muted);
   }
+  .primary .lead { color: inherit; }
+  .primary .head::before { background: var(--color-primary-foreground); }
 </style>

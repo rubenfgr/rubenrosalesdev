@@ -25,7 +25,7 @@ import Logo from './Logo.astro';
 
 <style>
   .footer {
-    margin-top: var(--space-section);
+    margin-top: calc(var(--space-section) / 2);
     padding-block: var(--space-7);
     border-top: var(--border-width-thin) solid var(--color-border);
     background: var(--color-surface);
@@ -37,6 +37,7 @@ import Logo from './Logo.astro';
   }
   .about { display: grid; gap: var(--space-3); max-width: var(--container-text); }
   .about p { color: var(--color-foreground-muted); }
+  :global(main:has(> .band:last-child) + .footer) { margin-top: 0; }
   ul {
     list-style: none;
     margin: 0;
