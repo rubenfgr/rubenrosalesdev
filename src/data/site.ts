@@ -10,6 +10,13 @@ export const site = {
   linkedin: 'https://www.linkedin.com/in/rubenrosalesdev',
 } as const;
 
+export const owner = {
+  name: 'Rubén Francisco Gazquez Rosales',
+  nif: '75718551K',
+  address: 'La Cañada San Urbano, 04120, Almería, España',
+  email: 'hola@rubenrosales.dev',
+} as const;
+
 export const navLinks = [
   { href: '/servicios', label: 'Servicios' },
   { href: '/proyectos', label: 'Proyectos' },

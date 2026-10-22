@@ -1,4 +1,5 @@
 ---
+import { owner } from '../data/site';
 import Legal from '../layouts/Legal.astro';
 ---
 
@@ -10,10 +11,10 @@ import Legal from '../layouts/Legal.astro';
 
   <h2>1. Responsable del tratamiento</h2>
   <ul>
-    <li>Nombre: [VERIFICAR: nombre y apellidos del responsable]</li>
-    <li>NIF/NIE: [VERIFICAR: NIF/NIE]</li>
-    <li>Domicilio: [VERIFICAR: domicilio]</li>
-    <li>Correo electrónico: [VERIFICAR: email de contacto]</li>
+    <li>Nombre: {owner.name}</li>
+    <li>NIF/NIE: {owner.nif}</li>
+    <li>Domicilio: {owner.address}</li>
+    <li>Correo electrónico: {owner.email}</li>
   </ul>
 
   <h2>2. Finalidad del tratamiento</h2>
@@ -62,8 +63,7 @@ import Legal from '../layouts/Legal.astro';
   <h2>8. Derechos del interesado</h2>
   <p>
     Puede ejercitar, en cualquier momento y de forma gratuita, los derechos de acceso, rectificación,
-    supresión, oposición, limitación y portabilidad, dirigiéndose por correo electrónico a [VERIFICAR:
-    email de contacto], indicando el derecho que desea ejercitar y adjuntando copia de su documento de
+    supresión, oposición, limitación y portabilidad, dirigiéndose por correo electrónico a {owner.email}, indicando el derecho que desea ejercitar y adjuntando copia de su documento de
     identidad.
   </p>
   <p>Asimismo, tiene derecho a presentar una reclamación ante la Agencia Española de Protección de Datos (AEPD).</p>

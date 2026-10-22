@@ -1,4 +1,5 @@
 ---
+import { owner } from '../data/site';
 import Legal from '../layouts/Legal.astro';
 ---
 
@@ -9,11 +10,10 @@ import Legal from '../layouts/Legal.astro';
     Información y de Comercio Electrónico (LSSI-CE), se informa de los datos identificativos del titular:
   </p>
   <ul>
-    <li>Titular: [VERIFICAR: nombre y apellidos del titular]</li>
-    <li>NIF/NIE: [VERIFICAR: NIF/NIE]</li>
-    <li>Domicilio: [VERIFICAR: domicilio]</li>
-    <li>Correo electrónico: [VERIFICAR: email de contacto]</li>
-    <li>Teléfono: [VERIFICAR: teléfono, o eliminar la línea]</li>
+    <li>Titular: {owner.name}</li>
+    <li>NIF/NIE: {owner.nif}</li>
+    <li>Domicilio: {owner.address}</li>
+    <li>Correo electrónico: {owner.email}</li>
     <li>Sitio web: rubenrosales.dev</li>
   </ul>
 

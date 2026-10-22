@@ -1,8 +1,10 @@
 ---
+import { owner } from '../data/site';
+
 const options = ['Automatización e IA', 'Aplicación web', 'App móvil', 'No lo tengo claro'];
 ---
 
-<form class="form" method="post" action="/api/contacto" data-contact novalidate>
+<form class="form" method="post" action="/api/contacto" data-contact data-email={owner.email} novalidate>
   <div class="field">
     <label for="nombre">Nombre</label>
     <input id="nombre" name="nombre" type="text" autocomplete="name" required maxlength="100" />
@@ -86,8 +88,7 @@ const options = ['Automatización e IA', 'Aplicación web', 'App móvil', 'No lo
         status.textContent = 'Gracias. He recibido tu mensaje y te responderé lo antes posible.';
         form.reset();
       } catch {
-        status.textContent =
-          'No se ha podido enviar el mensaje. Prueba de nuevo o escríbeme a [VERIFICAR: email de contacto].';
+        status.textContent = `No se ha podido enviar el mensaje. Prueba de nuevo o escríbeme a ${form.dataset.email}.`;
       }
     });
   }
