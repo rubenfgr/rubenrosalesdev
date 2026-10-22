@@ -1,0 +1,114 @@
+{
+  "note": "URLs de la web antigua (Next.js con localePrefix always: solo existen /es/... y /en/...). Fuente de la tabla de redirecciones.",
+  "prefixes": [
+    "/es",
+    "/en"
+  ],
+  "pages": [
+    {
+      "from": "",
+      "to": "/"
+    },
+    {
+      "from": "/services",
+      "to": "/servicios"
+    },
+    {
+      "from": "/services/*",
+      "to": "/servicios"
+    },
+    {
+      "from": "/projects",
+      "to": "/proyectos"
+    },
+    {
+      "from": "/about",
+      "to": "/sobre-mi"
+    },
+    {
+      "from": "/blog",
+      "to": "/blog"
+    },
+    {
+      "from": "/legal-notice",
+      "to": "/aviso-legal"
+    },
+    {
+      "from": "/privacy-policy",
+      "to": "/privacidad"
+    }
+  ],
+  "blogSlugs": [
+    "detectar-procesos-manuales-automatizables",
+    "ia-aplicada-empresas-valor-real",
+    "agentes-ia-produccion-patrones-errores-arquitectura",
+    "integrar-ia-sistemas-existentes",
+    "rag-negocio-cuando-usar",
+    "automatizacion-documental-ocr-ia",
+    "disenar-integraciones-crm-erp-herramientas",
+    "flujo-manual-a-sistema-automatico",
+    "arquitectura-productos-internos-web-apis-despliegue",
+    "integracion-a-medida-o-n8n",
+    "next-js-16-rsc-server-actions-guia-completa",
+    "nestjs-arquitectura-modular-escalable",
+    "typescript-tipos-avanzados-genericos-utiles",
+    "testing-vitest-jest-estrategia-cobertura",
+    "performance-next-js-bundle-size-core-vitals",
+    "seguridad-api-authentication-authorization-tokens",
+    "bases-de-datos-postgres-postgres-indexes-queries",
+    "docker-compose-desarrollo-local-consistencia",
+    "ci-cd-github-actions-automatizar-testing-deploy",
+    "react-hooks-custom-hooks-logica-reutilizable",
+    "tailwind-css-utilidad-primero-no-bloat",
+    "prisma-orm-migraciones-tipos-seguridad",
+    "arquitectura-frontend-layered-features-modulos",
+    "error-handling-boundaries-observabilidad-frontend",
+    "estado-global-context-api-vs-zustand-redux",
+    "ux-formularios-validacion-user-friendly",
+    "accesibilidad-web-wcag-screen-readers-teclado",
+    "migracion-legacy-a-moderno-estrategia",
+    "escala-datos-particionamiento-sharding",
+    "cache-redis-estrategias-invalidacion",
+    "api-versioning-breaking-changes-deprecation",
+    "observabilidad-metricas-logs-traces-distributed-tracing",
+    "despliegue-blue-green-canary-progressive-rollout",
+    "documentacion-tecnica-readme-arquitectura-decisiones",
+    "escalabilidad-horizontal-load-balancing-stateless",
+    "refactoring-tecnicas-deuda-tecnica-mejora-continua",
+    "feedback-loop-desarrollo-rapido-iteracion",
+    "crecimiento-equipo-documentacion-procesos-escala",
+    "nextauth-autenticacion-segura-nextjs",
+    "seo-next-js-metadata-structured-data",
+    "webhooks-eventos-arquitectura-push-basada",
+    "testing-e2e-playwright-automated-workflows",
+    "multitenancy-saas-aislamiento-datos-seguridad",
+    "machine-learning-modelos-produccion-no-trampa",
+    "analitycs-eventos-seguimiento-usuarios-sin-invasividad",
+    "feature-flags-experimentation-rollout-controlado",
+    "backup-disaster-recovery-plan-continuidad"
+  ],
+  "projects": {
+    "integracion-crm-erp-ia": "integracion-crm-erp-ia",
+    "procesamiento-documental-ia": "procesamiento-documental-ia",
+    "nps-casas-alquiler": "nps-casas-alquiler",
+    "app-inventario-barcode": "app-inventario-barcode",
+    "gestion-inmobiliaria": "gestion-inmobiliaria",
+    "sistema-gestion-nominas": "sistema-gestion-nominas",
+    "gestion-becas-universitarias": "gestion-becas-universitarias",
+    "traspaso-vehiculos": "traspaso-vehiculos",
+    "analisis-noticias-ia": "analisis-noticias-ia",
+    "plataforma-educativa-ia-formacion": "plataforma-educativa-ia-formacion",
+    "procesamiento-pedidos-ia-ftp": "integracion-crm-erp-ia",
+    "procesamiento-documental-ia-universidad": "procesamiento-documental-ia",
+    "noticias-procesadas-ia": "analisis-noticias-ia",
+    "plataforma-educativa-deporte": "plataforma-educativa-ia-formacion",
+    "sistema-gestion-ruido-iot": null,
+    "agricultura-precision-prototipo": null,
+    "contabilidad-ifrs-16": null,
+    "control-cerraduras-sistema": null,
+    "control-produccion-cooperativas": null,
+    "control-inventario": null,
+    "control-remoto-iot": null,
+    "red-videovigilancia": null
+  }
+}
