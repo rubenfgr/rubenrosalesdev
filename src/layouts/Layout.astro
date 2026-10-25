@@ -33,7 +33,6 @@ const canonical = new URL(cleanPath(Astro.url), siteUrl).href;
 const alternates = getAlternates(Astro.url, siteUrl, paths);
 const currentPath = cleanPath(Astro.url).replace(/^\/en(?=\/|$)/, '') || '/';
 const switchPaths = Object.fromEntries(locales.map((l) => [l, paths ? (paths[l] ?? '/') : currentPath])) as Record<Lang, string>;
-const footerNav = site.nav.filter((l) => ['services', 'projects', 'blog'].includes(l.id));
 ---
 
 <!doctype html>
@@ -64,7 +63,7 @@ const footerNav = site.nav.filter((l) => ['services', 'projects', 'blog'].includ
     <main id="contenido">
       <slot />
     </main>
-    <Footer lang={lang} t={t} name={site.name} tagline={site.footer.tagline} motto={site.footer.motto} email={site.contact.email} nav={footerNav} legal={site.legal} social={site.social} />
+    <Footer lang={lang} t={t} name={site.name} tagline={site.footer.tagline} motto={site.footer.motto} email={site.contact.email} nav={site.nav} legal={site.legal} social={site.social} />
     {assistantEnabled && <Assistant client:idle data={assistant} pricing={pricing} labels={ui(lang, 'assistant')} lang={lang} locale={intlLocale[lang]} endpoint="/api/contact" />}
     <Scroll />
     {
