@@ -16,7 +16,7 @@ export const siteSchema = z.object({
 
 export const ownerSchema = z.object({
   name: z.string(),
-  nif: z.string(),
+  nif: z.string().optional(),
   address: z.string(),
   email: z.email(),
 });

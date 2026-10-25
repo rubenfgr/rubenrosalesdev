@@ -11,7 +11,7 @@ import Legal from '../layouts/Legal.astro';
   </p>
   <ul>
     <li>Titular: {owner.name}</li>
-    <li>NIF/NIE: {owner.nif}</li>
+    {owner.nif && <li>NIF/NIE: {owner.nif}</li>}
     <li>Domicilio: {owner.address}</li>
     <li>Correo electrónico: {owner.email}</li>
     <li>Sitio web: rubenrosales.dev</li>

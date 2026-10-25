@@ -12,7 +12,7 @@ import Legal from '../layouts/Legal.astro';
   <h2>1. Responsable del tratamiento</h2>
   <ul>
     <li>Nombre: {owner.name}</li>
-    <li>NIF/NIE: {owner.nif}</li>
+    {owner.nif && <li>NIF/NIE: {owner.nif}</li>}
     <li>Domicilio: {owner.address}</li>
     <li>Correo electrónico: {owner.email}</li>
   </ul>
