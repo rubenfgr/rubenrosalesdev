@@ -8,9 +8,9 @@
       "href": "/#servicios"
     },
     {
-      "id": "projects",
-      "label": "Proyectos",
-      "href": "/#proyectos"
+      "id": "how",
+      "label": "Cómo funciona",
+      "href": "/#como-funciona"
     },
     {
       "id": "calculator",
@@ -18,14 +18,24 @@
       "href": "/#calculadora"
     },
     {
-      "id": "blog",
-      "label": "Blog",
-      "href": "/blog"
+      "id": "method",
+      "label": "Método",
+      "href": "/#proceso"
+    },
+    {
+      "id": "projects",
+      "label": "Proyectos",
+      "href": "/#proyectos"
     },
     {
       "id": "faq",
       "label": "FAQ",
       "href": "/#faq"
+    },
+    {
+      "id": "blog",
+      "label": "Blog",
+      "href": "/blog"
     }
   ],
   "cta": {

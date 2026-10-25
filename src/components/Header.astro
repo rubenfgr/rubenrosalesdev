@@ -126,8 +126,13 @@ const contactHref = getLocalizedPath('/#contacto', lang);
   .progress { position: absolute; inset: auto 0 -1px 0; height: 2px; pointer-events: none; }
   .progress-bar { height: 100%; background: var(--gradient-brand); transform-origin: 0 50%; transform: scaleX(0); }
 
-  @media (min-width: 60rem) {
+  .link, .cta { white-space: nowrap; }
+  .role, .sep { display: none; }
+  @media (min-width: 75rem) {
     .desktop { display: flex; }
     .mobile { display: none; }
+  }
+  @media (min-width: 82rem) {
+    .role, .sep { display: inline; }
   }
 </style>
