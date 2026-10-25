@@ -15,7 +15,8 @@ concurrency:
   cancel-in-progress: false
 
 env:
-  IMAGE: ghcr.io/rubenfgr/rubenrosalesdev-web
+  IMAGE_WEB: ghcr.io/rubenfgr/rubenrosalesdev-web
+  IMAGE_API: ghcr.io/rubenfgr/rubenrosalesdev-api
 
 jobs:
   build-and-push:
@@ -25,16 +26,20 @@ jobs:
       - name: Login en GHCR
         run: echo "${{ secrets.GITHUB_TOKEN }}" | docker login ghcr.io -u "${{ github.actor }}" --password-stdin
       # GUARDS_STRICT=1: el build falla si queda un [VERIFICAR] o un borrador enlazado (nada de eso llega a producción).
-      - name: Construir imagen
+      - name: Construir imagen de la web
         run: |
           docker build -f apps/web/Dockerfile --build-arg GUARDS_STRICT=1 \
             --build-arg PUBLIC_ASSISTANT_ENABLED="${{ vars.PUBLIC_ASSISTANT_ENABLED }}" \
             --build-arg PUBLIC_CF_ANALYTICS_TOKEN="${{ vars.PUBLIC_CF_ANALYTICS_TOKEN }}" \
-            -t "$IMAGE:latest" -t "$IMAGE:${{ github.sha }}" .
-      - name: Publicar imagen
+            -t "$IMAGE_WEB:latest" -t "$IMAGE_WEB:${{ github.sha }}" .
+      - name: Construir imagen de la API
+        run: docker build -f apps/api/Dockerfile -t "$IMAGE_API:latest" -t "$IMAGE_API:${{ github.sha }}" .
+      - name: Publicar imágenes
         run: |
-          docker push "$IMAGE:latest"
-          docker push "$IMAGE:${{ github.sha }}"
+          docker push "$IMAGE_WEB:latest"
+          docker push "$IMAGE_WEB:${{ github.sha }}"
+          docker push "$IMAGE_API:latest"
+          docker push "$IMAGE_API:${{ github.sha }}"
 
   deploy:
     needs: build-and-push
