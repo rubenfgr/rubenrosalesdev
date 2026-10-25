@@ -1,6 +1,6 @@
 # Formulario de contacto (Gmail)
 
-El formulario guiado, el directo y el resumen del asistente envían JSON a `POST /api/contact` (un endpoint del Worker de Cloudflare). El endpoint valida los datos, aplica el antispam (campo señuelo `website`, tiempo mínimo de 3 s desde que se abre el formulario y comprobación de origen) y envía el email con el proveedor elegido en `CONTACT_PROVIDER`: **Gmail** (por defecto, OAuth2) o **Resend**. El visitante queda en `Reply-To`, así que basta responder al email recibido.
+El formulario guiado, el directo y el resumen del asistente envían JSON a `POST /api/contact` (un endpoint del servidor Node). El endpoint valida los datos, aplica el antispam (campo señuelo `website`, tiempo mínimo de 3 s desde que se abre el formulario y comprobación de origen) y envía el email con el proveedor elegido en `CONTACT_PROVIDER`: **Gmail** (por defecto, OAuth2) o **Resend**. El visitante queda en `Reply-To`, así que basta responder al email recibido.
 
 ## Variables (solo en el entorno, nunca en el repo)
 
@@ -17,7 +17,7 @@ El formulario guiado, el directo y el resumen del asistente envían JSON a `POST
 
 Sin ellas, el endpoint responde 503 y el formulario muestra el aviso de error con el email de contacto.
 
-En producción se definen como **secretos del Worker** (`pnpm exec wrangler secret put GMAIL_CLIENT_ID`, etc., o en el panel de Cloudflare). En local, copia `.dev.vars.example` a `.dev.vars`.
+En producción se definen en `/opt/rubenrosales/.env` del VPS (ver [despliegue.md](despliegue.md)). En local, copia `.env.example` a `.env`.
 
 ## Cómo obtener las credenciales
 
@@ -38,8 +38,8 @@ Según la [documentación de Google](https://developers.google.com/identity/prot
 - pasan 6 meses sin usarlo,
 - revocas el acceso, o se superan 100 tokens por cuenta y cliente.
 
-Si el formulario empieza a fallar (el Worker registra `contacto: fallo al enviar token 400`), repite los pasos 4 y 5. Conviene enviarte un mensaje de prueba cada pocos meses.
+Si el formulario empieza a fallar (el servidor registra `contacto: fallo al enviar token 400`), repite los pasos 4 y 5. Conviene enviarte un mensaje de prueba cada pocos meses.
 
 ## Antispam
 
-El endpoint no tiene límite de peticiones propio. Si hiciera falta, se añade una regla de limitación en Cloudflare (WAF) sobre `/api/contacto`.
+El endpoint no tiene límite de peticiones propio. Si hiciera falta, se añade un middleware de Traefik (`ratelimit`) sobre `/api/contacto`.

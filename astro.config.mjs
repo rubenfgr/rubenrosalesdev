@@ -1,7 +1,7 @@
 // @ts-check
 import { unified } from '@astrojs/markdown-remark';
 import sitemap from '@astrojs/sitemap';
-import cloudflare from '@astrojs/cloudflare';
+import node from '@astrojs/node';
 import mdx from '@astrojs/mdx';
 import preact from '@astrojs/preact';
 import { defineConfig, envField } from 'astro/config';
@@ -47,8 +47,8 @@ const light = codeTheme('rr-light', 'light', {
 });
 export default defineConfig({
   site: 'https://rubenrosales.dev',
-  // Sin sesiones (no se crea KV) y con imágenes optimizadas en el build (no se usa el binding de Images).
-  adapter: cloudflare({ imageService: 'compile' }),
+  // Servidor Node (contenedor Docker en el VPS): sirve lo estático y ejecuta las rutas /api y las redirecciones.
+  adapter: node({ mode: 'standalone' }),
   session: false,
   // Secretos del formulario de contacto: solo variables de entorno, nunca en el repo.
   env: {
@@ -73,7 +73,7 @@ export default defineConfig({
   // Desarrollo accesible por Tailscale (pnpm dev:tailscale): permite los nombres MagicDNS *.ts.net.
   vite: { server: { allowedHosts: ['.ts.net'] } },
   trailingSlash: 'never',
-  build: { format: 'file' },
+  build: { format: 'directory' },
   integrations: [
     sitemap({ i18n: { defaultLocale: 'es', locales: { es: 'es-ES', en: 'en-GB' } } }),
     expressiveCode({

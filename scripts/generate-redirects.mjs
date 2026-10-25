@@ -1,4 +1,4 @@
-// Genera public/_redirects (Cloudflare) y docs/redirecciones.md a partir de src/data/legacy.json.
+// Genera src/data/redirects.generated.json (lo aplica src/middleware.ts) y docs/redirecciones.md a partir de src/data/legacy.json.
 // El destino de cada artículo o proyecto antiguo depende del contenido actual:
 // si sigue publicado, va a su URL nueva; si no, a /blog o /proyectos.
 import fs from 'node:fs';
@@ -42,14 +42,12 @@ for (const prefix of legacy.prefixes.filter((x) => x !== '/en')) {
 }
 // Páginas que ahora viven en la landing
 for (const from of legacy.landingRedirects) rows.push([from, '/']);
-// Reglas con comodín al final (Cloudflare evalúa en orden; las estáticas primero).
+// Reglas con comodín al final (las exactas primero).
 rows.sort((a, b) => Number(a[0].includes('*')) - Number(b[0].includes('*')));
 // Resto de rutas con prefijo: /es/x → /x (el español ya no lleva prefijo).
 rows.push(['/es/*', '/:splat']);
 
-const redirects = rows.map(([from, to]) => `${from} ${to} 301`).join('\n') + '\n';
-fs.mkdirSync(path.join(root, 'public'), { recursive: true });
-fs.writeFileSync(path.join(root, 'public/_redirects'), redirects);
+fs.writeFileSync(path.join(root, 'src/data/redirects.generated.json'), `${JSON.stringify(rows, null, 1)}\n`);
 
 const md = [
   '# Tabla de redirecciones',

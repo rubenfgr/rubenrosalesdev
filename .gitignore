@@ -3,7 +3,5 @@ dist/
 .astro/
 .env
 .env.*
-.wrangler/
 redesign-kit/
-public/_redirects
 .dev.vars
