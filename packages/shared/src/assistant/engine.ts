@@ -1,5 +1,5 @@
-// Motor de reglas del asistente. Puro y sin dependencias de Astro: lo usan la isla y la ruta de la API.
-// Todos los textos y cifras vienen de los datos (src/content/assistant), nunca de aquí.
+// Motor de reglas del asistente. Puro y sin dependencias de Astro: lo usan la isla de la web y la API.
+// Todos los textos y cifras vienen de los datos (apps/web/src/content/assistant), nunca de aquí.
 
 export type Confidence = 'low' | 'medium' | 'high';
 

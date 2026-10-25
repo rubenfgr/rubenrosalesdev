@@ -12,6 +12,7 @@ COPY packages/shared/package.json packages/shared/
 
 FROM base AS build
 RUN pnpm install --frozen-lockfile --filter @rr/web...
+COPY packages/shared packages/shared
 COPY apps/web apps/web
 # Con GUARDS_STRICT=1 el build falla si queda algún [VERIFICAR] o un borrador enlazado.
 ARG GUARDS_STRICT=0

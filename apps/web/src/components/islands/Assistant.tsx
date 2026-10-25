@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from 'preact/hooks';
-import { canEstimate, estimate, matchRule, type Ctx, type Estimate, type Pricing } from '../../lib/assistant/engine';
+import { canEstimate, estimate, matchRule, type Ctx, type Estimate, type Pricing } from '@rr/shared/engine';
 import './Assistant.css';
 
 interface Data {

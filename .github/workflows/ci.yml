@@ -20,6 +20,6 @@ jobs:
           cache: pnpm
       - run: pnpm install --frozen-lockfile
       - run: pnpm check
-      - run: pnpm --filter @rr/api test
+      - run: pnpm test
       # Sin GUARDS_STRICT: las guardas de producción avisan pero no bloquean ramas ni previews.
       - run: pnpm build

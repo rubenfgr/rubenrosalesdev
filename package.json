@@ -11,6 +11,7 @@
     "check": "pnpm -r check",
     "build:prod": "pnpm --filter @rr/web build:prod && pnpm --filter @rr/api build",
     "i18n:check": "pnpm --filter @rr/web i18n:check",
-    "content:new": "pnpm --filter @rr/web content:new"
+    "content:new": "pnpm --filter @rr/web content:new",
+    "test": "pnpm -r --if-present test"
   }
 }

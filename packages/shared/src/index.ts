@@ -35,3 +35,5 @@ export const leadSchema = z.object({
   summary: z.array(z.string().max(300)).max(20).default([]),
 });
 export type Lead = z.infer<typeof leadSchema>;
+
+export * from './assistant/engine';
