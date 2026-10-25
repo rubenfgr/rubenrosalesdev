@@ -152,7 +152,7 @@ Principios de diseño:
 | ID | Decisión | Estado | Respuesta |
 |---|---|---|---|
 | D-1 | Cifras reales de `pricing.json` (tipos, rangos €, semanas, multiplicadores) y quitar `placeholder` | **PENDIENTE (bloquea fase 10)** | |
-| D-2 | Proveedor y modelo del LLM y **tope de gasto mensual** en euros | **DECIDIDA** (pendiente solo verificar el ID del modelo) | Proveedor Google Gemini, modelo **`gemini-3.5-flash-lite`** (ID facilitado por Rubén; el agente debe confirmar que existe y cómo se invoca en la documentación oficial). **Tope: 1 €/mes.** Rubén cargará **5 €** en la cuenta de la API (nivel de pago; ver T-3.0). Alternativa open: Ollama (T-3.9) |
+| D-2 | Proveedor y modelo del LLM y **tope de gasto mensual** en euros | **DECIDIDA y verificada** (ID, API y precios; ver T-3.0) | Proveedor Google Gemini, modelo **`gemini-3.5-flash-lite`** (ID facilitado por Rubén; el agente debe confirmar que existe y cómo se invoca en la documentación oficial). **Tope: 1 €/mes.** Rubén cargará **5 €** en la cuenta de la API (nivel de pago; ver T-3.0). Alternativa open: Ollama (T-3.9) |
 | D-3 | ¿Se guardan las conversaciones? Plazo de conservación (propuesta: 90 días) y base legal | **PENDIENTE (bloquea fase 5)** | |
 | D-4 | Texto del aviso/consentimiento al abrir el chat (es/en) | **PENDIENTE (bloquea fase 5)** | |
 | D-5 | Antibots: ¿Cloudflare Turnstile (gratis; el DNS ya está en Cloudflare) o solo rate limit + honeypot? | **PENDIENTE (fase 7)** | |
@@ -235,11 +235,12 @@ Objetivo: base sólida de la API (configuración, errores, logging, límites) an
 
 Objetivo: endpoint `POST /api/v1/chat` con streaming, herramientas y guardarraíles. **Bloqueada por D-2.**
 
-- [ ] **T-3.0 Configuración del proveedor (D-2 decidida)** — Gemini 3.5 Flash Lite, tope **1 €/mes**, Rubén pondrá **5 €** de saldo.
+- [~] **T-3.0 Configuración del proveedor (D-2 decidida)** — Gemini 3.5 Flash Lite, tope **1 €/mes**, Rubén pondrá **5 €** de saldo.
   - **Nota de privacidad (verificar):** según mi conocimiento, en los niveles gratuitos de la Gemini API Google puede usar el contenido para mejorar sus productos; con saldo/plan de pago no. Como el chat recibirá texto de visitantes, **verifica en los términos oficiales vigentes** que el uso con saldo de pago no se usa para entrenar y anótalo en §4. Si no puede garantizarse, el prompt enviado al modelo **no debe incluir datos personales** (nombre/email nunca van al LLM; solo el texto de la conversación sin identificadores).
   - **Cómo funciona el saldo (verificar con Rubén en la consola de Google AI Studio/Cloud):** cargar 5 € no limita por sí solo el gasto en todos los casos (algunos modos de facturación cobran después y los presupuestos de Google Cloud solo **avisan**, no cortan). Por eso **el tope real lo impone la propia API** (T-7.3) con el contador de coste; la alerta de Google es una segunda red de seguridad. Pide a Rubén que active una **alerta de presupuesto** en 1 € si la consola lo permite.
   - Rubén crea la clave y se guarda **solo** como `ASSISTANT_LLM_API_KEY` en el `.env` del VPS.
   - Variables: `ASSISTANT_LLM_PROVIDER` (`gemini` | `ollama`), `ASSISTANT_LLM_ENABLED` (`1` activa), `ASSISTANT_LLM_API_KEY`, `ASSISTANT_LLM_MODEL` (valor inicial `gemini-3.5-flash-lite`; confirmar en la documentación), `ASSISTANT_LLM_MAX_OUTPUT_TOKENS` (por defecto **300**), `ASSISTANT_LLM_MONTHLY_BUDGET_EUR` (**1**), `ASSISTANT_LLM_PRICE_IN_PER_MTOK` y `ASSISTANT_LLM_PRICE_OUT_PER_MTOK` (euros por millón de tokens de entrada/salida, **copiados de la tabla de precios oficial vigente**; no los inventes: si no puedes verificarlos, pregunta a Rubén), `OLLAMA_BASE_URL`, `OLLAMA_MODEL`.
+  - **Verificado el 2026-10-25** (docs oficiales: ai.google.dev/gemini-api/docs/models, /pricing, /api/generate-content): `gemini-3.5-flash-lite` existe y es estable; precio de pago estándar 0,30 USD/Mtok entrada y 2,50 USD/Mtok salida (incluye razonamiento); en pago el contenido no se usa para mejorar productos. Pendiente de Rubén: clave, alerta de presupuesto a 1 €, y confirmar el criterio USD≈EUR. Hecho en `6831b4a`.
   - **Aceptación:** variables documentadas en `deploy/.env.example` y `docs/backend.md`; D-2 verificada en §4 con enlaces a la documentación y a la tabla de precios consultadas.
 - [x] **T-3.1 Conocimiento empaquetado para la API**
   - Depende de: T-1.1.
@@ -266,13 +267,14 @@ Objetivo: endpoint `POST /api/v1/chat` con streaming, herramientas y guardarraí
   - Una vez portado, **elimina** `apps/web/src/lib/assistant/prompt.ts` y `apps/web/src/pages/api/assistant.ts` (la web ya no llama al LLM; lo hace la API). Verifica antes con `grep` que nada más los importa.
   - **Hecho en `8c1493e`.** Retirados `prompt.ts` y `pages/api/assistant.ts` de la web y las variables `ASSISTANT_LLM_*` de `astro.config.mjs`. El encabezado de la tabla indica usar la herramienta `estimate`. La selección de secciones por relevancia llega con T-3.8.
   - **Aceptación:** pruebas que comprueban que el prompt de `es` y de `en` contiene la tabla de rangos, las 7 reglas y la bio, y que **no** contiene cifras fuera de `pricing.json`.
-- [ ] **T-3.4 Cliente del LLM (abstracción)**
+- [x] **T-3.4 Cliente del LLM (abstracción)**
   - `apps/api/src/services/llm.ts`: interfaz `LlmClient { stream(input): AsyncIterable<LlmEvent> }` con eventos `text`, `tool_call`, `done`, `error`. La interfaz **no menciona ningún proveedor**.
   - Implementación `GeminiClient` con `fetch` a la Gemini API (endpoint de generación en streaming, clave por cabecera o parámetro según la documentación vigente). **Verifica en la documentación oficial** antes de escribirlo: URL y ruta del método de streaming, cómo se pasa el *system instruction*, formato de `contents`/roles (`user`/`model`), declaración de funciones (*function calling*), formato de los eventos del stream y campos de uso de tokens. Si no puedes verificar algo, dilo y pregunta; no lo supongas. No añadas el SDK oficial salvo que aporte algo claro (comprueba que está mantenido); preferible `fetch` por consistencia con el resto.
   - Timeouts (30 s), reintento único ante 5xx/429 del proveedor, `AbortSignal` ligado a la petición (si el cliente cierra, se cancela).
   - Para las pruebas, `FakeLlmClient` determinista (no se llama a la red en tests).
   - Cada respuesta debe devolver el **uso de tokens** (`tokensIn`, `tokensOut`) para el control de coste (T-7.3).
   - Selección del cliente por `ASSISTANT_LLM_PROVIDER` en una función `createLlmClient(env)`; el resto del código no conoce el proveedor.
+  - **Hecho en `6831b4a`** (`services/llm.ts`, `gemini.ts`, `llm-factory.ts`). Clave en cabecera `x-goog-api-key`. No verificado en la doc: `thinkingConfig` en `generateContent` (se omite; el razonamiento por defecto de 3.5 Flash-Lite es «minimal» y se factura como salida). La prueba manual con clave real queda pendiente de la clave de Rubén. Ollama se añade en T-3.9.
   - **Aceptación:** pruebas con el cliente falso: texto en streaming, llamada a herramienta, error del proveedor → `llm_unavailable`. Una prueba manual documentada con clave real en local.
 - [ ] **T-3.8 Optimización de coste (obligatoria; objetivo: ≤ 1 €/mes)**
   - Depende de: T-3.3, T-3.4.
