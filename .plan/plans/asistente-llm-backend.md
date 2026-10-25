@@ -153,8 +153,8 @@ Principios de diseño:
 |---|---|---|---|
 | D-1 | Cifras reales de `pricing.json` (tipos, rangos €, semanas, multiplicadores) y quitar `placeholder` | **PENDIENTE (bloquea fase 10)** | |
 | D-2 | Proveedor y modelo del LLM y **tope de gasto mensual** en euros | **DECIDIDA y verificada** (ID, API y precios; ver T-3.0) | Proveedor Google Gemini, modelo **`gemini-3.5-flash-lite`** (ID facilitado por Rubén; el agente debe confirmar que existe y cómo se invoca en la documentación oficial). **Tope: 1 €/mes.** Rubén cargará **5 €** en la cuenta de la API (nivel de pago; ver T-3.0). Alternativa open: Ollama (T-3.9) |
-| D-3 | ¿Se guardan las conversaciones? Plazo de conservación (propuesta: 90 días) y base legal | **PENDIENTE (bloquea fase 5)** | |
-| D-4 | Texto del aviso/consentimiento al abrir el chat (es/en) | **PENDIENTE (bloquea fase 5)** | |
+| D-3 | ¿Se guardan las conversaciones? Plazo de conservación (propuesta: 90 días) y base legal | **DECIDIDA (2026-10-25)** | Se guardan **solo con consentimiento** (RGPD art. 6.1.a), en el Postgres del VPS, con UUID aleatorio y hash de IP; **90 días** y borrado diario. Leads: **12 meses** (`leads.expires_at`; se purgan aparte). Marcar `[VERIFICAR: revisión legal]` en `/privacidad` |
+| D-4 | Texto del aviso/consentimiento al abrir el chat (es/en) | **DECIDIDA (2026-10-25)** | Borrador aceptado por Rubén (nombra a Google/Gemini, 90 días, hola@rubenrosales.dev, botones «Aceptar y continuar» / «Continuar sin guardar»). Texto en T-5.1 |
 | D-5 | Antibots: ¿Cloudflare Turnstile (gratis; el DNS ya está en Cloudflare) o solo rate limit + honeypot? | **PENDIENTE (fase 7)** | |
 | D-6 | Almacenamiento externo de backups (Hetzner Storage Box / Object Storage u otro S3) | **PENDIENTE (fase 8)** | |
 | D-7 | ¿Mover `/api/contact` de la web a la API? (propuesta: sí, T-6.6) | **PENDIENTE (fase 6)** | |
