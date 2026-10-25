@@ -2,10 +2,14 @@ import { Hono } from 'hono';
 import { bodyLimit } from 'hono/body-limit';
 import { cors } from 'hono/cors';
 import { secureHeaders } from 'hono/secure-headers';
+import { knowledge as bundledKnowledge, type Knowledge } from '@rr/shared/knowledge';
 import type { Db } from './db';
 import type { Env } from './env';
 import { errorBody, registerErrorHandlers } from './lib/errors';
 import { requestLogger, type LogSink } from './lib/logging';
+import { MemoryAnswerCache, type AnswerCache } from './services/answer-cache';
+import type { LlmClient, LlmUsage } from './services/llm';
+import { chatRoutes } from './routes/chat';
 import { healthRoutes } from './routes/health';
 
 export interface Deps {
@@ -15,12 +19,26 @@ export interface Deps {
   pingDb: () => Promise<void>;
   /** Destino de los logs de petición (por defecto, stdout). */
   logSink?: LogSink;
+  /** Cliente del LLM; `null` = apagado (la ruta de chat responde 503). */
+  llm?: LlmClient | null;
+  cache?: AnswerCache;
+  knowledge?: Knowledge;
+  /** Control de gasto (T-7.3). */
+  usage?: { allowed(): boolean; record(u: LlmUsage): void };
 }
+
+export type ResolvedDeps = Deps & { llm: LlmClient | null; cache: AnswerCache; knowledge: Knowledge };
 
 /** Tamaño máximo del cuerpo de una petición. */
 export const MAX_BODY_BYTES = 32 * 1024;
 
-export function createApp(deps: Deps) {
+export function createApp(input: Deps) {
+  const deps: ResolvedDeps = {
+    ...input,
+    llm: input.llm ?? null,
+    cache: input.cache ?? new MemoryAnswerCache(),
+    knowledge: input.knowledge ?? bundledKnowledge,
+  };
   const app = new Hono().basePath('/api/v1');
 
   app.use(requestLogger(deps.logSink));
@@ -29,6 +47,7 @@ export function createApp(deps: Deps) {
   if (deps.env.ALLOWED_ORIGIN) app.use(cors({ origin: deps.env.ALLOWED_ORIGIN, allowMethods: ['GET', 'POST'] }));
 
   app.route('/health', healthRoutes(deps));
+  app.route('/chat', chatRoutes(deps));
 
   registerErrorHandlers(app);
   return app;

@@ -16,8 +16,30 @@ export const chatRequestSchema = z.object({
   lang: langSchema,
   conversationId: z.uuid().optional(),
   messages: z.array(chatMessageSchema).min(1).max(20),
+  /** Respuestas ya conocidas de la estimación (ids de assistant.json / pricing.json). */
+  ctx: z
+    .object({ type: z.string().max(40).optional(), systems: z.string().max(40).optional(), team: z.string().max(40).optional() })
+    .optional(),
 });
 export type ChatRequest = z.infer<typeof chatRequestSchema>;
+
+/** Eventos SSE de `POST /api/v1/chat`: `delta` (texto), `done` (fin) y `error`. */
+export const chatDeltaEventSchema = z.object({ text: z.string() });
+export const chatDoneEventSchema = z.object({
+  conversationId: z.uuid(),
+  source: z.enum(['rule', 'cache', 'llm']),
+  estimate: z
+    .object({
+      minEur: z.number(),
+      maxEur: z.number(),
+      minWeeks: z.number(),
+      maxWeeks: z.number(),
+      confidence: z.enum(['low', 'medium', 'high']),
+    })
+    .optional(),
+});
+export const chatErrorEventSchema = z.object({ error: z.string() });
+export type ChatDoneEvent = z.infer<typeof chatDoneEventSchema>;
 
 export const chatResponseSchema = z.object({
   conversationId: z.uuid(),

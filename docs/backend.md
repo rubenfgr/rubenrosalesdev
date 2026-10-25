@@ -61,3 +61,19 @@ Formato único: `{ "error": "<codigo_snake_case>", "message"?: string }`. Códig
 **Prueba manual con clave real (local):** `ASSISTANT_LLM_ENABLED=1 ASSISTANT_LLM_API_KEY=<tu clave> ASSISTANT_LLM_MODEL=gemini-3.5-flash-lite pnpm dev:api` y `curl -N -X POST localhost:3000/api/v1/chat ...` (cuando exista T-3.6). La clave solo en tu shell, nunca en el repo.
 
 En el VPS las pone `deploy/.env.example` → `.env` (ver [despliegue.md](despliegue.md)). Las demás variables (límites, LLM…) se documentan aquí al añadirlas.
+
+## Chat del asistente (`POST /api/v1/chat`)
+
+Entrada: `ChatRequest` de `@rr/shared` (idioma, hasta 20 mensajes, `ctx` opcional con tipo/herramientas/equipo). Salida: `text/event-stream` con `delta` (`{text}`), `done` (`{conversationId, source: rule|cache|llm, estimate?}`) y `error`. Si el LLM está apagado, sin clave o falla antes de dar texto: `503 {"error":"llm_unavailable"}` y la web degrada a reglas.
+
+Orden de un turno (`services/chat.ts`), pensado para gastar lo mínimo:
+
+1. **Reglas primero:** si `matchRule()` resuelve la pregunta (precio, plazo, quién es Rubén, contacto, cómo trabaja), responde con el guion de `assistant.json` sin llamar al LLM.
+2. **Caché** (`answer_cache`, TTL 30 días): solo preguntas sueltas, sin contexto de estimación, sin email ni teléfono, sin herramienta ni importes en la respuesta. Se normaliza (minúsculas, sin tildes ni puntuación).
+3. **Límites:** más de 12 mensajes del usuario en la conversación, 20 llamadas al LLM por IP y día (IP con hash y sal) y, más adelante, el tope mensual → `llm_unavailable` (la web sigue con reglas).
+4. **LLM** con system prompt mínimo (reglas + bio + tabla de tipos + solo las secciones relevantes por palabras clave), últimos 6 mensajes recortados a 500 caracteres, `maxOutputTokens` 300, temperatura 0,3 y la herramienta `estimate` (máx. 3 iteraciones). El modelo no calcula precios.
+5. **Validador de cifras** (`services/validator.ts`): todo importe en euros debe ser un extremo de un rango producido por `estimate()` en esta conversación (o el que ya conoce `ctx`). Si no, se sustituye la respuesta por `actions.fallback` (derivar a Rubén) y se avisa en el log sin contenido. Decisión de streaming: la respuesta del LLM se **bufferiza entera** (≤ 300 tokens), se valida y se emite después en frases; así nunca se envía una cifra no autorizada ni hay que retractar texto.
+
+### Coste (objetivo ≤ 1 €/mes)
+
+Medido con el constructor de prompt real (caracteres / 4 como aproximación de tokens): el system prompt para una pregunta típica pesa entre ~450 y ~650 tokens (completo: ~1.150–1.190; límite de diseño 1.200). Con historial máximo (6 × 500 caracteres ≈ 750 tokens) y 300 de salida, una llamada cuesta como mucho unos 0,0012 USD a 0,30/2,50 USD por millón (entrada/salida); una típica (≈650 entrada, ≈150 salida) unos 0,0006 USD. El tope de 1 €/mes equivale a entre ~850 y ~1.700 llamadas al LLM, y las preguntas resueltas por reglas o caché no cuestan nada. **Pendiente:** medir tokens reales con la clave de Rubén (el uso real llega en `usageMetadata` y se registra desde T-7.3).

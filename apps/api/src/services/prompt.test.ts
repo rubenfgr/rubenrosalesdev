@@ -40,6 +40,23 @@ describe('buildSystemPrompt', () => {
     });
   }
 
+  it('con una pregunta, solo añade las secciones relevantes y cabe en ~1.200 tokens (caracteres / 4)', () => {
+    for (const lang of langs) {
+      const q = lang === 'es' ? '¿Cómo es el proceso de trabajo y qué pasa después del despliegue?' : 'How does the process work after deployment?';
+      const prompt = buildSystemPrompt(lang, knowledge, { question: q });
+      expect(prompt.length / 4).toBeLessThanOrEqual(1200);
+      expect(prompt.length).toBeLessThanOrEqual(buildSystemPrompt(lang).length);
+      for (const rule of RULES[lang]) expect(prompt).toContain(rule);
+      expect(prompt).toContain(knowledge.assistant[lang].bio);
+    }
+  });
+
+  it('una pregunta sin coincidencias no añade servicios, proceso ni FAQ', () => {
+    const prompt = buildSystemPrompt('es', knowledge, { question: 'zzzzz qqqqq' });
+    expect(prompt).not.toContain(`## Servicios`);
+    expect(prompt).not.toContain(`## Preguntas frecuentes`);
+  });
+
   it('el prompt de cada idioma no mezcla las reglas del otro', () => {
     expect(buildSystemPrompt('es')).not.toContain(RULES.en[0]!);
     expect(buildSystemPrompt('en')).not.toContain(RULES.es[0]!);

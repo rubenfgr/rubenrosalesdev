@@ -2,6 +2,7 @@
 // (bio, servicios, proceso, FAQ y tabla de rangos), en el idioma del usuario.
 import { knowledge as defaultKnowledge, type Knowledge } from '@rr/shared/knowledge';
 import type { Lang } from '@rr/shared';
+import { keywords, normalize } from '../lib/text';
 
 /** Reglas de producto. Son las 7 del plan (T-3.3); no se relajan sin decisión de Rubén. */
 export const RULES: Record<Lang, string[]> = {
@@ -44,7 +45,26 @@ const HEADINGS: Record<Lang, Record<'bio' | 'services' | 'process' | 'faq' | 'pr
   },
 };
 
-export function buildSystemPrompt(lang: Lang, k: Knowledge = defaultKnowledge): string {
+/** Los elementos que más se parecen a la pregunta (por palabras clave, con coincidencia por prefijo de 5 letras). */
+function relevant<T>(items: T[], text: (i: T) => string, words: string[], max: number): T[] {
+  const stems = words.map((w) => w.slice(0, 5));
+  return items
+    .map((item) => {
+      const haystack = normalize(text(item));
+      return { item, score: stems.filter((st) => haystack.includes(st)).length };
+    })
+    .filter((x) => x.score > 0)
+    .sort((a, b) => b.score - a.score)
+    .slice(0, max)
+    .map((x) => x.item);
+}
+
+interface PromptOptions {
+  /** Si se indica, solo se añaden las secciones (servicios, proceso, FAQ) relevantes para la pregunta (T-3.8). */
+  question?: string;
+}
+
+export function buildSystemPrompt(lang: Lang, k: Knowledge = defaultKnowledge, opts: PromptOptions = {}): string {
   const assistant = k.assistant[lang];
   const pricing = k.pricing;
   const h = HEADINGS[lang];
@@ -52,31 +72,22 @@ export function buildSystemPrompt(lang: Lang, k: Knowledge = defaultKnowledge): 
   const table = Object.entries(pricing.types).map(
     ([id, p]) => `- ${assistant.types[id] ?? id}: ${p.minEur}–${p.maxEur} €, ${p.minWeeks}–${p.maxWeeks} ${weeks}`,
   );
-  const multipliers = Object.entries(pricing.multipliers).flatMap(([group, items]) =>
-    Object.entries(items).map(([key, m]) => `- ${group}/${key}: ${JSON.stringify(m)}`),
-  );
+  const words = opts.question === undefined ? null : keywords(opts.question);
+  const pick = <T>(items: T[], text: (i: T) => string, max: number) => (words ? relevant(items, text, words, max) : items);
+
+  const services = pick(k.services[lang].items, (s) => `${s.name} ${s.title} ${s.body}`, 3);
+  const processSteps = pick(k.process[lang].items, (p) => `${p.title} ${p.tag} ${p.body}`, 3);
+  const faq = pick(k.faq[lang].items, (f) => `${f.question} ${f.answer}`, 3);
+
+  const section = (title: string, lines: string[]) => (lines.length ? ['', `## ${title}`, ...lines] : []);
   return [
     assistant.panel.title,
-    '',
-    `## ${h.rules}`,
-    ...RULES[lang].map((r) => `- ${r}`),
-    '',
-    `## ${h.bio}`,
-    assistant.bio,
-    '',
-    `## ${h.services}`,
-    ...k.services[lang].items.map((s) => `- ${s.name}: ${s.title}. ${s.body}`),
-    '',
-    `## ${h.process}`,
-    ...k.process[lang].items.map((p) => `${p.step}. ${p.title} (${p.tag}): ${p.body}`),
-    '',
-    `## ${h.faq}`,
-    ...k.faq[lang].items.map((f) => `- ${f.question} ${f.answer}`),
-    '',
-    `## ${h.pricing}`,
-    ...table,
-    ...multipliers,
-    `- rounding: ${pricing.rounding}`,
+    ...section(h.rules, RULES[lang].map((r) => `- ${r}`)),
+    ...section(h.bio, [assistant.bio]),
+    ...section(h.services, services.map((s) => `- ${s.name}: ${s.title}. ${s.body}`)),
+    ...section(h.process, processSteps.map((p) => `${p.step}. ${p.title} (${p.tag}): ${p.body}`)),
+    ...section(h.faq, faq.map((f) => `- ${f.question} ${f.answer}`)),
+    ...section(h.pricing, table),
     '',
     assistant.estimate.disclaimer,
   ].join('\n');
