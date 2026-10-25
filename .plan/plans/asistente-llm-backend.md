@@ -358,15 +358,18 @@ Objetivo: guardar conversaciones, mensajes y leads de forma mínima y reversible
 
 Depende de D-3 y D-4. Se puede hacer en paralelo a la fase 4.
 
-- [ ] **T-5.1 Aviso y consentimiento en el chat (web)**
+- [x] **T-5.1 Aviso y consentimiento en el chat (web)**
   - Al abrir el chat por primera vez muestra el aviso (D-4) con dos acciones: «Aceptar y continuar» (envía `consent: true`) y «Continuar sin guardar» (conversación efímera). Los textos van a `apps/web/src/content/assistant/{es,en}.json` (clave `consent`) y se añaden al esquema Zod de `apps/web/src/content.config.ts`. `pnpm i18n:check` debe pasar.
+  - **Hecho en `1be27fe`.** La elección vive solo en el estado de la isla (se pierde al recargar, a propósito). Hasta elegir se oculta el chat y se desactiva la entrada. Verificado con Playwright (1280 y 390 px, es y en; 0 peticiones a `/api/`); capturas en `.plan/evidence/consent-*.png`. La API recibirá `consent` en T-6.2.
   - **Aceptación:** sin elegir no se envía ningún mensaje del usuario a la API; ambos caminos funcionan.
-- [ ] **T-5.2 Política de privacidad**
+- [x] **T-5.2 Política de privacidad**
   - `apps/web/src/pages/privacidad.astro`: añadir tratamiento «asistente virtual»: qué datos, finalidad, base legal, plazo (D-3), encargados (**Hetzner** como alojamiento; **Google (Gemini API)** como encargado del tratamiento del texto de las conversaciones — transferencia internacional si aplica; condiciones del plan de pago y uso de datos según D-2), derechos y cómo ejercerlos (`hola@rubenrosales.dev`).
   - **Redacta con cautela y marca `[VERIFICAR: revisión legal]`** donde haya dudas jurídicas; el build estricto lo bloqueará hasta que Rubén lo confirme. **No presentes el texto como asesoramiento legal.**
+  - **Hecho en `9b88943`** (sección 10 de `/privacidad`). La página legal está solo en español (como las demás). Con dos `[VERIFICAR]` el build estricto fallará hasta que Rubén los resuelva.
   - **Aceptación:** la página explica el tratamiento y los plazos; los `[VERIFICAR]` están listados en la bitácora.
-- [ ] **T-5.3 Ejercicio de derechos (mínimo viable)**
+- [x] **T-5.3 Ejercicio de derechos (mínimo viable)**
   - Procedimiento documentado en `docs/privacidad-operativa.md`: cómo localizar y borrar una conversación o un lead por email (consulta SQL de ejemplo con `psql`, **sin ejecutar nada en producción sin permiso**).
+  - **Hecho en `9b88943`** (`docs/privacidad-operativa.md`); consultas probadas contra Postgres real (en una transacción con rollback).
   - **Aceptación:** el documento permite a Rubén atender una solicitud en menos de 10 minutos.
 
 ---
@@ -482,6 +485,7 @@ Depende de todo lo anterior, de **D-1 (cifras reales)** y de la aprobación de R
 | 2026-10-25 | **Fase 2** (T-2.1…T-2.4) | Hecha | `3ed49b7`, `1da41c6`, `8ab6986` | errores/validación, logging sin PII, rate limit, límite de cuerpo. 13 pruebas verdes; `check` y `build` ok. |
 | 2026-10-25 | **Fase 3** (T-3.1…T-3.9) | Hecha salvo 3 pendientes externos | `c14ff87`…`ollama` | Chat SSE con reglas→caché→LLM, `estimate`, validador de cifras, límites, Gemini y Ollama (simulados). 68+9 pruebas, `check`, `build`, `i18n:check` e imágenes Docker verdes. **Pendientes:** (1) clave de Gemini y prueba manual real + medición de tokens reales (T-3.0/T-3.4/T-3.8); (2) recursos del VPS y modelo Ollama (T-3.9); (3) alerta de presupuesto de 1 € en Google. |
 | 2026-10-25 | **Fase 4** (T-4.0…T-4.6) | Hecha | ver tareas | Persistencia con consentimiento, leads con antispam y email Gmail, purga diaria. 81 pruebas + 4 de integración con Postgres real; smoke extremo a extremo OK. |
+| 2026-10-25 | **Fase 5** (T-5.1…T-5.3) | Hecha | ver tareas | Aviso y consentimiento en el chat (es/en), sección del asistente en `/privacidad` con 2 `[VERIFICAR]`, procedimiento de derechos. |
 
 ### Cambios sobre la marcha
 - 2026-10-25: **D-2 decidida**: tope de 1 €/mes, saldo de 5 € y soporte de Ollama con modelos open; se añaden T-3.8 (optimización de coste), T-3.9 (Ollama) y se reescribe T-7.3 (tope mensual por coste).
@@ -495,6 +499,7 @@ Depende de todo lo anterior, de **D-1 (cifras reales)** y de la aprobación de R
 - `thinkingConfig` en `generateContent` de Gemini 3.5 Flash-Lite: no verificado, no se usa.
 - Supuesto de que Traefik pone la IP real como primer valor de `X-Forwarded-For`.
 - Recursos del VPS y modelo de Ollama.
+- `/privacidad` sección 10 (2 marcas `[VERIFICAR: revisión legal]`): bases jurídicas del texto enviado a Google cuando no se guarda la conversación; condiciones vigentes de Google y transferencia internacional.
 
 ---
 
