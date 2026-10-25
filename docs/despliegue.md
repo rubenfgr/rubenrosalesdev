@@ -9,7 +9,7 @@ Traefik ─┬─ rubenrosales.dev                  → web      (Astro + @astro
                                                   └─ postgres (red interna, sin puertos expuestos, volumen pgdata)
 ```
 
-La web sirve las páginas estáticas, `/api/contact` y las redirecciones 301 del portal anterior. La API cuelga del mismo dominio bajo `/api/v1` (sin DNS ni CORS nuevos); ver [backend.md](backend.md). Las copias de seguridad de Postgres se añaden en la fase 8 del plan (`.plan/plans/asistente-llm-backend.md`).
+La web sirve las páginas estáticas, `/api/contact` y las redirecciones 301 del portal anterior. La API cuelga del mismo dominio bajo `/api/v1` (sin DNS ni CORS nuevos); ver [backend.md](backend.md). Un cuarto contenedor, `backup`, hace copias nocturnas de Postgres (ver [restaurar-backup.md](restaurar-backup.md)).
 
 **`main` = producción.** Cada push a `main` construye las imágenes y las despliega (`.github/workflows/deploy.yml`). Las demás ramas solo pasan por `ci.yml` (tipos + build). Trabaja en ramas y no hagas push ni merge a `main` sin aprobación de Rubén.
 
@@ -53,7 +53,10 @@ Ver `deploy/.env.example`: base de datos (`POSTGRES_DB`, `POSTGRES_USER`, `POSTG
 
 - Logs: `docker logs -f rubenrosales-web`, `rubenrosales-api` o `rubenrosales-postgres`. Estado: `docker compose ps`.
 - La API aplica las migraciones al arrancar. Postgres no expone puertos: para entrar, `docker exec -it rubenrosales-postgres psql -U <usuario> <base>`.
-- Restaurar una copia de seguridad: se documentará en `docs/restaurar-backup.md` (fase 8).
+- Copias de seguridad y restauración: [restaurar-backup.md](restaurar-backup.md).
+- Estado y salud: `docker compose ps` (api, postgres y web llevan `healthcheck`; deben salir `healthy`). Errores recientes: `docker logs --tail 100 rubenrosales-api`. Reiniciar un servicio: `docker compose restart api`. Apagar el LLM al instante: `ASSISTANT_LLM_ENABLED=` vacío en el `.env` y `docker compose up -d api`.
+- Gasto del LLM del mes: `docker exec rubenrosales-api node dist/jobs/usage.js`.
+- Chequeo externo opcional (uptime gratuito): apuntar a `https://rubenrosales.dev/api/v1/health`, que responde `{"status":"ok"}` o 503 si la base de datos falla.
 - Volver a una versión anterior: cambiar `latest` por un SHA en `compose.yml` y `docker compose up -d`. Las migraciones son aditivas, no hay que deshacer la base de datos.
 - Probar las imágenes en local (contexto = raíz del repo): `docker build -f apps/web/Dockerfile -t rr-web . && docker run --rm -p 4321:4321 rr-web` y `docker build -f apps/api/Dockerfile -t rr-api .`.
 - Local con Tailscale: `pnpm dev:tailscale`.

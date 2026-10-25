@@ -94,10 +94,41 @@ services:
     security_opt:
       - no-new-privileges:true
 
-# El servicio de copias de seguridad se añade en T-8.1.
+  # Copia nocturna de Postgres: pg_dump -Fc en el volumen «backups», con retención de 14 (BACKUP_KEEP).
+  # Hace una copia al arrancar y otra cada 24 h. Forzar una ahora: `docker compose restart backup`.
+  # Restaurar: docs/restaurar-backup.md. La copia externa (T-8.2) se añadirá cuando se elija el destino.
+  backup:
+    image: postgres:17
+    container_name: rubenrosales-backup
+    restart: unless-stopped
+    depends_on:
+      postgres:
+        condition: service_healthy
+    environment:
+      PGHOST: postgres
+      PGUSER: ${POSTGRES_USER}
+      PGPASSWORD: ${POSTGRES_PASSWORD}
+      PGDATABASE: ${POSTGRES_DB}
+      BACKUP_KEEP: "14"
+    volumes:
+      - backups:/backups
+    networks:
+      - internal
+    entrypoint: ["/bin/sh", "-c"]
+    command:
+      - |
+        while true; do
+          f=/backups/rr-$$(date -u +%Y%m%d-%H%M).dump
+          if pg_dump -Fc -f "$$f.tmp"; then mv "$$f.tmp" "$$f"; echo "backup ok: $$f ($$(du -h "$$f" | cut -f1))"; else rm -f "$$f.tmp"; echo "backup FALLO"; fi
+          ls -1t /backups/rr-*.dump 2>/dev/null | tail -n +$$((BACKUP_KEEP + 1)) | xargs -r rm -f
+          sleep 86400
+        done
+    security_opt:
+      - no-new-privileges:true
 
 volumes:
   pgdata:
+  backups:
   ollama:
 
 networks:
