@@ -13,6 +13,9 @@ FROM base AS build
 RUN pnpm install --frozen-lockfile --filter @rr/api...
 COPY packages/shared packages/shared
 COPY apps/api apps/api
+# Contenido de la web: scripts/export-knowledge.mjs lo empaqueta en el build de la API.
+COPY scripts/export-knowledge.mjs scripts/export-knowledge.mjs
+COPY apps/web/src/content apps/web/src/content
 RUN pnpm --filter @rr/api build
 
 # tsup empaqueta todo: la imagen final solo lleva el resultado y las migraciones SQL.

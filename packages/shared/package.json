@@ -5,11 +5,13 @@
   "type": "module",
   "exports": {
     ".": "./src/index.ts",
-    "./engine": "./src/assistant/engine.ts"
+    "./engine": "./src/assistant/engine.ts",
+    "./knowledge": "./src/knowledge.ts"
   },
   "scripts": {
-    "check": "tsc --noEmit",
-    "test": "vitest run"
+    "check": "node ../../scripts/export-knowledge.mjs && tsc --noEmit",
+    "test": "vitest run",
+    "generate": "node ../../scripts/export-knowledge.mjs"
   },
   "dependencies": {
     "zod": "^4.0.0"
