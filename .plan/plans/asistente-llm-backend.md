@@ -474,6 +474,7 @@ Depende de todo lo anterior, de **D-1 (cifras reales)** y de la aprobación de R
 | 2026-10-25 | **Fase 1** (T-1.3…T-1.6) | Hecha | `9f9ced5`, `da813f7`, `a9e73c9` | compose con api+postgres (sin `backup`, va en T-8.1); workflow con dos imágenes; docs. `pnpm check`, tests API y `pnpm build` verdes; imágenes web y api construyen; Postgres+API reales responden en local. Enrutado Traefik y despliegue sin probar (requieren VPS/main). |
 
 | 2026-10-25 | **Fase 2** (T-2.1…T-2.4) | Hecha | `3ed49b7`, `1da41c6`, `8ab6986` | errores/validación, logging sin PII, rate limit, límite de cuerpo. 13 pruebas verdes; `check` y `build` ok. |
+| 2026-10-25 | **Fase 3** (T-3.1…T-3.9) | Hecha salvo 3 pendientes externos | `c14ff87`…`ollama` | Chat SSE con reglas→caché→LLM, `estimate`, validador de cifras, límites, Gemini y Ollama (simulados). 68+9 pruebas, `check`, `build`, `i18n:check` e imágenes Docker verdes. **Pendientes:** (1) clave de Gemini y prueba manual real + medición de tokens reales (T-3.0/T-3.4/T-3.8); (2) recursos del VPS y modelo Ollama (T-3.9); (3) alerta de presupuesto de 1 € en Google. |
 
 ### Cambios sobre la marcha
 - 2026-10-25: **D-2 decidida**: tope de 1 €/mes, saldo de 5 € y soporte de Ollama con modelos open; se añaden T-3.8 (optimización de coste), T-3.9 (Ollama) y se reescribe T-7.3 (tope mensual por coste).
@@ -482,7 +483,11 @@ Depende de todo lo anterior, de **D-1 (cifras reales)** y de la aprobación de R
 - 2026-10-25: al empezar se vio que `origin/main` ya está en `80bf067`: el commit del monorepo (`fdce25f`) y los commits del plan **ya están en `main`** (y `feat/backend-monorepo` apunta al mismo commit). Posible despliegue ya lanzado con rutas `apps/web`; Rubén debe confirmar que el workflow `deploy.yml` actual (que ya usa `apps/web/Dockerfile`) funcionó. La API aún no se despliega (falta T-1.4).
 
 ### `[VERIFICAR]` abiertos
-_(lista de datos pendientes de confirmar con Rubén)_
+- Criterio USD≈EUR para los precios del LLM (la tabla oficial está en dólares).
+- Prueba manual con clave real de Gemini y tokens reales por conversación.
+- `thinkingConfig` en `generateContent` de Gemini 3.5 Flash-Lite: no verificado, no se usa.
+- Supuesto de que Traefik pone la IP real como primer valor de `X-Forwarded-For`.
+- Recursos del VPS y modelo de Ollama.
 
 ---
 
