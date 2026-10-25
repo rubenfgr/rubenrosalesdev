@@ -38,6 +38,13 @@ export function t(lang: Lang) {
 }
 export type T = ReturnType<typeof t>;
 
+/** Subárbol de textos de una sección, para pasarlo como prop a una isla. */
+export const ui = <K extends keyof Dict>(lang: Lang, section: K): Dict[K] => dictionaries[lang][section];
+
+/** Sustituye `{variable}` en un texto ya resuelto (para islas, que reciben subárboles de `ui`). */
+export const fmt = (text: string, vars: Record<string, string | number>): string =>
+  text.replace(/\{(\w+)\}/g, (_, name: string) => String(vars[name] ?? `{${name}}`));
+
 // ── Rutas ─────────────────────────────────────────────────────────────────────────────────────
 /**
  * Ruta de la URL sin extensión de fichero ni `/index` (con `build.format: 'file'` el pathname del build

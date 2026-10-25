@@ -48,7 +48,7 @@
         "l3": "autopilot."
       }
     },
-    "lead": "I automate processes and add AI agents to the systems you already use. They read, decide and record for you, with clear rules, supervision where it matters and every action traced.",
+    "lead": "I automate processes and add AI agents to the systems you already use. They read, decide and record for you",
     "ctaPrimary": "Tell me about your project",
     "ctaSecondary": "Explore projects",
     "pillars": {
@@ -78,7 +78,8 @@
         "value": "8",
         "label": "years of experience [VERIFICAR: cifra del diseño]"
       }
-    }
+    },
+    "leadStrong": "with clear rules, supervision where it matters and every action traced."
   },
   "integrations": {
     "eyebrow": "// I connect what you already use",
@@ -121,7 +122,9 @@
     "units": {
       "hours": "h",
       "minutes": "min"
-    }
+    },
+    "hubApproved": "Approved",
+    "hubWaiting": "Waiting for your approval"
   },
   "problem": {
     "eyebrow": "00 / diagnosis",
@@ -146,7 +149,135 @@
     "title2": "One standard.",
     "lead": "For small businesses and professionals. I start with the part that holds you back most and leave it working in production.",
     "techNote": "Technical profile? Tools are chosen to fit your case.",
-    "techCta": "Ask me about the stack →"
+    "techCta": "Ask me about the stack →",
+    "demo": {
+      "flow": {
+        "order": {
+          "label": "Order",
+          "sub": "Arrives by email"
+        },
+        "stock": {
+          "label": "Stock",
+          "sub": "Gets deducted"
+        },
+        "invoice": {
+          "label": "Invoice",
+          "sub": "Issued automatically"
+        },
+        "payment": {
+          "label": "Payment",
+          "sub": "Alert if unpaid"
+        }
+      },
+      "doc": {
+        "supplier": "CERÁMICAS LEVANTE S.L.",
+        "taxId": "Tax ID B-46123456 · Manises (Valencia)",
+        "title": "INVOICE",
+        "number": "No. F-2026-0412",
+        "client": "Customer: Reformas Ruiz S.L.",
+        "issued": "Issued 31/10/2026 ·",
+        "due": "Due 30/11/2026",
+        "concept": "Description",
+        "qty": "Qty",
+        "amount": "Amount",
+        "lines": {
+          "l1": {
+            "text": "Porcelain tile 30×60",
+            "qty": "120 m²",
+            "amount": "2,268.00"
+          },
+          "l2": {
+            "text": "Matching skirting",
+            "qty": "80 lm",
+            "amount": "512.00"
+          },
+          "l3": {
+            "text": "C2TE adhesive 25 kg",
+            "qty": "38 bags",
+            "amount": "1,017.19"
+          },
+          "l4": {
+            "text": "Delivery and unloading",
+            "qty": "1",
+            "amount": "180.00"
+          }
+        },
+        "base": "Taxable amount",
+        "baseValue": "€3,977.19",
+        "vat": "VAT 21%",
+        "vatValue": "€835.21",
+        "total": "TOTAL",
+        "totalValue": "€4,812.40"
+      },
+      "extracted": "Extracted data",
+      "field": "Field",
+      "value": "Value",
+      "fields": {
+        "supplier": {
+          "label": "Supplier",
+          "value": "Cerámicas Levante S.L."
+        },
+        "number": {
+          "label": "Invoice no.",
+          "value": "F-2026-0412"
+        },
+        "due": {
+          "label": "Due date",
+          "value": "30/11/2026"
+        },
+        "base": {
+          "label": "Taxable amount",
+          "value": "€3,977.19"
+        },
+        "vat": {
+          "label": "VAT 21%",
+          "value": "€835.21"
+        },
+        "total": {
+          "label": "Total",
+          "value": "€4,812.40"
+        }
+      },
+      "reading": "Reading…",
+      "recorded": "Posted in accounting",
+      "dash": {
+        "title": "Sales · October 2026",
+        "live": "Live",
+        "billed": "Invoiced",
+        "billedDelta": "+12% vs Sept.",
+        "orders": "Orders",
+        "ordersDelta": "+8%",
+        "ticket": "Average ticket",
+        "ticketDelta": "+3%",
+        "weekly": "Weekly invoicing",
+        "target": "Target",
+        "week": "W{n}",
+        "byChannel": "By channel",
+        "store": "Shop",
+        "web": "Web",
+        "distributors": "Distributors"
+      },
+      "phone": {
+        "date": "Thursday, 23 October",
+        "time": "9:41",
+        "network": "5G",
+        "now": "now",
+        "minutesAgo": "{n} min ago",
+        "n1": {
+          "title": "New job assigned",
+          "text": "Repair at 14 Colón St · today at 10:30"
+        },
+        "n2": {
+          "title": "Quote accepted",
+          "text": "Hnos. Valero has signed no. 2026-118"
+        },
+        "n3": {
+          "title": "Materials ready",
+          "text": "Your order is ready for collection at the warehouse"
+        },
+        "appInitial": "R"
+      }
+    }
   },
   "tray": {
     "eyebrow": "02 / control",
@@ -183,7 +314,14 @@
       "euText": "It only accesses what is essential.",
       "ownTitle": "The system is yours",
       "ownText": "Code and documentation delivered."
-    }
+    },
+    "reading": "Reading…",
+    "handOver": "Handing it over for review",
+    "asks": "Not sure: it asks you",
+    "paused": "Paused · nothing is executed",
+    "selfHandled": "You handle it",
+    "selfHandledWhy": "{title}. I'll make a note for next time.",
+    "modeLabel": "Mode"
   },
   "calculator": {
     "eyebrow": "03 / calculator",
@@ -238,7 +376,99 @@
       "maintenance": "In maintenance",
       "done": "Finished"
     },
-    "counter": "{current} / {total}"
+    "counter": "{current} / {total}",
+    "mock": {
+      "orders": {
+        "title": "Today's orders",
+        "live": "Incoming",
+        "received": "Received",
+        "auto": "Created automatically",
+        "inProgress": "In progress",
+        "states": {
+          "reading": "Reading",
+          "checking": "Checking",
+          "created": "Created"
+        },
+        "lines": "{n} lines",
+        "viaEmail": "email",
+        "viaPdf": "PDF attached",
+        "customers": {
+          "c1": "Ferretería Turia",
+          "c2": "Obras Marina SL",
+          "c3": "Hnos. Ferrer",
+          "c4": "Cerámicas Levante",
+          "c5": "Reformas Ruiz",
+          "c6": "Suministros Albufera",
+          "c7": "Construcciones Sorolla",
+          "c8": "Pinturas Benimaclet"
+        }
+      },
+      "surveys": {
+        "title": "Would they recommend the house?",
+        "responses": "{n} responses",
+        "yes": "Yes",
+        "neutral": "Neutral",
+        "no": "No",
+        "sentToday": "Surveys sent today",
+        "houses": {
+          "h1": {
+            "name": "Casa Mar Blau",
+            "text": "Everything was perfect, we will definitely be back."
+          },
+          "h2": {
+            "name": "Villa Racó",
+            "text": "The pool is wonderful."
+          },
+          "h3": {
+            "name": "Apartamento Puerto",
+            "text": "Good, although a bit noisy."
+          },
+          "h4": {
+            "name": "Casa Olivar",
+            "text": "Very clean and well located."
+          },
+          "h5": {
+            "name": "Ático Malvarrosa",
+            "text": "Super quick check-in, very friendly."
+          },
+          "h6": {
+            "name": "Casa Sierra",
+            "text": "There was no hot water at night."
+          }
+        }
+      },
+      "count": {
+        "title": "Count · Warehouse",
+        "online": "Connected",
+        "offline": "Offline",
+        "offlineMsg": "No signal: readings are stored on the phone",
+        "syncingMsg": "Connection restored · syncing…",
+        "syncedMsg": "Everything synced",
+        "saved": "Saved",
+        "synced": "Synced",
+        "items": {
+          "i1": "Stainless screw 4×40",
+          "i2": "Nylon plug 8 mm",
+          "i3": "Cable tie 300 mm",
+          "i4": "Duct tape",
+          "i5": "Neutral silicone"
+        }
+      },
+      "noise": {
+        "title": "Noise level",
+        "limit": "Limit",
+        "limitValue": "65 dB",
+        "unit": "dB",
+        "history": "Sensor B · last few minutes",
+        "over": "Sensor B exceeds the limit ({value} dB) · alert sent",
+        "ok": "Everything below the limit",
+        "sensors": {
+          "a": "Sensor A",
+          "b": "Sensor B",
+          "c": "Sensor C"
+        }
+      }
+    }
   },
   "faq": {
     "eyebrow": "06 / questions",
@@ -507,5 +737,11 @@
     "inputPlaceholder": "Type your message…",
     "fabTitle": "Have a project?",
     "fabSubtitle": "Tell the assistant"
+  },
+  "notFound": {
+    "title": "This page does not exist",
+    "text": "The link may have changed. Try the home page or the blog.",
+    "home": "Go to the home page",
+    "blog": "Go to the blog"
   }
 }

@@ -1,0 +1,67 @@
+---
+// Scroll suave (Lenis), reveal al entrar en viewport y barra de progreso. Todo se desactiva con prefers-reduced-motion.
+---
+
+<script>
+  import Lenis from 'lenis';
+
+  const reduced = matchMedia('(prefers-reduced-motion: reduce)').matches;
+  const OFFSET = -68;
+  const progress = document.querySelector<HTMLElement>('[data-progress]');
+
+  const updateProgress = () => {
+    if (!progress) return;
+    const max = document.documentElement.scrollHeight - innerHeight;
+    progress.style.transform = `scaleX(${max > 0 ? Math.min(1, scrollY / max) : 0})`;
+  };
+  updateProgress();
+  addEventListener('scroll', updateProgress, { passive: true });
+  addEventListener('resize', updateProgress);
+
+  let lenis: Lenis | null = null;
+  if (!reduced) {
+    lenis = new Lenis({ duration: 1.15, easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)), smoothWheel: true });
+    const raf = (time: number) => {
+      lenis?.raf(time);
+      requestAnimationFrame(raf);
+    };
+    requestAnimationFrame(raf);
+  }
+
+  // Anclas de la misma página: scroll con el offset del header.
+  document.addEventListener('click', (e) => {
+    const a = (e.target as Element).closest<HTMLAnchorElement>('a[href*="#"]');
+    if (!a || a.target === '_blank' || e.defaultPrevented || e.metaKey || e.ctrlKey) return;
+    const url = new URL(a.href, location.href);
+    const clean = (p: string) => p.replace(/\/$/, '') || '/';
+    if (url.origin !== location.origin || clean(url.pathname) !== clean(location.pathname) || !url.hash) return;
+    const target = document.querySelector(url.hash);
+    if (!target) return;
+    e.preventDefault();
+    history.pushState(null, '', url.hash);
+    if (lenis) lenis.scrollTo(target as HTMLElement, { offset: OFFSET });
+    else scrollTo({ top: target.getBoundingClientRect().top + scrollY + OFFSET });
+  });
+
+  // Reveal: hijos directos de cada sección, una sola vez, con escalonado de 90 ms (máx. 8).
+  if (!reduced && 'IntersectionObserver' in window) {
+    const groups = document.querySelectorAll<HTMLElement>('[data-reveal]');
+    groups.forEach((group) => {
+      Array.from(group.children).forEach((child, i) => {
+        child.setAttribute('data-reveal-item', '');
+        (child as HTMLElement).style.setProperty('--reveal-index', String(Math.min(i, 8)));
+      });
+    });
+    document.documentElement.classList.add('js-reveal');
+    const io = new IntersectionObserver(
+      (entries) =>
+        entries.forEach((en) => {
+          if (!en.isIntersecting) return;
+          en.target.classList.add('is-revealed');
+          io.unobserve(en.target);
+        }),
+      { threshold: 0.08, rootMargin: '0px 0px -8% 0px' },
+    );
+    document.querySelectorAll('[data-reveal-item]').forEach((el) => io.observe(el));
+  }
+</script>

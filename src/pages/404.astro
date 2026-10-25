@@ -1,14 +1,18 @@
 ---
+import { getLang, getLocalizedPath, t as makeT } from '../i18n';
 import Layout from '../layouts/Layout.astro';
+
+const lang = getLang(Astro.url);
+const t = makeT(lang);
 ---
 
-<Layout title="Página no encontrada" noindex>
+<Layout title={t('meta.notFoundTitle')} noindex>
   <div class="container wrap">
-    <h1>Esta página no existe</h1>
-    <p>Puede que el enlace haya cambiado. Prueba desde el inicio o en el blog.</p>
+    <h1>{t('notFound.title')}</h1>
+    <p>{t('notFound.text')}</p>
     <p class="ctas">
-      <a class="btn btn-primary" href="/">Ir al inicio</a>
-      <a class="btn btn-secondary" href="/blog">Ir al blog</a>
+      <a class="btn btn-primary" href={getLocalizedPath('/', lang)}>{t('notFound.home')}</a>
+      <a class="btn btn-secondary" href={getLocalizedPath('/blog', lang)}>{t('notFound.blog')}</a>
     </p>
   </div>
 </Layout>

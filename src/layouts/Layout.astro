@@ -3,6 +3,7 @@ import '../styles/global.css';
 import archivoLatin from '@fontsource-variable/archivo/files/archivo-latin-wdth-normal.woff2?url';
 import Footer from '../components/Footer.astro';
 import Header from '../components/Header.astro';
+import Scroll from '../components/Scroll.astro';
 import { getData } from '../i18n/content';
 import { cleanPath, getAlternates, getLang, getLocalizedPath, intlLocale, locales, t as makeT, type Lang } from '../i18n';
 
@@ -55,11 +56,12 @@ const footerNav = site.nav.filter((l) => ['services', 'projects', 'blog'].includ
   </head>
   <body>
     <a class="skip-link" href="#contenido">{t('a11y.skipToContent')}</a>
-    <Header lang={lang} t={t} nav={site.nav} cta={site.cta.short} role={site.role} switchPaths={switchPaths} />
+    <Header lang={lang} t={t} name={site.name} nav={site.nav} cta={site.cta} email={site.contact.email} role={site.role} switchPaths={switchPaths} />
     <main id="contenido">
       <slot />
     </main>
-    <Footer lang={lang} t={t} tagline={site.footer.tagline} motto={site.footer.motto} email={site.contact.email} nav={footerNav} legal={site.legal} social={site.social} />
+    <Footer lang={lang} t={t} name={site.name} tagline={site.footer.tagline} motto={site.footer.motto} email={site.contact.email} nav={footerNav} legal={site.legal} social={site.social} />
+    <Scroll />
     {
       analyticsToken && (
         <script

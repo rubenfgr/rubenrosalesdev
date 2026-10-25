@@ -14,6 +14,8 @@ html {
 
 body {
   margin: 0;
+  overflow-x: hidden;
+  -webkit-font-smoothing: antialiased;
   min-height: 100vh;
   display: flex;
   flex-direction: column;
@@ -28,6 +30,65 @@ body {
 main {
   flex: 1;
   padding-top: var(--nav-height);
+}
+
+::selection {
+  background: var(--gradient-brand);
+  color: var(--color-primary-foreground);
+}
+
+input,
+textarea,
+button {
+  font-family: inherit;
+}
+
+a { text-decoration: none; }
+
+@keyframes rrpulse { 0%, 100% { opacity: 1; } 50% { opacity: 0.3; } }
+@keyframes rrblink { 0%, 49% { opacity: 1; } 50%, 100% { opacity: 0; } }
+@keyframes rrspin { to { transform: rotate(360deg); } }
+@keyframes rrbeat { 0%, 100% { transform: scale(1); } 50% { transform: scale(1.35); } }
+@keyframes rrflow { to { stroke-dashoffset: -14; } }
+
+/* Lenis */
+html.lenis, html.lenis body { height: auto; }
+.lenis.lenis-smooth { scroll-behavior: auto !important; }
+.lenis.lenis-stopped { overflow: hidden; }
+
+/* Reveal al entrar en viewport (lo activa Scroll.astro; sin JS o con reduced-motion, todo visible) */
+.js-reveal [data-reveal-item] {
+  opacity: 0;
+  transform: translateY(28px);
+  transition: opacity 900ms cubic-bezier(0.2, 0.7, 0.2, 1), transform 900ms cubic-bezier(0.2, 0.7, 0.2, 1);
+  transition-delay: calc(var(--reveal-index, 0) * 90ms);
+}
+.js-reveal [data-reveal-item].is-revealed { opacity: 1; transform: none; }
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { animation: none !important; transition: none !important; scroll-behavior: auto !important; }
+  .js-reveal [data-reveal-item] { opacity: 1; transform: none; }
+}
+
+/* Piezas comunes de sección */
+.section-inner {
+  max-width: var(--container-max);
+  margin-inline: auto;
+  padding: clamp(3.5rem, 8vw, 7rem) var(--container-padding);
+}
+.eyebrow {
+  font-family: var(--font-family-mono);
+  font-size: var(--font-size-mono);
+  letter-spacing: var(--letter-spacing-label);
+  text-transform: uppercase;
+  color: var(--color-foreground-subtle);
+}
+.section-title {
+  margin: 0;
+  font-size: var(--font-size-section);
+  font-weight: var(--font-weight-heavy);
+  line-height: 1;
+  letter-spacing: var(--letter-spacing-tighter);
 }
 
 h1,
@@ -105,8 +166,10 @@ a:hover { color: var(--color-primary-hover); }
 .btn {
   display: inline-flex;
   align-items: center;
-  gap: var(--space-2);
-  padding: var(--space-3) var(--space-5);
+  justify-content: center;
+  gap: var(--space-3);
+  min-height: 3.375rem;
+  padding: 0 var(--space-5);
   border-radius: var(--radius-md);
   border: var(--border-width-thin) solid transparent;
   font: inherit;
@@ -114,26 +177,29 @@ a:hover { color: var(--color-primary-hover); }
   font-weight: var(--font-weight-medium);
   text-decoration: none;
   cursor: pointer;
-  transition: background-color var(--duration-fast) var(--ease-out);
+  transition: all var(--duration-base) var(--ease-out);
 }
 .btn-primary {
-  background: var(--color-primary);
+  background: var(--gradient-brand);
   color: var(--color-primary-foreground);
+  font-weight: var(--font-weight-strong);
+  box-shadow: var(--shadow-cta);
 }
 .btn-primary:hover {
-  background: var(--color-primary-hover);
+  background: var(--gradient-brand-hover);
   color: var(--color-primary-foreground);
+  transform: translateY(-1px);
 }
 .btn-secondary {
-  background: transparent;
+  background: var(--color-surface);
   color: var(--color-foreground);
-  border-color: var(--color-border-strong);
+  border-color: var(--color-border);
+  font-weight: var(--font-weight-strong);
 }
 .btn-secondary:hover {
-  background: var(--color-surface-alt);
+  border-color: var(--color-foreground);
   color: var(--color-foreground);
 }
-
 .btn-inverse {
   background: var(--color-primary-foreground);
   color: var(--color-primary);
@@ -142,3 +208,12 @@ a:hover { color: var(--color-primary-hover); }
   background: var(--color-surface-alt);
   color: var(--color-primary-hover);
 }
+.mono-arrow { font-family: var(--font-family-mono); }
+
+/* Eyebrow de sección: «00 / diagnóstico» + filete */
+.eb { display: flex; align-items: center; gap: var(--space-3); font-family: var(--font-family-mono); font-size: 12px; color: var(--color-foreground-subtle); }
+.eb .eb-num { color: var(--color-primary); }
+.eb .eb-rule { flex: 1; height: 1px; background: var(--color-border); }
+.eb.dark { color: var(--color-dark-text-subtle); }
+.eb.dark .eb-num { color: var(--color-primary-on-dark); }
+.eb.dark .eb-rule { background: var(--color-dark-border); }

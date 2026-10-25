@@ -1,12 +1,12 @@
 const kinds = ['note', 'tip', 'warning', 'danger'] as const;
 type Kind = (typeof kinds)[number];
 
-const defaultTitles: Record<Kind, string> = {
-  note: 'Nota',
-  tip: 'Consejo',
-  warning: 'Aviso',
-  danger: 'Peligro',
+// Títulos por defecto según el idioma del artículo (blog/es o blog/en).
+const titlesByLang: Record<'es' | 'en', Record<Kind, string>> = {
+  es: { note: 'Nota', tip: 'Consejo', warning: 'Aviso', danger: 'Peligro' },
+  en: { note: 'Note', tip: 'Tip', warning: 'Warning', danger: 'Danger' },
 };
+let defaultTitles = titlesByLang.es;
 
 // Iconos Lucide (24x24, trazo 1,5), incrustados como hast.
 const icons: Record<Kind, [string, Record<string, string>][]> = {
@@ -110,5 +110,8 @@ const walk = (node: DirectiveNode) => {
 
 // Plugin remark: `:::note`, `:::tip`, `:::warning` y `:::danger` (sintaxis de Docusaurus).
 export default function remarkAdmonitions() {
-  return (tree: DirectiveNode) => walk(tree);
+  return (tree: DirectiveNode, file: { path?: string }) => {
+    defaultTitles = /[\\/]blog[\\/]en[\\/]/.test(file.path ?? '') ? titlesByLang.en : titlesByLang.es;
+    return walk(tree);
+  };
 }

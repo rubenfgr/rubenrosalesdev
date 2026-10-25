@@ -74,16 +74,61 @@
   --rr-almagra-900: #421C13;
   --rr-almagra-950: #2A110B;
 
+  /* Paper / ink — superficies del rediseño 2026 (claro y paneles oscuros) */
+  --rr-paper-50:  #FFFFFF;
+  --rr-paper-100: #F7F8F5;
+  --rr-paper-200: #F4F5F2;
+  --rr-paper-300: #EEF0EC;
+  --rr-paper-400: #ECEEE9;
+  --rr-paper-500: #DCDED8;
+  --rr-paper-600: #C9CDC6;
+  --rr-ink-300: #9AA29E;
+  --rr-ink-350: #7E8885;
+  --rr-ink-400: #5E6865;
+  --rr-ink-500: #C2C8C1;
+  --rr-ink-600: #4A5653;
+  --rr-ink-650: #3D4946;
+  --rr-ink-700: #33403D;
+  --rr-ink-750: #2F3B39;
+  --rr-ink-800: #24302E;
+  --rr-ink-850: #1F2826;
+  --rr-ink-900: #1C2422;
+
+  /* Marca (petróleo) del rediseño */
+  --rr-brand-300: #7FB0C2;
+  --rr-brand-350: #5B97AD;
+  --rr-brand-400: #3B7489;
+  --rr-brand-600: #285A6E;
+  --rr-brand-650: #21495A;
+  --rr-brand-700: #1F4858;
+
+  /* Acentos cálidos y de estado */
+  --rr-olive-600: #4F5A3E;
+  --rr-ok-300: #A9B88C;
+  --rr-ok-400: #8FA06E;
+  --rr-ok-200: #B5C496;
+  --rr-terra-300: #D98A73;
+  --rr-terra-200: #E3A58E;
+  --rr-terra-100: #E3A390;
+  --rr-sand-400: #B79E6A;
+  --rr-sand-300: #C9B78F;
+  --rr-tint-olive: #ECEFE6;
+  --rr-tint-sea: #E7EEF1;
+  --rr-tint-sand: #F3EEE3;
+  --rr-tint-terra: #F3E9E5;
+
   /* ---------- Tipografía ---------- */
   --font-family-sans: "Archivo Variable", "Archivo", system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
   --font-family-mono: ui-monospace, "SFMono-Regular", "JetBrains Mono", Menlo, Consolas, monospace;
 
-  --font-width-display: 118%;   /* eje wdth de Archivo */
+  --font-width-display: 100%;   /* eje wdth de Archivo (el rediseño usa el ancho normal) */
   --font-width-body: 100%;
 
   --font-weight-regular: 400;
   --font-weight-medium: 500;
   --font-weight-strong: 620;    /* titulares y wordmark */
+  --font-weight-bold: 700;
+  --font-weight-heavy: 800;     /* titulares del rediseño */
 
   /* Escala 1.25 (tercera mayor), base 1rem. Los tres mayores fluyen con clamp. */
   --font-size-caption: 0.8rem;                                   /* 12.8px */
@@ -94,6 +139,10 @@
   --font-size-h3:      clamp(1.5625rem, 1.3rem + 1.1vw, 1.953rem); /* 25→31px */
   --font-size-h2:      clamp(1.953rem, 1.5rem + 1.9vw, 2.441rem);  /* 31→39px */
   --font-size-display: clamp(2.441rem, 1.7rem + 3.2vw, 3.815rem);  /* 39→61px */
+  --font-size-hero: clamp(2.875rem, 7.6vw, 6.5rem);                /* 46→104px */
+  --font-size-section: clamp(2.125rem, 5vw, 4rem);                 /* 34→64px */
+  --font-size-mono: 0.6875rem;                                     /* 11px, etiquetas mono */
+  --font-size-small: 0.8125rem;                                    /* 13px */
 
   --line-height-tight: 1.1;   /* display */
   --line-height-snug: 1.2;    /* headings */
@@ -103,6 +152,9 @@
   --letter-spacing-display: -0.015em;
   --letter-spacing-heading: -0.01em;
   --letter-spacing-body: 0;
+  --letter-spacing-tight: -0.03em;   /* titulares del rediseño */
+  --letter-spacing-tighter: -0.045em; /* hero y cifras */
+  --letter-spacing-label: 0.08em;     /* eyebrows y etiquetas mono */
 
   --measure: 66ch;            /* longitud máxima de línea en texto corrido */
 
@@ -120,11 +172,11 @@
   --space-10: 8rem;    /* 128 */
 
   /* ---------- Layout ---------- */
-  --container-max: 72rem;     /* 1152px */
+  --container-max: 80rem;     /* 1280px */
   --container-text: 42rem;    /* columnas de lectura */
-  --container-padding: clamp(1.25rem, 4vw, 3rem);
+  --container-padding: 1.25rem;
   --space-section: clamp(4rem, 3rem + 5vw, 8rem); /* separación vertical entre secciones (64→128px) */
-  --nav-height: 4rem;                              /* navegación fija */
+  --nav-height: 4.25rem;                              /* navegación fija */
   --grid-columns: 12;
   --grid-gutter: clamp(1rem, 2.5vw, 2rem);
   /* Breakpoints (referencia; las media queries no aceptan var()):
@@ -147,6 +199,12 @@
 
   /* ---------- Elevación (sombras tintadas en stone, nunca negras) ---------- */
   --shadow-sm: 0 1px 2px rgb(30 39 37 / 0.08);
+  --shadow-cta: 0 1px 0 var(--rr-brand-700) inset, 0 10px 24px -12px rgb(40 90 110 / 0.7);
+  --shadow-card: 0 24px 48px -32px rgb(40 90 110 / 0.45);
+  --shadow-panel: 0 24px 48px -32px rgb(43 53 51 / 0.35);
+  --shadow-panel-dark: 0 24px 48px -28px rgb(28 36 34 / 0.7);
+  --shadow-menu: 0 18px 40px -20px rgb(43 53 51 / 0.45);
+  --shadow-focus: 0 0 0 3px rgb(127 176 194 / 0.18);
   --shadow-md: 0 2px 4px rgb(30 39 37 / 0.06), 0 8px 24px rgb(30 39 37 / 0.08);
 
   --z-base: 0;
@@ -179,29 +237,69 @@
   --chart-6: var(--rr-stone-500);
 }
 
-/* ---------- Tema claro (por defecto) ---------- */
+/* ---------- Tema claro (por defecto y único) ---------- */
 :root,
 [data-theme="light"] {
   color-scheme: light;
 
-  --color-background: var(--rr-stone-100);
-  --color-surface: var(--rr-stone-50);
-  --color-surface-alt: var(--rr-stone-200);
+  --color-background: var(--rr-paper-200);
+  --color-surface: var(--rr-paper-50);
+  --color-surface-alt: var(--rr-paper-400);
+  --color-surface-sunken: var(--rr-paper-100);
+  --color-surface-tint: var(--rr-paper-300);
 
   --color-foreground: var(--rr-stone-900);
-  --color-foreground-muted: var(--rr-stone-600);
-  --color-foreground-subtle: var(--rr-stone-500);   /* solo texto grande o no esencial */
-  --color-foreground-inverse: var(--rr-stone-50);
+  --color-foreground-muted: var(--rr-ink-400);
+  --color-foreground-subtle: var(--rr-ink-350);   /* solo texto grande o no esencial */
+  --color-foreground-faint: var(--rr-ink-300);
+  --color-foreground-inverse: var(--rr-paper-200);
 
-  --color-border: var(--rr-stone-200);
-  --color-border-strong: var(--rr-stone-500);
+  --color-border: var(--rr-paper-500);
+  --color-border-strong: var(--rr-paper-600);
 
-  --color-primary: var(--rr-sea-600);
-  --color-primary-hover: var(--rr-sea-700);
-  --color-primary-foreground: var(--rr-stone-50);
-  --color-secondary: var(--rr-lichen-700);
-  --color-secondary-foreground: var(--rr-stone-50);
-  --color-accent: var(--rr-esparto-400);            /* decorativo, nunca texto */
+  --color-primary: var(--rr-brand-600);
+  --color-primary-hover: var(--rr-brand-700);
+  --color-primary-deep: var(--rr-brand-650);
+  --color-primary-light: var(--rr-brand-400);
+  --color-primary-on-dark: var(--rr-brand-300);
+  --color-primary-on-dark-strong: var(--rr-brand-350);
+  --color-primary-foreground: var(--rr-paper-50);
+  --gradient-brand: linear-gradient(135deg, var(--rr-brand-400) 0%, var(--rr-brand-600) 52%, var(--rr-brand-650) 100%);
+  --gradient-brand-hover: linear-gradient(135deg, #326A80 0%, var(--rr-brand-650) 52%, #1A3D4B 100%);
+  --gradient-brand-text: linear-gradient(100deg, var(--rr-brand-400) 0%, var(--rr-brand-600) 55%, var(--rr-brand-650) 100%);
+  --color-secondary: var(--rr-olive-600);
+  --color-secondary-foreground: var(--rr-paper-200);
+  --color-accent: var(--rr-sand-400);               /* decorativo, nunca texto */
+  --color-accent-soft: var(--rr-sand-300);
+
+  /* Paneles oscuros (Problema, Cómo funciona, Contacto, footer) */
+  --color-dark: var(--rr-stone-900);
+  --color-dark-footer: var(--rr-ink-900);
+  --color-dark-contact: var(--rr-ink-850);
+  --color-dark-panel: var(--rr-ink-800);
+  --color-dark-panel-alt: var(--rr-ink-750);
+  --color-dark-raised: var(--rr-ink-700);
+  --color-dark-border: var(--rr-ink-650);
+  --color-dark-border-strong: var(--rr-ink-600);
+  --color-dark-text: var(--rr-paper-200);
+  --color-dark-text-muted: var(--rr-ink-500);
+  --color-dark-text-subtle: var(--rr-ink-300);
+  --color-dark-text-faint: var(--rr-ink-350);
+
+  /* Estados y acentos */
+  --color-ok: var(--rr-ok-300);
+  --color-ok-strong: var(--rr-ok-400);
+  --color-ok-soft: var(--rr-ok-200);
+  --color-alert: var(--rr-terra-300);
+  --color-alert-soft: var(--rr-terra-200);
+  --color-alert-text: var(--rr-terra-100);
+  --color-ok-surface: #F5F7F1;
+  --color-ok-border: #B9C3A8;
+  --color-primary-on-gradient: #CFE0E7;
+  --color-tint-olive: var(--rr-tint-olive);
+  --color-tint-sea: var(--rr-tint-sea);
+  --color-tint-sand: var(--rr-tint-sand);
+  --color-tint-terra: var(--rr-tint-terra);
 
   --color-focus: var(--rr-sea-600);
 

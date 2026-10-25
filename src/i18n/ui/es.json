@@ -48,7 +48,7 @@
         "l3": "automático."
       }
     },
-    "lead": "Automatizo procesos e integro agentes de IA en los sistemas que ya usas. Leen, deciden y registran por ti con reglas claras, supervisión donde importa y cada acción trazada.",
+    "lead": "Automatizo procesos e integro agentes de IA en los sistemas que ya usas. Leen, deciden y registran por ti",
     "ctaPrimary": "Cuéntame tu proyecto",
     "ctaSecondary": "Explorar proyectos",
     "pillars": {
@@ -78,7 +78,8 @@
         "value": "8",
         "label": "años de experiencia [VERIFICAR: cifra del diseño]"
       }
-    }
+    },
+    "leadStrong": "con reglas claras, supervisión donde importa y cada acción trazada."
   },
   "integrations": {
     "eyebrow": "// conecto lo que ya usas",
@@ -121,7 +122,9 @@
     "units": {
       "hours": "h",
       "minutes": "min"
-    }
+    },
+    "hubApproved": "Aprobado",
+    "hubWaiting": "Espera tu visto bueno"
   },
   "problem": {
     "eyebrow": "00 / diagnóstico",
@@ -146,7 +149,135 @@
     "title2": "Una misma exigencia.",
     "lead": "Para pymes y profesionales. Empiezo por el tramo que más te frena y lo dejo funcionando en producción.",
     "techNote": "¿Perfil técnico? Las herramientas se eligen según tu caso.",
-    "techCta": "Pregúntame por el stack →"
+    "techCta": "Pregúntame por el stack →",
+    "demo": {
+      "flow": {
+        "order": {
+          "label": "Pedido",
+          "sub": "Llega por email"
+        },
+        "stock": {
+          "label": "Stock",
+          "sub": "Se descuenta"
+        },
+        "invoice": {
+          "label": "Factura",
+          "sub": "Se emite sola"
+        },
+        "payment": {
+          "label": "Cobro",
+          "sub": "Aviso si no paga"
+        }
+      },
+      "doc": {
+        "supplier": "CERÁMICAS LEVANTE S.L.",
+        "taxId": "CIF B-46123456 · Manises (Valencia)",
+        "title": "FACTURA",
+        "number": "Nº F-2026-0412",
+        "client": "Cliente: Reformas Ruiz S.L.",
+        "issued": "Emisión 31/10/2026 ·",
+        "due": "Vence 30/11/2026",
+        "concept": "Concepto",
+        "qty": "Cant.",
+        "amount": "Importe",
+        "lines": {
+          "l1": {
+            "text": "Azulejo porcelánico 30×60",
+            "qty": "120 m²",
+            "amount": "2.268,00"
+          },
+          "l2": {
+            "text": "Rodapié a juego",
+            "qty": "80 ml",
+            "amount": "512,00"
+          },
+          "l3": {
+            "text": "Adhesivo C2TE 25 kg",
+            "qty": "38 sc",
+            "amount": "1.017,19"
+          },
+          "l4": {
+            "text": "Portes y descarga",
+            "qty": "1",
+            "amount": "180,00"
+          }
+        },
+        "base": "Base imponible",
+        "baseValue": "3.977,19 €",
+        "vat": "IVA 21%",
+        "vatValue": "835,21 €",
+        "total": "TOTAL",
+        "totalValue": "4.812,40 €"
+      },
+      "extracted": "Datos extraídos",
+      "field": "Campo",
+      "value": "Valor",
+      "fields": {
+        "supplier": {
+          "label": "Proveedor",
+          "value": "Cerámicas Levante S.L."
+        },
+        "number": {
+          "label": "Nº factura",
+          "value": "F-2026-0412"
+        },
+        "due": {
+          "label": "Vencimiento",
+          "value": "30/11/2026"
+        },
+        "base": {
+          "label": "Base imponible",
+          "value": "3.977,19 €"
+        },
+        "vat": {
+          "label": "IVA 21%",
+          "value": "835,21 €"
+        },
+        "total": {
+          "label": "Total",
+          "value": "4.812,40 €"
+        }
+      },
+      "reading": "Leyendo…",
+      "recorded": "Anotada en contabilidad",
+      "dash": {
+        "title": "Ventas · Octubre 2026",
+        "live": "En directo",
+        "billed": "Facturado",
+        "billedDelta": "+12% vs sept.",
+        "orders": "Pedidos",
+        "ordersDelta": "+8%",
+        "ticket": "Ticket medio",
+        "ticketDelta": "+3%",
+        "weekly": "Facturación semanal",
+        "target": "Objetivo",
+        "week": "S{n}",
+        "byChannel": "Por canal",
+        "store": "Tienda",
+        "web": "Web",
+        "distributors": "Distribuidores"
+      },
+      "phone": {
+        "date": "jueves, 23 de octubre",
+        "time": "9:41",
+        "network": "5G",
+        "now": "ahora",
+        "minutesAgo": "hace {n} min",
+        "n1": {
+          "title": "Nuevo parte asignado",
+          "text": "Reparación en C/ Colón 14 · hoy a las 10:30"
+        },
+        "n2": {
+          "title": "Presupuesto aceptado",
+          "text": "Hnos. Valero ha firmado el nº 2026-118"
+        },
+        "n3": {
+          "title": "Material listo",
+          "text": "Tu pedido está para recoger en almacén"
+        },
+        "appInitial": "R"
+      }
+    }
   },
   "tray": {
     "eyebrow": "02 / control",
@@ -183,7 +314,14 @@
       "euText": "Solo accede a lo imprescindible.",
       "ownTitle": "El sistema es tuyo",
       "ownText": "Código y documentación entregados."
-    }
+    },
+    "reading": "Leyendo…",
+    "handOver": "Te lo paso para revisar",
+    "asks": "No lo tiene claro: te pregunta",
+    "paused": "En pausa · no se ejecuta nada",
+    "selfHandled": "Lo gestionas tú",
+    "selfHandledWhy": "{title}. Tomo nota para la próxima vez.",
+    "modeLabel": "Modo"
   },
   "calculator": {
     "eyebrow": "03 / calculadora",
@@ -238,7 +376,99 @@
       "maintenance": "En mantenimiento",
       "done": "Terminado"
     },
-    "counter": "{current} / {total}"
+    "counter": "{current} / {total}",
+    "mock": {
+      "orders": {
+        "title": "Pedidos de hoy",
+        "live": "Entrando",
+        "received": "Recibidos",
+        "auto": "Creados solos",
+        "inProgress": "En proceso",
+        "states": {
+          "reading": "Leyendo",
+          "checking": "Comprobando",
+          "created": "Creado"
+        },
+        "lines": "{n} líneas",
+        "viaEmail": "email",
+        "viaPdf": "PDF adjunto",
+        "customers": {
+          "c1": "Ferretería Turia",
+          "c2": "Obras Marina SL",
+          "c3": "Hnos. Ferrer",
+          "c4": "Cerámicas Levante",
+          "c5": "Reformas Ruiz",
+          "c6": "Suministros Albufera",
+          "c7": "Construcciones Sorolla",
+          "c8": "Pinturas Benimaclet"
+        }
+      },
+      "surveys": {
+        "title": "¿Recomendarían la casa?",
+        "responses": "{n} respuestas",
+        "yes": "Sí",
+        "neutral": "Neutros",
+        "no": "No",
+        "sentToday": "Encuestas enviadas hoy",
+        "houses": {
+          "h1": {
+            "name": "Casa Mar Blau",
+            "text": "Todo perfecto, volveremos seguro."
+          },
+          "h2": {
+            "name": "Villa Racó",
+            "text": "La piscina, una maravilla."
+          },
+          "h3": {
+            "name": "Apartamento Puerto",
+            "text": "Bien, aunque algo ruidoso."
+          },
+          "h4": {
+            "name": "Casa Olivar",
+            "text": "Muy limpia y bien situada."
+          },
+          "h5": {
+            "name": "Ático Malvarrosa",
+            "text": "Entrada rapidísima, muy amables."
+          },
+          "h6": {
+            "name": "Casa Sierra",
+            "text": "No había agua caliente por la noche."
+          }
+        }
+      },
+      "count": {
+        "title": "Recuento · Almacén",
+        "online": "Conectado",
+        "offline": "Sin conexión",
+        "offlineMsg": "Sin cobertura: las lecturas se guardan en el móvil",
+        "syncingMsg": "Conexión recuperada · sincronizando…",
+        "syncedMsg": "Todo sincronizado",
+        "saved": "Guardado",
+        "synced": "Sincronizado",
+        "items": {
+          "i1": "Tornillo inox 4×40",
+          "i2": "Taco de nailon 8 mm",
+          "i3": "Brida 300 mm",
+          "i4": "Cinta americana",
+          "i5": "Silicona neutra"
+        }
+      },
+      "noise": {
+        "title": "Nivel de ruido",
+        "limit": "Límite",
+        "limitValue": "65 dB",
+        "unit": "dB",
+        "history": "Sensor B · últimos minutos",
+        "over": "Sensor B supera el límite ({value} dB) · aviso enviado",
+        "ok": "Todo por debajo del límite",
+        "sensors": {
+          "a": "Sensor A",
+          "b": "Sensor B",
+          "c": "Sensor C"
+        }
+      }
+    }
   },
   "faq": {
     "eyebrow": "06 / preguntas",
@@ -507,5 +737,11 @@
     "inputPlaceholder": "Escribe tu mensaje…",
     "fabTitle": "¿Tienes un proyecto?",
     "fabSubtitle": "Cuéntaselo al asistente"
+  },
+  "notFound": {
+    "title": "Esta página no existe",
+    "text": "Puede que el enlace haya cambiado. Prueba desde el inicio o en el blog.",
+    "home": "Ir al inicio",
+    "blog": "Ir al blog"
   }
 }

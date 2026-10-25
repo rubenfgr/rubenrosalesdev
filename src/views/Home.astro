@@ -1,11 +1,22 @@
 ---
-// Vista de la home, común a «/» y «/en». Fase 1: estructura y datos por idioma; el diseño llega en la Fase 2.
+// Vista de la home, común a «/» y «/en». Todo el texto sale de las colecciones y de src/i18n/ui.
+import Proceso from '../components/Proceso.astro';
+import Calculadora from '../components/islands/Calculadora';
+import ComoFunciona from '../components/islands/ComoFunciona';
+import Contacto from '../components/islands/Contacto';
+import FAQ from '../components/islands/FAQ';
+import Hero from '../components/islands/Hero';
+import Integraciones from '../components/islands/Integraciones';
+import Problema from '../components/islands/Problema';
+import Proyectos from '../components/islands/Proyectos';
+import Servicios from '../components/islands/Servicios';
 import { getData } from '../i18n/content';
-import { formatNumber, getLang, t as makeT } from '../i18n';
+import { getLang, getLocalizedPath, intlLocale, t as makeT, ui } from '../i18n';
 import Layout from '../layouts/Layout.astro';
 
 const lang = getLang(Astro.url);
 const t = makeT(lang);
+const locale = intlLocale[lang];
 const [services, problem, tray, process, projects, faq, integrations, site] = await Promise.all([
   getData('services', lang),
   getData('problemTasks', lang),
@@ -16,70 +27,31 @@ const [services, problem, tray, process, projects, faq, integrations, site] = aw
   getData('integrationCases', lang),
   getData('site', lang),
 ]);
-const totalHours = problem.items.reduce((sum, i) => sum + i.hoursPerWeek, 0);
+const contactHref = getLocalizedPath('/#contacto', lang);
+const projectsHref = getLocalizedPath('/#proyectos', lang);
+const hero = ui(lang, 'hero');
 ---
 
 <Layout>
-  <section id="top" class="container block">
-    <h1>
-      {t('hero.headline.a.l1')} {t('hero.headline.a.l2')} {t('hero.headline.a.l3')}
-    </h1>
-    <p>{t('hero.lead')}</p>
-    <p>
-      <a class="btn btn-primary" href="#contacto">{t('hero.ctaPrimary')}</a>
-      <a class="btn btn-secondary" href="#proyectos">{t('hero.ctaSecondary')}</a>
-    </p>
-  </section>
-
-  <section id="integraciones" class="container block">
-    <h2>{t('integrations.title1')} {t('integrations.title2')}</h2>
-    <ul>{integrations.items.map((c) => <li>{c.pending} → {c.done}</li>)}</ul>
-  </section>
-
-  <section id="problema" class="container block">
-    <h2>{t('problem.title1')} {t('problem.title2')}</h2>
-    <p>{t('problem.manualPerWeek')}: {formatNumber(lang, totalHours)} {t('problem.hoursUnit')}</p>
-    <ul>{problem.items.map((i) => <li>{i.label} · {t('problem.hoursPerWeek', { hours: i.hoursPerWeek })}</li>)}</ul>
-  </section>
-
-  <section id="servicios" class="container block">
-    <h2>{t('services.title1')} {t('services.title2')}</h2>
-    <p>{t('services.lead')}</p>
-    <ul>{services.items.map((s) => <li><strong>{s.name}</strong>: {s.title}. {s.body}</li>)}</ul>
-  </section>
-
-  <section id="como-funciona" class="container block">
-    <h2>{t('tray.title1')} {t('tray.title2')}</h2>
-    <ul>{tray.items.map((i) => <li>{i.title} · {i.confidence} %</li>)}</ul>
-  </section>
-
-  <section id="calculadora" class="container block">
-    <h2>{t('calculator.title1')} {t('calculator.title2')}</h2>
-  </section>
-
-  <section id="proceso" class="container block">
-    <h2>{t('process.title1')} {t('process.title2')}</h2>
-    <ol>{process.items.map((p) => <li><strong>{p.title}</strong>: {p.body}</li>)}</ol>
-  </section>
-
-  <section id="proyectos" class="container block">
-    <h2>{t('projects.title1')} {t('projects.title2')}</h2>
-    <p>{t('projects.lead')}</p>
-    <ul>{projects.items.map((p) => <li>{p.year} · {t(`projects.status.${p.status}`)} · {p.title}</li>)}</ul>
-  </section>
-
-  <section id="faq" class="container block">
-    <h2>{t('faq.title1')} {t('faq.title2')}</h2>
-    <dl>{faq.items.map((f) => <><dt>{f.question}</dt><dd>{f.answer}</dd></>)}</dl>
-  </section>
-
-  <section id="contacto" class="container block">
-    <h2>{t('contact.title1')} {t('contact.title2')}</h2>
-    <p>{t('contact.lead')}</p>
-    <p><a href={`mailto:${site.contact.email}`}>{site.contact.email}</a> · {site.contact.responseTime}</p>
-  </section>
+  <Hero
+    client:visible
+    headline={hero.headline.a}
+    lead={hero.lead}
+    leadStrong={hero.leadStrong}
+    ctaPrimary={hero.ctaPrimary}
+    ctaSecondary={hero.ctaSecondary}
+    contactHref={contactHref}
+    projectsHref={projectsHref}
+    pillars={hero.pillars}
+    stats={hero.stats}
+  />
+  <Integraciones client:visible cases={integrations.items} labels={ui(lang, 'integrations')} approvedLabel={t('integrations.hubApproved')} waitLabel={t('integrations.hubWaiting')} />
+  <Problema client:visible tasks={problem.items} labels={ui(lang, 'problem')} locale={locale} />
+  <Servicios client:visible services={services.items} labels={ui(lang, 'services')} locale={locale} contactHref={contactHref} />
+  <ComoFunciona client:visible items={tray.items} modes={tray.modes} log={tray.log} labels={ui(lang, 'tray')} />
+  <Calculadora client:visible labels={ui(lang, 'calculator')} locale={locale} contactHref={contactHref} />
+  <Proceso eyebrow={t('process.eyebrow')} title1={t('process.title1')} title2={t('process.title2')} steps={process.items} />
+  <Proyectos client:visible projects={projects.items} labels={ui(lang, 'projects')} locale={locale} contactHref={contactHref} />
+  <FAQ client:visible items={faq.items} labels={ui(lang, 'faq')} contactHref={contactHref} />
+  <Contacto client:visible labels={ui(lang, 'contact')} lang={lang} email={site.contact.email} endpoint="/api/contact" />
 </Layout>
-
-<style>
-  .block { padding-block: var(--space-7); }
-</style>
