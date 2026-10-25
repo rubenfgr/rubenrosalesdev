@@ -512,6 +512,7 @@ Depende de todo lo anterior, de **D-1 (cifras reales)** y de la aprobación de R
 
 - 2026-10-25: se adelantaron tareas de las fases 7-9 que no dependen de decisiones pendientes (D-5, D-6, D-7) para no parar; quedan abiertas T-6.6, T-7.2 y T-8.2. La fase 10 sigue bloqueada por D-1 y por la aprobación de Rubén.
 - 2026-10-25: el contrato `leadSchema` gana `website` y `startedAt`; `chatRequestSchema` gana `ctx` y `consent`; se añaden las tablas `answer_cache` y `llm_usage_monthly` y `leads.expires_at` (migraciones 0001-0003).
+- 2026-10-25: revisión propia del código: sin `IP_HASH_SALT` el hash de IP quedaba sin sal; ahora se genera una sal aleatoria por arranque (`fix(api)`). Preparado el guion de la fase 10 en `docs/rollout-asistente.md` (T-10.1 como lista de comprobación; nada ejecutado).
 
 ### `[VERIFICAR]` abiertos
 - Criterio USD≈EUR para los precios del LLM (la tabla oficial está en dólares).
