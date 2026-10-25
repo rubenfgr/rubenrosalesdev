@@ -70,6 +70,8 @@ export default defineConfig({
   },
   // i18n nativo: español sin prefijo (/), inglés en /en.
   i18n: { defaultLocale: 'es', locales: ['es', 'en'], routing: { prefixDefaultLocale: false } },
+  // Desarrollo accesible por Tailscale (pnpm dev:tailscale): permite los nombres MagicDNS *.ts.net.
+  vite: { server: { allowedHosts: ['.ts.net'] } },
   trailingSlash: 'never',
   build: { format: 'file' },
   integrations: [

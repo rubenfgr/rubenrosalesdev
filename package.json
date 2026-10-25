@@ -14,7 +14,8 @@
     "build:prod": "GUARDS_STRICT=1 pnpm build",
     "i18n:check": "node scripts/i18n-check.mjs",
     "prebuild": "node scripts/i18n-check.mjs",
-    "content:new": "node scripts/content-new.mjs"
+    "content:new": "node scripts/content-new.mjs",
+    "dev:tailscale": "astro dev --host"
   },
   "dependencies": {
     "@astrojs/check": "^0.9.12",
