@@ -205,22 +205,26 @@ Objetivo: que web y API se construyan, prueben y desplieguen juntas, con Postgre
 
 Objetivo: base sólida de la API (configuración, errores, logging, límites) antes de añadir lógica del asistente.
 
-- [ ] **T-2.1 Estructura y convenciones**
+- [x] **T-2.1 Estructura y convenciones**
   - Depende de: T-1.2.
   - Organiza `apps/api/src/`: `routes/` (un fichero por recurso, cada uno exporta una función `(deps) => Hono`), `services/` (lógica), `lib/` (utilidades), `db/`. Registra las rutas en `createApp` (`app.route('/chat', chatRoutes(deps))`).
   - Formato de error único: `{ "error": "<codigo_snake_case>", "message"?: string }`. Códigos: `invalid_request` (400), `rate_limited` (429), `llm_unavailable` (503), `not_found` (404), `internal` (500).
   - Validación de entrada con `@hono/zod-validator` y los esquemas de `@rr/shared`. Una petición inválida → 400 `invalid_request`.
+  - **Hecho en `3ed49b7`.** `lib/errors.ts`, `lib/validate.ts`, `routes/health.ts`. `payload_too_large` (413) añadido a los códigos.
   - **Aceptación:** pruebas que cubren 400/404/500 con el formato de error.
-- [ ] **T-2.2 Logging estructurado y request id**
+- [x] **T-2.2 Logging estructurado y request id**
   - Middleware que añade `x-request-id` (genera uno si falta), registra una línea JSON por petición (`method`, `path`, `status`, `ms`, `requestId`) y **nunca** cuerpos, IPs en claro, emails ni mensajes de usuario.
+  - **Hecho en `8ab6986`.**
   - **Aceptación:** prueba que verifica que el log no contiene el cuerpo de una petición con un email de prueba.
-- [ ] **T-2.3 Rate limiting**
+- [x] **T-2.3 Rate limiting**
   - Depende de: T-2.1.
   - Límite por IP (cliente real vía cabecera `X-Forwarded-For` de Traefik; confía solo en el primer salto) con ventana deslizante en memoria (suficiente con una sola instancia). Configurable por variables: `RATE_LIMIT_CHAT_PER_MIN` (por defecto 10) y `RATE_LIMIT_LEADS_PER_HOUR` (por defecto 5). Cabecera `Retry-After`.
   - La IP se **hashea con sal** (`IP_HASH_SALT`) si se necesita guardar (fase 4); nunca se guarda en claro.
+  - **Hecho en `1da41c6`.** El middleware existe y está probado; se engancha a `/chat` y `/leads` en T-3.6 y T-4.4. Supuesto: Traefik pone la IP real como primer valor de `X-Forwarded-For` (verificar en el rollout).
   - **Aceptación:** pruebas de que la petición n+1 recibe 429 y de que tras la ventana vuelve a pasar.
-- [ ] **T-2.4 Cabeceras de seguridad y CORS**
+- [x] **T-2.4 Cabeceras de seguridad y CORS**
   - `secureHeaders` ya está. Añade límite de tamaño de cuerpo (`bodyLimit` 32 KB). CORS solo si `ALLOWED_ORIGIN` está definido.
+  - **Hecho en `8ab6986`.**
   - **Aceptación:** prueba de que un cuerpo mayor devuelve 413/400.
 
 **Fin de la fase 2:** `pnpm --filter @rr/api test` verde con cobertura de errores, logging y límites.
@@ -458,6 +462,8 @@ Depende de todo lo anterior, de **D-1 (cifras reales)** y de la aprobación de R
 |---|---|---|---|---|
 | 2026-10-25 | T-1.1, T-1.2 | Hecho | `fdce25f` | Monorepo y esqueleto de la API verificados con Postgres real |
 | 2026-10-25 | **Fase 1** (T-1.3…T-1.6) | Hecha | `9f9ced5`, `da813f7`, `a9e73c9` | compose con api+postgres (sin `backup`, va en T-8.1); workflow con dos imágenes; docs. `pnpm check`, tests API y `pnpm build` verdes; imágenes web y api construyen; Postgres+API reales responden en local. Enrutado Traefik y despliegue sin probar (requieren VPS/main). |
+
+| 2026-10-25 | **Fase 2** (T-2.1…T-2.4) | Hecha | `3ed49b7`, `1da41c6`, `8ab6986` | errores/validación, logging sin PII, rate limit, límite de cuerpo. 13 pruebas verdes; `check` y `build` ok. |
 
 ### Cambios sobre la marcha
 - 2026-10-25: **D-2 decidida**: tope de 1 €/mes, saldo de 5 € y soporte de Ollama con modelos open; se añaden T-3.8 (optimización de coste), T-3.9 (Ollama) y se reescribe T-7.3 (tope mensual por coste).

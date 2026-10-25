@@ -34,7 +34,7 @@ pnpm dev            # web en http://localhost:4321
 
 ## Errores
 
-Formato único: `{ "error": "<codigo_snake_case>", "message"?: string }`. Códigos: `invalid_request` (400), `not_found` (404), `rate_limited` (429), `internal` (500), `llm_unavailable` (503). Los logs nunca contienen cuerpos de petición, emails ni mensajes de usuarios.
+Formato único: `{ "error": "<codigo_snake_case>", "message"?: string }`. Códigos: `invalid_request` (400), `not_found` (404), `rate_limited` (429), `internal` (500), `llm_unavailable` (503). Un cuerpo de más de 32 KB devuelve `413 payload_too_large`. El rate limit (`lib/rate-limit.ts`) usa el primer valor de `X-Forwarded-For` (Traefik) y devuelve `429 rate_limited` con `Retry-After`; es en memoria, válido con una sola instancia. Los logs nunca contienen cuerpos de petición, emails ni mensajes de usuarios.
 
 ## Variables de entorno
 
@@ -43,5 +43,8 @@ Formato único: `{ "error": "<codigo_snake_case>", "message"?: string }`. Códig
 | `DATABASE_URL` | sí | Cadena de conexión a Postgres |
 | `PORT` | no | Puerto (3000 por defecto) |
 | `ALLOWED_ORIGIN` | no | Origen CORS; vacío = mismo origen (lo normal) |
+| `IP_HASH_SALT` | cuando se guarde algo de la IP | Sal para hashear IPs; nunca se guardan en claro |
+| `RATE_LIMIT_CHAT_PER_MIN` | no | Peticiones de chat por IP y minuto (10) |
+| `RATE_LIMIT_LEADS_PER_HOUR` | no | Envíos de lead por IP y hora (5) |
 
 En el VPS las pone `deploy/.env.example` → `.env` (ver [despliegue.md](despliegue.md)). Las demás variables (límites, LLM…) se documentan aquí al añadirlas.
