@@ -5,3 +5,4 @@ dist/
 .env.*
 redesign-kit/
 .dev.vars
+!.env.example
