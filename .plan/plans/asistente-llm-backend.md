@@ -378,22 +378,27 @@ Depende de D-3 y D-4. Se puede hacer en paralelo a la fase 4.
 
 Objetivo: que `Assistant.tsx` use el LLM cuando esté disponible y degrade a reglas.
 
-- [ ] **T-6.1 Cliente de la API en la web**
+- [x] **T-6.1 Cliente de la API en la web**
   - Depende de: T-3.6, T-4.4.
   - `apps/web/src/lib/assistant/api.ts`: `streamChat(req, onDelta, signal)` que consume SSE con `fetch` + `ReadableStream`, valida los eventos con los esquemas de `@rr/shared`, y `sendLead(lead)`. Añade `@rr/shared` como dependencia de `@rr/web` (`workspace:*`).
+  - **Hecho en `0e78427`** (`lib/assistant/api.ts`, 9 pruebas; vitest añadido a la web).
   - **Aceptación:** pruebas (vitest en web, o pruebas del módulo con `fetch` simulado) de: streaming normal, 503 → lanza `LlmUnavailable`, corte de red.
-- [ ] **T-6.2 Modo híbrido en `Assistant.tsx`**
+- [x] **T-6.2 Modo híbrido en `Assistant.tsx`**
   - Mantén el flujo guiado por chips y las tarjetas (estimación, resumen) **tal como están**. Añade: el **texto libre** del usuario se envía a `/chat` (streaming) si `PUBLIC_ASSISTANT_LLM=1`; si la API responde 503/timeout o la red falla, se usa `matchRule()` (comportamiento actual). La estimación de las tarjetas sigue calculándose en el cliente con `estimate()` de `@rr/shared`.
   - Muestra la respuesta del LLM en una burbuja que se completa con el streaming; indicador de «escribiendo»; botón de reintentar si falla; **todos los textos nuevos en `ui/{es,en}.json`**.
+  - **Hecho en `7d7b7bf`.** Con LLM activo, el texto libre va a `/chat`; ante 503/límite/red/corte se responde con `matchRule()` y aparece «Reintentar con el asistente». La conversación se envía con `consent` y `ctx`.
   - **Aceptación:** con la API caída el asistente funciona como hoy; con la API activa, una pregunta libre («¿cómo trabajas?») se responde con streaming; la estimación solo aparece tras las 3 respuestas.
-- [ ] **T-6.3 Envío del resumen a la API**
+- [x] **T-6.3 Envío del resumen a la API**
   - El envío del resumen del asistente (`kind: 'assistant'`) pasa de `/api/contact` a `POST /api/v1/leads` (incluye `conversationId` si hay consentimiento, honeypot `website` vacío y `startedAt`).
+  - **Hecho en `7d7b7bf`.** El resumen va a `/api/v1/leads` (con `website` vacío, `startedAt` y `conversationId` si hay consentimiento); el prop `endpoint` de la isla desaparece. Verificado con la API simulada; el email real y la fila se comprobarán en T-9.3 y en el rollout.
   - **Aceptación:** el lead llega a Rubén por email y queda en la tabla `leads`.
-- [ ] **T-6.4 Configuración y flags**
+- [x] **T-6.4 Configuración y flags**
   - Variables de build de la web: `PUBLIC_ASSISTANT_ENABLED` (ya existe) y `PUBLIC_ASSISTANT_LLM` (nueva, por defecto vacío = solo reglas). Añade `ARG`/`ENV` en `apps/web/Dockerfile` y `vars.*` en `deploy.yml`.
+  - **Hecho en `7d7b7bf`** (Dockerfile, `deploy.yml`, docs). Comprobado: con ambas vacías 0 páginas con la isla; con `ENABLED=1`, 10.
   - **Aceptación:** con ambas desactivadas el HTML generado no contiene el asistente (comprobar con `grep` en `apps/web/dist`).
-- [ ] **T-6.5 Revisión visual**
+- [x] **T-6.5 Revisión visual**
   - Comprueba panel, burbujas en streaming, errores y estados de carga a **1280 px y 390 px**, con y sin `prefers-reduced-motion` (sin animaciones). Usa Playwright (ya usado antes con `playwright-core` y Chrome del sistema) o el navegador integrado.
+  - **Hecho.** Playwright (`playwright-core` + Chrome del sistema, instalado fuera del repo) a 1280, 390 y 390 con `prefers-reduced-motion: reduce`; API simulada con `page.route`: streaming con indicador de escritura, 503 → reglas + reintentar, flujo guiado hasta estimación y envío del resumen. Capturas en `.plan/evidence/hybrid-*.png`. Incidencia corregida en el camino: los chips de inicio se veían antes de elegir el consentimiento.
   - **Aceptación:** capturas guardadas en `.plan/evidence/` (no se versionan, añade la carpeta a `.gitignore` si hace falta) y descritas en la bitácora.
 
 - [ ] **T-6.6 [Opcional, requiere D-7] Mover el formulario de contacto a la API**
@@ -486,6 +491,7 @@ Depende de todo lo anterior, de **D-1 (cifras reales)** y de la aprobación de R
 | 2026-10-25 | **Fase 3** (T-3.1…T-3.9) | Hecha salvo 3 pendientes externos | `c14ff87`…`ollama` | Chat SSE con reglas→caché→LLM, `estimate`, validador de cifras, límites, Gemini y Ollama (simulados). 68+9 pruebas, `check`, `build`, `i18n:check` e imágenes Docker verdes. **Pendientes:** (1) clave de Gemini y prueba manual real + medición de tokens reales (T-3.0/T-3.4/T-3.8); (2) recursos del VPS y modelo Ollama (T-3.9); (3) alerta de presupuesto de 1 € en Google. |
 | 2026-10-25 | **Fase 4** (T-4.0…T-4.6) | Hecha | ver tareas | Persistencia con consentimiento, leads con antispam y email Gmail, purga diaria. 81 pruebas + 4 de integración con Postgres real; smoke extremo a extremo OK. |
 | 2026-10-25 | **Fase 5** (T-5.1…T-5.3) | Hecha | ver tareas | Aviso y consentimiento en el chat (es/en), sección del asistente en `/privacidad` con 2 `[VERIFICAR]`, procedimiento de derechos. |
+| 2026-10-25 | **Fase 6** (T-6.1…T-6.5) | Hecha; **T-6.6 pendiente de D-7** | ver tareas | Isla híbrida con streaming y degradación, resumen por la API, flag `PUBLIC_ASSISTANT_LLM`, revisión visual a 1280/390/reduced-motion. |
 
 ### Cambios sobre la marcha
 - 2026-10-25: **D-2 decidida**: tope de 1 €/mes, saldo de 5 € y soporte de Ollama con modelos open; se añaden T-3.8 (optimización de coste), T-3.9 (Ollama) y se reescribe T-7.3 (tope mensual por coste).
