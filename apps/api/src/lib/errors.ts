@@ -9,6 +9,7 @@ export const errorStatus = {
   rate_limited: 429,
   internal: 500,
   llm_unavailable: 503,
+  mail_unavailable: 502,
 } as const satisfies Record<string, ContentfulStatusCode>;
 
 export type ErrorCode = keyof typeof errorStatus;

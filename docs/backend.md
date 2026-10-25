@@ -45,6 +45,7 @@ Formato único: `{ "error": "<codigo_snake_case>", "message"?: string }`. Códig
 | `PORT` | no | Puerto (3000 por defecto) |
 | `ALLOWED_ORIGIN` | no | Origen CORS; vacío = mismo origen (lo normal) |
 | `IP_HASH_SALT` | cuando se guarde algo de la IP | Sal para hashear IPs; nunca se guardan en claro |
+| `CONTACT_TO`, `GMAIL_SENDER`, `GMAIL_CLIENT_ID`, `GMAIL_CLIENT_SECRET`, `GMAIL_REFRESH_TOKEN` | para enviar leads | Gmail API (OAuth2); misma configuración que la web (ver [formulario-contacto.md](formulario-contacto.md)). Sin ellas el lead se guarda y la API responde `502 mail_unavailable` |
 | `CONVERSATION_RETENTION_DAYS` / `LEAD_RETENTION_DAYS` | no | Conservación: 90 días las conversaciones, 365 los leads (D-3) |
 | `RATE_LIMIT_CHAT_PER_MIN` | no | Peticiones de chat por IP y minuto (10) |
 | `RATE_LIMIT_LEADS_PER_HOUR` | no | Envíos de lead por IP y hora (5) |
@@ -87,3 +88,9 @@ Medido con el constructor de prompt real (caracteres / 4 como aproximación de t
 El servicio `ollama` del compose está bajo el profile `llm-local` (no arranca por defecto, sin puertos, con volumen `ollama`). Para usarlo: `docker compose --profile llm-local up -d ollama` y `docker exec rubenrosales-ollama ollama pull <modelo>`.
 
 **Pendiente (requiere el VPS y los evals, no hecho):** comprobar RAM/CPU/disco del VPS (probablemente sin GPU), elegir el modelo con los evals de T-9.2 en es y en, y medir la latencia real. No se ha fijado ningún modelo ni se ha activado nada en producción.
+
+## Persistencia y leads
+
+- **Conversaciones:** solo se guardan si la petición lleva `consent: true` (D-3). Sin consentimiento no se escribe nada. Se identifican por un UUID aleatorio y un hash con sal de la IP; caducan a los 90 días.
+- **Leads (`POST /api/v1/leads`):** valida con `leadSchema`, antispam (señuelo `website` y tiempo mínimo de 3 s desde `startedAt`), guarda el lead (caduca a los 12 meses) y envía el email a Rubén con `Reply-To` del visitante. Límite: `RATE_LIMIT_LEADS_PER_HOUR` por IP.
+- **Borrado:** `jobs/purge.ts` borra al arrancar y una vez al día lo caducado. Al borrar una conversación caen sus mensajes (`ON DELETE CASCADE`); los leads se purgan por su propia fecha y su `conversation_id` pasa a nulo. Solo se registran recuentos.

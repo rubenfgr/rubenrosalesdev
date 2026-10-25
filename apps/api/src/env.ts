@@ -10,6 +10,12 @@ const schema = z.object({
   IP_HASH_SALT: z.string().default(''),
   RATE_LIMIT_CHAT_PER_MIN: z.coerce.number().int().positive().default(10),
   RATE_LIMIT_LEADS_PER_HOUR: z.coerce.number().int().positive().default(5),
+  /** Email de los leads por Gmail API (OAuth2). Vacío = sin envío. */
+  CONTACT_TO: z.string().default(''),
+  GMAIL_SENDER: z.string().default(''),
+  GMAIL_CLIENT_ID: z.string().default(''),
+  GMAIL_CLIENT_SECRET: z.string().default(''),
+  GMAIL_REFRESH_TOKEN: z.string().default(''),
   /** Conservación (D-3): conversaciones 90 días, leads 12 meses. */
   CONVERSATION_RETENTION_DAYS: z.coerce.number().int().positive().default(90),
   LEAD_RETENTION_DAYS: z.coerce.number().int().positive().default(365),

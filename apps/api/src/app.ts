@@ -9,6 +9,8 @@ import type { Env } from './env';
 import { errorBody, registerErrorHandlers } from './lib/errors';
 import { requestLogger, type LogSink } from './lib/logging';
 import { MemoryAnswerCache, type AnswerCache } from './services/answer-cache';
+import type { Mailer } from './services/mailer';
+import { leadRoutes } from './routes/leads';
 import type { LlmClient, LlmUsage } from './services/llm';
 import { chatRoutes } from './routes/chat';
 import { healthRoutes } from './routes/health';
@@ -25,12 +27,14 @@ export interface Deps {
   cache?: AnswerCache;
   /** Persistencia (por defecto en memoria, solo para pruebas; `index.ts` pasa la de Postgres). */
   repos?: Repositories;
+  /** Envío de email; `null` = sin configurar. */
+  mailer?: Mailer | null;
   knowledge?: Knowledge;
   /** Control de gasto (T-7.3). */
   usage?: { allowed(): boolean; record(u: LlmUsage): void };
 }
 
-export type ResolvedDeps = Deps & { llm: LlmClient | null; cache: AnswerCache; repos: Repositories; knowledge: Knowledge };
+export type ResolvedDeps = Deps & { llm: LlmClient | null; cache: AnswerCache; repos: Repositories; mailer: Mailer | null; knowledge: Knowledge };
 
 /** Tamaño máximo del cuerpo de una petición. */
 export const MAX_BODY_BYTES = 32 * 1024;
@@ -41,6 +45,7 @@ export function createApp(input: Deps) {
     llm: input.llm ?? null,
     cache: input.cache ?? new MemoryAnswerCache(),
     repos: input.repos ?? new MemoryRepositories(),
+    mailer: input.mailer ?? null,
     knowledge: input.knowledge ?? bundledKnowledge,
   };
   const app = new Hono().basePath('/api/v1');
@@ -52,6 +57,7 @@ export function createApp(input: Deps) {
 
   app.route('/health', healthRoutes(deps));
   app.route('/chat', chatRoutes(deps));
+  app.route('/leads', leadRoutes(deps));
 
   registerErrorHandlers(app);
   return app;

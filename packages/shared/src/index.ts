@@ -57,6 +57,9 @@ export const leadSchema = z.object({
   lang: langSchema,
   conversationId: z.uuid().optional(),
   summary: z.array(z.string().max(300)).max(20).default([]),
+  /** Antispam: campo señuelo (debe ir vacío) y momento en que se abrió el formulario (ms desde epoch). */
+  website: z.string().max(200).optional(),
+  startedAt: z.number(),
 });
 export type Lead = z.infer<typeof leadSchema>;
 
