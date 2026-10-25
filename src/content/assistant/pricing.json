@@ -1,0 +1,62 @@
+{
+  "placeholder": true,
+  "note": "Cifras de ejemplo: confirmar con Rubén antes de producción.",
+  "currency": "EUR",
+  "rounding": 500,
+  "types": {
+    "process": {
+      "minEur": 1500,
+      "maxEur": 6000,
+      "minWeeks": 2,
+      "maxWeeks": 5,
+      "placeholder": true
+    },
+    "ai": {
+      "minEur": 3000,
+      "maxEur": 10000,
+      "minWeeks": 3,
+      "maxWeeks": 8,
+      "placeholder": true
+    },
+    "web": {
+      "minEur": 4000,
+      "maxEur": 15000,
+      "minWeeks": 4,
+      "maxWeeks": 10,
+      "placeholder": true
+    },
+    "app": {
+      "minEur": 8000,
+      "maxEur": 25000,
+      "minWeeks": 8,
+      "maxWeeks": 16,
+      "placeholder": true
+    }
+  },
+  "multipliers": {
+    "systems": {
+      "several": {
+        "maxFactor": 1.3,
+        "extraWeeks": 2,
+        "placeholder": true
+      },
+      "unknown": {
+        "maxFactor": 1.4,
+        "confidence": "low",
+        "placeholder": true
+      }
+    },
+    "team": {
+      "large": {
+        "minFactor": 1.2,
+        "maxFactor": 1.25,
+        "placeholder": true
+      },
+      "small": {
+        "maxFactor": 0.9,
+        "placeholder": true
+      }
+    }
+  },
+  "defaultConfidence": "medium"
+}

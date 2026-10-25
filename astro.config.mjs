@@ -58,6 +58,14 @@ export default defineConfig({
       GMAIL_REFRESH_TOKEN: envField.string({ context: 'server', access: 'secret', optional: true }),
       GMAIL_SENDER: envField.string({ context: 'server', access: 'secret', optional: true }),
       CONTACT_TO: envField.string({ context: 'server', access: 'secret', optional: true }),
+      // Proveedor de envío del formulario y del resumen del asistente: 'gmail' (por defecto) o 'resend'.
+      CONTACT_PROVIDER: envField.string({ context: 'server', access: 'secret', optional: true }),
+      RESEND_API_KEY: envField.string({ context: 'server', access: 'secret', optional: true }),
+      CONTACT_FROM: envField.string({ context: 'server', access: 'secret', optional: true }),
+      // Asistente con LLM (desactivado por defecto): ASSISTANT_LLM_ENABLED=1 + clave y modelo.
+      ASSISTANT_LLM_ENABLED: envField.string({ context: 'server', access: 'secret', optional: true }),
+      ASSISTANT_LLM_API_KEY: envField.string({ context: 'server', access: 'secret', optional: true }),
+      ASSISTANT_LLM_MODEL: envField.string({ context: 'server', access: 'secret', optional: true }),
     },
   },
   // i18n nativo: español sin prefijo (/), inglés en /en.

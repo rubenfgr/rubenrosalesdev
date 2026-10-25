@@ -1,0 +1,230 @@
+{
+  "panel": {
+    "title": "Asistente de Rubén",
+    "status": "Responde al momento · Rubén revisa cada conversación",
+    "banner": "Asistente automático · no cierra precios",
+    "disclaimer": "Asistente automático. Puede equivocarse; Rubén confirma todo por escrito."
+  },
+  "greeting": [
+    "Hola, soy el asistente de Rubén Rosales. Le adelanto trabajo: entiendo qué necesitas, te cuento cómo trabaja y, si quieres, te doy un rango orientativo.",
+    "¿Por dónde empezamos?"
+  ],
+  "bio": "Rubén es desarrollador independiente. Desde 2019 construye software para pymes: automatiza procesos, conecta los programas que ya usáis y aplica IA donde ahorra horas de verdad.",
+  "steps": {
+    "start": [
+      {
+        "action": "proyecto",
+        "label": "Tengo un proyecto en mente"
+      },
+      {
+        "action": "precio",
+        "label": "¿Cuánto cuesta algo así?"
+      },
+      {
+        "action": "info",
+        "label": "¿Quién es Rubén?"
+      },
+      {
+        "action": "humano",
+        "label": "Prefiero hablar con él"
+      }
+    ],
+    "price_q": [
+      {
+        "action": "proyecto",
+        "label": "Vale, te cuento"
+      },
+      {
+        "action": "humano",
+        "label": "Mejor hablo con Rubén"
+      }
+    ],
+    "after_est": [
+      {
+        "action": "humano",
+        "label": "Enviar resumen a Rubén"
+      },
+      {
+        "action": "como",
+        "label": "¿Cómo trabaja?"
+      },
+      {
+        "action": "proyecto",
+        "label": "Probar otro caso"
+      }
+    ],
+    "after_info": [
+      {
+        "action": "proyecto",
+        "label": "Tengo un proyecto"
+      },
+      {
+        "action": "como",
+        "label": "¿Cómo es el proceso?"
+      },
+      {
+        "action": "humano",
+        "label": "Hablar con Rubén"
+      }
+    ]
+  },
+  "actions": {
+    "proyecto": {
+      "say": [
+        "Perfecto. Tres preguntas rápidas y te doy un rango.\n\n1/3 · ¿Qué quieres resolver?"
+      ],
+      "step": "type"
+    },
+    "info": {
+      "say": [
+        "Rubén es desarrollador independiente. Desde 2019 construye software para pymes: automatiza procesos, conecta los programas que ya usáis y aplica IA donde ahorra horas de verdad.",
+        "Trabaja con un alcance cerrado por escrito, entregas cada 1–2 semanas y soporte después del despliegue. Habla directamente contigo, sin intermediarios."
+      ],
+      "step": "after_info"
+    },
+    "precio": {
+      "say": [
+        "Depende mucho del alcance, así que no te voy a dar una cifra al aire.",
+        "Si me cuentas tres cosas, te doy un rango orientativo basado en proyectos parecidos. ¿Lo hacemos?"
+      ],
+      "step": "price_q"
+    },
+    "humano": {
+      "say": [
+        "Claro. Déjame tu nombre y email y Rubén te escribe en menos de 24 h laborables, con lo que hayamos hablado hasta ahora."
+      ],
+      "step": "contact"
+    },
+    "como": {
+      "say": [
+        "1. Llamada de 30 min para entender el problema (gratis).\n2. Propuesta con alcance, plazo y precio cerrado.\n3. Desarrollo por entregas que vas probando.\n4. Despliegue, formación y soporte.",
+        "Solo pagas por lo acordado en la propuesta."
+      ],
+      "step": "after_info"
+    },
+    "plazo": {
+      "say": [
+        "Los plazos van de 2 a 16 semanas según el tipo de proyecto. Con tres datos te doy un rango más ajustado."
+      ],
+      "step": "price_q"
+    },
+    "typeChosen": {
+      "say": [
+        "2/3 · ¿Con qué trabajáis ahora?"
+      ],
+      "step": "systems"
+    },
+    "systemsChosen": {
+      "say": [
+        "3/3 · ¿Cuántas personas tocan este proceso?"
+      ],
+      "step": "team"
+    },
+    "estimateIntro": {
+      "say": [
+        "Con lo que me cuentas, proyectos parecidos suelen quedar en este rango:"
+      ],
+      "step": "after_est"
+    },
+    "estimateOutro": {
+      "say": [
+        "Es una referencia para que sepas si encaja en tu presupuesto, no un compromiso. ¿Siguiente paso?"
+      ],
+      "step": "after_est"
+    },
+    "noEstimate": {
+      "say": [
+        "Gracias. Con esto Rubén puede prepararte una propuesta concreta.",
+        "¿Te parece que le pase el resumen?"
+      ],
+      "step": "after_est"
+    },
+    "fallback": {
+      "say": [
+        "Buena pregunta. Prefiero no inventarme la respuesta: se la paso a Rubén tal cual y te contesta él.",
+        "Mientras, ¿te ayudo con algo de esto?"
+      ],
+      "step": "start"
+    }
+  },
+  "rules": [
+    {
+      "pattern": "precio|cuesta|cuánto|cuanto|presupuesto|coste|€",
+      "action": "precio"
+    },
+    {
+      "pattern": "plazo|tarda|semanas|cuándo|cuando",
+      "action": "plazo"
+    },
+    {
+      "pattern": "llamada|hablar|contact|email|teléfono|telefono",
+      "action": "humano"
+    },
+    {
+      "pattern": "quién|quien|experiencia|rubén|ruben",
+      "action": "info"
+    }
+  ],
+  "types": {
+    "process": "Automatizar un proceso",
+    "ai": "IA con documentos o correos",
+    "web": "Web o sistema a medida",
+    "app": "App móvil"
+  },
+  "systems": {
+    "excel": "Excel y correo",
+    "erp": "Un ERP o CRM",
+    "several": "Varios programas sin conectar",
+    "unknown": "No lo tengo claro"
+  },
+  "team": {
+    "small": "1–5 personas",
+    "medium": "6–20 personas",
+    "large": "Más de 20"
+  },
+  "estimate": {
+    "title": "Rango orientativo",
+    "confidence": "Confianza {level}",
+    "levels": {
+      "low": "baja",
+      "medium": "media",
+      "high": "alta"
+    },
+    "weeks": "{min}–{max} semanas",
+    "upTitle": "Lo que lo puede subir",
+    "up": "Integrar programas sin API, muchos casos especiales, datos desordenados o plazos muy cortos.",
+    "downTitle": "Lo que lo puede bajar",
+    "down": "Empezar por un solo proceso, que ya uses herramientas con API o reutilizar piezas de proyectos previos.",
+    "disclaimer": "No es un presupuesto. Es un rango a partir de proyectos parecidos; la cifra real sale de una llamada de 30 min con Rubén y una propuesta por escrito."
+  },
+  "form": {
+    "name": "Nombre",
+    "namePlaceholder": "Cómo te llamas",
+    "email": "Email",
+    "emailPlaceholder": "tu@empresa.com",
+    "consent": "Acepto que Rubén use estos datos y esta conversación para responderme.",
+    "submit": "Enviar resumen a Rubén →",
+    "sending": "Enviando…",
+    "errors": {
+      "name": "Falta tu nombre.",
+      "email": "Revisa el email.",
+      "consent": "Necesito tu consentimiento para enviarlo.",
+      "send": "No se ha podido enviar. Inténtalo de nuevo o escribe a hola@rubenrosales.dev."
+    }
+  },
+  "summary": {
+    "title": "Enviado a Rubén",
+    "rows": {
+      "name": "Nombre",
+      "email": "Email",
+      "project": "Proyecto",
+      "tools": "Herramientas",
+      "team": "Equipo",
+      "range": "Rango"
+    },
+    "rangeNote": "{range} (orientativo)",
+    "footer": "Te escribe en menos de 24 h laborables. Así no tendrás que repetirle nada.",
+    "thanks": "Gracias, {name}.",
+    "userSent": "Enviado: {name}"
+  }
+}

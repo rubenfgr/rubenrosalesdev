@@ -37,6 +37,7 @@ export default function Contacto({ labels: L, lang, email: contactEmail, endpoin
   const [errors, setErrors] = useState<Record<string, boolean>>({});
   const [stepErr, setStepErr] = useState('');
   const [status, setStatus] = useState<Status>('idle');
+  const started = useRef(Date.now());
   const msgRef = useRef<HTMLTextAreaElement>(null);
   const nameRef = useRef<HTMLInputElement>(null);
   const set = (patch: Partial<typeof BLANK>) => setF((v) => ({ ...v, ...patch }));
@@ -66,7 +67,7 @@ export default function Contacto({ labels: L, lang, email: contactEmail, endpoin
       const res = await fetch(endpoint, {
         method: 'POST',
         headers: { 'content-type': 'application/json' },
-        body: JSON.stringify({ lang, mode, goals: f.goals, size: f.size, when: f.when, tools: [...f.tools, ...f.toolsOther.split(',').map((x) => x.trim()).filter(Boolean)], message: f.msg, name: f.name, company: f.company, email: f.email, preference: f.pref === 1 ? 'call' : 'email', phone: f.phone, consent: f.consent }),
+        body: JSON.stringify({ kind: 'form', startedAt: started.current, lang, mode, goals: f.goals, size: f.size, when: f.when, tools: [...f.tools, ...f.toolsOther.split(',').map((x) => x.trim()).filter(Boolean)], message: f.msg, name: f.name, company: f.company, email: f.email, preference: f.pref === 1 ? 'call' : 'email', phone: f.phone, consent: f.consent }),
       });
       if (!res.ok) throw new Error(String(res.status));
       setStatus('sent');

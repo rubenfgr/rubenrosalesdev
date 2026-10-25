@@ -1,0 +1,230 @@
+{
+  "panel": {
+    "title": "Rubén's assistant",
+    "status": "Replies instantly · Rubén reviews every conversation",
+    "banner": "Automatic assistant · does not quote final prices",
+    "disclaimer": "Automatic assistant. It can make mistakes; Rubén confirms everything in writing."
+  },
+  "greeting": [
+    "Hi, I'm Rubén Rosales's assistant. I do some groundwork for him: I work out what you need, explain how he works and, if you like, give you an indicative range.",
+    "Where shall we start?"
+  ],
+  "bio": "Rubén is an independent developer. Since 2019 he has been building software for small businesses: he automates processes, connects the tools you already use and applies AI where it really saves hours.",
+  "steps": {
+    "start": [
+      {
+        "action": "proyecto",
+        "label": "I have a project in mind"
+      },
+      {
+        "action": "precio",
+        "label": "How much does something like this cost?"
+      },
+      {
+        "action": "info",
+        "label": "Who is Rubén?"
+      },
+      {
+        "action": "humano",
+        "label": "I'd rather talk to him"
+      }
+    ],
+    "price_q": [
+      {
+        "action": "proyecto",
+        "label": "OK, let me tell you"
+      },
+      {
+        "action": "humano",
+        "label": "I'd rather talk to Rubén"
+      }
+    ],
+    "after_est": [
+      {
+        "action": "humano",
+        "label": "Send the summary to Rubén"
+      },
+      {
+        "action": "como",
+        "label": "How does he work?"
+      },
+      {
+        "action": "proyecto",
+        "label": "Try another case"
+      }
+    ],
+    "after_info": [
+      {
+        "action": "proyecto",
+        "label": "I have a project"
+      },
+      {
+        "action": "como",
+        "label": "What is the process like?"
+      },
+      {
+        "action": "humano",
+        "label": "Talk to Rubén"
+      }
+    ]
+  },
+  "actions": {
+    "proyecto": {
+      "say": [
+        "Great. Three quick questions and I'll give you a range.\n\n1/3 · What do you want to solve?"
+      ],
+      "step": "type"
+    },
+    "info": {
+      "say": [
+        "Rubén is an independent developer. Since 2019 he has been building software for small businesses: he automates processes, connects the tools you already use and applies AI where it really saves hours.",
+        "He works with a scope agreed in writing, deliveries every 1–2 weeks and support after deployment. You deal with him directly, with no intermediaries."
+      ],
+      "step": "after_info"
+    },
+    "precio": {
+      "say": [
+        "It depends a lot on the scope, so I'm not going to throw out a number at random.",
+        "If you tell me three things, I can give you an indicative range based on similar projects. Shall we?"
+      ],
+      "step": "price_q"
+    },
+    "humano": {
+      "say": [
+        "Of course. Leave me your name and email and Rubén will write to you within 24 working hours, with everything we have discussed so far."
+      ],
+      "step": "contact"
+    },
+    "como": {
+      "say": [
+        "1. A 30-minute call to understand the problem (free).\n2. A proposal with scope, timeline and a fixed price.\n3. Development in deliveries you can test as you go.\n4. Deployment, training and support.",
+        "You only pay for what is agreed in the proposal."
+      ],
+      "step": "after_info"
+    },
+    "plazo": {
+      "say": [
+        "Timelines range from 2 to 16 weeks depending on the type of project. With three details I can give you a tighter range."
+      ],
+      "step": "price_q"
+    },
+    "typeChosen": {
+      "say": [
+        "2/3 · What do you work with now?"
+      ],
+      "step": "systems"
+    },
+    "systemsChosen": {
+      "say": [
+        "3/3 · How many people are involved in this process?"
+      ],
+      "step": "team"
+    },
+    "estimateIntro": {
+      "say": [
+        "Based on what you've told me, similar projects usually end up in this range:"
+      ],
+      "step": "after_est"
+    },
+    "estimateOutro": {
+      "say": [
+        "It is a reference so you can tell whether it fits your budget, not a commitment. What next?"
+      ],
+      "step": "after_est"
+    },
+    "noEstimate": {
+      "say": [
+        "Thanks. With this Rubén can prepare a concrete proposal for you.",
+        "Shall I pass him the summary?"
+      ],
+      "step": "after_est"
+    },
+    "fallback": {
+      "say": [
+        "Good question. I'd rather not make up an answer: I'll pass it to Rubén as it is and he will reply.",
+        "Meanwhile, can I help you with any of this?"
+      ],
+      "step": "start"
+    }
+  },
+  "rules": [
+    {
+      "pattern": "price|cost|how much|quote|budget|fee|€",
+      "action": "precio"
+    },
+    {
+      "pattern": "timeline|how long|weeks|when|deadline",
+      "action": "plazo"
+    },
+    {
+      "pattern": "call|talk|speak|contact|email|phone",
+      "action": "humano"
+    },
+    {
+      "pattern": "who|experience|rubén|ruben",
+      "action": "info"
+    }
+  ],
+  "types": {
+    "process": "Automate a process",
+    "ai": "AI for documents or emails",
+    "web": "Custom website or system",
+    "app": "Mobile app"
+  },
+  "systems": {
+    "excel": "Excel and email",
+    "erp": "An ERP or CRM",
+    "several": "Several unconnected programs",
+    "unknown": "I'm not sure"
+  },
+  "team": {
+    "small": "1–5 people",
+    "medium": "6–20 people",
+    "large": "More than 20"
+  },
+  "estimate": {
+    "title": "Indicative range",
+    "confidence": "Confidence: {level}",
+    "levels": {
+      "low": "low",
+      "medium": "medium",
+      "high": "high"
+    },
+    "weeks": "{min}–{max} weeks",
+    "upTitle": "What could push it up",
+    "up": "Integrating programs without an API, many special cases, messy data or very tight deadlines.",
+    "downTitle": "What could bring it down",
+    "down": "Starting with a single process, tools that already have an API, or reusing pieces from previous projects.",
+    "disclaimer": "This is not a quote. It is a range based on similar projects; the real figure comes from a 30-minute call with Rubén and a written proposal."
+  },
+  "form": {
+    "name": "Name",
+    "namePlaceholder": "What's your name",
+    "email": "Email",
+    "emailPlaceholder": "you@company.com",
+    "consent": "I agree that Rubén may use this data and this conversation to reply to me.",
+    "submit": "Send summary to Rubén →",
+    "sending": "Sending…",
+    "errors": {
+      "name": "Your name is missing.",
+      "email": "Check the email.",
+      "consent": "I need your consent to send it.",
+      "send": "It could not be sent. Try again or write to hola@rubenrosales.dev."
+    }
+  },
+  "summary": {
+    "title": "Sent to Rubén",
+    "rows": {
+      "name": "Name",
+      "email": "Email",
+      "project": "Project",
+      "tools": "Tools",
+      "team": "Team",
+      "range": "Range"
+    },
+    "rangeNote": "{range} (indicative)",
+    "footer": "He will write to you within 24 working hours. That way you won't have to repeat anything.",
+    "thanks": "Thanks, {name}.",
+    "userSent": "Sent: {name}"
+  }
+}

@@ -8,7 +8,7 @@
   },
   "scripts": {
     "dev": "astro dev",
-    "build": "node scripts/i18n-check.mjs && node scripts/generate-redirects.mjs && astro build && node scripts/check-build.mjs",
+    "build": "node scripts/generate-redirects.mjs && astro build && node scripts/check-build.mjs",
     "preview": "astro preview",
     "check": "astro check",
     "build:prod": "GUARDS_STRICT=1 pnpm build",

@@ -734,7 +734,7 @@
     "restart": "Start over",
     "send": "Send",
     "messageAria": "Message",
-    "inputPlaceholder": "Type your message…",
+    "inputPlaceholder": "Type your question…",
     "fabTitle": "Have a project?",
     "fabSubtitle": "Tell the assistant"
   },

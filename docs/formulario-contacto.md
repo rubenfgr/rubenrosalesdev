@@ -1,8 +1,11 @@
 # Formulario de contacto (Gmail)
 
-El formulario envía a `POST /api/contacto` (un endpoint del Worker de Cloudflare). El endpoint valida los datos, aplica el antispam (campo señuelo y tiempo mínimo de 3 s, más comprobación de origen) y envía un email con la **API de Gmail** usando OAuth2. El visitante queda en `Reply-To`, así que basta responder al email recibido.
+El formulario guiado, el directo y el resumen del asistente envían JSON a `POST /api/contact` (un endpoint del Worker de Cloudflare). El endpoint valida los datos, aplica el antispam (campo señuelo `website`, tiempo mínimo de 3 s desde que se abre el formulario y comprobación de origen) y envía el email con el proveedor elegido en `CONTACT_PROVIDER`: **Gmail** (por defecto, OAuth2) o **Resend**. El visitante queda en `Reply-To`, así que basta responder al email recibido.
 
 ## Variables (solo en el entorno, nunca en el repo)
+
+`CONTACT_PROVIDER` = `gmail` (por defecto) o `resend`. Con Resend hacen falta `RESEND_API_KEY`, `CONTACT_FROM` (remitente verificado en Resend) y `CONTACT_TO`.
+
 
 | Variable | Qué es |
 |---|---|

@@ -1,6 +1,7 @@
 // Guardas de build de producción. Con GUARDS_STRICT=1 el build falla; sin ella, solo avisa.
 //  1. Ningún «[VERIFICAR» en las páginas generadas.
 //  2. Ningún proyecto publicado con `result` sin `resultVerified: true`.
+//  2b. Tabla de rangos del asistente sin placeholders.
 //  3. Ningún artículo en borrador enlazado desde contenido publicado.
 import fs from 'node:fs';
 import path from 'node:path';
@@ -32,6 +33,12 @@ for (const f of walk(path.join(root, 'src/content/case-studies')).filter((n) => 
   if (is(front, 'published', 'true') && /^result:\s*\S/m.test(front) && !is(front, 'resultVerified', 'true')) {
     problems.push(`proyecto publicado con result sin resultVerified: ${path.basename(f)}`);
   }
+}
+
+// 2b. Cifras de ejemplo del asistente sin confirmar
+const pricingFile = path.join(root, 'src/content/assistant/pricing.json');
+if (fs.existsSync(pricingFile) && JSON.stringify(JSON.parse(fs.readFileSync(pricingFile, 'utf8'))).includes('"placeholder":true')) {
+  problems.push('assistant/pricing.json con cifras de ejemplo (placeholder: true)');
 }
 
 // 3. Borradores enlazados desde contenido publicado

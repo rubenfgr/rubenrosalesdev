@@ -121,6 +121,65 @@ const trayItems = byLocale(
   }),
 );
 
+const assistantPricing = defineCollection({
+  // Sin idioma: la tabla de rangos es única. Las cifras son de ejemplo (`placeholder: true`) hasta que las confirme Rubén.
+  loader: glob({ pattern: 'pricing.json', base: './src/content/assistant' }),
+  schema: z.object({
+    placeholder: z.boolean(),
+    note: text,
+    currency: z.literal('EUR'),
+    rounding: z.number().int().positive(),
+    types: z.record(
+      id,
+      z.object({ minEur: z.number(), maxEur: z.number(), minWeeks: z.number(), maxWeeks: z.number(), placeholder: z.boolean() }),
+    ),
+    multipliers: z.record(
+      z.enum(['systems', 'team']),
+      z.record(
+        id,
+        z.object({
+          minFactor: z.number().optional(),
+          maxFactor: z.number().optional(),
+          extraWeeks: z.number().optional(),
+          confidence: z.enum(['low', 'medium', 'high']).optional(),
+          placeholder: z.boolean(),
+        }),
+      ),
+    ),
+    defaultConfidence: z.enum(['low', 'medium', 'high']),
+  }),
+});
+
+const key = z.string().regex(/^[A-Za-z0-9_-]+$/);
+const stepOption = z.object({ action: key, label: text });
+const say = z.object({ say: z.array(text).min(1), step: key });
+const assistant = byLocale(
+  'assistant',
+  z.object({
+    panel: z.object({ title: text, status: text, banner: text, disclaimer: text }),
+    greeting: z.array(text).min(1),
+    bio: text,
+    steps: z.record(key, z.array(stepOption).min(1)),
+    actions: z.record(key, say),
+    rules: z.array(z.object({ pattern: text, action: key })),
+    types: z.record(key, text),
+    systems: z.record(key, text),
+    team: z.record(key, text),
+    estimate: z.object({
+      title: text, confidence: text, levels: z.object({ low: text, medium: text, high: text }), weeks: text,
+      upTitle: text, up: text, downTitle: text, down: text, disclaimer: text,
+    }),
+    form: z.object({
+      name: text, namePlaceholder: text, email: text, emailPlaceholder: text, consent: text, submit: text, sending: text,
+      errors: z.object({ name: text, email: text, consent: text, send: text }),
+    }),
+    summary: z.object({
+      title: text, rows: z.object({ name: text, email: text, project: text, tools: text, team: text, range: text }),
+      rangeNote: text, footer: text, thanks: text, userSent: text,
+    }),
+  }),
+);
+
 const link = z.object({ label: text, href: z.string().startsWith('/') });
 const site = byLocale(
   'site',
@@ -173,5 +232,7 @@ export const collections = {
   integrationCases,
   trayItems,
   site,
+  assistant,
+  assistantPricing,
   blog,
 };

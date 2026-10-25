@@ -4,8 +4,9 @@ import archivoLatin from '@fontsource-variable/archivo/files/archivo-latin-wdth-
 import Footer from '../components/Footer.astro';
 import Header from '../components/Header.astro';
 import Scroll from '../components/Scroll.astro';
-import { getData } from '../i18n/content';
-import { cleanPath, getAlternates, getLang, getLocalizedPath, intlLocale, locales, t as makeT, type Lang } from '../i18n';
+import Assistant from '../components/islands/Assistant';
+import { getData, getPricing } from '../i18n/content';
+import { cleanPath, getAlternates, getLang, getLocalizedPath, intlLocale, locales, t as makeT, ui, type Lang } from '../i18n';
 
 interface Props {
   title?: string;
@@ -20,6 +21,7 @@ const { title, description, noindex = false, ogType = 'website', paths } = Astro
 const lang = getLang(Astro.url);
 const t = makeT(lang);
 const site = await getData('site', lang);
+const [assistant, pricing] = await Promise.all([getData('assistant', lang), getPricing()]);
 const siteUrl = Astro.site ?? new URL('https://rubenrosales.dev');
 
 const fullTitle = title ? `${title} · ${site.name}` : site.seo.title;
@@ -61,6 +63,7 @@ const footerNav = site.nav.filter((l) => ['services', 'projects', 'blog'].includ
       <slot />
     </main>
     <Footer lang={lang} t={t} name={site.name} tagline={site.footer.tagline} motto={site.footer.motto} email={site.contact.email} nav={footerNav} legal={site.legal} social={site.social} />
+    <Assistant client:idle data={assistant} pricing={pricing} labels={ui(lang, 'assistant')} lang={lang} locale={intlLocale[lang]} endpoint="/api/contact" />
     <Scroll />
     {
       analyticsToken && (
