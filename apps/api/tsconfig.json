@@ -1,5 +1,5 @@
 {
   "extends": "../../tsconfig.base.json",
   "compilerOptions": { "types": ["node"], "noEmit": true },
-  "include": ["src", "evals", "drizzle.config.ts", "tsup.config.ts"]
+  "include": ["src", "evals", "e2e", "drizzle.config.ts", "tsup.config.ts"]
 }

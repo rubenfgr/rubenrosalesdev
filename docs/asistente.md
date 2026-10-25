@@ -29,3 +29,9 @@ Activar con `ASSISTANT_LLM_ENABLED=1`, `ASSISTANT_LLM_API_KEY` y `ASSISTANT_LLM_
 
 - `PUBLIC_ASSISTANT_ENABLED=1`: muestra el asistente (flujo guiado por reglas; el resumen va a `/api/v1/leads`, así que la API debe estar desplegada).
 - `PUBLIC_ASSISTANT_LLM=1`: además, el texto libre va a `POST /api/v1/chat` con streaming; si la API responde 503, hay un límite o falla la red, el asistente usa el motor de reglas. Con ambos vacíos el HTML no contiene el asistente.
+
+## Pruebas
+
+- `pnpm test`: unitarias e integración (motor, prompt, validador, rutas, cliente de la web). Las de repositorios usan Postgres real si hay `TEST_DATABASE_URL` (ver [backend.md](backend.md)).
+- `pnpm e2e`: prueba de humo con Playwright. Construye la web con el asistente activado, levanta web + API (LLM, email y base de datos simulados) detrás de un proxy local y recorre: aviso de consentimiento, texto libre con streaming, flujo guiado hasta la estimación y envío del resumen, a 1280 y 390 px. Comprueba que se guardan los leads y la conversación y que se «envía» el email. Necesita Chrome (`CHROME_PATH`, por defecto `/usr/bin/google-chrome`). No toca servidores reales ni deja la web construida con el flag distinto al que tenías: vuelve a ejecutar tu `pnpm build` normal después.
+- `pnpm --filter @rr/api eval`: 39 casos (es y en) contra el LLM real; solo con `ASSISTANT_LLM_API_KEY` y `ASSISTANT_LLM_MODEL` en el entorno. No corre en CI. Opción `--out informe.md`.
