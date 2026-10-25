@@ -27,8 +27,14 @@ Web pública de rubenrosales.dev: servicios, proyectos y blog. Astro estático, 
 
 ## Comandos
 
-Ver `package.json`. Antes de dar una tarea por terminada: check de tipos, build y revisión visual.
+Desde la raíz (monorepo pnpm; ver `package.json`):
+
+- `pnpm dev` (web, :4321) · `pnpm dev:api` (API, :3000, necesita `DATABASE_URL`)
+- `pnpm check` (tipos de todos los paquetes) · `pnpm --filter @rr/api test` · `pnpm build`
+- `pnpm i18n:check` (claves es/en de la interfaz)
+
+Estructura: `apps/web` (Astro), `apps/api` (Hono + Postgres, ver `docs/backend.md`), `packages/shared` (contratos Zod). Antes de dar una tarea por terminada: check de tipos, tests, build y revisión visual.
 
 ## Blog
 
-Ver `docs/escribir-un-post.md`. Un artículo = un fichero por idioma en `apps/web/apps/web/src/content/blog/{es,en}/<slug>.mdx`.
+Ver `docs/escribir-un-post.md`. Un artículo = un fichero por idioma en `apps/web/src/content/blog/{es,en}/<slug>.mdx`.

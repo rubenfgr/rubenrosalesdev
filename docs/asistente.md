@@ -1,6 +1,6 @@
 # Asistente
 
-Chatbot flotante (`src/components/islands/Assistant.tsx`, isla `client:idle` montada en el layout).
+Chatbot flotante (`apps/web/src/components/islands/Assistant.tsx`, isla `client:idle` montada en el layout).
 
 **Estado: oculto.** El asistente no se muestra hasta definir la variable de build `PUBLIC_ASSISTANT_ENABLED=1`. Sin ella, el layout no lo monta ni descarga su código. En producción es la variable de GitHub `PUBLIC_ASSISTANT_ENABLED` (se aplica en el build de la imagen).
 
@@ -8,11 +8,11 @@ Chatbot flotante (`src/components/islands/Assistant.tsx`, isla `client:idle` mon
 
 | Qué | Dónde |
 |---|---|
-| Guiones, ramas, opciones, avisos, bio, textos de las tarjetas | `src/content/assistant/{es,en}.json` |
-| Tabla de rangos y multiplicadores (sin idioma) | `src/content/assistant/pricing.json` |
-| Motor de reglas (estimación, reglas de texto libre) | `src/lib/assistant/engine.ts` |
-| System prompt del LLM | `src/lib/assistant/prompt.ts` (se construye con los mismos datos) |
-| Ruta del LLM (desactivada por defecto) | `src/pages/api/assistant.ts` |
+| Guiones, ramas, opciones, avisos, bio, textos de las tarjetas | `apps/web/src/content/assistant/{es,en}.json` |
+| Tabla de rangos y multiplicadores (sin idioma) | `apps/web/src/content/assistant/pricing.json` |
+| Motor de reglas (estimación, reglas de texto libre) | `apps/web/src/lib/assistant/engine.ts` |
+| System prompt del LLM | `apps/web/src/lib/assistant/prompt.ts` (se construye con los mismos datos) |
+| Ruta del LLM (desactivada por defecto) | `apps/web/src/pages/api/assistant.ts` |
 | Envío del resumen | `POST /api/contact` con `kind: "assistant"` |
 
 ## Cifras de ejemplo
