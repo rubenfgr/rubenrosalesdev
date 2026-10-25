@@ -93,6 +93,7 @@ El servicio `ollama` del compose está bajo el profile `llm-local` (no arranca p
 
 - **Conversaciones:** solo se guardan si la petición lleva `consent: true` (D-3). Sin consentimiento no se escribe nada. Se identifican por un UUID aleatorio y un hash con sal de la IP; caducan a los 90 días.
 - **Leads (`POST /api/v1/leads`):** valida con `leadSchema`, antispam (señuelo `website` y tiempo mínimo de 3 s desde `startedAt`), guarda el lead (caduca a los 12 meses) y envía el email a Rubén con `Reply-To` del visitante. Límite: `RATE_LIMIT_LEADS_PER_HOUR` por IP.
+- **Contacto (`POST /api/v1/contact`):** mismo antispam y límite que los leads; no se guarda, solo se envía el email (formato en `services/contact-email.ts`, con las etiquetas en español que `scripts/export-knowledge.mjs` toma de la web).
 - **Borrado:** `jobs/purge.ts` borra al arrancar y una vez al día lo caducado. Al borrar una conversación caen sus mensajes (`ON DELETE CASCADE`); los leads se purgan por su propia fecha y su `conversation_id` pasa a nulo. Solo se registran recuentos.
 
 ## Tope de gasto del LLM (1 €/mes) y kill switch

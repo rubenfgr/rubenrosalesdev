@@ -5,7 +5,7 @@ services:
     image: ghcr.io/rubenfgr/rubenrosalesdev-web:latest
     container_name: rubenrosales-web
     restart: unless-stopped
-    env_file: .env
+    # Sin env_file: la web ya no necesita secretos (el email y la base de datos son cosa de la API).
     networks:
       - proxy
     labels:

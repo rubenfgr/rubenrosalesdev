@@ -54,5 +54,5 @@ const hero = ui(lang, 'hero');
   <Proceso eyebrow={t('process.eyebrow')} title1={t('process.title1')} title2={t('process.title2')} steps={process.items} />
   <Proyectos client:visible projects={visibleProjects} labels={ui(lang, 'projects')} locale={locale} contactHref={contactHref} />
   <FAQ client:visible items={faq.items} labels={ui(lang, 'faq')} contactHref={contactHref} />
-  <Contacto client:visible labels={ui(lang, 'contact')} lang={lang} email={site.contact.email} endpoint="/api/contact" />
+  <Contacto client:visible labels={ui(lang, 'contact')} lang={lang} email={site.contact.email} />
 </Layout>

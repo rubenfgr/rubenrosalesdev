@@ -64,3 +64,24 @@ export const leadSchema = z.object({
 export type Lead = z.infer<typeof leadSchema>;
 
 export * from './assistant/engine';
+
+/** Formulario de contacto (guiado o directo). */
+export const contactSchema = z.object({
+  lang: langSchema,
+  mode: z.enum(['guided', 'direct']),
+  goals: z.array(z.string().max(120)).max(20).default([]),
+  size: z.string().max(20).default(''),
+  when: z.string().max(20).default(''),
+  tools: z.array(z.string().max(120)).max(20).default([]),
+  message: z.string().trim().min(10).max(4000),
+  name: z.string().trim().min(1).max(100),
+  company: z.string().trim().max(150).default(''),
+  email: z.email().max(200),
+  preference: z.enum(['email', 'call']),
+  phone: z.string().trim().max(40).default(''),
+  consent: z.literal(true),
+  /** Antispam: campo señuelo (debe ir vacío) y momento en que se abrió el formulario (ms desde epoch). */
+  website: z.string().max(200).optional(),
+  startedAt: z.number(),
+});
+export type Contact = z.infer<typeof contactSchema>;

@@ -1,5 +1,5 @@
 // Cliente de la API del asistente (`/api/v1`): chat por SSE y envío del resumen (lead).
-import { chatDeltaEventSchema, chatDoneEventSchema, chatErrorEventSchema, type ChatDoneEvent, type ChatRequest, type Lead } from '@rr/shared';
+import { chatDeltaEventSchema, chatDoneEventSchema, chatErrorEventSchema, type ChatDoneEvent, type ChatRequest, type Contact, type Lead } from '@rr/shared';
 
 /** El LLM no está disponible (503, límite, error de red o corte): la isla degrada al motor de reglas. */
 export class LlmUnavailable extends Error {
@@ -77,6 +77,18 @@ export async function streamChat(req: ChatRequest, onDelta: (text: string) => vo
   }
   if (!done) throw new LlmUnavailable(received);
   return done;
+}
+
+/** Envía el formulario de contacto (guiado o directo). Lanza si la API no responde bien. */
+export async function sendContact(form: Omit<Contact, 'website'> & { website?: string }, opts: Options = {}): Promise<void> {
+  const { fetchImpl = fetch, base = BASE } = opts;
+  const res = await fetchImpl(`${base}/contact`, {
+    method: 'POST',
+    headers: { 'content-type': 'application/json' },
+    body: JSON.stringify({ website: '', ...form }),
+    ...(opts.signal ? { signal: opts.signal } : {}),
+  });
+  if (!res.ok) throw new Error(String(res.status));
 }
 
 /** Envía el resumen a Rubén. Lanza si la API no responde bien. */

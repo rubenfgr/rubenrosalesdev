@@ -9,7 +9,7 @@ Traefik ─┬─ rubenrosales.dev                  → web      (Astro + @astro
                                                   └─ postgres (red interna, sin puertos expuestos, volumen pgdata)
 ```
 
-La web sirve las páginas estáticas, `/api/contact` y las redirecciones 301 del portal anterior. La API cuelga del mismo dominio bajo `/api/v1` (sin DNS ni CORS nuevos); ver [backend.md](backend.md). Un cuarto contenedor, `backup`, hace copias nocturnas de Postgres (ver [restaurar-backup.md](restaurar-backup.md)).
+La web sirve las páginas estáticas y las redirecciones 301 del portal anterior (ya no tiene rutas `/api`). La API cuelga del mismo dominio bajo `/api/v1` (sin DNS ni CORS nuevos); ver [backend.md](backend.md). Un cuarto contenedor, `backup`, hace copias nocturnas de Postgres (ver [restaurar-backup.md](restaurar-backup.md)).
 
 **`main` = producción.** Cada push a `main` construye las imágenes y las despliega (`.github/workflows/deploy.yml`). Las demás ramas solo pasan por `ci.yml` (tipos + build). Trabaja en ramas y no hagas push ni merge a `main` sin aprobación de Rubén.
 
@@ -47,7 +47,7 @@ La web sirve las páginas estáticas, `/api/contact` y las redirecciones 301 del
 
 ## Variables del servidor (`/opt/apps/projects/rubenrosalesdev/.env`, nunca en el repo)
 
-Ver `deploy/.env.example`: base de datos (`POSTGRES_DB`, `POSTGRES_USER`, `POSTGRES_PASSWORD`, `DATABASE_URL` coherente con ellos, `ALLOWED_ORIGIN` vacío), proveedor de email (`CONTACT_PROVIDER` = `gmail` o `resend`, `CONTACT_TO`, credenciales) y, si se activa, el LLM del asistente. Detalles en [formulario-contacto.md](formulario-contacto.md). Tras editar el `.env`: `cd /opt/apps/projects/rubenrosalesdev && docker compose up -d`.
+Ver `deploy/.env.example`: base de datos (`POSTGRES_DB`, `POSTGRES_USER`, `POSTGRES_PASSWORD`, `DATABASE_URL` coherente con ellos, `ALLOWED_ORIGIN` vacío), email por Gmail (`CONTACT_TO`, `GMAIL_*`; los lee la API) y, si se activa, el LLM del asistente. Detalles en [formulario-contacto.md](formulario-contacto.md). Tras editar el `.env`: `cd /opt/apps/projects/rubenrosalesdev && docker compose up -d`.
 
 ## Operación
 

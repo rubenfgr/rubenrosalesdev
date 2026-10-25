@@ -4,7 +4,7 @@ import sitemap from '@astrojs/sitemap';
 import node from '@astrojs/node';
 import mdx from '@astrojs/mdx';
 import preact from '@astrojs/preact';
-import { defineConfig, envField } from 'astro/config';
+import { defineConfig } from 'astro/config';
 import expressiveCode from 'astro-expressive-code';
 import remarkDirective from 'remark-directive';
 import rehypeHeadingAnchors from './src/plugins/rehype-heading-anchors.ts';
@@ -52,24 +52,11 @@ export default defineConfig({
   session: false,
   // Detrás de Traefik, Astro solo confía en el Host si coincide con estos dominios; si no, `url` es localhost y /api rechaza el origen (403).
   security: { allowedDomains: [{ hostname: 'rubenrosales.dev', protocol: 'https' }, { hostname: 'localhost' }] },
-  // Secretos del formulario de contacto: solo variables de entorno, nunca en el repo.
-  env: {
-    schema: {
-      GMAIL_CLIENT_ID: envField.string({ context: 'server', access: 'secret', optional: true }),
-      GMAIL_CLIENT_SECRET: envField.string({ context: 'server', access: 'secret', optional: true }),
-      GMAIL_REFRESH_TOKEN: envField.string({ context: 'server', access: 'secret', optional: true }),
-      GMAIL_SENDER: envField.string({ context: 'server', access: 'secret', optional: true }),
-      CONTACT_TO: envField.string({ context: 'server', access: 'secret', optional: true }),
-      // Proveedor de envío del formulario y del resumen del asistente: 'gmail' (por defecto) o 'resend'.
-      CONTACT_PROVIDER: envField.string({ context: 'server', access: 'secret', optional: true }),
-      RESEND_API_KEY: envField.string({ context: 'server', access: 'secret', optional: true }),
-      CONTACT_FROM: envField.string({ context: 'server', access: 'secret', optional: true }),
-    },
-  },
   // i18n nativo: español sin prefijo (/), inglés en /en.
   i18n: { defaultLocale: 'es', locales: ['es', 'en'], routing: { prefixDefaultLocale: false } },
   // Desarrollo accesible por Tailscale (pnpm dev:tailscale): permite los nombres MagicDNS *.ts.net.
-  vite: { server: { allowedHosts: ['.ts.net'] } },
+  // En local, /api/v1 se reenvía a la API (pnpm dev:api, puerto 3000); en producción lo hace Traefik.
+  vite: { server: { allowedHosts: ['.ts.net'], proxy: { '/api/v1': 'http://localhost:3000' } } },
   trailingSlash: 'never',
   build: { format: 'directory' },
   integrations: [

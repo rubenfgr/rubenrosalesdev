@@ -10,6 +10,7 @@ import { errorBody, registerErrorHandlers } from './lib/errors';
 import { requestLogger, type LogSink } from './lib/logging';
 import { MemoryAnswerCache, type AnswerCache } from './services/answer-cache';
 import type { Mailer } from './services/mailer';
+import { contactRoutes } from './routes/contact';
 import { leadRoutes } from './routes/leads';
 import type { LlmClient } from './services/llm';
 import { chatRoutes } from './routes/chat';
@@ -58,6 +59,7 @@ export function createApp(input: Deps) {
   app.route('/health', healthRoutes(deps));
   app.route('/chat', chatRoutes(deps));
   app.route('/leads', leadRoutes(deps));
+  app.route('/contact', contactRoutes(deps));
 
   registerErrorHandlers(app);
   return app;

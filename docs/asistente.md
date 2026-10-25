@@ -13,7 +13,7 @@ Chatbot flotante (`apps/web/src/components/islands/Assistant.tsx`, isla `client:
 | Motor de reglas (estimación, reglas de texto libre) | `packages/shared/src/assistant/engine.ts` |
 | System prompt del LLM | `apps/api/src/services/prompt.ts` (se construye con los mismos datos, empaquetados en el build de la API) |
 | Ruta del LLM (desactivada por defecto) | `POST /api/v1/chat` en `apps/api` (fase 3 del plan) |
-| Envío del resumen | `POST /api/v1/leads` (API); el formulario de contacto sigue en `POST /api/contact` |
+| Envío del resumen | `POST /api/v1/leads` (API); el formulario de contacto, en `POST /api/v1/contact` |
 | Aviso de privacidad y consentimiento | `consent` en `apps/web/src/content/assistant/{es,en}.json` |
 | Cliente de la API en la web | `apps/web/src/lib/assistant/api.ts` |
 

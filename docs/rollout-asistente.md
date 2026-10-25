@@ -22,7 +22,7 @@ Nada de esto se ha ejecutado. `main` = producción: cada paso que toque `main` o
 1. Merge de `feat/backend-monorepo` a `main` (dispara `deploy.yml`). Antes, repasa el diff con `git diff main...feat/backend-monorepo --stat`.
 2. En GitHub, variables `PUBLIC_ASSISTANT_ENABLED` y `PUBLIC_ASSISTANT_LLM` **vacías** (o inexistentes).
 3. Comprueba en producción:
-   - La web se ve igual que antes y `/api/contact` sigue funcionando (envía un mensaje de prueba por el formulario).
+   - La web se ve igual que antes y el formulario de contacto sigue funcionando (ahora va a `/api/v1/contact`: envía un mensaje de prueba y comprueba que llega el email).
    - `curl -s https://rubenrosales.dev/api/v1/health` → `{"status":"ok"}`.
    - En el VPS: `docker compose ps` con `api`, `postgres` y `web` en `healthy` (y `backup` arrancado); `docker logs rubenrosales-backup` con «backup ok».
    - `docker exec rubenrosales-postgres pg_isready` y que no haya puertos publicados.

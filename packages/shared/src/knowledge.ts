@@ -26,6 +26,7 @@ export interface Knowledge {
   faq: Record<Lang, { items: { id: string; question: string; answer: string }[] }>;
   assistant: Record<Lang, AssistantKnowledge>;
   pricing: Pricing;
+  contactEs: { goals: Record<string, string>; sizes: Record<string, string>; whens: Record<string, string> };
 }
 
 export const knowledge = data as unknown as Knowledge;

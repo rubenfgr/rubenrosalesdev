@@ -1,4 +1,5 @@
 import { useEffect, useRef, useState } from 'preact/hooks';
+import { sendContact } from '../../lib/assistant/api';
 import Eyebrow from './Eyebrow';
 import './Contacto.css';
 
@@ -25,12 +26,12 @@ interface Labels {
     guided: { s1: Step; s2Mail: Step; s2Call: Step; s3: Step }; direct: { s1: Step; s2: Step; s3: Step } };
   aside: { reviewer: string; reviewerText: string; preferWrite: string; location: string };
 }
-interface Props { labels: Labels; lang: string; email: string; endpoint: string }
+interface Props { labels: Labels; lang: string; email: string }
 
 const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 const BLANK = { goals: [] as string[], size: '', when: '', tools: [] as string[], toolsOther: '', msg: '', name: '', company: '', email: '', pref: 0, phone: '', consent: false };
 
-export default function Contacto({ labels: L, lang, email: contactEmail, endpoint }: Props) {
+export default function Contacto({ labels: L, lang, email: contactEmail }: Props) {
   const [mode, setMode] = useState<Mode>('guided');
   const [step, setStep] = useState(0);
   const [f, setF] = useState(BLANK);
@@ -64,12 +65,22 @@ export default function Contacto({ labels: L, lang, email: contactEmail, endpoin
   const submit = async () => {
     setStatus('sending');
     try {
-      const res = await fetch(endpoint, {
-        method: 'POST',
-        headers: { 'content-type': 'application/json' },
-        body: JSON.stringify({ kind: 'form', startedAt: started.current, lang, mode, goals: f.goals, size: f.size, when: f.when, tools: [...f.tools, ...f.toolsOther.split(',').map((x) => x.trim()).filter(Boolean)], message: f.msg, name: f.name, company: f.company, email: f.email, preference: f.pref === 1 ? 'call' : 'email', phone: f.phone, consent: f.consent }),
+      await sendContact({
+        startedAt: started.current,
+        lang: lang === 'en' ? 'en' : 'es',
+        mode,
+        goals: f.goals,
+        size: f.size,
+        when: f.when,
+        tools: [...f.tools, ...f.toolsOther.split(',').map((x) => x.trim()).filter(Boolean)],
+        message: f.msg,
+        name: f.name,
+        company: f.company,
+        email: f.email,
+        preference: f.pref === 1 ? 'call' : 'email',
+        phone: f.phone,
+        consent: true,
       });
-      if (!res.ok) throw new Error(String(res.status));
       setStatus('sent');
     } catch {
       setStatus('error');

@@ -1,10 +1,10 @@
 # Formulario de contacto (Gmail)
 
-El formulario guiado, el directo y el resumen del asistente envían JSON a `POST /api/contact` (un endpoint del servidor Node). El endpoint valida los datos, aplica el antispam (campo señuelo `website`, tiempo mínimo de 3 s desde que se abre el formulario y comprobación de origen) y envía el email con el proveedor elegido en `CONTACT_PROVIDER`: **Gmail** (por defecto, OAuth2) o **Resend**. El visitante queda en `Reply-To`, así que basta responder al email recibido.
+El formulario guiado y el directo envían JSON a `POST /api/v1/contact`, y el resumen del asistente a `POST /api/v1/leads`; los dos son rutas de la API (`apps/api`, ver [backend.md](backend.md)). Cada ruta valida los datos con Zod (`contactSchema` y `leadSchema` de `@rr/shared`), aplica el antispam (campo señuelo `website`, tiempo mínimo de 3 s desde que se abre el formulario y límite de peticiones por IP) y envía el email por **Gmail** (OAuth2). El visitante queda en `Reply-To`, así que basta responder al email recibido. El formulario de contacto no se guarda en la base de datos; los resúmenes del asistente sí (12 meses).
 
 ## Variables (solo en el entorno, nunca en el repo)
 
-`CONTACT_PROVIDER` = `gmail` (por defecto) o `resend`. Con Resend hacen falta `RESEND_API_KEY`, `CONTACT_FROM` (remitente verificado en Resend) y `CONTACT_TO`.
+Las lee la **API**, no la web (la web ya no usa secretos). Resend ya no está soportado: solo Gmail.
 
 
 | Variable | Qué es |
@@ -15,9 +15,9 @@ El formulario guiado, el directo y el resumen del asistente envían JSON a `POST
 | `GMAIL_SENDER` | Cuenta de Gmail desde la que se envía (la autorizada) |
 | `CONTACT_TO` | Dirección que recibe los mensajes (p. ej. `hola@rubenrosales.dev` si ya reenvía a tu Gmail, o la propia cuenta de Gmail) |
 
-Sin ellas, el endpoint responde 503 y el formulario muestra el aviso de error con el email de contacto.
+Sin ellas, la API responde `502 mail_unavailable` (los resúmenes del asistente quedan guardados igualmente) y el formulario muestra el aviso de error con el email de contacto.
 
-En producción se definen en `/opt/apps/projects/rubenrosalesdev/.env` del VPS (ver [despliegue.md](despliegue.md)). En local, copia `.env.example` a `.env`.
+En producción se definen en `/opt/apps/projects/rubenrosalesdev/.env` del VPS (ver [despliegue.md](despliegue.md)). En local, copia `apps/api/.env.example` a `apps/api/.env`.
 
 ## Cómo obtener las credenciales
 
@@ -38,8 +38,8 @@ Según la [documentación de Google](https://developers.google.com/identity/prot
 - pasan 6 meses sin usarlo,
 - revocas el acceso, o se superan 100 tokens por cuenta y cliente.
 
-Si el formulario empieza a fallar (el servidor registra `contacto: fallo al enviar token 400`), repite los pasos 4 y 5. Conviene enviarte un mensaje de prueba cada pocos meses.
+Si el formulario empieza a fallar (la API registra `contact: fallo al enviar el email token 400`), repite los pasos 4 y 5. Conviene enviarte un mensaje de prueba cada pocos meses.
 
 ## Antispam
 
-El endpoint no tiene límite de peticiones propio. Si hiciera falta, se añade un middleware de Traefik (`ratelimit`) sobre `/api/contact`.
+Campo señuelo `website` (si llega relleno, se responde 200 sin enviar), tiempo mínimo de 3 s desde que se abre el formulario (y máximo de 24 h) y límite por IP (`RATE_LIMIT_LEADS_PER_HOUR`, 5 por hora por defecto, con `Retry-After`). No hay Turnstile (decisión D-5): si se viera abuso, se plantearía.

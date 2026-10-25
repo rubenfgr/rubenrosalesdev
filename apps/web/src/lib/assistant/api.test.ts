@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { LlmUnavailable, sendLead, streamChat } from './api';
+import { LlmUnavailable, sendContact, sendLead, streamChat } from './api';
 
 const ID = '3f6c1d0e-6a53-4b6c-9a6f-0a1b2c3d4e5f';
 const req = { lang: 'es' as const, messages: [{ role: 'user' as const, content: 'hola' }] };
@@ -77,5 +77,20 @@ describe('sendLead', () => {
   it('lanza si la API responde error', async () => {
     const f = (async () => new Response('', { status: 502 })) as unknown as typeof fetch;
     await expect(sendLead(lead, { fetchImpl: f })).rejects.toThrow('502');
+  });
+});
+
+describe('sendContact', () => {
+  const form = { lang: 'es' as const, mode: 'direct' as const, goals: [], size: '', when: '', tools: [], message: 'Quiero automatizar mis facturas', name: 'Ana', company: '', email: 'ana@example.com', preference: 'email' as const, phone: '', consent: true as const, startedAt: 1 };
+  it('envía a /api/v1/contact con el señuelo vacío', async () => {
+    let sent: { url: string; body: Record<string, unknown> } | undefined;
+    const f = (async (url: string, init: RequestInit) => ((sent = { url, body: JSON.parse(init.body as string) }), new Response('{"ok":true}'))) as unknown as typeof fetch;
+    await sendContact(form, { fetchImpl: f });
+    expect(sent!.url).toBe('/api/v1/contact');
+    expect(sent!.body).toMatchObject({ website: '', name: 'Ana', mode: 'direct' });
+  });
+  it('lanza si la API responde error', async () => {
+    const f = (async () => new Response('', { status: 502 })) as unknown as typeof fetch;
+    await expect(sendContact(form, { fetchImpl: f })).rejects.toThrow('502');
   });
 });

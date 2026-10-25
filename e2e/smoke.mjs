@@ -8,10 +8,10 @@ import { chromium } from 'playwright-core';
 
 const WEB = 4301, API = 4302, PROXY = 4300;
 const children = [];
-const stop = () => children.forEach((c) => c.kill('SIGTERM'));
+const stop = () => children.forEach((c) => { try { c.pid ? process.kill(-c.pid, 'SIGTERM') : c.kill('SIGTERM'); } catch {} });
 process.on('exit', stop);
 const fail = (msg) => { console.error('FALLO:', msg); stop(); process.exit(1); };
-const run = (cmd, args, env = {}, cwd) => spawn(cmd, args, { env: { ...process.env, ...env }, cwd, stdio: 'ignore' });
+const run = (cmd, args, env = {}, cwd) => spawn(cmd, args, { env: { ...process.env, ...env }, cwd, stdio: 'ignore', detached: true }); // grupo propio: se mata entero al terminar
 const waitFor = async (url) => { for (let i = 0; i < 60; i++) { try { if ((await fetch(url)).status < 500) return; } catch {} await new Promise((r) => setTimeout(r, 500)); } fail(`no arranca ${url}`); };
 
 console.log('· construyendo la web con el asistente activado…');
@@ -60,11 +60,28 @@ try {
     await page.check('.as-consent input');
     await page.click('.as-submit');
     await page.waitForSelector('.as-sum', { timeout: 15000 });
+    // formulario de contacto (modo directo) → /api/v1/contact (se cierra antes el panel del asistente)
+    await page.locator('.as-panel button[aria-label="Cerrar"]').evaluate((el) => el.click());
+    await page.waitForSelector('.as-panel', { state: 'detached' });
+    await page.locator('.ct-tab').nth(1).scrollIntoViewIfNeeded();
+    await page.waitForSelector('astro-island:not([ssr]) .ct-tab'); // la isla se hidrata al ser visible
+    await page.locator('.ct-tab').nth(1).evaluate((el) => el.click()); // la cabecera fija puede tapar el botón
+    await page.fill('.ct-form input[type=text] >> nth=0', `Bea ${name}`);
+    await page.fill('.ct-form input[type=email]', 'bea@example.com');
+    await page.fill('.ct-form textarea', 'Quiero automatizar mis facturas con mi Excel actual.');
+    await page.locator('.ct-form input[type=checkbox]').evaluate((el) => el.click());
+    await page.waitForTimeout(3200); // antispam: mínimo 3 s desde que se abrió el formulario
+    const contactRes = page.waitForResponse((r) => r.url().includes('/api/v1/contact'));
+    await page.locator('.ct-form button[type=submit]').evaluate((el) => el.click());
+    const cr = await contactRes;
+    if (cr.status() !== 200) fail(`contacto respondió ${cr.status()}: ${await cr.text()}`);
+    await page.waitForSelector('.ct-form', { state: 'detached', timeout: 15000 });
     await page.close();
-    console.log(`✓ ${name}: consentimiento, streaming, estimación y envío del resumen`);
+    console.log(`✓ ${name}: consentimiento, streaming, estimación, resumen y formulario de contacto`);
   }
   const s = await state();
-  if (s.leads !== 2 || s.emails.length !== 2) fail(`se esperaban 2 leads y 2 emails; hay ${s.leads} y ${s.emails.length}`);
+  if (s.leads !== 2 || s.emails.length !== 4) fail(`se esperaban 2 leads y 4 emails (2 resúmenes + 2 formularios); hay ${s.leads} y ${s.emails.length}`);
+  if (s.emails.filter((m) => m.subject.startsWith('Contacto web: Bea')).length !== 2) fail('faltan los emails del formulario de contacto');
   if (!s.emails[0].subject.startsWith('Asistente web: Ana')) fail(`asunto inesperado: ${s.emails[0].subject}`);
   if (s.conversations !== 2 || s.messages < 4) fail(`la conversación aceptada no se guardó (${s.conversations} conv., ${s.messages} mensajes)`);
   console.log(`✓ API: ${s.leads} leads guardados, ${s.emails.length} emails enviados (asunto «${s.emails[0].subject}», Reply-To ${s.emails[0].replyTo}), ${s.conversations} conversaciones con ${s.messages} mensajes`);

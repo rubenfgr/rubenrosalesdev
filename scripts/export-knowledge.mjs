@@ -10,12 +10,17 @@ const content = join(root, 'apps/web/src/content');
 const read = (rel) => JSON.parse(readFileSync(join(content, rel), 'utf8'));
 const byLang = (collection) => ({ es: read(`${collection}/es.json`), en: read(`${collection}/en.json`) });
 
+const uiContact = JSON.parse(readFileSync(join(root, 'apps/web/src/i18n/ui/es.json'), 'utf8')).contact;
+const titles = (o) => Object.fromEntries(Object.entries(o).map(([k, v]) => [k, typeof v === 'string' ? v : v.title]));
+
 const knowledge = {
   services: byLang('services'),
   process: byLang('process'),
   faq: byLang('faq'),
   assistant: byLang('assistant'),
   pricing: read('assistant/pricing.json'),
+  // Etiquetas en español del formulario de contacto, para redactar el email a Rubén.
+  contactEs: { goals: titles(uiContact.goals), sizes: uiContact.sizes, whens: uiContact.whens },
 };
 
 const out = join(root, 'packages/shared/generated/knowledge.json');
