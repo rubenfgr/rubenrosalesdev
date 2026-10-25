@@ -80,7 +80,7 @@ docs/                        despliegue.md, asistente.md, formulario-contacto.md
 - Monorepo pnpm; una imagen Docker por app, contexto de build = raíz del repo.
 - El contenido de la web **sigue en git** (JSON/MDX). Moverlo a base de datos queda fuera de este plan.
 - El asistente sigue **oculto** (`PUBLIC_ASSISTANT_ENABLED`) hasta el rollout (fase 10).
-- LLM: API de **Anthropic** (Messages API). Modelo y clave por variables de entorno.
+- LLM: **Google Gemini**, modelo **Gemini 3.5 Flash Lite** (decisión de Rubén, 2026-10-25). El **ID exacto del modelo y el formato de la API deben verificarse en la documentación oficial de Google** (Gemini API) antes de implementar: el agente no debe suponerlos. Modelo y clave por variables de entorno.
 
 ---
 
@@ -130,7 +130,7 @@ Navegador ──HTTPS──▶ Traefik ──┬─ Host(rubenrosales.dev)      
                                └─ Host(rubenrosales.dev) && PathPrefix(/api/v1) ─▶ api  (Hono, :3000)
                                                                                      │
                                                                   Postgres (red interna, sin puertos expuestos)
-                                                                  Anthropic Messages API (salida HTTPS)
+                                                                  Gemini API de Google (salida HTTPS)
 ```
 
 Flujo de un turno de chat:
@@ -151,7 +151,7 @@ Principios de diseño:
 | ID | Decisión | Estado | Respuesta |
 |---|---|---|---|
 | D-1 | Cifras reales de `pricing.json` (tipos, rangos €, semanas, multiplicadores) y quitar `placeholder` | **PENDIENTE (bloquea fase 10)** | |
-| D-2 | Proveedor y modelo del LLM (por defecto Anthropic) y **tope de gasto mensual** en euros | **PENDIENTE (bloquea fase 3)** | |
+| D-2 | Proveedor y modelo del LLM y **tope de gasto mensual** en euros | **PARCIAL**: proveedor y modelo decididos; falta el **tope de gasto** y confirmar el **plan de pago** (ver nota) | Google Gemini, «Gemini 3.5 Flash Lite» (ID por verificar en la documentación oficial) |
 | D-3 | ¿Se guardan las conversaciones? Plazo de conservación (propuesta: 90 días) y base legal | **PENDIENTE (bloquea fase 5)** | |
 | D-4 | Texto del aviso/consentimiento al abrir el chat (es/en) | **PENDIENTE (bloquea fase 5)** | |
 | D-5 | Antibots: ¿Cloudflare Turnstile (gratis; el DNS ya está en Cloudflare) o solo rate limit + honeypot? | **PENDIENTE (fase 7)** | |
@@ -226,7 +226,10 @@ Objetivo: base sólida de la API (configuración, errores, logging, límites) an
 
 Objetivo: endpoint `POST /api/v1/chat` con streaming, herramientas y guardarraíles. **Bloqueada por D-2.**
 
-- [ ] **T-3.0 [DECISIÓN] D-2** — pregunta a Rubén proveedor/modelo y tope de gasto. Anótalo en §4. Crea la clave en el proveedor (lo hace Rubén) y se guarda **solo** como `ASSISTANT_LLM_API_KEY` en el `.env` del VPS. Variables: `ASSISTANT_LLM_ENABLED` (`1` activa), `ASSISTANT_LLM_API_KEY`, `ASSISTANT_LLM_MODEL`, `ASSISTANT_LLM_MAX_OUTPUT_TOKENS` (por defecto 600), `ASSISTANT_LLM_MONTHLY_BUDGET_EUR` (tope informativo, ver T-7.3).
+- [ ] **T-3.0 [DECISIÓN parcial] D-2** — proveedor y modelo **ya decididos** (Gemini 3.5 Flash Lite). **Falta preguntar a Rubén:** (a) tope de gasto mensual en euros y (b) si usará un plan de pago de la API. **Nota de privacidad:** según mi conocimiento, en los niveles gratuitos de la Gemini API Google puede usar el contenido para mejorar sus productos; al enviar mensajes de visitantes (datos personales) hay que usar un nivel **de pago** o confirmar en los términos vigentes que no se usan para entrenar. **Verifícalo en los términos oficiales** y anótalo en §4; si no se puede garantizar, el asistente no debe enviar datos personales al modelo (ver T-3.3: el prompt de usuario no incluye nombre/email).
+  - Rubén crea la clave de API (Google AI Studio / Google Cloud) y se guarda **solo** como `ASSISTANT_LLM_API_KEY` en el `.env` del VPS.
+  - Variables: `ASSISTANT_LLM_PROVIDER=gemini`, `ASSISTANT_LLM_ENABLED` (`1` activa), `ASSISTANT_LLM_API_KEY`, `ASSISTANT_LLM_MODEL` (el ID exacto verificado), `ASSISTANT_LLM_MAX_OUTPUT_TOKENS` (por defecto 600), `ASSISTANT_LLM_MONTHLY_BUDGET_EUR` (tope informativo, ver T-7.3).
+  - **Aceptación:** D-2 completa en §4, ID del modelo anotado con enlace a la documentación consultada.
 - [ ] **T-3.1 Conocimiento empaquetado para la API**
   - Depende de: T-1.1.
   - Problema: el contenido vive en `apps/web/src/content/**` y la API no puede leerlo en runtime (imagen aparte). Solución: un script `scripts/export-knowledge.mjs` (en la raíz) que, **antes del build de la API**, lee `apps/web/src/content/{services,process,faq,assistant,projects?}/{es,en}.json` y `assistant/pricing.json` y escribe `packages/shared/generated/knowledge.json` (con tipo exportado). `packages/shared` lo expone (`export { knowledge }`).
@@ -250,12 +253,13 @@ Objetivo: endpoint `POST /api/v1/chat` con streaming, herramientas y guardarraí
   - Una vez portado, **elimina** `apps/web/src/lib/assistant/prompt.ts` y `apps/web/src/pages/api/assistant.ts` (la web ya no llama al LLM; lo hace la API). Verifica antes con `grep` que nada más los importa.
   - **Aceptación:** pruebas que comprueban que el prompt de `es` y de `en` contiene la tabla de rangos, las 7 reglas y la bio, y que **no** contiene cifras fuera de `pricing.json`.
 - [ ] **T-3.4 Cliente del LLM (abstracción)**
-  - `apps/api/src/services/llm.ts`: interfaz `LlmClient { stream(input): AsyncIterable<LlmEvent> }` con eventos `text`, `tool_use`, `done`, `error`. Implementación `AnthropicClient` con `fetch` a `https://api.anthropic.com/v1/messages` (`stream: true`, SSE), cabeceras `x-api-key` y `anthropic-version`. **Verifica en la documentación oficial** el formato actual de la petición/eventos y las versiones antes de escribirlo; si no puedes verificarlo, dilo.
+  - `apps/api/src/services/llm.ts`: interfaz `LlmClient { stream(input): AsyncIterable<LlmEvent> }` con eventos `text`, `tool_call`, `done`, `error`. La interfaz **no menciona ningún proveedor**.
+  - Implementación `GeminiClient` con `fetch` a la Gemini API (endpoint de generación en streaming, clave por cabecera o parámetro según la documentación vigente). **Verifica en la documentación oficial** antes de escribirlo: URL y ruta del método de streaming, cómo se pasa el *system instruction*, formato de `contents`/roles (`user`/`model`), declaración de funciones (*function calling*), formato de los eventos del stream y campos de uso de tokens. Si no puedes verificar algo, dilo y pregunta; no lo supongas. No añadas el SDK oficial salvo que aporte algo claro (comprueba que está mantenido); preferible `fetch` por consistencia con el resto.
   - Timeouts (30 s), reintento único ante 5xx/429 del proveedor, `AbortSignal` ligado a la petición (si el cliente cierra, se cancela).
   - Para las pruebas, `FakeLlmClient` determinista (no se llama a la red en tests).
-  - **Aceptación:** pruebas con el cliente falso: texto en streaming, herramienta, error del proveedor → `llm_unavailable`.
+  - **Aceptación:** pruebas con el cliente falso: texto en streaming, llamada a herramienta, error del proveedor → `llm_unavailable`. Una prueba manual documentada con clave real en local.
 - [ ] **T-3.5 Herramienta `estimate`**
-  - Define una herramienta del LLM `estimate` con parámetros `{ type, systems, team }` (enums = ids de `assistant.json` y `pricing.json`: `process|ai|web|app`, `excel|erp|several|unknown`, `small|medium|large`). Su ejecución llama a `estimate()` de `@rr/shared` y devuelve `{ minEur, maxEur, minWeeks, maxWeeks, confidence }` (o error si faltan datos).
+  - Define una función (*function calling* de Gemini) `estimate` con parámetros `{ type, systems, team }` (enums = ids de `assistant.json` y `pricing.json`: `process|ai|web|app`, `excel|erp|several|unknown`, `small|medium|large`). Su ejecución llama a `estimate()` de `@rr/shared` y devuelve `{ minEur, maxEur, minWeeks, maxWeeks, confidence }` (o error si faltan datos).
   - Bucle de herramientas en `chat` (máximo 3 iteraciones) hasta respuesta final.
   - **Aceptación:** prueba: con cliente falso que pide `estimate(process, excel, small)`, la API devuelve la respuesta final usando el resultado de la herramienta; con parámetros inválidos la herramienta devuelve error y el LLM no obtiene cifras.
 - [ ] **T-3.6 Endpoint `POST /api/v1/chat` con streaming SSE**
@@ -269,7 +273,7 @@ Objetivo: endpoint `POST /api/v1/chat` con streaming, herramientas y guardarraí
   - Como la respuesta va en streaming, bufferiza el texto hasta detectar cifras o implementa el streaming con un pequeño retraso de línea; documenta la decisión elegida.
   - **Aceptación:** pruebas con 10+ casos (cifra inventada, cifra de la tabla fuera de contexto, rango correcto, números no monetarios como «3 semanas», años, «30 minutos») con resultados esperados.
 
-**Fin de la fase 3:** `/chat` funciona de extremo a extremo contra el cliente falso y, con clave real en local, contra el LLM (prueba manual documentada en §15, **sin pegar la clave en ningún sitio**).
+**Fin de la fase 3:** `/chat` funciona de extremo a extremo contra el cliente falso y, con clave real en local, contra Gemini (prueba manual documentada en §15, **sin pegar la clave en ningún sitio**).
 
 ---
 
@@ -311,7 +315,7 @@ Depende de D-3 y D-4. Se puede hacer en paralelo a la fase 4.
   - Al abrir el chat por primera vez muestra el aviso (D-4) con dos acciones: «Aceptar y continuar» (envía `consent: true`) y «Continuar sin guardar» (conversación efímera). Los textos van a `apps/web/src/content/assistant/{es,en}.json` (clave `consent`) y se añaden al esquema Zod de `apps/web/src/content.config.ts`. `pnpm i18n:check` debe pasar.
   - **Aceptación:** sin elegir no se envía ningún mensaje del usuario a la API; ambos caminos funcionan.
 - [ ] **T-5.2 Política de privacidad**
-  - `apps/web/src/pages/privacidad.astro`: añadir tratamiento «asistente virtual»: qué datos, finalidad, base legal, plazo (D-3), encargados (**Hetzner** como alojamiento; proveedor del LLM como encargado/destinatario — transferencia internacional si aplica), derechos y cómo ejercerlos (`hola@rubenrosales.dev`).
+  - `apps/web/src/pages/privacidad.astro`: añadir tratamiento «asistente virtual»: qué datos, finalidad, base legal, plazo (D-3), encargados (**Hetzner** como alojamiento; **Google (Gemini API)** como encargado del tratamiento del texto de las conversaciones — transferencia internacional si aplica; condiciones del plan de pago y uso de datos según D-2), derechos y cómo ejercerlos (`hola@rubenrosales.dev`).
   - **Redacta con cautela y marca `[VERIFICAR: revisión legal]`** donde haya dudas jurídicas; el build estricto lo bloqueará hasta que Rubén lo confirme. **No presentes el texto como asesoramiento legal.**
   - **Aceptación:** la página explica el tratamiento y los plazos; los `[VERIFICAR]` están listados en la bitácora.
 - [ ] **T-5.3 Ejercicio de derechos (mínimo viable)**
@@ -425,7 +429,7 @@ Depende de todo lo anterior, de **D-1 (cifras reales)** y de la aprobación de R
 | 2026-10-25 | T-1.1, T-1.2 | Hecho | `fdce25f` | Monorepo y esqueleto de la API verificados con Postgres real |
 
 ### Cambios sobre la marcha
-_(anota aquí cualquier desviación del plan y por qué)_
+- 2026-10-25: el proveedor del LLM pasa de Anthropic a **Google Gemini (Gemini 3.5 Flash Lite)** por decisión de Rubén. Se reescriben T-3.0, T-3.4 y T-3.5, y la referencia del encargado en T-5.2. La ruta `apps/web/src/pages/api/assistant.ts` (stub antiguo para Anthropic) se elimina en T-3.3 como estaba previsto.
 
 ### `[VERIFICAR]` abiertos
 _(lista de datos pendientes de confirmar con Rubén)_
