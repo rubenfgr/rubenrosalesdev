@@ -167,7 +167,7 @@ Objetivo: que web y API se construyan, prueben y desplieguen juntas, con Postgre
 
 - [x] **T-1.1 Reestructurar a monorepo** — hecho en `fdce25f`. `apps/web` (con `git mv`, historial conservado), `apps/api`, `packages/shared`, `tsconfig.base.json`, `package.json` raíz con scripts.
 - [x] **T-1.2 Esqueleto de la API** — hecho en `fdce25f`. Hono + Drizzle + Postgres, `/api/v1/health`, migración inicial, 3 pruebas, Dockerfile. Verificado: migra y responde contra un Postgres real.
-- [ ] **T-1.3 `deploy/compose.yml` con web + api + postgres + backup**
+- [x] **T-1.3 `deploy/compose.yml` con web + api + postgres + backup**
   - Depende de: T-1.1, T-1.2.
   - Cambios en `deploy/compose.yml` (mantén las etiquetas actuales de la web):
     - Servicio `postgres` (imagen `postgres:17`), volumen nombrado `pgdata`, red interna `internal` (no `proxy`), **sin `ports`**, `healthcheck` con `pg_isready`, `restart: unless-stopped`. Variables `POSTGRES_DB`, `POSTGRES_USER`, `POSTGRES_PASSWORD` desde `.env`.
@@ -176,6 +176,7 @@ Objetivo: que web y API se construyan, prueben y desplieguen juntas, con Postgre
     - Servicio `backup` (T-8.1 lo detalla).
   - `deploy/.env.example`: añade `POSTGRES_DB`, `POSTGRES_USER`, `POSTGRES_PASSWORD`, `DATABASE_URL=postgres://USER:PASS@postgres:5432/DB`, `ALLOWED_ORIGIN=` (vacío), y las variables del LLM (fase 3) comentadas.
   - **Aceptación:** `docker compose -f deploy/compose.yml config` valida sin errores; las etiquetas no colisionan con las de la web (la web sigue sirviendo `/` y `/api/contact`).
+  - **Hecho en `9f9ced5`:** `compose config` valida; probados Postgres + API reales en local (health ok, migraciones aplicadas). El servicio `backup` se difiere a T-8.1 (se añade allí). Sin Traefik local no se probó el enrutado por etiquetas.
   - **Verificación:** levantar el compose en local con una red `proxy` creada (`docker network create proxy`) y un `.env` de prueba; `curl -k -H "Host: rubenrosales.dev" https://localhost/api/v1/health` → `{"status":"ok"}` si hay Traefik local; si no, probar los contenedores por separado.
 - [ ] **T-1.4 Workflow de despliegue para dos imágenes**
   - Depende de: T-1.3.
@@ -457,6 +458,8 @@ Depende de todo lo anterior, de **D-1 (cifras reales)** y de la aprobación de R
 ### Cambios sobre la marcha
 - 2026-10-25: **D-2 decidida**: tope de 1 €/mes, saldo de 5 € y soporte de Ollama con modelos open; se añaden T-3.8 (optimización de coste), T-3.9 (Ollama) y se reescribe T-7.3 (tope mensual por coste).
 - 2026-10-25: el proveedor del LLM pasa de Anthropic a **Google Gemini (Gemini 3.5 Flash Lite)** por decisión de Rubén. Se reescriben T-3.0, T-3.4 y T-3.5, y la referencia del encargado en T-5.2. La ruta `apps/web/src/pages/api/assistant.ts` (stub antiguo para Anthropic) se elimina en T-3.3 como estaba previsto.
+
+- 2026-10-25: al empezar se vio que `origin/main` ya está en `80bf067`: el commit del monorepo (`fdce25f`) y los commits del plan **ya están en `main`** (y `feat/backend-monorepo` apunta al mismo commit). Posible despliegue ya lanzado con rutas `apps/web`; Rubén debe confirmar que el workflow `deploy.yml` actual (que ya usa `apps/web/Dockerfile`) funcionó. La API aún no se despliega (falta T-1.4).
 
 ### `[VERIFICAR]` abiertos
 _(lista de datos pendientes de confirmar con Rubén)_
