@@ -28,6 +28,8 @@ const fullTitle = title ? `${title} · ${site.name}` : site.seo.title;
 const metaDescription = description ?? site.seo.description;
 // El asistente está construido pero oculto hasta que se decida implementarlo: PUBLIC_ASSISTANT_ENABLED=1 lo muestra.
 const assistantEnabled = import.meta.env.PUBLIC_ASSISTANT_ENABLED === '1';
+// Texto libre al LLM (API); sin esto el asistente solo usa el motor de reglas.
+const assistantLlm = import.meta.env.PUBLIC_ASSISTANT_LLM === '1';
 const analyticsToken = import.meta.env.PUBLIC_CF_ANALYTICS_TOKEN;
 const canonical = new URL(cleanPath(Astro.url), siteUrl).href;
 const alternates = getAlternates(Astro.url, siteUrl, paths);
@@ -64,7 +66,7 @@ const switchPaths = Object.fromEntries(locales.map((l) => [l, paths ? (paths[l] 
       <slot />
     </main>
     <Footer lang={lang} t={t} name={site.name} tagline={site.footer.tagline} motto={site.footer.motto} email={site.contact.email} nav={site.nav} legal={site.legal} social={site.social} />
-    {assistantEnabled && <Assistant client:idle data={assistant} pricing={pricing} labels={ui(lang, 'assistant')} lang={lang} locale={intlLocale[lang]} endpoint="/api/contact" privacyHref="/privacidad" />}
+    {assistantEnabled && <Assistant client:idle data={assistant} pricing={pricing} labels={ui(lang, 'assistant')} lang={lang} locale={intlLocale[lang]} privacyHref="/privacidad" llm={assistantLlm} />}
     <Scroll />
     {
       analyticsToken && (

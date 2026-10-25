@@ -1,5 +1,6 @@
 import { useEffect, useRef, useState } from 'preact/hooks';
 import { canEstimate, estimate, matchRule, type Ctx, type Estimate, type Pricing } from '@rr/shared/engine';
+import { LlmUnavailable, sendLead, streamChat } from '../../lib/assistant/api';
 import './Assistant.css';
 
 interface Data {
@@ -14,8 +15,8 @@ interface Data {
   form: { name: string; namePlaceholder: string; email: string; emailPlaceholder: string; consent: string; submit: string; sending: string; errors: Record<'name' | 'email' | 'consent' | 'send', string> };
   summary: { title: string; rows: Record<'name' | 'email' | 'project' | 'tools' | 'team' | 'range', string>; rangeNote: string; footer: string; thanks: string; userSent: string };
 }
-interface Labels { fabAria: string; panelAria: string; close: string; restart: string; send: string; messageAria: string; inputPlaceholder: string; fabTitle: string; fabSubtitle: string }
-interface Props { data: Data; pricing: Pricing; labels: Labels; lang: string; locale: string; showEstimates?: boolean; endpoint: string; privacyHref: string }
+interface Labels { fabAria: string; panelAria: string; close: string; restart: string; send: string; messageAria: string; inputPlaceholder: string; fabTitle: string; fabSubtitle: string; retry: string }
+interface Props { data: Data; pricing: Pricing; labels: Labels; lang: string; locale: string; showEstimates?: boolean; privacyHref: string; llm?: boolean }
 
 type Msg =
   | { kind: 'bot' | 'user'; text: string }
@@ -23,7 +24,7 @@ type Msg =
   | { kind: 'summary'; rows: { k: string; v: string }[] };
 const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
-export default function Assistant({ data: D, pricing, labels: L, lang, locale, showEstimates = true, endpoint, privacyHref }: Props) {
+export default function Assistant({ data: D, pricing, labels: L, lang, locale, showEstimates = true, privacyHref, llm = false }: Props) {
   const [open, setOpen] = useState(false);
   // Aviso de privacidad (D-4): hasta elegir, no se muestra el chat ni se envía nada. 'yes' = guardar la conversación.
   const [consent, setConsent] = useState<'yes' | 'no' | null>(null);
@@ -35,6 +36,10 @@ export default function Assistant({ data: D, pricing, labels: L, lang, locale, s
   const [form, setForm] = useState({ name: '', email: '', consent: false });
   const [formError, setFormError] = useState('');
   const [sending, setSending] = useState(false);
+  // Texto libre pendiente de reintentar con el LLM (tras un fallo).
+  const [retry, setRetry] = useState<string | null>(null);
+  const conversationId = useRef<string | undefined>(undefined);
+  const abort = useRef<AbortController | null>(null);
   const body = useRef<HTMLDivElement>(null);
   const input = useRef<HTMLInputElement>(null);
   const timer = useRef<number | undefined>(undefined);
@@ -51,7 +56,7 @@ export default function Assistant({ data: D, pricing, labels: L, lang, locale, s
   useEffect(() => {
     body.current?.scrollTo({ top: body.current.scrollHeight, behavior: reduced() ? 'auto' : 'smooth' });
   }, [messages.length, typing, step]);
-  useEffect(() => () => clearTimeout(timer.current), []);
+  useEffect(() => () => { clearTimeout(timer.current); abort.current?.abort(); }, []);
 
   const fmtRange = (e: Estimate) => {
     const nf = new Intl.NumberFormat(locale);
@@ -94,6 +99,9 @@ export default function Assistant({ data: D, pricing, labels: L, lang, locale, s
   const restart = () => {
     if (!consent) return;
     clearTimeout(timer.current);
+    abort.current?.abort();
+    conversationId.current = undefined;
+    setRetry(null);
     setMessages([]);
     setCtx({});
     setTyping(false);
@@ -135,13 +143,58 @@ export default function Assistant({ data: D, pricing, labels: L, lang, locale, s
     : step === 'team' ? Object.entries(D.team).map(([a, l]) => ({ action: a, label: l }))
     : D.steps[step] ?? [];
 
+  /** Texto libre al LLM con streaming. Si la API no está disponible, se responde con el motor de reglas (comportamiento previo). */
+  const askLlm = async (text: string) => {
+    setRetry(null);
+    setTyping(true);
+    setStep('wait');
+    const ac = new AbortController();
+    abort.current = ac;
+    const history = messages
+      .flatMap((m) => (m.kind === 'bot' || m.kind === 'user' ? [{ role: m.kind === 'user' ? ('user' as const) : ('assistant' as const), content: m.text.slice(0, 2000) }] : []))
+      .slice(-19);
+    const c = ctxRef.current;
+    let acc = '';
+    let started = false;
+    try {
+      const done = await streamChat(
+        {
+          lang: lang === 'en' ? 'en' : 'es',
+          ...(conversationId.current ? { conversationId: conversationId.current } : {}),
+          messages: [...history, { role: 'user', content: text.slice(0, 2000) }],
+          consent: consent === 'yes',
+          ...(Object.keys(c).length ? { ctx: c } : {}),
+        },
+        (t) => {
+          acc += t;
+          const snapshot = acc;
+          const first = !started;
+          started = true;
+          setTyping(false);
+          setMessages((m) => (first ? [...m, { kind: 'bot', text: snapshot }] : [...m.slice(0, -1), { kind: 'bot', text: snapshot }]));
+        },
+        { signal: ac.signal },
+      );
+      if (consent === 'yes') conversationId.current = done.conversationId;
+      setTyping(false);
+      setStep('start');
+    } catch (err) {
+      if (ac.signal.aborted) return;
+      setTyping(false);
+      setRetry(text);
+      if (started || !(err instanceof LlmUnavailable)) return setStep('start');
+      say(matchRule(D.rules, text) ?? 'fallback');
+    }
+  };
+
   const onSend = (e: Event) => {
     e.preventDefault();
     const t = draft.trim();
     if (!t || typing) return;
     setDraft('');
     user(t);
-    say(matchRule(D.rules, t) ?? 'fallback');
+    if (llm && consent) void askLlm(t);
+    else say(matchRule(D.rules, t) ?? 'fallback');
   };
 
   const submitContact = async () => {
@@ -160,12 +213,15 @@ export default function Assistant({ data: D, pricing, labels: L, lang, locale, s
     setFormError('');
     setSending(true);
     try {
-      const res = await fetch(endpoint, {
-        method: 'POST',
-        headers: { 'content-type': 'application/json' },
-        body: JSON.stringify({ kind: 'assistant', startedAt: started.current, lang, name, email: form.email.trim(), consent: true, summary: rows.map((r) => `${r.k}: ${r.v}`) }),
+      await sendLead({
+        startedAt: started.current,
+        lang: lang === 'en' ? 'en' : 'es',
+        name,
+        email: form.email.trim(),
+        consent: true,
+        summary: rows.map((r) => `${r.k}: ${r.v}`),
+        ...(conversationId.current ? { conversationId: conversationId.current } : {}),
       });
-      if (!res.ok) throw new Error(String(res.status));
     } catch {
       setSending(false);
       return setFormError(D.form.errors.send);
@@ -232,6 +288,7 @@ export default function Assistant({ data: D, pricing, labels: L, lang, locale, s
               );
             })}
             {typing && <div class="as-typing"><i /><i /><i /></div>}
+            {!!consent && retry && !typing && step === 'start' && <div class="as-chips"><button type="button" class="as-chip" onClick={() => void askLlm(retry)}>{L.retry}</button></div>}
             {showChips && <div class="as-chips">{options.map((o) => <button type="button" class="as-chip" onClick={() => pick(o.action, o.label)}>{o.label}</button>)}</div>}
             {!typing && step === 'contact' && (
               <div class="as-form">

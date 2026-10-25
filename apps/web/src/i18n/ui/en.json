@@ -736,6 +736,7 @@
     "messageAria": "Message",
     "inputPlaceholder": "Type your question…",
     "fabTitle": "Have a project?",
+    "retry": "Retry with the assistant",
     "fabSubtitle": "Tell the assistant"
   },
   "notFound": {

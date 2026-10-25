@@ -736,6 +736,7 @@
     "messageAria": "Mensaje",
     "inputPlaceholder": "Escribe tu pregunta…",
     "fabTitle": "¿Tienes un proyecto?",
+    "retry": "Reintentar con el asistente",
     "fabSubtitle": "Cuéntaselo al asistente"
   },
   "notFound": {

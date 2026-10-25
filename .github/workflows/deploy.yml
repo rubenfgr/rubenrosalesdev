@@ -30,6 +30,7 @@ jobs:
         run: |
           docker build -f apps/web/Dockerfile --build-arg GUARDS_STRICT=1 \
             --build-arg PUBLIC_ASSISTANT_ENABLED="${{ vars.PUBLIC_ASSISTANT_ENABLED }}" \
+            --build-arg PUBLIC_ASSISTANT_LLM="${{ vars.PUBLIC_ASSISTANT_LLM }}" \
             --build-arg PUBLIC_CF_ANALYTICS_TOKEN="${{ vars.PUBLIC_CF_ANALYTICS_TOKEN }}" \
             -t "$IMAGE_WEB:latest" -t "$IMAGE_WEB:${{ github.sha }}" .
       - name: Construir imagen de la API
