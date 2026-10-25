@@ -72,11 +72,11 @@
     "stats": {
       "projects": {
         "value": "20",
-        "label": "projects delivered [VERIFICAR: cifra del diseño]"
+        "label": "projects delivered"
       },
       "years": {
         "value": "8",
-        "label": "years of experience [VERIFICAR: cifra del diseño]"
+        "label": "years of experience"
       }
     },
     "leadStrong": "with clear rules, supervision where it matters and every action traced."
