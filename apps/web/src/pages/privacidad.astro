@@ -3,7 +3,7 @@ import { owner } from '../data/site';
 import Legal from '../layouts/Legal.astro';
 ---
 
-<Legal title="Política de privacidad" description="Cómo se tratan los datos personales recogidos a través del formulario de contacto.">
+<Legal title="Política de privacidad" description="Cómo se tratan los datos personales recogidos a través del formulario de contacto y del asistente virtual.">
   <p>
     En cumplimiento del Reglamento (UE) 2016/679 (RGPD) y de la Ley Orgánica 3/2018 (LOPDGDD), le
     informamos de lo siguiente:
@@ -77,5 +77,48 @@ import Legal from '../layouts/Legal.astro';
     El responsable del tratamiento aplica las medidas técnicas y organizativas razonables y adecuadas
     para proteger los datos personales frente a pérdida, alteración, acceso no autorizado o destrucción,
     en cumplimiento del RGPD y la LOPDGDD.
+  </p>
+  <h2>10. Asistente virtual</h2>
+  <p>
+    La web incluye un asistente virtual automático (con inteligencia artificial) que responde dudas sobre
+    los servicios y puede dar un rango orientativo de precio. Sus respuestas no constituyen un presupuesto
+    ni producen efectos jurídicos: Rubén confirma cualquier propuesta por escrito.
+  </p>
+  <ul>
+    <li>
+      <strong>Datos tratados:</strong> los mensajes que escribe en el chat, el idioma de la página y la
+      fecha. De su dirección IP solo se conserva una huella irreversible (hash con sal) para limitar el abuso;
+      nunca la IP en claro. Si usa el envío de resumen, también su nombre y su correo electrónico, que
+      <strong>no se envían al modelo de lenguaje</strong>.
+    </li>
+    <li>
+      <strong>Finalidad:</strong> responder a su consulta, revisar las conversaciones para mejorar el
+      servicio y, si deja sus datos, contactar con usted.
+    </li>
+    <li>
+      <strong>Base jurídica:</strong> su consentimiento (art. 6.1.a RGPD) para guardar la conversación, que
+      puede rechazar con «Continuar sin guardar» y retirar en cualquier momento. El contacto posterior se
+      basa en su solicitud (art. 6.1.b RGPD). [VERIFICAR: revisión legal de las bases jurídicas, en especial
+      del tratamiento del texto enviado al proveedor cuando no se guarda la conversación]
+    </li>
+    <li>
+      <strong>Plazo de conservación:</strong> las conversaciones guardadas, 90 días; el nombre, el correo y
+      el resumen del contacto, 12 meses. Después se borran automáticamente.
+    </li>
+    <li>
+      <strong>Encargados del tratamiento:</strong> Hetzner (alojamiento y base de datos) y Google (Gemini API),
+      que procesa el texto de la conversación para generar la respuesta. Según las condiciones de Google para
+      el servicio de pago, ese contenido no se utiliza para mejorar sus productos. [VERIFICAR: condiciones
+      vigentes de Google y existencia de transferencia internacional con sus garantías]
+    </li>
+    <li>
+      <strong>Decisiones automatizadas:</strong> el asistente no toma decisiones que le afecten de forma
+      significativa; solo ofrece información y rangos orientativos.
+    </li>
+  </ul>
+  <p>
+    Puede pedir el acceso o el borrado de su conversación escribiendo a {owner.email}, con la hora
+    aproximada y el contenido de algún mensaje para poder localizarla (la conversación no está asociada a su
+    nombre).
   </p>
 </Legal>
