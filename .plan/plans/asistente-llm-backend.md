@@ -276,7 +276,7 @@ Objetivo: endpoint `POST /api/v1/chat` con streaming, herramientas y guardarraí
   - Selección del cliente por `ASSISTANT_LLM_PROVIDER` en una función `createLlmClient(env)`; el resto del código no conoce el proveedor.
   - **Hecho en `6831b4a`** (`services/llm.ts`, `gemini.ts`, `llm-factory.ts`). Clave en cabecera `x-goog-api-key`. No verificado en la doc: `thinkingConfig` en `generateContent` (se omite; el razonamiento por defecto de 3.5 Flash-Lite es «minimal» y se factura como salida). La prueba manual con clave real queda pendiente de la clave de Rubén. Ollama se añade en T-3.9.
   - **Aceptación:** pruebas con el cliente falso: texto en streaming, llamada a herramienta, error del proveedor → `llm_unavailable`. Una prueba manual documentada con clave real en local.
-- [ ] **T-3.8 Optimización de coste (obligatoria; objetivo: ≤ 1 €/mes)**
+- [x] **T-3.8 Optimización de coste (obligatoria; objetivo: ≤ 1 €/mes)**
   - Depende de: T-3.3, T-3.4.
   - Aplica **todas** estas medidas y documenta en `docs/backend.md` cuántos tokens consume una conversación típica (mide, no estimes):
     1. **Reglas primero:** si `matchRule()` resuelve la pregunta (precio, plazo, quién es Rubén, contacto, cómo trabaja), responde con el guion de `assistant.json` **sin llamar al LLM**. El LLM solo entra con texto libre que las reglas no cubren.
@@ -286,6 +286,7 @@ Objetivo: endpoint `POST /api/v1/chat` con streaming, herramientas y guardarraí
     5. **Salida corta:** `maxOutputTokens` = 300, temperatura baja, instrucción de responder en ≤ 4 frases.
     6. **Límites por conversación y por IP:** máx. 12 mensajes del LLM por conversación; máx. 20 al día por IP (hash); a partir de ahí, solo reglas.
     7. **Degradación en cadena:** tope mensual alcanzado → `ollama` si está configurado; si no → solo reglas (T-7.3).
+  - **Hecho en `4529bbd`** (migración `0001`, `answer_cache` probada en Postgres real). Los tokens por conversación se han estimado con el prompt real (caracteres/4); la medición con uso real queda pendiente de la clave (ver `docs/backend.md`). Límites diario por IP (20) y por conversación (12) activos; el tope mensual y la degradación a Ollama llegan con T-7.3/T-3.9.
   - **Aceptación:** pruebas: una pregunta cubierta por reglas no llama al LLM (cliente falso con contador = 0); la segunda pregunta idéntica sale de la caché (contador no sube); el prompt construido para una pregunta de ejemplo no supera el límite de tokens (aproximación por caracteres/4 documentada); el límite por conversación bloquea el mensaje 13.
 - [ ] **T-3.9 Proveedor alternativo: Ollama con modelos open**
   - Depende de: T-3.4.
@@ -294,19 +295,22 @@ Objetivo: endpoint `POST /api/v1/chat` con streaming, herramientas y guardarraí
   - Elección de modelo: decídela con los **evals** (T-9.2) sobre es y en; prioriza modelos pequeños multilingües. No fijes uno sin medirlo.
   - Coste del proveedor `ollama` = 0 (no cuenta contra el tope).
   - **Aceptación:** con `ASSISTANT_LLM_PROVIDER=ollama` y un Ollama local, `/chat` responde en streaming; pruebas con servidor Ollama simulado; documento con los recursos medidos del VPS y el modelo recomendado.
-- [ ] **T-3.5 Herramienta `estimate`**
+- [x] **T-3.5 Herramienta `estimate`**
   - Define una función (*function calling* de Gemini) `estimate` con parámetros `{ type, systems, team }` (enums = ids de `assistant.json` y `pricing.json`: `process|ai|web|app`, `excel|erp|several|unknown`, `small|medium|large`). Su ejecución llama a `estimate()` de `@rr/shared` y devuelve `{ minEur, maxEur, minWeeks, maxWeeks, confidence }` (o error si faltan datos).
   - Bucle de herramientas en `chat` (máximo 3 iteraciones) hasta respuesta final.
+  - **Hecho en `4529bbd`** (`services/tools.ts`, bucle en `services/chat.ts`).
   - **Aceptación:** prueba: con cliente falso que pide `estimate(process, excel, small)`, la API devuelve la respuesta final usando el resultado de la herramienta; con parámetros inválidos la herramienta devuelve error y el LLM no obtiene cifras.
-- [ ] **T-3.6 Endpoint `POST /api/v1/chat` con streaming SSE**
+- [x] **T-3.6 Endpoint `POST /api/v1/chat` con streaming SSE**
   - Depende de: T-2.1, T-2.3, T-3.3, T-3.4, T-3.5.
   - Entrada: `ChatRequest` (`packages/shared`; amplíalo con `ctx?: { type?, systems?, team? }` si hace falta). Salida: `text/event-stream` con eventos `delta` (`{text}`), `done` (`{conversationId, estimate?}`) y `error` (`{error}`).
   - Si `ASSISTANT_LLM_ENABLED !== '1'` o falta clave/modelo → `503 {"error":"llm_unavailable"}` (la web degrada a reglas).
   - Aplica rate limit (T-2.3) y límite de longitud (último mensaje ≤ 2000 caracteres, historial ≤ 20).
+  - **Hecho en `4529bbd`** (`routes/chat.ts`). Nota: el límite de 12 mensajes de usuario por conversación se aplica sobre el historial recibido; como el contrato admite 20 mensajes, solo se alcanza de verdad con la conversación persistida (fase 4) o llamando al servicio directamente (así se prueba).
   - **Aceptación:** pruebas de streaming con `FakeLlmClient`; 503 cuando está desactivado; 400 ante entrada inválida; 429 al exceder el límite.
-- [ ] **T-3.7 Guardarraíl de salida (validador de cifras)**
+- [x] **T-3.7 Guardarraíl de salida (validador de cifras)**
   - Antes de enviar el texto final al cliente (y de guardarlo), un validador extrae importes en euros (`€`, `EUR`, «euros», formatos `1.500`, `1,500`, rangos «1.500–6.000») y comprueba que cada cifra pertenece a un rango producido por `estimate()` en esta conversación. Si hay cifras no autorizadas: **sustituye la respuesta** por el texto `assistant.json → actions.fallback` del idioma (derivar a Rubén) y registra el evento (sin contenido).
   - Como la respuesta va en streaming, bufferiza el texto hasta detectar cifras o implementa el streaming con un pequeño retraso de línea; documenta la decisión elegida.
+  - **Hecho en `4529bbd`.** Decisión: se bufferiza la respuesta entera y se emite en frases tras validar (ver `docs/backend.md`). Cifras = extremos de rangos de `estimate()`; importes «cinco mil euros»/«5k €» se bloquean por no verificables.
   - **Aceptación:** pruebas con 10+ casos (cifra inventada, cifra de la tabla fuera de contexto, rango correcto, números no monetarios como «3 semanas», años, «30 minutos») con resultados esperados.
 
 **Fin de la fase 3:** `/chat` funciona de extremo a extremo contra el cliente falso y, con clave real en local, contra Gemini (prueba manual documentada en §15, **sin pegar la clave en ningún sitio**).
