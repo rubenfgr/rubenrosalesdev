@@ -23,3 +23,21 @@ describe('api', () => {
     expect(await res.json()).toEqual({ error: 'not_found' });
   });
 });
+
+describe('límites de la API', () => {
+  it('un cuerpo mayor de 32 KB da 413 en JSON', async () => {
+    const res = await make(async () => {}).request('/api/v1/health', {
+      method: 'POST',
+      headers: { 'content-length': String(40 * 1024) },
+      body: 'x'.repeat(40 * 1024),
+    });
+    expect(res.status).toBe(413);
+    expect(await res.json()).toEqual({ error: 'payload_too_large' });
+  });
+
+  it('añade cabeceras de seguridad y x-request-id', async () => {
+    const res = await make(async () => {}).request('/api/v1/health');
+    expect(res.headers.get('x-content-type-options')).toBe('nosniff');
+    expect(res.headers.get('x-request-id')).toBeTruthy();
+  });
+});
