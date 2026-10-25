@@ -24,9 +24,9 @@ export type ToolOutcome = { ok: true; estimate: Estimate } | { ok: false };
 export function runEstimate(k: Knowledge, lang: 'es' | 'en', args: Record<string, unknown>): ToolOutcome {
   const { type, systems, team } = args;
   const valid =
-    typeof type === 'string' && type in k.pricing.types &&
-    typeof systems === 'string' && systems in k.assistant[lang].systems &&
-    typeof team === 'string' && team in k.assistant[lang].team;
+    typeof type === 'string' && Object.hasOwn(k.pricing.types, type) &&
+    typeof systems === 'string' && Object.hasOwn(k.assistant[lang].systems, systems) &&
+    typeof team === 'string' && Object.hasOwn(k.assistant[lang].team, team);
   if (!valid) return { ok: false };
   const ctx = { type, systems, team };
   if (!canEstimate(ctx)) return { ok: false };

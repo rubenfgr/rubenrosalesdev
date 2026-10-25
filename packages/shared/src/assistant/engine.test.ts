@@ -45,6 +45,12 @@ describe('estimate', () => {
     expect(estimate(pricing, { type: 'process', systems: 'excel', team: 'small' })?.maxEur).toBe(5500);
   });
 
+  it('ids heredados del prototipo (constructor, __proto__) no cuentan como tipo ni como multiplicador', () => {
+    expect(estimate(pricing, { type: 'constructor', systems: 'excel', team: 'small' })).toBeNull();
+    expect(estimate(pricing, { type: '__proto__', systems: 'excel', team: 'small' })).toBeNull();
+    expect(estimate(pricing, { type: 'process', systems: 'constructor', team: 'toString' })).toEqual(estimate(pricing, { type: 'process', systems: 'excel', team: 'medium' }));
+  });
+
   it('devuelve null si el tipo no existe', () => {
     expect(estimate(pricing, { type: 'nada', systems: 'excel', team: 'small' })).toBeNull();
   });

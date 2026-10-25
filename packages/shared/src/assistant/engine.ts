@@ -29,13 +29,14 @@ export interface Estimate {
 export const canEstimate = (ctx: Ctx): ctx is Required<Ctx> => !!(ctx.type && ctx.systems && ctx.team);
 
 export function estimate(pricing: Pricing, ctx: Required<Ctx>): Estimate | null {
-  const base = pricing.types[ctx.type];
-  if (!base) return null;
+  // Solo ids propios de los datos: un id como «constructor» o «__proto__» (puede venir del cliente) no es un tipo.
+  if (!Object.hasOwn(pricing.types, ctx.type)) return null;
+  const base = pricing.types[ctx.type]!;
   let { minEur, maxEur, minWeeks, maxWeeks } = base;
   let confidence = pricing.defaultConfidence;
   for (const [group, value] of [['systems', ctx.systems], ['team', ctx.team]] as const) {
-    const m = pricing.multipliers[group][value];
-    if (!m) continue;
+    if (!Object.hasOwn(pricing.multipliers[group], value)) continue;
+    const m = pricing.multipliers[group][value]!;
     minEur *= m.minFactor ?? 1;
     maxEur *= m.maxFactor ?? 1;
     maxWeeks += m.extraWeeks ?? 0;

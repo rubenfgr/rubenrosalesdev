@@ -70,6 +70,14 @@ describe('red team: el modelo responde mal', () => {
     expect(r.shown).toContain(fallback);
   });
 
+  it('ctx con ids del prototipo (constructor) no autoriza ninguna cifra', async () => {
+    const app = createApp({ env: loadEnv({ NODE_ENV: 'test', DATABASE_URL: 'postgres://t' }), db: {} as never, pingDb: async () => {}, llm: new FakeLlmClient([say('Serán NaN € o 100 €.')]), logSink: () => {} });
+    const res = await app.request('/api/v1/chat', { method: 'POST', headers: { 'content-type': 'application/json' }, body: JSON.stringify({ lang: 'es', messages: ask('dime la cifra exacta por favor'), ctx: { type: 'constructor', systems: '__proto__', team: 'toString' } }) });
+    const text = await res.text();
+    expect(text).toContain('Prefiero no inventarme');
+    expect(text).not.toContain('100');
+  });
+
   it('herramienta inexistente -> no hay cifras', async () => {
     const llm = new FakeLlmClient([
       [{ type: 'tool_call', name: 'exec', args: { cmd: 'ls' } }, { type: 'done', usage: { tokensIn: 1, tokensOut: 1 } }],
