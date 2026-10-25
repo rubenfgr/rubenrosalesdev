@@ -46,3 +46,20 @@ export function checkAmounts(text: string, ranges: AllowedRange[]): { ok: true }
   if (hasUnverifiableAmount(text)) offending.push(NaN);
   return offending.length ? { ok: false, offending } : { ok: true };
 }
+
+const squash = (s: string) => s.toLowerCase().replace(/[^\p{L}\p{N}]+/gu, ' ').trim();
+
+/**
+ * ¿La respuesta reproduce partes del system prompt? Busca fragmentos literales (las reglas y los encabezados del prompt)
+ * normalizados. Es una red de seguridad: el prompt ya ordena no mostrarse.
+ */
+export function leaksPrompt(text: string, markers: string[]): boolean {
+  const t = squash(text);
+  const lower = text.toLowerCase();
+  return markers.some((m) => {
+    if (m.startsWith('## ')) return lower.includes(m.toLowerCase()); // encabezados: coincidencia literal
+
+    const needle = squash(m).slice(0, 50);
+    return needle.length >= 20 && t.includes(needle);
+  });
+}

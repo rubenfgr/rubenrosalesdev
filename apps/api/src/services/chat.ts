@@ -5,9 +5,9 @@ import { estimate, matchRule, type ChatRequest, type Estimate, type Lang } from 
 import type { Knowledge } from '@rr/shared/knowledge';
 import { type AnswerCache } from './answer-cache';
 import type { LlmClient, LlmTurn, LlmUsage } from './llm';
-import { buildSystemPrompt } from './prompt';
+import { buildSystemPrompt, promptMarkers } from './prompt';
 import { estimateTool, runEstimate, toolResult } from './tools';
-import { checkAmounts, extractAmounts } from './validator';
+import { checkAmounts, extractAmounts, leaksPrompt } from './validator';
 
 /** Acciones de las reglas que se responden con el guion, sin llamar al LLM. */
 const DIRECT_ACTIONS = ['precio', 'plazo', 'info', 'humano', 'como'];
@@ -127,7 +127,7 @@ export async function* chatTurn(deps: ChatDeps, req: ChatRequest, signal?: Abort
   // 5. Validador de cifras: si algo no sale de `estimate()`, se sustituye por el texto de derivación.
   text = text.trim();
   let final = finished && text ? text : fallback;
-  if (!checkAmounts(final, authorised).ok) {
+  if (!checkAmounts(final, authorised).ok || leaksPrompt(final, promptMarkers(lang))) {
     deps.onBlocked?.();
     final = fallback;
   }

@@ -64,6 +64,9 @@ interface PromptOptions {
   question?: string;
 }
 
+/** Fragmentos del prompt que nunca deben aparecer en una respuesta (reglas y encabezados). */
+export const promptMarkers = (lang: Lang): string[] => [...RULES[lang], ...Object.values(HEADINGS[lang]).map((h) => `## ${h}`)];
+
 export function buildSystemPrompt(lang: Lang, k: Knowledge = defaultKnowledge, opts: PromptOptions = {}): string {
   const assistant = k.assistant[lang];
   const pricing = k.pricing;
