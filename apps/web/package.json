@@ -12,7 +12,8 @@
     "i18n:check": "node scripts/i18n-check.mjs",
     "prebuild": "node scripts/i18n-check.mjs",
     "content:new": "node scripts/content-new.mjs",
-    "dev:tailscale": "astro dev --host"
+    "dev:tailscale": "astro dev --host",
+    "test": "vitest run"
   },
   "dependencies": {
     "@astrojs/check": "^0.9.12",
@@ -32,5 +33,8 @@
     "remark-directive": "4.0.0",
     "sharp": "^0.35.5",
     "typescript": "^6.0.3"
+  },
+  "devDependencies": {
+    "vitest": "^3.2.0"
   }
 }
