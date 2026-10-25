@@ -1,0 +1,32 @@
+{
+  "items": [
+    {
+      "id": "discovery",
+      "step": "01",
+      "tag": "Llamada de 30 min",
+      "title": "Descubrimiento",
+      "body": "Me cuentas qué te frena y te digo si tiene sentido automatizarlo. Si no lo tiene, te lo digo también."
+    },
+    {
+      "id": "proposal",
+      "step": "02",
+      "tag": "Presupuesto cerrado",
+      "title": "Propuesta y alcance",
+      "body": "Qué se hace, qué queda fuera, cuánto cuesta y en cuánto tiempo. Por escrito, antes de empezar."
+    },
+    {
+      "id": "development",
+      "step": "03",
+      "tag": "Pago por tramos",
+      "title": "Desarrollo iterativo",
+      "body": "Cada tramo se entrega, se prueba con tus datos y se factura. Sin sorpresas al final."
+    },
+    {
+      "id": "support",
+      "step": "04",
+      "tag": "Cuota mensual",
+      "title": "Despliegue y soporte",
+      "body": "Lo pongo en marcha y lo mantengo. Cuando quieras ir a por el siguiente proceso, partimos de aquí."
+    }
+  ]
+}

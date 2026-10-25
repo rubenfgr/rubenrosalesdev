@@ -1,0 +1,39 @@
+{
+  "items": [
+    {
+      "id": "no-change-tools",
+      "question": "¿Tengo que cambiar los programas que ya uso?",
+      "answer": "No. Me conecto a tu ERP, CRM, contabilidad u hojas de cálculo. Si alguno no tiene forma de integrarse, programo el puente. Solo propongo software nuevo cuando lo que tienes de verdad te frena."
+    },
+    {
+      "id": "data-and-ai",
+      "question": "¿Mis datos salen de la empresa al usar IA?",
+      "answer": "Solo si lo decides. Trabajo con OpenAI, Anthropic y otros modelos en modalidades que no entrenan con tus datos, o con modelos en tu propia infraestructura. Todo documentado y alineado con el RGPD."
+    },
+    {
+      "id": "gdpr",
+      "question": "¿Cumple con el RGPD? ¿Dónde se guardan mis datos?",
+      "answer": "Sí. Cada proyecto se diseña cumpliendo el RGPD: solo se usan los datos necesarios, con accesos controlados y con el contrato de encargo de tratamiento firmado. Los servidores se eligen contigo; por defecto propongo servidores en España y, si prefieres otro proveedor o tus propios equipos, se instala ahí."
+    },
+    {
+      "id": "ai-mistakes",
+      "question": "¿Y si la IA se equivoca?",
+      "answer": "Por eso arranca supervisada: apruebas lo importante y, cuando algo no cuadra, te pregunta en lugar de inventárselo. Cada acción queda registrada para revisarla y corregirla."
+    },
+    {
+      "id": "cost",
+      "question": "¿Cuánto cuesta un proyecto típico?",
+      "answer": "Depende del alcance. Primero entiendo el proceso y después te doy una propuesta con alcance y precio cerrados, para que decidas con números."
+    },
+    {
+      "id": "time-to-production",
+      "question": "¿Cuánto tarda en estar en producción?",
+      "answer": "Trabajo por entregas iterativas: la primera parte útil llega pronto y el resto se suma por tramos. Prefiero entregar pronto algo pequeño y fiable que tarde algo grande y frágil."
+    },
+    {
+      "id": "after-failure",
+      "question": "¿Qué pasa si algo falla después?",
+      "answer": "Cada sistema incluye monitorización y alertas. Después de la entrega ofrezco soporte y evolución para mantenerlo y ampliarlo."
+    }
+  ]
+}

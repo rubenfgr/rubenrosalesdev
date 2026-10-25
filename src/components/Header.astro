@@ -1,33 +1,55 @@
 ---
 import { Menu, X } from '@lucide/astro';
-import { navLinks } from '../data/site';
+import { cleanPath, getLocalizedPath, type Lang, type T } from '../i18n';
 import Logo from './Logo.astro';
+import LangSwitch from './LangSwitch.astro';
 
-const path = Astro.url.pathname.replace(/\/$/, '') || '/';
-const isCurrent = (href: string) => path === href || path.startsWith(`${href}/`);
+interface NavItem {
+  id: string;
+  label: string;
+  href: string;
+}
+interface Props {
+  lang: Lang;
+  t: T;
+  nav: NavItem[];
+  cta: string;
+  role: string;
+  /** Ruta de la página equivalente en cada idioma. */
+  switchPaths: Record<Lang, string>;
+}
+
+const { lang, t, nav, cta, role, switchPaths } = Astro.props;
+
+const path = cleanPath(Astro.url);
+const isCurrent = (href: string) => {
+  const target = getLocalizedPath(href, lang);
+  return !target.includes('#') && (path === target || path.startsWith(`${target}/`));
+};
 ---
 
 <header class="nav" data-nav>
   <div class="container nav-inner">
-    <a href="/" class="brand">
-      <span class="visually-hidden">Inicio:</span>
+    <a href={getLocalizedPath('/', lang)} class="brand">
+      <span class="visually-hidden">{t('a11y.homeLink')}</span>
       <span class="logo-wide"><Logo /></span>
       <span class="logo-narrow"><Logo variant="symbol" /></span>
-      <span class="descriptor">Software, automatización e IA</span>
+      <span class="descriptor">{role}</span>
     </a>
 
-    <nav class="links" aria-label="Principal">
+    <nav class="links" aria-label={t('a11y.mainNav')}>
       <ul id="menu" class="menu" data-menu>
         {
-          navLinks.map((l) => (
+          nav.map((l) => (
             <li>
-              <a href={l.href} aria-current={isCurrent(l.href) ? 'page' : undefined}>
+              <a href={getLocalizedPath(l.href, lang)} aria-current={isCurrent(l.href) ? 'page' : undefined}>
                 {l.label}
               </a>
             </li>
           ))
         }
-        <li class="cta-item"><a class="btn btn-primary" href="/#contacto">Contacto</a></li>
+        <li class="cta-item"><a class="btn btn-primary" href={getLocalizedPath('/#contacto', lang)}>{cta}</a></li>
+        <li class="lang-item"><LangSwitch lang={lang} t={t} paths={switchPaths} /></li>
       </ul>
     </nav>
 
@@ -37,7 +59,9 @@ const isCurrent = (href: string) => path === href || path.startsWith(`${href}/`)
         class="menu-btn"
         aria-expanded="false"
         aria-controls="menu"
-        aria-label="Abrir menú"
+        aria-label={t('a11y.openMenu')}
+        data-label-open={t('a11y.openMenu')}
+        data-label-close={t('a11y.closeMenu')}
         data-menu-btn
       >
         <span class="icon-open"><Menu size={20} stroke-width={1.5} aria-hidden="true" /></span>
@@ -55,7 +79,7 @@ const isCurrent = (href: string) => path === href || path.startsWith(`${href}/`)
   if (nav && btn && menu) {
     const setOpen = (open: boolean, returnFocus = false) => {
       btn.setAttribute('aria-expanded', String(open));
-      btn.setAttribute('aria-label', open ? 'Cerrar menú' : 'Abrir menú');
+      btn.setAttribute('aria-label', (open ? btn.dataset.labelClose : btn.dataset.labelOpen) ?? '');
       nav.toggleAttribute('data-open', open);
       if (open) menu.querySelector<HTMLElement>('a')?.focus();
       else if (returnFocus) btn.focus();
@@ -182,6 +206,7 @@ const isCurrent = (href: string) => path === href || path.startsWith(`${href}/`)
     .nav[data-open] .menu { display: flex; }
     .menu a:not(.btn) { display: block; padding: var(--space-3) 0; }
     .cta-item { margin-top: var(--space-3); }
+    .lang-item { margin-top: var(--space-2); }
     .cta-item .btn { justify-content: center; width: 100%; }
   }
 </style>

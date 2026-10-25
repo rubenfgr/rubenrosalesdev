@@ -1,11 +1,13 @@
 ---
 import type { MarkdownHeading } from 'astro';
+import { getLang, t as makeT } from '../i18n';
 
 interface Props {
   headings: MarkdownHeading[];
   variant: 'aside' | 'details';
 }
 const { headings, variant } = Astro.props;
+const t = makeT(getLang(Astro.url));
 const items = headings.filter((h) => h.depth === 2 || h.depth === 3);
 ---
 
@@ -13,14 +15,14 @@ const items = headings.filter((h) => h.depth === 2 || h.depth === 3);
   items.length > 0 && (
     variant === 'details' ? (
       <details class="toc toc-details">
-        <summary>En este artículo</summary>
+        <summary>{t('blog.tocTitle')}</summary>
         <ul>
           {items.map((h) => <li class={`d${h.depth}`}><a href={`#${h.slug}`} data-toc-link>{h.text}</a></li>)}
         </ul>
       </details>
     ) : (
       <nav class="toc toc-aside" aria-labelledby="toc-t">
-        <h2 id="toc-t">En este artículo</h2>
+        <h2 id="toc-t">{t('blog.tocTitle')}</h2>
         <ul>
           {items.map((h) => <li class={`d${h.depth}`}><a href={`#${h.slug}`} data-toc-link>{h.text}</a></li>)}
         </ul>

@@ -1,0 +1,257 @@
+{
+  "items": [
+    {
+      "id": "customer-orders-ai",
+      "featured": true,
+      "category": "ai-automation",
+      "type": "IA · Automatización",
+      "status": "in-development",
+      "year": 2025,
+      "title": "Pedidos de clientes que entran solos en el programa de gestión.",
+      "summary": "Lee los emails y documentos que mandan los clientes, saca los datos del pedido, los comprueba y crea el pedido en el CRM/ERP de la empresa.",
+      "includes": [
+        "Lectura de emails y documentos",
+        "Comprobación de datos",
+        "Alta automática del pedido"
+      ]
+    },
+    {
+      "id": "rental-guest-surveys",
+      "featured": true,
+      "category": "web",
+      "type": "Web",
+      "status": "in-development",
+      "year": 2025,
+      "title": "Qué opinan los huéspedes de cada casa de alquiler.",
+      "summary": "Tras cada estancia se envía una encuesta automática. Las respuestas se reúnen en paneles e informes para ver qué casas funcionan y cuáles no.",
+      "includes": [
+        "Encuestas automáticas",
+        "Análisis de opiniones",
+        "Paneles e informes"
+      ]
+    },
+    {
+      "id": "barcode-inventory-app",
+      "featured": true,
+      "category": "app",
+      "type": "App",
+      "status": "in-development",
+      "year": 2025,
+      "title": "Inventario con la cámara del móvil, con o sin cobertura.",
+      "summary": "App para iPhone y Android que lee el código de barras de cada artículo. Sin conexión sigue funcionando y, al recuperarla, lo sincroniza todo solo.",
+      "includes": [
+        "Escaneo con la cámara",
+        "Funciona sin conexión",
+        "Datos al momento"
+      ]
+    },
+    {
+      "id": "noise-sensors",
+      "featured": true,
+      "category": "sensors",
+      "type": "Sensores",
+      "status": "in-development",
+      "year": 2025,
+      "title": "Ruido medido en directo, con aviso al pasar del límite.",
+      "summary": "Sensores que miden el nivel de ruido y se configuran desde el móvil por Bluetooth. Un panel muestra las lecturas al momento, avisa cuando se supera el límite y guarda el histórico.",
+      "includes": [
+        "Avisos en tiempo real",
+        "Límites ajustables",
+        "Histórico e informes"
+      ]
+    },
+    {
+      "id": "fitness-training-platform",
+      "featured": false,
+      "category": "web",
+      "type": "Web",
+      "status": "in-development",
+      "year": 2025,
+      "title": "Plataforma de formación en fitness, nutrición y salud",
+      "summary": "Plataforma de cursos sobre deporte con gestión de contenidos y alumnos.",
+      "includes": [
+        "Cursos con vídeo y material",
+        "Seguimiento del progreso de cada alumno",
+        "Evaluaciones"
+      ]
+    },
+    {
+      "id": "university-scholarships",
+      "featured": false,
+      "category": "web",
+      "type": "Web",
+      "status": "maintenance",
+      "year": 2024,
+      "title": "Gestión de becas universitarias",
+      "summary": "Gestión de becas y ayudas de una universidad, de la solicitud a la verificación de documentos.",
+      "includes": [
+        "Solicitudes online",
+        "Acceso con la cuenta de la universidad",
+        "Avisos por correo"
+      ]
+    },
+    {
+      "id": "language-centre-website",
+      "featured": false,
+      "category": "web",
+      "type": "Web",
+      "status": "maintenance",
+      "year": 2024,
+      "title": "Web del Centro de Lenguas de la Universidad de Almería",
+      "summary": "Web informativa en varios idiomas, preparada para cargar rápido y posicionar bien en buscadores.",
+      "includes": [
+        "Panel para editar los contenidos",
+        "Cursos, horarios y profesorado",
+        "Varios idiomas"
+      ]
+    },
+    {
+      "id": "property-management",
+      "featured": false,
+      "category": "web",
+      "type": "Web",
+      "status": "maintenance",
+      "year": 2024,
+      "title": "Gestión inmobiliaria",
+      "summary": "Inmuebles, inquilinos y pagos en una sola plataforma.",
+      "includes": [
+        "Planos en 3D",
+        "Cerraduras inteligentes para controlar accesos",
+        "Firma digital de contratos e informes automáticos"
+      ]
+    },
+    {
+      "id": "payroll-management",
+      "featured": false,
+      "category": "web",
+      "type": "Web",
+      "status": "maintenance",
+      "year": 2023,
+      "title": "Gestión de nóminas",
+      "summary": "Nóminas y permisos de la plantilla, conectado con el programa de recursos humanos de la empresa.",
+      "includes": [
+        "Exportación a Excel",
+        "Envío automático de correos",
+        "Usuarios y permisos por rol"
+      ]
+    },
+    {
+      "id": "vehicle-transfers",
+      "featured": false,
+      "category": "web",
+      "type": "Web",
+      "status": "maintenance",
+      "year": 2023,
+      "title": "Trámites de traspaso de vehículos",
+      "summary": "Los trámites de un vehículo desde una sola web, conectada con sistemas externos.",
+      "includes": [
+        "Transferencias e informes",
+        "Altas, bajas y matriculación",
+        "Duplicados de permiso de circulación y carné"
+      ]
+    },
+    {
+      "id": "precision-agriculture",
+      "featured": false,
+      "category": "sensors",
+      "type": "Sensores",
+      "status": "done",
+      "year": 2023,
+      "title": "Prototipo de agricultura de precisión",
+      "summary": "Sensores en el campo que envían sus lecturas por radio de largo alcance a un panel.",
+      "includes": [
+        "Lecturas de sensores en campo",
+        "Gráficas de evolución",
+        "Alertas"
+      ]
+    },
+    {
+      "id": "lease-accounting",
+      "featured": false,
+      "category": "web",
+      "type": "Web",
+      "status": "maintenance",
+      "year": 2022,
+      "title": "Contabilidad de contratos de alquiler",
+      "summary": "Tratamiento contable de contratos de alquiler según la norma IFRS 16.",
+      "includes": [
+        "Registro de contratos",
+        "Cálculo de amortizaciones",
+        "Exportación al programa contable"
+      ]
+    },
+    {
+      "id": "locks-and-alarms",
+      "featured": false,
+      "category": "app",
+      "type": "App y web",
+      "status": "maintenance",
+      "year": 2022,
+      "title": "Control de cerraduras y alarmas",
+      "summary": "Panel web y app para iPhone y Android para gestionar cerraduras y alarmas.",
+      "includes": [
+        "Panel de administración",
+        "Apps para iOS y Android",
+        "Conexión con sistemas de terceros"
+      ]
+    },
+    {
+      "id": "cooperative-production-control",
+      "featured": false,
+      "category": "web",
+      "type": "Web",
+      "status": "done",
+      "year": 2021,
+      "title": "Control de producción para cooperativas",
+      "summary": "Apoyo en una plataforma de control de producción para cooperativas.",
+      "includes": [
+        "Sensores en planta",
+        "Informes",
+        "Trazabilidad"
+      ]
+    },
+    {
+      "id": "inventory-desktop",
+      "featured": false,
+      "category": "app",
+      "type": "Programa de escritorio",
+      "status": "done",
+      "year": 2020,
+      "title": "Control de inventario",
+      "summary": "Programa de inventario conectado con otro sistema para tener el stock siempre al día.",
+      "includes": [
+        "Sincronización automática del stock",
+        "Informes por almacén"
+      ]
+    },
+    {
+      "id": "remote-equipment-control",
+      "featured": false,
+      "category": "sensors",
+      "type": "Sensores",
+      "status": "done",
+      "year": 2020,
+      "title": "Control remoto de equipos",
+      "summary": "Control y vigilancia a distancia de equipos, conectados por red móvil.",
+      "includes": [
+        "Control a distancia",
+        "Lecturas de sensores",
+        "Conexión 4G"
+      ]
+    },
+    {
+      "id": "video-surveillance-network",
+      "featured": false,
+      "category": "sensors",
+      "type": "Redes",
+      "status": "done",
+      "year": 2019,
+      "title": "Red de videovigilancia",
+      "summary": "Red local extendida varios kilómetros con antenas para instalar videovigilancia.",
+      "includes": [
+        "Enlaces por antena",
+        "Gestión de cámaras"
+      ]
+    }
+  ]
+}

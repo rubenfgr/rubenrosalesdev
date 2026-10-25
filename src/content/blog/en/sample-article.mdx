@@ -1,0 +1,45 @@
+---
+title: "Sample article to test the blog"
+description: "Draft with admonitions, code blocks and headings to check the blog design before publishing."
+date: 2026-10-22
+tags: [example, blog]
+translationKey: plantilla-de-ejemplo
+draft: true
+---
+
+This draft is used to check how an article looks. It is not published in production because it has `draft: true`.
+
+## Admonitions
+
+:::note
+A note with background information.
+:::
+
+:::tip[A tip]
+A tip with its own title.
+:::
+
+:::warning
+Something worth keeping in mind before you continue.
+:::
+
+:::danger
+An action that cannot be undone.
+:::
+
+## Code
+
+```ts title="example.ts" {2,4-5}
+export function sum(a: number, b: number): number {
+  const result = a + b; // highlighted line
+  return result;
+}
+```
+
+### One more section
+
+Filler text to check the table of contents with two heading levels and the scrollspy.
+
+## Closing
+
+End of the example.

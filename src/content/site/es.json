@@ -1,0 +1,74 @@
+{
+  "name": "Rubén Rosales",
+  "role": "Ingeniería & IA",
+  "nav": [
+    {
+      "id": "services",
+      "label": "Servicios",
+      "href": "/#servicios"
+    },
+    {
+      "id": "projects",
+      "label": "Proyectos",
+      "href": "/#proyectos"
+    },
+    {
+      "id": "calculator",
+      "label": "Calculadora",
+      "href": "/#calculadora"
+    },
+    {
+      "id": "blog",
+      "label": "Blog",
+      "href": "/blog"
+    },
+    {
+      "id": "faq",
+      "label": "FAQ",
+      "href": "/#faq"
+    }
+  ],
+  "cta": {
+    "short": "Hablar del proyecto",
+    "long": "Cuéntame tu proyecto"
+  },
+  "footer": {
+    "tagline": "Ingeniería de software, automatización e IA para empresas que quieren durar.",
+    "motto": "construido pieza a pieza, sin argamasa"
+  },
+  "legal": [
+    {
+      "label": "Aviso legal",
+      "href": "/aviso-legal"
+    },
+    {
+      "label": "Privacidad",
+      "href": "/privacidad"
+    },
+    {
+      "label": "Cookies",
+      "href": "/cookies"
+    }
+  ],
+  "seo": {
+    "title": "Rubén Rosales | Desarrollo, IA y Automatización",
+    "description": "Automatizo procesos, integro sistemas e IA y desarrollo software a medida para pymes y profesionales que necesitan dejar de hacer a mano lo que puede hacerse solo.",
+    "ogImageAlt": "Logotipo de Rubén Rosales"
+  },
+  "contact": {
+    "email": "hola@rubenrosales.dev",
+    "responseTime": "Te respondo en un máximo de 48 horas."
+  },
+  "social": [
+    {
+      "id": "linkedin",
+      "label": "LinkedIn",
+      "url": "https://www.linkedin.com/in/rubenrosalesdev"
+    },
+    {
+      "id": "github",
+      "label": "GitHub",
+      "url": "https://github.com/rubenfgr"
+    }
+  ]
+}

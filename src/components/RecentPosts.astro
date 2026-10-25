@@ -1,4 +1,5 @@
 ---
+import { getLang, getLocalizedPath, t as makeT } from '../i18n';
 import { postUrl, type Post } from '../lib/blog';
 
 interface Props {
@@ -6,10 +7,12 @@ interface Props {
   currentId?: string;
 }
 const { posts, currentId } = Astro.props;
+const lang = getLang(Astro.url);
+const t = makeT(lang);
 ---
 
 <nav class="recent" aria-labelledby="recent-t">
-  <h2 id="recent-t">Artículos recientes</h2>
+  <h2 id="recent-t">{t('blog.recent')}</h2>
   <ul>
     {
       posts.map((p) => (
@@ -19,7 +22,7 @@ const { posts, currentId } = Astro.props;
       ))
     }
   </ul>
-  <a class="all" href="/blog/archivo">Ver archivo</a>
+  <a class="all" href={getLocalizedPath('/blog/archivo', lang)}>{t('blog.viewArchive')}</a>
 </nav>
 
 <style>

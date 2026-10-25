@@ -1,0 +1,102 @@
+{
+  "items": [
+    {
+      "id": "ferreteria-ruiz-order",
+      "tag": "order",
+      "title": "Pedido de Ferretería Ruiz",
+      "from": "Por email · 6 artículos",
+      "confidence": 97,
+      "done": "Registrado en el ERP",
+      "why": "Cliente y artículos reconocidos, precios de tarifa."
+    },
+    {
+      "id": "ceramicas-levante-invoice",
+      "tag": "pdf",
+      "title": "Factura de Cerámicas Levante",
+      "from": "Adjunto en email",
+      "confidence": 95,
+      "done": "Anotada en contabilidad",
+      "why": "CIF e importe coinciden con el pedido de octubre."
+    },
+    {
+      "id": "discount-request",
+      "tag": "email",
+      "title": "«¿Me hacéis un 10 % de descuento?»",
+      "from": "Bar La Plaza",
+      "confidence": 38,
+      "done": "Respuesta enviada",
+      "why": "No hay ninguna regla sobre descuentos: lo decides tú.",
+      "approveLabel": "Responder yo"
+    },
+    {
+      "id": "valero-order",
+      "tag": "order",
+      "title": "Pedido de Hnos. Valero",
+      "from": "Por WhatsApp · 40 cajas",
+      "confidence": 68,
+      "done": "Registrado en el ERP",
+      "why": "Cantidad inusual: suele pedir 4 cajas, no 40."
+    },
+    {
+      "id": "turia-delivery-note",
+      "tag": "pdf",
+      "title": "Albarán de Transportes Turia",
+      "from": "Escaneado",
+      "confidence": 99,
+      "done": "Entrega confirmada",
+      "why": "Firma y número de albarán legibles."
+    },
+    {
+      "id": "address-change",
+      "tag": "email",
+      "title": "Cambio de dirección de envío",
+      "from": "Clínica Sorolla",
+      "confidence": 81,
+      "done": "Ficha de cliente actualizada",
+      "why": "Afecta a un pedido ya en ruta."
+    }
+  ],
+  "modes": [
+    {
+      "id": "review-all",
+      "label": "Revisar todo",
+      "description": "Nada se ejecuta sin tu OK. Así empezamos siempre, hasta que te fías.",
+      "threshold": 101
+    },
+    {
+      "id": "only-doubtful",
+      "label": "Solo lo dudoso",
+      "description": "Lo claro va solo; lo raro o nuevo te lo pregunta antes de tocar nada.",
+      "threshold": 85
+    },
+    {
+      "id": "automatic",
+      "label": "Automático",
+      "description": "Trabaja solo. Aun así, si no lo tiene claro, se para y pregunta.",
+      "threshold": 50
+    }
+  ],
+  "log": [
+    {
+      "id": "late-payment-reminder",
+      "time": "9:08",
+      "action": "Recordatorio de cobro enviado",
+      "why": "Factura 2026-097 vencida hace 7 días.",
+      "who": "auto"
+    },
+    {
+      "id": "quote-approved",
+      "time": "9:05",
+      "action": "Presupuesto aprobado",
+      "why": "Marta lo revisó y dio el OK.",
+      "who": "approved"
+    },
+    {
+      "id": "order-recorded",
+      "time": "9:02",
+      "action": "Pedido registrado en el ERP",
+      "why": "Cliente habitual, mismos artículos que la semana pasada.",
+      "who": "auto"
+    }
+  ]
+}

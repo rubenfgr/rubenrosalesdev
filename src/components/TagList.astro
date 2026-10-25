@@ -1,12 +1,16 @@
 ---
+import { getLang, getLocalizedPath, t as makeT } from '../i18n';
+
 interface Props {
   tags: readonly string[];
 }
 const { tags } = Astro.props;
+const lang = getLang(Astro.url);
+const t = makeT(lang);
 ---
 
-<ul class="tags" aria-label="Etiquetas">
-  {tags.map((t) => <li><a href={`/blog/etiquetas/${t}`}>{t}</a></li>)}
+<ul class="tags" aria-label={t('blog.tags')}>
+  {tags.map((tag) => <li><a href={getLocalizedPath(`/blog/etiquetas/${tag}`, lang)}>{tag}</a></li>)}
 </ul>
 
 <style>

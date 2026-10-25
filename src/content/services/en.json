@@ -1,0 +1,32 @@
+{
+  "items": [
+    {
+      "id": "automation",
+      "number": "1.1",
+      "name": "Automation",
+      "title": "Processes that move on their own",
+      "body": "I connect the tools you already use —email, invoicing, spreadsheets, CRM— so each step triggers the next without anyone having to remember."
+    },
+    {
+      "id": "applied-ai",
+      "number": "1.2",
+      "name": "Applied AI",
+      "title": "AI that reads, understands and records",
+      "body": "It reads invoices, emails and documents, picks out what matters and logs it where it belongs. Inside your own tools, not in a separate window."
+    },
+    {
+      "id": "custom-software",
+      "number": "1.3",
+      "name": "Custom software",
+      "title": "Websites and internal systems",
+      "body": "Dashboards, portals and applications built around the way you work, for when no off-the-shelf tool fits."
+    },
+    {
+      "id": "mobile-apps",
+      "number": "1.4",
+      "name": "Mobile apps",
+      "title": "Apps for iOS and Android",
+      "body": "For your team on the road or for your customers: instant notifications, sign-in with their own account, published on the App Store and Google Play."
+    }
+  ]
+}

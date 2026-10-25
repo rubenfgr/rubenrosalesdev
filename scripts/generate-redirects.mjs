@@ -13,13 +13,13 @@ const flag = (fm, key) => new RegExp(`^${key}:\\s*true\\b`, 'm').test(fm);
 const liveBlog = new Set();
 const blogDir = path.join(root, 'src/content/blog');
 if (fs.existsSync(blogDir)) {
-  for (const slug of fs.readdirSync(blogDir)) {
-    const file = path.join(blogDir, slug, 'index.md');
-    if (fs.existsSync(file) && !flag(frontmatter(file), 'draft')) liveBlog.add(slug);
+  const esDir = path.join(blogDir, 'es');
+  for (const f of fs.existsSync(esDir) ? fs.readdirSync(esDir).filter((n) => /\.mdx?$/.test(n)) : []) {
+    if (!flag(frontmatter(path.join(esDir, f)), 'draft')) liveBlog.add(f.replace(/\.mdx?$/, ''));
   }
 }
 const liveProjects = new Set();
-const projDir = path.join(root, 'src/content/projects');
+const projDir = path.join(root, 'src/content/case-studies');
 if (fs.existsSync(projDir)) {
   for (const f of fs.readdirSync(projDir).filter((n) => n.endsWith('.md'))) {
     if (flag(frontmatter(path.join(projDir, f)), 'published')) liveProjects.add(f.replace(/\.md$/, ''));
@@ -27,7 +27,8 @@ if (fs.existsSync(projDir)) {
 }
 
 const rows = []; // [origen, destino]
-for (const prefix of legacy.prefixes) {
+// /en ya es una ruta real del sitio (i18n): solo se redirige el prefijo /es heredado.
+for (const prefix of legacy.prefixes.filter((x) => x !== '/en')) {
   for (const slug of legacy.blogSlugs) {
     rows.push([`${prefix}/blog/${slug}`, liveBlog.has(slug) ? `/blog/${slug}` : '/blog']);
   }
@@ -43,8 +44,8 @@ for (const prefix of legacy.prefixes) {
 for (const from of legacy.landingRedirects) rows.push([from, '/']);
 // Reglas con comodín al final (Cloudflare evalúa en orden; las estáticas primero).
 rows.sort((a, b) => Number(a[0].includes('*')) - Number(b[0].includes('*')));
-// Resto de rutas con prefijo: /es/x → /x (el español ya no lleva prefijo); /en/x → inicio.
-rows.push(['/es/*', '/:splat'], ['/en/*', '/']);
+// Resto de rutas con prefijo: /es/x → /x (el español ya no lleva prefijo).
+rows.push(['/es/*', '/:splat']);
 
 const redirects = rows.map(([from, to]) => `${from} ${to} 301`).join('\n') + '\n';
 fs.mkdirSync(path.join(root, 'public'), { recursive: true });

@@ -27,7 +27,7 @@ for (const f of outputs) {
 }
 
 // 2. Resultados sin verificar en proyectos publicados
-for (const f of walk(path.join(root, 'src/content/projects')).filter((n) => n.endsWith('.md'))) {
+for (const f of walk(path.join(root, 'src/content/case-studies')).filter((n) => n.endsWith('.md'))) {
   const front = fm(f);
   if (is(front, 'published', 'true') && /^result:\s*\S/m.test(front) && !is(front, 'resultVerified', 'true')) {
     problems.push(`proyecto publicado con result sin resultVerified: ${path.basename(f)}`);
@@ -38,11 +38,11 @@ for (const f of walk(path.join(root, 'src/content/projects')).filter((n) => n.en
 const blogDir = path.join(root, 'src/content/blog');
 const drafts = [];
 const published = [];
-for (const f of walk(blogDir).filter((n) => /index\.mdx?$/.test(n))) {
+for (const f of walk(blogDir).filter((n) => /\.mdx?$/.test(n))) {
   (is(fm(f), 'draft', 'true') ? drafts : published).push(f);
 }
-const draftSlugs = drafts.map((f) => path.basename(path.dirname(f)));
-const publishedFiles = [...published, ...walk(path.join(root, 'src/content/projects')), ...outputs];
+const draftSlugs = drafts.map((f) => path.basename(f).replace(/\.mdx?$/, ''));
+const publishedFiles = [...published, ...walk(path.join(root, 'src/content/case-studies')), ...outputs];
 for (const f of publishedFiles) {
   const text = fs.readFileSync(f, 'utf8');
   for (const slug of draftSlugs) {

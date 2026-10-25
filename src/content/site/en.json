@@ -1,0 +1,74 @@
+{
+  "name": "Rubén Rosales",
+  "role": "Engineering & AI",
+  "nav": [
+    {
+      "id": "services",
+      "label": "Services",
+      "href": "/#servicios"
+    },
+    {
+      "id": "projects",
+      "label": "Projects",
+      "href": "/#proyectos"
+    },
+    {
+      "id": "calculator",
+      "label": "Calculator",
+      "href": "/#calculadora"
+    },
+    {
+      "id": "blog",
+      "label": "Blog",
+      "href": "/blog"
+    },
+    {
+      "id": "faq",
+      "label": "FAQ",
+      "href": "/#faq"
+    }
+  ],
+  "cta": {
+    "short": "Talk about your project",
+    "long": "Tell me about your project"
+  },
+  "footer": {
+    "tagline": "Software engineering, automation and AI for companies that want to last.",
+    "motto": "built piece by piece, no mortar"
+  },
+  "legal": [
+    {
+      "label": "Legal notice",
+      "href": "/aviso-legal"
+    },
+    {
+      "label": "Privacy",
+      "href": "/privacidad"
+    },
+    {
+      "label": "Cookies",
+      "href": "/cookies"
+    }
+  ],
+  "seo": {
+    "title": "Rubén Rosales | Development, AI and Automation",
+    "description": "I automate processes, integrate systems and AI, and build custom software for small businesses and professionals who need to stop doing by hand what can be done on its own.",
+    "ogImageAlt": "Rubén Rosales logo"
+  },
+  "contact": {
+    "email": "hola@rubenrosales.dev",
+    "responseTime": "I reply within 48 hours at most."
+  },
+  "social": [
+    {
+      "id": "linkedin",
+      "label": "LinkedIn",
+      "url": "https://www.linkedin.com/in/rubenrosalesdev"
+    },
+    {
+      "id": "github",
+      "label": "GitHub",
+      "url": "https://github.com/rubenfgr"
+    }
+  ]
+}

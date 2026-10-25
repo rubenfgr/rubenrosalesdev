@@ -1,23 +1,24 @@
 # Escribir un post
 
-Un artículo = una carpeta en `src/content/blog/<slug>/` con un `index.md`. El slug es el nombre de la carpeta y forma la URL: `/blog/<slug>`.
+Un artículo = un fichero por idioma: `src/content/blog/es/<slug>.mdx` y `src/content/blog/en/<slug>.mdx`. El slug es el nombre del fichero y forma la URL: `/blog/<slug>` (es) y `/en/blog/<slug>` (en). Los dos ficheros se emparejan con el mismo `translationKey`; los slugs pueden ser distintos.
 
 ## Flujo
 
-1. Crea `src/content/blog/<slug>/index.md` con la plantilla de abajo.
+1. Crea los dos ficheros con la plantilla de abajo (o usa `pnpm content:new blog <slug>` cuando exista).
 2. Revisa en local con `pnpm dev` (los borradores se ven en desarrollo).
 3. Quita `draft: true` (o ponlo en `false`), haz commit y `git push` a `main`.
 4. El hosting construye y despliega. Si el frontmatter es inválido, el build falla y la web anterior sigue publicada.
 
 ## Plantilla
 
-Copia esto en `src/content/blog/mi-articulo/index.md`:
+Copia esto en `src/content/blog/es/mi-articulo.mdx` (y la versión inglesa en `src/content/blog/en/`):
 
 ````md
 ---
 title: "Título claro y concreto"            # obligatorio, máximo 70 caracteres
 description: "Una o dos frases que resuman el artículo para buscadores y redes."  # 50–160 caracteres
 date: 2026-10-22                            # obligatorio
+translationKey: mi-articulo                 # obligatorio, igual en es y en
 updated: 2026-11-05                         # opcional, si lo revisas después
 tags: [automatizacion, procesos]            # de 1 a 4, en minúsculas y kebab-case
 draft: true                                 # true = no se publica en producción
@@ -46,7 +47,7 @@ Reglas del frontmatter (si no se cumplen, el build falla):
 
 ## Imágenes
 
-Guárdalas en la misma carpeta y enlázalas con ruta relativa. Astro las optimiza. El texto alternativo es obligatorio:
+Guárdalas junto al artículo (p. ej. `src/content/blog/es/portada.webp`) y enlázalas con ruta relativa. Astro las optimiza. El texto alternativo es obligatorio:
 
 ```md
 ![Diagrama del flujo de pedidos](./flujo.png)

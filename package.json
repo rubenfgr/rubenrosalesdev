@@ -8,21 +8,26 @@
   },
   "scripts": {
     "dev": "astro dev",
-    "build": "node scripts/generate-redirects.mjs && astro build && node scripts/check-build.mjs",
+    "build": "node scripts/i18n-check.mjs && node scripts/generate-redirects.mjs && astro build && node scripts/check-build.mjs",
     "preview": "astro preview",
     "check": "astro check",
-    "build:prod": "GUARDS_STRICT=1 pnpm build"
+    "build:prod": "GUARDS_STRICT=1 pnpm build",
+    "i18n:check": "node scripts/i18n-check.mjs",
+    "prebuild": "node scripts/i18n-check.mjs"
   },
   "dependencies": {
     "@astrojs/check": "^0.9.12",
     "@astrojs/cloudflare": "14.4.2",
     "@astrojs/markdown-remark": "^7.3.4",
+    "@astrojs/mdx": "^8.1.1",
+    "@astrojs/preact": "^6.1.1",
     "@astrojs/rss": "4.0.19",
     "@astrojs/sitemap": "3.7.4",
     "@fontsource-variable/archivo": "^5.3.0",
     "@lucide/astro": "^1.61.0",
     "astro": "^7.4.2",
     "astro-expressive-code": "0.44.3",
+    "preact": "^11.0.2",
     "remark-directive": "4.0.0",
     "typescript": "^6.0.3"
   },

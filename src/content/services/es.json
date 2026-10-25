@@ -1,0 +1,32 @@
+{
+  "items": [
+    {
+      "id": "automation",
+      "number": "1.1",
+      "name": "Automatización",
+      "title": "Procesos que avanzan solos",
+      "body": "Conecto los programas que ya usas —email, facturación, hojas de cálculo, CRM— para que cada paso dispare el siguiente sin que nadie tenga que acordarse."
+    },
+    {
+      "id": "applied-ai",
+      "number": "1.2",
+      "name": "IA aplicada",
+      "title": "IA que lee, entiende y registra",
+      "body": "Lee facturas, correos y documentos, saca lo importante y lo anota donde toca. Dentro de tus programas, no en una ventana aparte."
+    },
+    {
+      "id": "custom-software",
+      "number": "1.3",
+      "name": "Software a medida",
+      "title": "Webs y sistemas internos",
+      "body": "Paneles, portales y aplicaciones hechas para tu forma de trabajar, cuando ningún programa de serie encaja."
+    },
+    {
+      "id": "mobile-apps",
+      "number": "1.4",
+      "name": "Apps móviles",
+      "title": "Apps para iOS y Android",
+      "body": "Para tu equipo en la calle o para tus clientes: avisos al momento, acceso con su cuenta y publicadas en App Store y Google Play."
+    }
+  ]
+}

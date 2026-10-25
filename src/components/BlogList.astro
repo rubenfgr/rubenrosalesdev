@@ -1,4 +1,5 @@
 ---
+import { getLang, t as makeT } from '../i18n';
 import type { Post } from '../lib/blog';
 import PostCard from './PostCard.astro';
 
@@ -7,11 +8,12 @@ interface Props {
   featuredFirst?: boolean;
 }
 const { posts, featuredFirst = false } = Astro.props;
+const t = makeT(getLang(Astro.url));
 ---
 
 {
   posts.length === 0 ? (
-    <p>Todavía no hay artículos.</p>
+    <p>{t('blog.empty')}</p>
   ) : (
     <div class="list">
       {posts.map((p, i) => <PostCard post={p} featured={featuredFirst && i === 0} level="h2" />)}

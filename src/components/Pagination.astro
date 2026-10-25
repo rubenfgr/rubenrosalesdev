@@ -1,4 +1,5 @@
 ---
+import { getLang, t as makeT } from '../i18n';
 import { pageUrl } from '../lib/blog';
 
 interface Props {
@@ -6,17 +7,19 @@ interface Props {
   totalPages: number;
 }
 const { page, totalPages } = Astro.props;
+const lang = getLang(Astro.url);
+const t = makeT(lang);
 const pages = Array.from({ length: totalPages }, (_, i) => i + 1);
 ---
 
 {
   totalPages > 1 && (
-    <nav class="pagination" aria-label="Paginación">
-      {page > 1 ? <a href={pageUrl(page - 1)} rel="prev">← Más recientes</a> : <span aria-hidden="true" />}
+    <nav class="pagination" aria-label={t('blog.pagination')}>
+      {page > 1 ? <a href={pageUrl(page - 1, lang)} rel="prev">{t('blog.newer')}</a> : <span aria-hidden="true" />}
       <ul>
-        {pages.map((n) => <li><a href={pageUrl(n)} aria-current={n === page ? 'page' : undefined}>{n}</a></li>)}
+        {pages.map((n) => <li><a href={pageUrl(n, lang)} aria-current={n === page ? 'page' : undefined}>{n}</a></li>)}
       </ul>
-      {page < totalPages ? <a href={pageUrl(page + 1)} rel="next">Más antiguos →</a> : <span aria-hidden="true" />}
+      {page < totalPages ? <a href={pageUrl(page + 1, lang)} rel="next">{t('blog.older')}</a> : <span aria-hidden="true" />}
     </nav>
   )
 }

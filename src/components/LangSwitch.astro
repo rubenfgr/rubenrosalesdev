@@ -1,0 +1,34 @@
+---
+import { getLocalizedPath, locales, type Lang, type T } from '../i18n';
+
+interface Props {
+  lang: Lang;
+  t: T;
+  /** Ruta de la página equivalente en cada idioma (sin localizar). */
+  paths: Record<Lang, string>;
+}
+
+const { lang, t, paths } = Astro.props;
+const other = locales.find((l) => l !== lang) ?? lang;
+---
+
+<a class="lang" href={getLocalizedPath(paths[other], other)} hreflang={other} lang={other} aria-label={t('lang.switchTo', { lang: t(`lang.${other}`) })}>
+  {other.toUpperCase()}
+</a>
+
+<style>
+  .lang {
+    display: inline-flex;
+    align-items: center;
+    padding: var(--space-2) var(--space-3);
+    border: var(--border-width-thin) solid var(--color-border);
+    border-radius: var(--radius-md);
+    font-family: var(--font-family-mono);
+    font-size: var(--font-size-label);
+    font-weight: var(--font-weight-medium);
+    letter-spacing: 0.08em;
+    color: var(--color-foreground);
+    text-decoration: none;
+  }
+  .lang:hover { color: var(--color-primary); border-color: var(--color-primary); }
+</style>

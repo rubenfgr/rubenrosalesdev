@@ -1,11 +1,5 @@
 ---
-import BlogIndex from '../../components/BlogIndex.astro';
-import { getPosts } from '../../lib/blog';
-import Layout from '../../layouts/Layout.astro';
-
-const posts = await getPosts();
+import BlogIndexView from '../../views/BlogIndexView.astro';
 ---
 
-<Layout title="Blog" description="Notas prácticas sobre automatización, IA aplicada y software para negocio.">
-  <BlogIndex posts={posts} page={1} />
-</Layout>
+<BlogIndexView />

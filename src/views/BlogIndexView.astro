@@ -1,0 +1,14 @@
+---
+import BlogIndex from '../components/BlogIndex.astro';
+import { getLang, t as makeT } from '../i18n';
+import Layout from '../layouts/Layout.astro';
+import { getPosts } from '../lib/blog';
+
+const lang = getLang(Astro.url);
+const t = makeT(lang);
+const posts = await getPosts(lang);
+---
+
+<Layout title={t('blog.title')} description={t('blog.description')} paths={{ es: '/blog', en: '/blog' }}>
+  <BlogIndex posts={posts} page={1} />
+</Layout>

@@ -1,0 +1,511 @@
+{
+  "meta": {
+    "siteName": "Rubén Rosales",
+    "htmlLang": "es",
+    "ogLocale": "es_ES",
+    "rssTitle": "Blog de Rubén Rosales",
+    "rssDescription": "Notas prácticas sobre automatización, IA aplicada y software para negocio.",
+    "notFoundTitle": "Página no encontrada"
+  },
+  "a11y": {
+    "skipToContent": "Saltar al contenido",
+    "menu": "Menú",
+    "closeMenu": "Cerrar menú",
+    "openMenu": "Abrir menú",
+    "mainNav": "Navegación principal",
+    "homeLink": "Rubén Rosales, ir al inicio",
+    "readingProgress": "Progreso de lectura",
+    "language": "Idioma",
+    "logoAlt": "Logotipo de Rubén Rosales"
+  },
+  "lang": {
+    "es": "Español",
+    "en": "English",
+    "switchTo": "Cambiar a {lang}"
+  },
+  "footer": {
+    "navigate": "NAVEGAR",
+    "contact": "CONTACTO",
+    "legal": "LEGAL",
+    "copyright": "© {year} Rubén Rosales",
+    "prompt": "$ echo \"{motto}\""
+  },
+  "hero": {
+    "headline": {
+      "a": {
+        "l1": "Procesos que",
+        "l2": "funcionan",
+        "l3": "solos."
+      },
+      "b": {
+        "l1": "El trabajo",
+        "l2": "repetitivo,",
+        "l3": "resuelto."
+      },
+      "c": {
+        "l1": "Tu operación,",
+        "l2": "en piloto",
+        "l3": "automático."
+      }
+    },
+    "lead": "Automatizo procesos e integro agentes de IA en los sistemas que ya usas. Leen, deciden y registran por ti con reglas claras, supervisión donde importa y cada acción trazada.",
+    "ctaPrimary": "Cuéntame tu proyecto",
+    "ctaSecondary": "Explorar proyectos",
+    "pillars": {
+      "automation": {
+        "title": "Automatización",
+        "text": "Procesos que se hacen solos."
+      },
+      "agents": {
+        "title": "Agentes IA",
+        "text": "Leen, deciden y registran."
+      },
+      "integrations": {
+        "title": "Integraciones",
+        "text": "Tus programas, conectados."
+      },
+      "custom": {
+        "title": "Software a medida",
+        "text": "Lo que no existe, lo creo."
+      }
+    },
+    "stats": {
+      "projects": {
+        "value": "20",
+        "label": "proyectos entregados [VERIFICAR: cifra del diseño]"
+      },
+      "years": {
+        "value": "8",
+        "label": "años de experiencia [VERIFICAR: cifra del diseño]"
+      }
+    }
+  },
+  "integrations": {
+    "eyebrow": "// conecto lo que ya usas",
+    "title1": "No cambias de programas.",
+    "title2": "Los conecto.",
+    "lead": "El trabajo sigue entrando por donde entra hoy, se decide con reglas que tú apruebas y queda guardado donde siempre lo buscas.",
+    "otherTitle": "¿Usas otro programa?",
+    "otherText": "Si guarda datos, se puede conectar.",
+    "exampleLabel": "Ejemplo de un día",
+    "live": "En marcha",
+    "colIn": "01 · Dónde llega →",
+    "colDecide": "02 · Se decide →",
+    "colOut": "03 · Dónde se guarda",
+    "traced": "cada acción queda trazada",
+    "hub": {
+      "rules": "IA con reglas",
+      "process": "Tu proceso"
+    },
+    "sources": {
+      "email": "Email",
+      "whatsapp": "WhatsApp",
+      "forms": "Formularios",
+      "pdf": "PDFs"
+    },
+    "destinations": {
+      "erp": "ERP",
+      "crm": "CRM",
+      "excel": "Excel",
+      "accounting": "Contabilidad"
+    },
+    "todaySuffix": "hoy",
+    "viewExample": "Ver ejemplo: {source}",
+    "waitingApproval": "Esperando tu visto bueno",
+    "inProgress": "En curso…",
+    "metrics": {
+      "saved": "recuperadas hoy",
+      "tasks": "tareas resueltas",
+      "human": "con tu visto bueno"
+    },
+    "units": {
+      "hours": "h",
+      "minutes": "min"
+    }
+  },
+  "problem": {
+    "eyebrow": "00 / diagnóstico",
+    "title1": "Tu empresa funciona.",
+    "title2": "Pero alguien hace de puente.",
+    "lead": "Cada programa va por su lado y las personas copian datos de uno a otro. Funciona mientras nadie falte y nadie se equivoque. Toca los que te suenan y mira qué pasa cuando dejan de hacerse a mano.",
+    "manualPerWeek": "A MANO / SEMANA",
+    "recovered": "RECUPERADAS",
+    "hoursUnit": "h",
+    "listTitle": "Puentes a mano",
+    "listSubtitle": "Una semana típica en una pyme",
+    "automateAll": "Automatizar todo",
+    "reset": "Reiniciar",
+    "automated": "automatizado",
+    "hoursPerWeek": "{hours} h/sem",
+    "returned": "Devuelto a tu equipo",
+    "daysPerMonth": "≈ {days} jornadas al mes"
+  },
+  "services": {
+    "eyebrow": "01 / servicios",
+    "title1": "Cuatro disciplinas.",
+    "title2": "Una misma exigencia.",
+    "lead": "Para pymes y profesionales. Empiezo por el tramo que más te frena y lo dejo funcionando en producción.",
+    "techNote": "¿Perfil técnico? Las herramientas se eligen según tu caso.",
+    "techCta": "Pregúntame por el stack →"
+  },
+  "tray": {
+    "eyebrow": "02 / control",
+    "title1": "La IA trabaja.",
+    "title2": "Tú decides hasta dónde.",
+    "lead": "Cuando algo no está claro, no se lo inventa: te lo pregunta. Y todo lo que hace queda apuntado, con el motivo. Pruébalo.",
+    "howMuchFreedom": "¿Cuánta libertad le das?",
+    "pause": "Pausar",
+    "resume": "Reanudar",
+    "isItClear": "¿Lo tiene claro?",
+    "confidence": {
+      "yes": "Sí",
+      "maybe": "Más o menos",
+      "no": "No"
+    },
+    "waitingForOk": "Esperando tu OK",
+    "nothingPending": "Nada pendiente. Todo lo que ha llegado estaba claro.",
+    "approve": "Aprobar",
+    "doItMyself": "Lo hago yo",
+    "logTitle": "Qué ha hecho, y por qué",
+    "today": "Hoy",
+    "who": {
+      "auto": "Automático",
+      "approved": "Aprobado por ti",
+      "corrected": "Corregido por ti"
+    },
+    "tags": {
+      "order": "PEDIDO",
+      "pdf": "PDF",
+      "email": "EMAIL"
+    },
+    "badges": {
+      "euTitle": "Tus datos, en la UE",
+      "euText": "Solo accede a lo imprescindible.",
+      "ownTitle": "El sistema es tuyo",
+      "ownText": "Código y documentación entregados."
+    }
+  },
+  "calculator": {
+    "eyebrow": "03 / calculadora",
+    "title1": "¿Cuánto te cuesta",
+    "title2": "lo repetitivo?",
+    "note": "Estimación conservadora: automatizamos el {pct} de las tareas repetitivas durante {weeks} semanas laborables.",
+    "team": "Tamaño del equipo",
+    "teamUnit": "personas",
+    "hours": "Horas repetitivas / persona / semana",
+    "hoursUnit": "horas",
+    "rate": "Coste por hora para la empresa",
+    "rateUnit": "€ / hora",
+    "annualSaving": "AHORRO ANUAL ESTIMADO",
+    "perMonth": "≈ {amount} al mes que hoy se van en hacer de puente.",
+    "todayHours": "Hoy · horas/año",
+    "automatedHours": "Automatizado · horas/año",
+    "recoveredHours": "Horas recuperadas",
+    "equivalent": "Equivalente",
+    "fte": "FTE",
+    "cta": "Validar esta cifra conmigo"
+  },
+  "process": {
+    "eyebrow": "04 / método",
+    "title1": "Sabes qué pagas",
+    "title2": "y qué recibes en cada paso."
+  },
+  "projects": {
+    "eyebrow": "05 / proyectos",
+    "title1": "Trabajo en producción,",
+    "title2": "no en presentaciones.",
+    "lead": "17 proyectos privados, hechos por cuenta ajena para empresas e instituciones. Por eso no hay capturas: si te interesa alguno, te lo cuento en persona.",
+    "previous": "Proyecto anterior",
+    "next": "Proyecto siguiente",
+    "goTo": "Ir al proyecto {n}",
+    "privateBadge": "Proyecto privado · por cuenta ajena",
+    "illustrative": "Recreación ilustrativa, con datos inventados",
+    "moreTitle": "Más proyectos, de 2019 a hoy",
+    "scrollPrev": "Anteriores",
+    "scrollNext": "Siguientes",
+    "privateTitle": "Proyecto privado",
+    "privateText": "Por cuenta ajena · sin capturas públicas",
+    "askTitle": "¿Quieres saber cómo está hecho alguno?",
+    "askCta": "Pregúntame por ese proyecto →",
+    "filters": {
+      "all": "Todos",
+      "web": "Web",
+      "app": "Apps",
+      "sensors": "Sensores y redes"
+    },
+    "status": {
+      "in-development": "En desarrollo",
+      "maintenance": "En mantenimiento",
+      "done": "Terminado"
+    },
+    "counter": "{current} / {total}"
+  },
+  "faq": {
+    "eyebrow": "06 / preguntas",
+    "title1": "Lo que conviene",
+    "title2": "preguntar antes.",
+    "notFound": "¿No está la tuya?",
+    "writeMe": "Escríbeme directamente"
+  },
+  "contact": {
+    "eyebrow": "07 / contacto",
+    "title1": "Cuéntame dónde",
+    "title2": "se atasca tu operación.",
+    "lead": "Cuatro preguntas y te preparo una primera ruta. Si tienes prisa, déjame un mensaje directo.",
+    "howToTell": "¿Cómo prefieres contármelo?",
+    "modes": {
+      "guided": {
+        "title": "Guiado",
+        "description": "4 preguntas · con ruta"
+      },
+      "direct": {
+        "title": "Directo",
+        "description": "Un mensaje rápido"
+      }
+    },
+    "steps": {
+      "goal": "Objetivo",
+      "context": "Contexto",
+      "jam": "El atasco",
+      "contact": "Contacto"
+    },
+    "direct": {
+      "title": "Escríbeme directamente",
+      "lead": "Tres datos y tu mensaje. Te respondo en un día laborable.",
+      "send": "Enviar mensaje"
+    },
+    "fields": {
+      "name": "Nombre",
+      "email": "Email",
+      "workEmail": "Email de trabajo",
+      "company": "Empresa",
+      "optional": "(opcional)",
+      "message": "Tu mensaje",
+      "phone": "Teléfono",
+      "tools": "¿Qué programas usáis?",
+      "team": "¿Cuántas personas sois?",
+      "when": "¿Para cuándo?",
+      "howContinue": "¿Cómo prefieres seguir?"
+    },
+    "placeholders": {
+      "name": "Laura Martí",
+      "email": "laura@empresa.com",
+      "company": "Distribuciones Martí",
+      "messageDirect": "Cuéntame en dos líneas qué necesitas.",
+      "messageGuided": "Ej.: dos personas pasan cada mañana los pedidos del email al programa a mano…",
+      "phone": "600 000 000",
+      "otherTool": "¿Otro? Escríbelo aquí"
+    },
+    "consent": "Acepto que use estos datos solo para responderte, según el RGPD. No los cedo a nadie y puedes pedir que los borre cuando quieras.",
+    "errors": {
+      "name": "Indica tu nombre.",
+      "emailInvalid": "Necesito un email válido.",
+      "messageShort": "Escribe al menos una frase.",
+      "consent": "Necesito tu permiso para poder responderte.",
+      "goal": "Elige al menos una opción.",
+      "jamShort": "Cuéntame un poco más.",
+      "phone": "Indica un teléfono para llamarte.",
+      "send": "No se ha podido enviar. Inténtalo de nuevo o escríbeme a {email}."
+    },
+    "q1": {
+      "counter": "Pregunta 1 de 4",
+      "title": "¿Qué te gustaría resolver?",
+      "hint": "Elige todo lo que aplique."
+    },
+    "q2": {
+      "counter": "Pregunta 2 de 4",
+      "title": "Un poco de contexto"
+    },
+    "q3": {
+      "counter": "Pregunta 3 de 4",
+      "title": "¿Dónde se pierde el tiempo?",
+      "hint": "Cuéntalo como se lo contarías a un compañero. Sin tecnicismos.",
+      "enough": "Perfecto, con esto ya puedo hacerme una idea.",
+      "notEnough": "Con dos o tres frases es suficiente.",
+      "examplesTitle": "¿Te suena alguno? Tócalo para empezar desde ahí:",
+      "examples": {
+        "orders": "Pasamos a mano los pedidos del email al programa de gestión.",
+        "reports": "Hacemos los mismos informes en Excel cada semana.",
+        "silos": "Cada programa tiene sus datos y nada cuadra entre ellos."
+      }
+    },
+    "q4": {
+      "counter": "Pregunta 4 de 4",
+      "title": "¿Dónde te respondo?"
+    },
+    "goals": {
+      "repetitive": {
+        "title": "Quitar tareas repetitivas",
+        "description": "Copiar datos, pasar pedidos, enviar avisos",
+        "routeTitle": "Automatizar lo que más se repite",
+        "routeText": "Localizar la tarea que más horas se come y quitarla primero."
+      },
+      "documents-ai": {
+        "title": "Usar IA con mis documentos",
+        "description": "Leer emails, facturas o contratos",
+        "routeTitle": "Probar la IA con tus documentos",
+        "routeText": "Una prueba con documentos reales antes de ponerla en marcha."
+      },
+      "connect": {
+        "title": "Conectar mis programas",
+        "description": "Que dejen de hablar por Excel",
+        "routeTitle": "Unir los programas que ya usas",
+        "routeText": "Que los datos pasen solos de uno a otro, sin copiar y pegar."
+      },
+      "web": {
+        "title": "Una web o plataforma",
+        "description": "Reservas, gestión, portal de clientes",
+        "routeTitle": "Una primera versión de la web",
+        "routeText": "Definir las pantallas clave y lanzar pronto, para mejorar con uso real."
+      },
+      "app": {
+        "title": "Una app para el equipo",
+        "description": "Trabajo de campo, almacén, partes",
+        "routeTitle": "Una app hecha con tu equipo",
+        "routeText": "Diseñarla con quien la va a usar en el día a día."
+      },
+      "unsure": {
+        "title": "Aún no lo tengo claro",
+        "description": "Lo vemos juntos",
+        "routeTitle": "Una llamada para ordenar ideas",
+        "routeText": "Vemos juntos qué compensa hacer primero y qué no merece la pena tocar."
+      }
+    },
+    "sizes": {
+      "1-5": "1–5",
+      "6-20": "6–20",
+      "21-50": "21–50",
+      "50-plus": "Más de 50"
+    },
+    "whens": {
+      "asap": "Cuanto antes",
+      "quarter": "Este trimestre",
+      "looking": "Solo estoy mirando"
+    },
+    "tools": {
+      "excel": "Excel",
+      "mail": "Gmail / Outlook",
+      "whatsapp": "WhatsApp",
+      "holded": "Holded",
+      "a3": "A3",
+      "sage": "Sage",
+      "erp": "ERP propio"
+    },
+    "prefs": {
+      "email": "Respuesta por email",
+      "call": "Prefiero una llamada"
+    },
+    "nav": {
+      "back": "← Atrás",
+      "next": "Siguiente",
+      "submit": "Enviar mi caso",
+      "sending": "Enviando…",
+      "keysHint": "Puedes usar las teclas 1–6",
+      "ctrlEnter": "Ctrl + Enter para seguir"
+    },
+    "sheet": {
+      "title": "Primera ruta · borrador",
+      "forPrefix": "Para {names}",
+      "defaultName": "Tu caso",
+      "status": {
+        "blank": "En blanco",
+        "forming": "Tomando forma",
+        "sent": "Enviado"
+      },
+      "whereStart": "Por dónde empezaría",
+      "fillHint": "Se rellena con tu primera respuesta.",
+      "team": "Equipo",
+      "teamValue": "{size} personas",
+      "when": "Plazo",
+      "tools": "Programas que ya usas",
+      "jamTitle": "El atasco, en tus palabras",
+      "jamEmpty": "Aquí aparecerá lo que me cuentes en la pregunta 3.",
+      "empty": "—"
+    },
+    "sent": {
+      "title": "Recibido, {name}.",
+      "callLine": "Te llamo al",
+      "mailLine": "Te escribo a",
+      "inOneDay": "en un día laborable.",
+      "another": "Enviar otro caso",
+      "guided": {
+        "s1": {
+          "title": "Leo tu caso",
+          "text": "Con la ruta que acabas de ver ya tengo por dónde empezar."
+        },
+        "s2Mail": {
+          "title": "Te respondo por email",
+          "text": "Con una primera propuesta: qué haría primero y qué no merece la pena tocar."
+        },
+        "s2Call": {
+          "title": "Te llamo",
+          "text": "Con una primera propuesta: qué haría primero y qué no merece la pena tocar."
+        },
+        "s3": {
+          "title": "Decides con números",
+          "text": "Si encaja, te paso una propuesta con alcance y precio cerrados."
+        }
+      },
+      "direct": {
+        "s1": {
+          "title": "Leo tu mensaje",
+          "text": "Si me falta algo para entender tu caso, te lo pregunto."
+        },
+        "s2": {
+          "title": "Te respondo por email",
+          "text": "Con una primera idea de por dónde empezaría."
+        },
+        "s3": {
+          "title": "Decides con números",
+          "text": "Si encaja, te paso una propuesta con alcance y precio cerrados."
+        }
+      }
+    },
+    "aside": {
+      "reviewer": "Lo revisa Rubén Rosales",
+      "reviewerText": "Hablas con quien construye. Sin comerciales.",
+      "preferWrite": "¿Prefieres escribir?",
+      "location": "España · trabajo en remoto"
+    }
+  },
+  "blog": {
+    "title": "Blog",
+    "description": "Notas prácticas sobre automatización, IA aplicada y software para negocio.",
+    "backHome": "← Volver al inicio",
+    "onThisPage": "en esta página",
+    "moreArticles": "/ más artículos",
+    "readingTime": "{minutes} min de lectura",
+    "author": "Rubén Rosales",
+    "authorRole": "Ingeniero de software",
+    "authorInitials": "RR",
+    "tags": "Etiquetas",
+    "previous": "← Anterior",
+    "next": "Siguiente →",
+    "adjacentLabel": "Artículos contiguos",
+    "tocLabel": "Índice del artículo",
+    "editOnGithub": "Editar en GitHub",
+    "empty": "Todavía no hay artículos.",
+    "updatedOn": "Actualizado el {date}",
+    "translationMissing": "Este artículo no está disponible en este idioma.",
+    "newer": "← Más recientes",
+    "older": "Más antiguos →",
+    "pagination": "Paginación",
+    "recent": "Artículos recientes",
+    "archive": "Archivo",
+    "viewArchive": "Ver archivo",
+    "tocTitle": "En este artículo",
+    "tagsIndex": "Etiquetas",
+    "rss": "RSS"
+  },
+  "assistant": {
+    "fabAria": "Abrir asistente",
+    "panelAria": "Asistente de Rubén",
+    "close": "Cerrar",
+    "restart": "Empezar de nuevo",
+    "send": "Enviar",
+    "messageAria": "Mensaje",
+    "inputPlaceholder": "Escribe tu mensaje…",
+    "fabTitle": "¿Tienes un proyecto?",
+    "fabSubtitle": "Cuéntaselo al asistente"
+  }
+}

@@ -1,0 +1,29 @@
+---
+import type { GetStaticPaths } from 'astro';
+import BlogPostView from '../../../views/BlogPostView.astro';
+import { getPosts, getTranslation, postSlug } from '../../../lib/blog';
+
+export const getStaticPaths = (async () => {
+  const posts = await getPosts('en');
+  return Promise.all(
+    posts.map(async (post, i) => {
+      const other = await getTranslation(post, 'es');
+      return {
+        params: { slug: postSlug(post) },
+        // Lista de más reciente a más antiguo: «Anterior» = más antiguo.
+        props: {
+          post,
+          older: posts[i + 1],
+          newer: posts[i - 1],
+          recent: posts.slice(0, 5),
+          paths: { en: `/blog/${postSlug(post)}`, ...(other ? { es: `/blog/${postSlug(other)}` } : {}) },
+        },
+      };
+    }),
+  );
+}) satisfies GetStaticPaths;
+
+const props = Astro.props;
+---
+
+<BlogPostView {...props} />

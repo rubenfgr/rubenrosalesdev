@@ -1,0 +1,46 @@
+{
+  "items": [
+    {
+      "id": "orders-to-erp",
+      "label": "Pasar pedidos del email al ERP",
+      "path": "Email → ERP",
+      "hoursPerWeek": 6,
+      "defaultOn": false
+    },
+    {
+      "id": "weekly-report",
+      "label": "Montar el informe semanal en Excel",
+      "path": "ERP → Excel",
+      "hoursPerWeek": 3,
+      "defaultOn": false
+    },
+    {
+      "id": "supplier-invoices",
+      "label": "Teclear facturas de proveedor",
+      "path": "PDF → Contabilidad",
+      "hoursPerWeek": 5,
+      "defaultOn": true
+    },
+    {
+      "id": "where-is-my-order",
+      "label": "Responder “¿dónde está mi pedido?”",
+      "path": "WhatsApp → Cliente",
+      "hoursPerWeek": 4,
+      "defaultOn": false
+    },
+    {
+      "id": "find-documents",
+      "label": "Buscar documentos de un cliente",
+      "path": "Carpetas → Persona",
+      "hoursPerWeek": 2,
+      "defaultOn": false
+    },
+    {
+      "id": "payment-reminders",
+      "label": "Recordar cobros pendientes",
+      "path": "Agenda → Cliente",
+      "hoursPerWeek": 3,
+      "defaultOn": false
+    }
+  ]
+}

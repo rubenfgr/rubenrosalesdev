@@ -1,4 +1,5 @@
 ---
+import { getLang, t as makeT } from '../i18n';
 import { formatDate, readingTime, type Post } from '../lib/blog';
 
 interface Props {
@@ -6,18 +7,20 @@ interface Props {
 }
 const { post } = Astro.props;
 const { date, updated } = post.data;
+const lang = getLang(Astro.url);
+const t = makeT(lang);
 ---
 
 <p class="meta">
-  <time datetime={date.toISOString()}>{formatDate(date)}</time>
+  <time datetime={date.toISOString()}>{formatDate(date, lang)}</time>
   <span aria-hidden="true">·</span>
-  <span>{readingTime(post.body)} min de lectura</span>
+  <span>{t('blog.readingTime', { minutes: readingTime(post.body) })}</span>
   {
     updated && (
       <>
         <span aria-hidden="true">·</span>
         <span>
-          Actualizado el <time datetime={updated.toISOString()}>{formatDate(updated)}</time>
+          <time datetime={updated.toISOString()}>{t('blog.updatedOn', { date: formatDate(updated, lang) })}</time>
         </span>
       </>
     )

@@ -1,0 +1,64 @@
+{
+  "items": [
+    {
+      "id": "order",
+      "source": "email",
+      "destination": "erp",
+      "sourceSub": "pedido_0412.eml",
+      "pending": "Pedido de Ferretería del Centro",
+      "done": "Pedido registrado en el ERP",
+      "meta": "Stock comprobado · confirmación enviada al cliente · 2 s",
+      "steps": {
+        "read": "Lee el pedido",
+        "check": "Comprueba stock",
+        "register": "Registra y confirma"
+      },
+      "humanApproval": null
+    },
+    {
+      "id": "query",
+      "source": "whatsapp",
+      "destination": "crm",
+      "sourceSub": "«¿Dónde está mi pedido?»",
+      "pending": "«¿Dónde está mi pedido 8799?»",
+      "done": "Cliente respondido",
+      "meta": "En reparto, llega mañana · anotado en su ficha · 6 s",
+      "steps": {
+        "read": "Entiende la consulta",
+        "check": "Busca el envío",
+        "register": "Responde y lo anota"
+      },
+      "humanApproval": null
+    },
+    {
+      "id": "quote",
+      "source": "forms",
+      "destination": "excel",
+      "sourceSub": "presupuesto · web",
+      "pending": "Solicitud de presupuesto · web",
+      "done": "Presupuesto en seguimiento",
+      "meta": "Datos completos · fila añadida a tu Excel · 3 s",
+      "steps": {
+        "read": "Lee la solicitud",
+        "check": "Valida los datos",
+        "register": "Lo añade al Excel"
+      },
+      "humanApproval": null
+    },
+    {
+      "id": "invoice",
+      "source": "pdf",
+      "destination": "accounting",
+      "sourceSub": "factura_F-0457.pdf",
+      "pending": "Factura F-0457 · 3.480 €",
+      "done": "Factura contabilizada",
+      "meta": "Más de 3.000 € · visto bueno de Finanzas · 2 s",
+      "steps": {
+        "read": "Lee la factura",
+        "check": "Revisa importe",
+        "register": "Contabiliza"
+      },
+      "humanApproval": "Finanzas"
+    }
+  ]
+}

@@ -1,0 +1,64 @@
+{
+  "items": [
+    {
+      "id": "order",
+      "source": "email",
+      "destination": "erp",
+      "sourceSub": "pedido_0412.eml",
+      "pending": "Order from Ferretería del Centro",
+      "done": "Order recorded in the ERP",
+      "meta": "Stock checked · confirmation sent to the customer · 2 s",
+      "steps": {
+        "read": "Reads the order",
+        "check": "Checks stock",
+        "register": "Records and confirms"
+      },
+      "humanApproval": null
+    },
+    {
+      "id": "query",
+      "source": "whatsapp",
+      "destination": "crm",
+      "sourceSub": "“Where is my order?”",
+      "pending": "“Where is my order 8799?”",
+      "done": "Customer answered",
+      "meta": "Out for delivery, arrives tomorrow · noted on their record · 6 s",
+      "steps": {
+        "read": "Understands the query",
+        "check": "Looks up the shipment",
+        "register": "Replies and logs it"
+      },
+      "humanApproval": null
+    },
+    {
+      "id": "quote",
+      "source": "forms",
+      "destination": "excel",
+      "sourceSub": "quote · website",
+      "pending": "Quote request · website",
+      "done": "Quote being followed up",
+      "meta": "Complete data · row added to your spreadsheet · 3 s",
+      "steps": {
+        "read": "Reads the request",
+        "check": "Validates the data",
+        "register": "Adds it to the spreadsheet"
+      },
+      "humanApproval": null
+    },
+    {
+      "id": "invoice",
+      "source": "pdf",
+      "destination": "accounting",
+      "sourceSub": "factura_F-0457.pdf",
+      "pending": "Invoice F-0457 · €3,480",
+      "done": "Invoice posted",
+      "meta": "Over €3,000 · approved by Finance · 2 s",
+      "steps": {
+        "read": "Reads the invoice",
+        "check": "Checks the amount",
+        "register": "Posts it"
+      },
+      "humanApproval": "Finance"
+    }
+  ]
+}

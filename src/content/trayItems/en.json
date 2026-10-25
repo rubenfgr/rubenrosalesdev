@@ -1,0 +1,102 @@
+{
+  "items": [
+    {
+      "id": "ferreteria-ruiz-order",
+      "tag": "order",
+      "title": "Order from Ferretería Ruiz",
+      "from": "By email · 6 items",
+      "confidence": 97,
+      "done": "Recorded in the ERP",
+      "why": "Customer and items recognised, list prices applied."
+    },
+    {
+      "id": "ceramicas-levante-invoice",
+      "tag": "pdf",
+      "title": "Invoice from Cerámicas Levante",
+      "from": "Email attachment",
+      "confidence": 95,
+      "done": "Posted in accounting",
+      "why": "Tax ID and amount match the October order."
+    },
+    {
+      "id": "discount-request",
+      "tag": "email",
+      "title": "“Can you give me a 10% discount?”",
+      "from": "Bar La Plaza",
+      "confidence": 38,
+      "done": "Reply sent",
+      "why": "There is no rule about discounts: you decide.",
+      "approveLabel": "Reply myself"
+    },
+    {
+      "id": "valero-order",
+      "tag": "order",
+      "title": "Order from Hnos. Valero",
+      "from": "By WhatsApp · 40 boxes",
+      "confidence": 68,
+      "done": "Recorded in the ERP",
+      "why": "Unusual quantity: they normally order 4 boxes, not 40."
+    },
+    {
+      "id": "turia-delivery-note",
+      "tag": "pdf",
+      "title": "Delivery note from Transportes Turia",
+      "from": "Scanned",
+      "confidence": 99,
+      "done": "Delivery confirmed",
+      "why": "Signature and delivery note number legible."
+    },
+    {
+      "id": "address-change",
+      "tag": "email",
+      "title": "Change of shipping address",
+      "from": "Clínica Sorolla",
+      "confidence": 81,
+      "done": "Customer record updated",
+      "why": "It affects an order already on its way."
+    }
+  ],
+  "modes": [
+    {
+      "id": "review-all",
+      "label": "Review everything",
+      "description": "Nothing runs without your OK. This is always how we start, until you trust it.",
+      "threshold": 101
+    },
+    {
+      "id": "only-doubtful",
+      "label": "Only the doubtful",
+      "description": "The clear cases go through on their own; anything odd or new is checked with you first.",
+      "threshold": 85
+    },
+    {
+      "id": "automatic",
+      "label": "Automatic",
+      "description": "It works on its own. Even so, if it is not sure, it stops and asks.",
+      "threshold": 50
+    }
+  ],
+  "log": [
+    {
+      "id": "late-payment-reminder",
+      "time": "9:08",
+      "action": "Payment reminder sent",
+      "why": "Invoice 2026-097 overdue by 7 days.",
+      "who": "auto"
+    },
+    {
+      "id": "quote-approved",
+      "time": "9:05",
+      "action": "Quote approved",
+      "why": "Marta reviewed it and gave the OK.",
+      "who": "approved"
+    },
+    {
+      "id": "order-recorded",
+      "time": "9:02",
+      "action": "Order recorded in the ERP",
+      "why": "Regular customer, same items as last week.",
+      "who": "auto"
+    }
+  ]
+}

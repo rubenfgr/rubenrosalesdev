@@ -31,4 +31,4 @@ Ver `package.json`. Antes de dar una tarea por terminada: check de tipos, build 
 
 ## Blog
 
-Ver `docs/escribir-un-post.md`. Un artículo = una carpeta en `src/content/blog/<slug>/` con `index.md`.
+Ver `docs/escribir-un-post.md`. Un artículo = un fichero por idioma en `src/content/blog/{es,en}/<slug>.mdx`.

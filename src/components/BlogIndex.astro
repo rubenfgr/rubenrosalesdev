@@ -1,4 +1,5 @@
 ---
+import { getLang, getLocalizedPath, t as makeT } from '../i18n';
 import { POSTS_PER_PAGE, type Post } from '../lib/blog';
 import BlogList from './BlogList.astro';
 import Pagination from './Pagination.astro';
@@ -9,14 +10,16 @@ interface Props {
   page: number;
 }
 const { posts, page } = Astro.props;
+const lang = getLang(Astro.url);
+const t = makeT(lang);
 const totalPages = Math.max(1, Math.ceil(posts.length / POSTS_PER_PAGE));
 const slice = posts.slice((page - 1) * POSTS_PER_PAGE, page * POSTS_PER_PAGE);
 ---
 
-<Section as="h1" id="blog" title="Blog" lead="Notas prácticas sobre automatización, IA aplicada y software para negocio.">
+<Section as="h1" id="blog" title={t('blog.title')} lead={t('blog.description')}>
   <BlogList posts={slice} featuredFirst={page === 1} />
   <Pagination page={page} totalPages={totalPages} />
-  <p class="links"><a href="/blog/etiquetas">Etiquetas</a> · <a href="/blog/archivo">Archivo</a> · <a href="/rss.xml">RSS</a></p>
+  <p class="links"><a href={getLocalizedPath('/blog/etiquetas', lang)}>{t('blog.tagsIndex')}</a> · <a href={getLocalizedPath('/blog/archivo', lang)}>{t('blog.archive')}</a> · <a href={getLocalizedPath('/rss.xml', lang)}>{t('blog.rss')}</a></p>
 </Section>
 
 <style>

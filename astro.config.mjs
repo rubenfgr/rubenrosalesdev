@@ -2,6 +2,8 @@
 import { unified } from '@astrojs/markdown-remark';
 import sitemap from '@astrojs/sitemap';
 import cloudflare from '@astrojs/cloudflare';
+import mdx from '@astrojs/mdx';
+import preact from '@astrojs/preact';
 import { defineConfig, envField } from 'astro/config';
 import expressiveCode from 'astro-expressive-code';
 import remarkDirective from 'remark-directive';
@@ -58,10 +60,12 @@ export default defineConfig({
       CONTACT_TO: envField.string({ context: 'server', access: 'secret', optional: true }),
     },
   },
+  // i18n nativo: español sin prefijo (/), inglés en /en.
+  i18n: { defaultLocale: 'es', locales: ['es', 'en'], routing: { prefixDefaultLocale: false } },
   trailingSlash: 'never',
   build: { format: 'file' },
   integrations: [
-    sitemap(),
+    sitemap({ i18n: { defaultLocale: 'es', locales: { es: 'es-ES', en: 'en-GB' } } }),
     expressiveCode({
       themes: /** @type {Loose} */ ([light]),
       useDarkModeMediaQuery: false,
@@ -74,6 +78,8 @@ export default defineConfig({
         uiFontFamily: 'var(--font-family-sans)',
       },
     }),
+    mdx(),
+    preact(),
   ],
   markdown: {
     processor: unified(),

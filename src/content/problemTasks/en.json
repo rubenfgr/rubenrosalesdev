@@ -1,0 +1,46 @@
+{
+  "items": [
+    {
+      "id": "orders-to-erp",
+      "label": "Copying orders from email into the ERP",
+      "path": "Email → ERP",
+      "hoursPerWeek": 6,
+      "defaultOn": false
+    },
+    {
+      "id": "weekly-report",
+      "label": "Building the weekly report in Excel",
+      "path": "ERP → Excel",
+      "hoursPerWeek": 3,
+      "defaultOn": false
+    },
+    {
+      "id": "supplier-invoices",
+      "label": "Typing in supplier invoices",
+      "path": "PDF → Accounting",
+      "hoursPerWeek": 5,
+      "defaultOn": true
+    },
+    {
+      "id": "where-is-my-order",
+      "label": "Answering “where is my order?”",
+      "path": "WhatsApp → Customer",
+      "hoursPerWeek": 4,
+      "defaultOn": false
+    },
+    {
+      "id": "find-documents",
+      "label": "Looking up a customer's documents",
+      "path": "Folders → Person",
+      "hoursPerWeek": 2,
+      "defaultOn": false
+    },
+    {
+      "id": "payment-reminders",
+      "label": "Chasing overdue payments",
+      "path": "Calendar → Customer",
+      "hoursPerWeek": 3,
+      "defaultOn": false
+    }
+  ]
+}

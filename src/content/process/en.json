@@ -1,0 +1,32 @@
+{
+  "items": [
+    {
+      "id": "discovery",
+      "step": "01",
+      "tag": "30-minute call",
+      "title": "Discovery",
+      "body": "You tell me what is holding you back and I tell you whether automating it makes sense. If it doesn't, I'll tell you that too."
+    },
+    {
+      "id": "proposal",
+      "step": "02",
+      "tag": "Fixed quote",
+      "title": "Proposal and scope",
+      "body": "What gets done, what stays out, how much it costs and how long it takes. In writing, before we start."
+    },
+    {
+      "id": "development",
+      "step": "03",
+      "tag": "Pay per stage",
+      "title": "Iterative development",
+      "body": "Each stage is delivered, tested with your data and invoiced. No surprises at the end."
+    },
+    {
+      "id": "support",
+      "step": "04",
+      "tag": "Monthly fee",
+      "title": "Deployment and support",
+      "body": "I put it into production and look after it. When you want to tackle the next process, we start from here."
+    }
+  ]
+}

@@ -1,0 +1,85 @@
+---
+// Vista de la home, común a «/» y «/en». Fase 1: estructura y datos por idioma; el diseño llega en la Fase 2.
+import { getData } from '../i18n/content';
+import { formatNumber, getLang, t as makeT } from '../i18n';
+import Layout from '../layouts/Layout.astro';
+
+const lang = getLang(Astro.url);
+const t = makeT(lang);
+const [services, problem, tray, process, projects, faq, integrations, site] = await Promise.all([
+  getData('services', lang),
+  getData('problemTasks', lang),
+  getData('trayItems', lang),
+  getData('process', lang),
+  getData('projects', lang),
+  getData('faq', lang),
+  getData('integrationCases', lang),
+  getData('site', lang),
+]);
+const totalHours = problem.items.reduce((sum, i) => sum + i.hoursPerWeek, 0);
+---
+
+<Layout>
+  <section id="top" class="container block">
+    <h1>
+      {t('hero.headline.a.l1')} {t('hero.headline.a.l2')} {t('hero.headline.a.l3')}
+    </h1>
+    <p>{t('hero.lead')}</p>
+    <p>
+      <a class="btn btn-primary" href="#contacto">{t('hero.ctaPrimary')}</a>
+      <a class="btn btn-secondary" href="#proyectos">{t('hero.ctaSecondary')}</a>
+    </p>
+  </section>
+
+  <section id="integraciones" class="container block">
+    <h2>{t('integrations.title1')} {t('integrations.title2')}</h2>
+    <ul>{integrations.items.map((c) => <li>{c.pending} → {c.done}</li>)}</ul>
+  </section>
+
+  <section id="problema" class="container block">
+    <h2>{t('problem.title1')} {t('problem.title2')}</h2>
+    <p>{t('problem.manualPerWeek')}: {formatNumber(lang, totalHours)} {t('problem.hoursUnit')}</p>
+    <ul>{problem.items.map((i) => <li>{i.label} · {t('problem.hoursPerWeek', { hours: i.hoursPerWeek })}</li>)}</ul>
+  </section>
+
+  <section id="servicios" class="container block">
+    <h2>{t('services.title1')} {t('services.title2')}</h2>
+    <p>{t('services.lead')}</p>
+    <ul>{services.items.map((s) => <li><strong>{s.name}</strong>: {s.title}. {s.body}</li>)}</ul>
+  </section>
+
+  <section id="como-funciona" class="container block">
+    <h2>{t('tray.title1')} {t('tray.title2')}</h2>
+    <ul>{tray.items.map((i) => <li>{i.title} · {i.confidence} %</li>)}</ul>
+  </section>
+
+  <section id="calculadora" class="container block">
+    <h2>{t('calculator.title1')} {t('calculator.title2')}</h2>
+  </section>
+
+  <section id="proceso" class="container block">
+    <h2>{t('process.title1')} {t('process.title2')}</h2>
+    <ol>{process.items.map((p) => <li><strong>{p.title}</strong>: {p.body}</li>)}</ol>
+  </section>
+
+  <section id="proyectos" class="container block">
+    <h2>{t('projects.title1')} {t('projects.title2')}</h2>
+    <p>{t('projects.lead')}</p>
+    <ul>{projects.items.map((p) => <li>{p.year} · {t(`projects.status.${p.status}`)} · {p.title}</li>)}</ul>
+  </section>
+
+  <section id="faq" class="container block">
+    <h2>{t('faq.title1')} {t('faq.title2')}</h2>
+    <dl>{faq.items.map((f) => <><dt>{f.question}</dt><dd>{f.answer}</dd></>)}</dl>
+  </section>
+
+  <section id="contacto" class="container block">
+    <h2>{t('contact.title1')} {t('contact.title2')}</h2>
+    <p>{t('contact.lead')}</p>
+    <p><a href={`mailto:${site.contact.email}`}>{site.contact.email}</a> · {site.contact.responseTime}</p>
+  </section>
+</Layout>
+
+<style>
+  .block { padding-block: var(--space-7); }
+</style>

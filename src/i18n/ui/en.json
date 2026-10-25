@@ -1,0 +1,511 @@
+{
+  "meta": {
+    "siteName": "Rubén Rosales",
+    "htmlLang": "en",
+    "ogLocale": "en_GB",
+    "rssTitle": "Rubén Rosales's blog",
+    "rssDescription": "Practical notes on automation, applied AI and business software.",
+    "notFoundTitle": "Page not found"
+  },
+  "a11y": {
+    "skipToContent": "Skip to content",
+    "menu": "Menu",
+    "closeMenu": "Close menu",
+    "openMenu": "Open menu",
+    "mainNav": "Main navigation",
+    "homeLink": "Rubén Rosales, go to the home page",
+    "readingProgress": "Reading progress",
+    "language": "Language",
+    "logoAlt": "Rubén Rosales logo"
+  },
+  "lang": {
+    "es": "Español",
+    "en": "English",
+    "switchTo": "Switch to {lang}"
+  },
+  "footer": {
+    "navigate": "NAVIGATE",
+    "contact": "CONTACT",
+    "legal": "LEGAL",
+    "copyright": "© {year} Rubén Rosales",
+    "prompt": "$ echo \"{motto}\""
+  },
+  "hero": {
+    "headline": {
+      "a": {
+        "l1": "Processes that",
+        "l2": "run",
+        "l3": "themselves."
+      },
+      "b": {
+        "l1": "The repetitive",
+        "l2": "work,",
+        "l3": "taken care of."
+      },
+      "c": {
+        "l1": "Your operations,",
+        "l2": "on",
+        "l3": "autopilot."
+      }
+    },
+    "lead": "I automate processes and add AI agents to the systems you already use. They read, decide and record for you, with clear rules, supervision where it matters and every action traced.",
+    "ctaPrimary": "Tell me about your project",
+    "ctaSecondary": "Explore projects",
+    "pillars": {
+      "automation": {
+        "title": "Automation",
+        "text": "Processes that run themselves."
+      },
+      "agents": {
+        "title": "AI agents",
+        "text": "They read, decide and record."
+      },
+      "integrations": {
+        "title": "Integrations",
+        "text": "Your tools, connected."
+      },
+      "custom": {
+        "title": "Custom software",
+        "text": "What doesn't exist, I build."
+      }
+    },
+    "stats": {
+      "projects": {
+        "value": "20",
+        "label": "projects delivered [VERIFICAR: cifra del diseño]"
+      },
+      "years": {
+        "value": "8",
+        "label": "years of experience [VERIFICAR: cifra del diseño]"
+      }
+    }
+  },
+  "integrations": {
+    "eyebrow": "// I connect what you already use",
+    "title1": "You don't change tools.",
+    "title2": "I connect them.",
+    "lead": "Work keeps arriving the way it does today, it is decided by rules you approve and it ends up stored where you always look for it.",
+    "otherTitle": "Using another tool?",
+    "otherText": "If it stores data, it can be connected.",
+    "exampleLabel": "An example day",
+    "live": "Running",
+    "colIn": "01 · Where it arrives →",
+    "colDecide": "02 · Decided →",
+    "colOut": "03 · Where it is stored",
+    "traced": "every action is traced",
+    "hub": {
+      "rules": "AI with rules",
+      "process": "Your process"
+    },
+    "sources": {
+      "email": "Email",
+      "whatsapp": "WhatsApp",
+      "forms": "Forms",
+      "pdf": "PDFs"
+    },
+    "destinations": {
+      "erp": "ERP",
+      "crm": "CRM",
+      "excel": "Excel",
+      "accounting": "Accounting"
+    },
+    "todaySuffix": "today",
+    "viewExample": "See example: {source}",
+    "waitingApproval": "Waiting for your approval",
+    "inProgress": "In progress…",
+    "metrics": {
+      "saved": "recovered today",
+      "tasks": "tasks resolved",
+      "human": "with your approval"
+    },
+    "units": {
+      "hours": "h",
+      "minutes": "min"
+    }
+  },
+  "problem": {
+    "eyebrow": "00 / diagnosis",
+    "title1": "Your company works.",
+    "title2": "But someone is acting as the bridge.",
+    "lead": "Each program does its own thing and people copy data from one to another. It works as long as nobody is off sick and nobody makes a mistake. Tap the ones that sound familiar and see what happens when they stop being done by hand.",
+    "manualPerWeek": "BY HAND / WEEK",
+    "recovered": "RECOVERED",
+    "hoursUnit": "h",
+    "listTitle": "Manual bridges",
+    "listSubtitle": "A typical week in a small business",
+    "automateAll": "Automate everything",
+    "reset": "Reset",
+    "automated": "automated",
+    "hoursPerWeek": "{hours} h/wk",
+    "returned": "Given back to your team",
+    "daysPerMonth": "≈ {days} working days a month"
+  },
+  "services": {
+    "eyebrow": "01 / services",
+    "title1": "Four disciplines.",
+    "title2": "One standard.",
+    "lead": "For small businesses and professionals. I start with the part that holds you back most and leave it working in production.",
+    "techNote": "Technical profile? Tools are chosen to fit your case.",
+    "techCta": "Ask me about the stack →"
+  },
+  "tray": {
+    "eyebrow": "02 / control",
+    "title1": "The AI does the work.",
+    "title2": "You decide how far it goes.",
+    "lead": "When something isn't clear, it doesn't make it up: it asks you. And everything it does is written down, with the reason. Try it.",
+    "howMuchFreedom": "How much freedom do you give it?",
+    "pause": "Pause",
+    "resume": "Resume",
+    "isItClear": "Is it sure?",
+    "confidence": {
+      "yes": "Yes",
+      "maybe": "More or less",
+      "no": "No"
+    },
+    "waitingForOk": "Waiting for your OK",
+    "nothingPending": "Nothing pending. Everything that arrived was clear.",
+    "approve": "Approve",
+    "doItMyself": "I'll do it",
+    "logTitle": "What it has done, and why",
+    "today": "Today",
+    "who": {
+      "auto": "Automatic",
+      "approved": "Approved by you",
+      "corrected": "Corrected by you"
+    },
+    "tags": {
+      "order": "ORDER",
+      "pdf": "PDF",
+      "email": "EMAIL"
+    },
+    "badges": {
+      "euTitle": "Your data, in the EU",
+      "euText": "It only accesses what is essential.",
+      "ownTitle": "The system is yours",
+      "ownText": "Code and documentation delivered."
+    }
+  },
+  "calculator": {
+    "eyebrow": "03 / calculator",
+    "title1": "How much does",
+    "title2": "the repetitive work cost you?",
+    "note": "Conservative estimate: we automate {pct} of repetitive tasks over {weeks} working weeks.",
+    "team": "Team size",
+    "teamUnit": "people",
+    "hours": "Repetitive hours / person / week",
+    "hoursUnit": "hours",
+    "rate": "Hourly cost for the company",
+    "rateUnit": "€ / hour",
+    "annualSaving": "ESTIMATED ANNUAL SAVING",
+    "perMonth": "≈ {amount} a month that currently goes on acting as the bridge.",
+    "todayHours": "Today · hours/year",
+    "automatedHours": "Automated · hours/year",
+    "recoveredHours": "Hours recovered",
+    "equivalent": "Equivalent",
+    "fte": "FTE",
+    "cta": "Validate this figure with me"
+  },
+  "process": {
+    "eyebrow": "04 / method",
+    "title1": "You know what you pay",
+    "title2": "and what you get at each step."
+  },
+  "projects": {
+    "eyebrow": "05 / projects",
+    "title1": "Work in production,",
+    "title2": "not in presentations.",
+    "lead": "17 private projects, built on behalf of companies and institutions. That is why there are no screenshots: if one interests you, I'll tell you about it in person.",
+    "previous": "Previous project",
+    "next": "Next project",
+    "goTo": "Go to project {n}",
+    "privateBadge": "Private project · for a third party",
+    "illustrative": "Illustrative recreation, with made-up data",
+    "moreTitle": "More projects, from 2019 to today",
+    "scrollPrev": "Previous",
+    "scrollNext": "Next",
+    "privateTitle": "Private project",
+    "privateText": "For a third party · no public screenshots",
+    "askTitle": "Want to know how one of them is built?",
+    "askCta": "Ask me about that project →",
+    "filters": {
+      "all": "All",
+      "web": "Web",
+      "app": "Apps",
+      "sensors": "Sensors and networks"
+    },
+    "status": {
+      "in-development": "In development",
+      "maintenance": "In maintenance",
+      "done": "Finished"
+    },
+    "counter": "{current} / {total}"
+  },
+  "faq": {
+    "eyebrow": "06 / questions",
+    "title1": "Worth asking",
+    "title2": "before you start.",
+    "notFound": "Yours isn't here?",
+    "writeMe": "Write to me directly"
+  },
+  "contact": {
+    "eyebrow": "07 / contact",
+    "title1": "Tell me where",
+    "title2": "your operations get stuck.",
+    "lead": "Four questions and I'll prepare a first route for you. If you're in a hurry, leave me a direct message.",
+    "howToTell": "How would you like to tell me?",
+    "modes": {
+      "guided": {
+        "title": "Guided",
+        "description": "4 questions · with a route"
+      },
+      "direct": {
+        "title": "Direct",
+        "description": "A quick message"
+      }
+    },
+    "steps": {
+      "goal": "Goal",
+      "context": "Context",
+      "jam": "The bottleneck",
+      "contact": "Contact"
+    },
+    "direct": {
+      "title": "Write to me directly",
+      "lead": "Three details and your message. I'll reply within one working day.",
+      "send": "Send message"
+    },
+    "fields": {
+      "name": "Name",
+      "email": "Email",
+      "workEmail": "Work email",
+      "company": "Company",
+      "optional": "(optional)",
+      "message": "Your message",
+      "phone": "Phone",
+      "tools": "Which tools do you use?",
+      "team": "How many of you are there?",
+      "when": "By when?",
+      "howContinue": "How would you like to continue?"
+    },
+    "placeholders": {
+      "name": "Laura Martí",
+      "email": "laura@company.com",
+      "company": "Martí Distribution",
+      "messageDirect": "Tell me in a couple of lines what you need.",
+      "messageGuided": "E.g. two people spend every morning copying orders from email into the system by hand…",
+      "phone": "600 000 000",
+      "otherTool": "Another one? Type it here"
+    },
+    "consent": "I agree that you may use this data only to reply to me, in line with the GDPR. It is not shared with anyone and I can ask for it to be deleted at any time.",
+    "errors": {
+      "name": "Please enter your name.",
+      "emailInvalid": "I need a valid email.",
+      "messageShort": "Write at least one sentence.",
+      "consent": "I need your permission to be able to reply.",
+      "goal": "Choose at least one option.",
+      "jamShort": "Tell me a bit more.",
+      "phone": "Enter a phone number so I can call you.",
+      "send": "It could not be sent. Try again or write to me at {email}."
+    },
+    "q1": {
+      "counter": "Question 1 of 4",
+      "title": "What would you like to solve?",
+      "hint": "Choose everything that applies."
+    },
+    "q2": {
+      "counter": "Question 2 of 4",
+      "title": "A bit of context"
+    },
+    "q3": {
+      "counter": "Question 3 of 4",
+      "title": "Where is the time lost?",
+      "hint": "Tell it the way you would to a colleague. No jargon.",
+      "enough": "Perfect, that gives me a good idea.",
+      "notEnough": "Two or three sentences is enough.",
+      "examplesTitle": "Does one sound familiar? Tap it to start from there:",
+      "examples": {
+        "orders": "We copy orders from email into the management system by hand.",
+        "reports": "We build the same reports in Excel every week.",
+        "silos": "Each program has its own data and nothing adds up between them."
+      }
+    },
+    "q4": {
+      "counter": "Question 4 of 4",
+      "title": "Where should I reply?"
+    },
+    "goals": {
+      "repetitive": {
+        "title": "Remove repetitive tasks",
+        "description": "Copying data, passing on orders, sending notices",
+        "routeTitle": "Automate what repeats most",
+        "routeText": "Find the task that eats the most hours and remove it first."
+      },
+      "documents-ai": {
+        "title": "Use AI with my documents",
+        "description": "Read emails, invoices or contracts",
+        "routeTitle": "Try the AI on your documents",
+        "routeText": "A trial with real documents before putting it into service."
+      },
+      "connect": {
+        "title": "Connect my programs",
+        "description": "So they stop talking through Excel",
+        "routeTitle": "Join up the programs you already use",
+        "routeText": "Data flows from one to another on its own, with no copy and paste."
+      },
+      "web": {
+        "title": "A website or platform",
+        "description": "Bookings, management, customer portal",
+        "routeTitle": "A first version of the site",
+        "routeText": "Define the key screens and launch early, to improve with real use."
+      },
+      "app": {
+        "title": "An app for the team",
+        "description": "Fieldwork, warehouse, work reports",
+        "routeTitle": "An app built with your team",
+        "routeText": "Design it with the people who will use it every day."
+      },
+      "unsure": {
+        "title": "I'm not sure yet",
+        "description": "We'll work it out together",
+        "routeTitle": "A call to sort out ideas",
+        "routeText": "We work out together what is worth doing first and what isn't worth touching."
+      }
+    },
+    "sizes": {
+      "1-5": "1–5",
+      "6-20": "6–20",
+      "21-50": "21–50",
+      "50-plus": "More than 50"
+    },
+    "whens": {
+      "asap": "As soon as possible",
+      "quarter": "This quarter",
+      "looking": "Just looking"
+    },
+    "tools": {
+      "excel": "Excel",
+      "mail": "Gmail / Outlook",
+      "whatsapp": "WhatsApp",
+      "holded": "Holded",
+      "a3": "A3",
+      "sage": "Sage",
+      "erp": "In-house ERP"
+    },
+    "prefs": {
+      "email": "Reply by email",
+      "call": "I'd rather have a call"
+    },
+    "nav": {
+      "back": "← Back",
+      "next": "Next",
+      "submit": "Send my case",
+      "sending": "Sending…",
+      "keysHint": "You can use keys 1–6",
+      "ctrlEnter": "Ctrl + Enter to continue"
+    },
+    "sheet": {
+      "title": "First route · draft",
+      "forPrefix": "For {names}",
+      "defaultName": "Your case",
+      "status": {
+        "blank": "Blank",
+        "forming": "Taking shape",
+        "sent": "Sent"
+      },
+      "whereStart": "Where I would start",
+      "fillHint": "It fills in with your first answer.",
+      "team": "Team",
+      "teamValue": "{size} people",
+      "when": "Timeframe",
+      "tools": "Programs you already use",
+      "jamTitle": "The bottleneck, in your words",
+      "jamEmpty": "What you tell me in question 3 will appear here.",
+      "empty": "—"
+    },
+    "sent": {
+      "title": "Received, {name}.",
+      "callLine": "I'll call you on",
+      "mailLine": "I'll write to you at",
+      "inOneDay": "within one working day.",
+      "another": "Send another case",
+      "guided": {
+        "s1": {
+          "title": "I read your case",
+          "text": "With the route you have just seen, I already know where to start."
+        },
+        "s2Mail": {
+          "title": "I reply by email",
+          "text": "With a first proposal: what I would do first and what isn't worth touching."
+        },
+        "s2Call": {
+          "title": "I call you",
+          "text": "With a first proposal: what I would do first and what isn't worth touching."
+        },
+        "s3": {
+          "title": "You decide with numbers",
+          "text": "If it fits, I'll send a proposal with a fixed scope and price."
+        }
+      },
+      "direct": {
+        "s1": {
+          "title": "I read your message",
+          "text": "If I'm missing something to understand your case, I'll ask you."
+        },
+        "s2": {
+          "title": "I reply by email",
+          "text": "With a first idea of where I would start."
+        },
+        "s3": {
+          "title": "You decide with numbers",
+          "text": "If it fits, I'll send a proposal with a fixed scope and price."
+        }
+      }
+    },
+    "aside": {
+      "reviewer": "Reviewed by Rubén Rosales",
+      "reviewerText": "You talk to the person who builds it. No salespeople.",
+      "preferWrite": "Prefer to write?",
+      "location": "Spain · working remotely"
+    }
+  },
+  "blog": {
+    "title": "Blog",
+    "description": "Practical notes on automation, applied AI and business software.",
+    "backHome": "← Back to home",
+    "onThisPage": "on this page",
+    "moreArticles": "/ more articles",
+    "readingTime": "{minutes} min read",
+    "author": "Rubén Rosales",
+    "authorRole": "Software engineer",
+    "authorInitials": "RR",
+    "tags": "Tags",
+    "previous": "← Previous",
+    "next": "Next →",
+    "adjacentLabel": "Adjacent articles",
+    "tocLabel": "Article contents",
+    "editOnGithub": "Edit on GitHub",
+    "empty": "There are no articles yet.",
+    "updatedOn": "Updated on {date}",
+    "translationMissing": "This article is not available in this language.",
+    "newer": "← Newer",
+    "older": "Older →",
+    "pagination": "Pagination",
+    "recent": "Recent articles",
+    "archive": "Archive",
+    "viewArchive": "View archive",
+    "tocTitle": "In this article",
+    "tagsIndex": "Tags",
+    "rss": "RSS"
+  },
+  "assistant": {
+    "fabAria": "Open assistant",
+    "panelAria": "Rubén's assistant",
+    "close": "Close",
+    "restart": "Start over",
+    "send": "Send",
+    "messageAria": "Message",
+    "inputPlaceholder": "Type your message…",
+    "fabTitle": "Have a project?",
+    "fabSubtitle": "Tell the assistant"
+  }
+}

@@ -1,0 +1,39 @@
+{
+  "items": [
+    {
+      "id": "no-change-tools",
+      "question": "Do I have to replace the software I already use?",
+      "answer": "No. I connect to your ERP, CRM, accounting or spreadsheets. If one of them has no way to integrate, I build the bridge. I only suggest new software when what you have is genuinely holding you back."
+    },
+    {
+      "id": "data-and-ai",
+      "question": "Does my data leave the company when AI is used?",
+      "answer": "Only if you decide so. I work with OpenAI, Anthropic and other models under plans that don't train on your data, or with models running on your own infrastructure. Everything is documented and aligned with the GDPR."
+    },
+    {
+      "id": "gdpr",
+      "question": "Is it GDPR compliant? Where is my data stored?",
+      "answer": "Yes. Every project is designed to comply with the GDPR: only the data that is needed, controlled access and a signed data processing agreement. We choose the servers together; by default I suggest servers in Spain and, if you prefer another provider or your own machines, it is installed there."
+    },
+    {
+      "id": "ai-mistakes",
+      "question": "What if the AI makes a mistake?",
+      "answer": "That's why it starts supervised: you approve what matters and, when something doesn't add up, it asks you instead of making it up. Every action is logged so you can review and correct it."
+    },
+    {
+      "id": "cost",
+      "question": "How much does a typical project cost?",
+      "answer": "It depends on the scope. First I understand the process, then I give you a proposal with a fixed scope and price so you can decide with real numbers."
+    },
+    {
+      "id": "time-to-production",
+      "question": "How long until it is in production?",
+      "answer": "I work in iterative deliveries: the first useful part arrives early and the rest is added in stages. I would rather deliver something small and reliable soon than something big and fragile late."
+    },
+    {
+      "id": "after-failure",
+      "question": "What happens if something fails later?",
+      "answer": "Every system includes monitoring and alerts. After delivery I offer support and further development to keep it running and to extend it."
+    }
+  ]
+}

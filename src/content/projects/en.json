@@ -1,0 +1,257 @@
+{
+  "items": [
+    {
+      "id": "customer-orders-ai",
+      "featured": true,
+      "category": "ai-automation",
+      "type": "AI · Automation",
+      "status": "in-development",
+      "year": 2025,
+      "title": "Customer orders that enter the management system on their own.",
+      "summary": "It reads the emails and documents customers send, extracts the order data, checks it and creates the order in the company CRM/ERP.",
+      "includes": [
+        "Reading emails and documents",
+        "Data checks",
+        "Automatic order creation"
+      ]
+    },
+    {
+      "id": "rental-guest-surveys",
+      "featured": true,
+      "category": "web",
+      "type": "Web",
+      "status": "in-development",
+      "year": 2025,
+      "title": "What guests think of each rental house.",
+      "summary": "An automatic survey is sent after every stay. The answers are gathered into dashboards and reports to see which houses work and which do not.",
+      "includes": [
+        "Automatic surveys",
+        "Opinion analysis",
+        "Dashboards and reports"
+      ]
+    },
+    {
+      "id": "barcode-inventory-app",
+      "featured": true,
+      "category": "app",
+      "type": "App",
+      "status": "in-development",
+      "year": 2025,
+      "title": "Inventory with the phone camera, with or without signal.",
+      "summary": "An iPhone and Android app that reads each item's barcode. It keeps working offline and syncs everything by itself once the connection is back.",
+      "includes": [
+        "Camera scanning",
+        "Works offline",
+        "Instant data"
+      ]
+    },
+    {
+      "id": "noise-sensors",
+      "featured": true,
+      "category": "sensors",
+      "type": "Sensors",
+      "status": "in-development",
+      "year": 2025,
+      "title": "Noise measured live, with an alert when the limit is exceeded.",
+      "summary": "Sensors that measure the noise level and are configured from a phone over Bluetooth. A dashboard shows readings instantly, alerts when the limit is exceeded and keeps the history.",
+      "includes": [
+        "Real-time alerts",
+        "Adjustable limits",
+        "History and reports"
+      ]
+    },
+    {
+      "id": "fitness-training-platform",
+      "featured": false,
+      "category": "web",
+      "type": "Web",
+      "status": "in-development",
+      "year": 2025,
+      "title": "Training platform for fitness, nutrition and health",
+      "summary": "A sports course platform with content and student management.",
+      "includes": [
+        "Courses with video and material",
+        "Progress tracking for each student",
+        "Assessments"
+      ]
+    },
+    {
+      "id": "university-scholarships",
+      "featured": false,
+      "category": "web",
+      "type": "Web",
+      "status": "maintenance",
+      "year": 2024,
+      "title": "University scholarship management",
+      "summary": "Management of a university's scholarships and grants, from application to document verification.",
+      "includes": [
+        "Online applications",
+        "Sign-in with the university account",
+        "Email notifications"
+      ]
+    },
+    {
+      "id": "language-centre-website",
+      "featured": false,
+      "category": "web",
+      "type": "Web",
+      "status": "maintenance",
+      "year": 2024,
+      "title": "Website of the University of Almería Language Centre",
+      "summary": "A multilingual information website, built to load fast and rank well in search engines.",
+      "includes": [
+        "Dashboard to edit the content",
+        "Courses, timetables and teaching staff",
+        "Several languages"
+      ]
+    },
+    {
+      "id": "property-management",
+      "featured": false,
+      "category": "web",
+      "type": "Web",
+      "status": "maintenance",
+      "year": 2024,
+      "title": "Property management",
+      "summary": "Properties, tenants and payments on a single platform.",
+      "includes": [
+        "3D floor plans",
+        "Smart locks to control access",
+        "Digital contract signing and automatic reports"
+      ]
+    },
+    {
+      "id": "payroll-management",
+      "featured": false,
+      "category": "web",
+      "type": "Web",
+      "status": "maintenance",
+      "year": 2023,
+      "title": "Payroll management",
+      "summary": "Payroll and leave for the workforce, connected to the company's HR software.",
+      "includes": [
+        "Export to Excel",
+        "Automatic emails",
+        "Users and permissions by role"
+      ]
+    },
+    {
+      "id": "vehicle-transfers",
+      "featured": false,
+      "category": "web",
+      "type": "Web",
+      "status": "maintenance",
+      "year": 2023,
+      "title": "Vehicle transfer paperwork",
+      "summary": "All of a vehicle's paperwork from a single website, connected to external systems.",
+      "includes": [
+        "Transfers and reports",
+        "Registrations, cancellations and plates",
+        "Duplicate registration documents and licences"
+      ]
+    },
+    {
+      "id": "precision-agriculture",
+      "featured": false,
+      "category": "sensors",
+      "type": "Sensors",
+      "status": "done",
+      "year": 2023,
+      "title": "Precision agriculture prototype",
+      "summary": "Field sensors that send their readings over long-range radio to a dashboard.",
+      "includes": [
+        "Field sensor readings",
+        "Trend charts",
+        "Alerts"
+      ]
+    },
+    {
+      "id": "lease-accounting",
+      "featured": false,
+      "category": "web",
+      "type": "Web",
+      "status": "maintenance",
+      "year": 2022,
+      "title": "Lease contract accounting",
+      "summary": "Accounting treatment of lease contracts under IFRS 16.",
+      "includes": [
+        "Contract register",
+        "Depreciation calculation",
+        "Export to the accounting software"
+      ]
+    },
+    {
+      "id": "locks-and-alarms",
+      "featured": false,
+      "category": "app",
+      "type": "App and web",
+      "status": "maintenance",
+      "year": 2022,
+      "title": "Lock and alarm control",
+      "summary": "A web dashboard and an iPhone and Android app to manage locks and alarms.",
+      "includes": [
+        "Admin dashboard",
+        "iOS and Android apps",
+        "Connection to third-party systems"
+      ]
+    },
+    {
+      "id": "cooperative-production-control",
+      "featured": false,
+      "category": "web",
+      "type": "Web",
+      "status": "done",
+      "year": 2021,
+      "title": "Production control for cooperatives",
+      "summary": "Support on a production control platform for cooperatives.",
+      "includes": [
+        "Sensors on the shop floor",
+        "Reports",
+        "Traceability"
+      ]
+    },
+    {
+      "id": "inventory-desktop",
+      "featured": false,
+      "category": "app",
+      "type": "Desktop software",
+      "status": "done",
+      "year": 2020,
+      "title": "Inventory control",
+      "summary": "Inventory software connected to another system to keep stock always up to date.",
+      "includes": [
+        "Automatic stock synchronisation",
+        "Reports by warehouse"
+      ]
+    },
+    {
+      "id": "remote-equipment-control",
+      "featured": false,
+      "category": "sensors",
+      "type": "Sensors",
+      "status": "done",
+      "year": 2020,
+      "title": "Remote equipment control",
+      "summary": "Remote control and monitoring of equipment, connected over the mobile network.",
+      "includes": [
+        "Remote control",
+        "Sensor readings",
+        "4G connection"
+      ]
+    },
+    {
+      "id": "video-surveillance-network",
+      "featured": false,
+      "category": "sensors",
+      "type": "Networks",
+      "status": "done",
+      "year": 2019,
+      "title": "Video surveillance network",
+      "summary": "A local network extended several kilometres with antennas to install video surveillance.",
+      "includes": [
+        "Antenna links",
+        "Camera management"
+      ]
+    }
+  ]
+}
