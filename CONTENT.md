@@ -6,20 +6,20 @@ Cómo añadir contenido nuevo (en español e inglés) sin tocar componentes. Com
 
 | Qué | Dónde | Cómo se edita |
 |---|---|---|
-| Textos de interfaz (botones, etiquetas, aria, errores, titulares de sección) | `src/i18n/ui/{es,en}.json` | A mano; claves anidadas por sección (`hero.ctaPrimary`, `contact.errors.emailInvalid`) |
-| Servicios (4) | `src/content/services/{es,en}.json` | A mano |
-| Proyectos | `src/content/projects/{es,en}.json` | `pnpm content:new projects <slug>` |
-| FAQ | `src/content/faq/{es,en}.json` | `pnpm content:new faq <slug>` |
-| Pasos del método | `src/content/process/{es,en}.json` | `pnpm content:new process <slug>` |
-| Tareas del diagnóstico | `src/content/problemTasks/{es,en}.json` | `pnpm content:new problemTasks <slug>` |
-| Casos de «Integraciones», bandeja de «Cómo funciona» | `src/content/integrationCases`, `trayItems` | A mano |
-| Navegación, footer, SEO, contacto, redes | `src/content/site/{es,en}.json` | A mano |
-| Asistente (guiones, bio, tarjetas) | `src/content/assistant/{es,en}.json` | A mano |
-| Rangos de precio del asistente (sin idioma) | `src/content/assistant/pricing.json` | A mano; `placeholder: true` hasta confirmar |
-| Artículos | `src/content/blog/{es,en}/<slug>.mdx` | `pnpm content:new blog <slug> [slug-en]` |
-| Casos de estudio largos (diseño anterior, sin usar) | `src/content/case-studies/*.md` | — |
+| Textos de interfaz (botones, etiquetas, aria, errores, titulares de sección) | `apps/web/src/i18n/ui/{es,en}.json` | A mano; claves anidadas por sección (`hero.ctaPrimary`, `contact.errors.emailInvalid`) |
+| Servicios (4) | `apps/web/src/content/services/{es,en}.json` | A mano |
+| Proyectos | `apps/web/src/content/projects/{es,en}.json` | `pnpm content:new projects <slug>` |
+| FAQ | `apps/web/src/content/faq/{es,en}.json` | `pnpm content:new faq <slug>` |
+| Pasos del método | `apps/web/src/content/process/{es,en}.json` | `pnpm content:new process <slug>` |
+| Tareas del diagnóstico | `apps/web/src/content/problemTasks/{es,en}.json` | `pnpm content:new problemTasks <slug>` |
+| Casos de «Integraciones», bandeja de «Cómo funciona» | `apps/web/src/content/integrationCases`, `trayItems` | A mano |
+| Navegación, footer, SEO, contacto, redes | `apps/web/src/content/site/{es,en}.json` | A mano |
+| Asistente (guiones, bio, tarjetas) | `apps/web/src/content/assistant/{es,en}.json` | A mano |
+| Rangos de precio del asistente (sin idioma) | `apps/web/src/content/assistant/pricing.json` | A mano; `placeholder: true` hasta confirmar |
+| Artículos | `apps/web/apps/web/src/content/blog/{es,en}/<slug>.mdx` | `pnpm content:new blog <slug> [slug-en]` |
+| Casos de estudio largos (diseño anterior, sin usar) | `apps/web/src/content/case-studies/*.md` | — |
 
-Regla de oro: **mismo `id` en `es` y `en`** (en blog, mismo `translationKey`). Los esquemas Zod están en `src/content.config.ts`.
+Regla de oro: **mismo `id` en `es` y `en`** (en blog, mismo `translationKey`). Los esquemas Zod están en `apps/web/src/content.config.ts`.
 
 ## Esquemas (resumen)
 

@@ -4,8 +4,8 @@ Web pública de rubenrosales.dev: servicios, proyectos y blog. Astro estático, 
 
 ## Fuentes de verdad
 
-- **Diseño:** `src/styles/tokens.css` y `docs/brand-guidelines.md`. Los componentes usan solo tokens semánticos (`--color-*`, `--space-*`, `--font-*`…), nunca primitivos (`--rr-*`) ni valores sueltos.
-- **Contenido:** colecciones en `src/content/` con esquema validado. Un frontmatter inválido debe romper el build.
+- **Diseño:** `apps/web/src/styles/tokens.css` y `docs/brand-guidelines.md`. Los componentes usan solo tokens semánticos (`--color-*`, `--space-*`, `--font-*`…), nunca primitivos (`--rr-*`) ni valores sueltos.
+- **Contenido:** colecciones en `apps/web/src/content/` con esquema validado. Un frontmatter inválido debe romper el build.
 - **Requisitos del rediseño:** `redesign-kit/specs/web-spec.md` (mientras exista el kit).
 
 ## Reglas de trabajo
@@ -31,4 +31,4 @@ Ver `package.json`. Antes de dar una tarea por terminada: check de tipos, build 
 
 ## Blog
 
-Ver `docs/escribir-un-post.md`. Un artículo = un fichero por idioma en `src/content/blog/{es,en}/<slug>.mdx`.
+Ver `docs/escribir-un-post.md`. Un artículo = un fichero por idioma en `apps/web/apps/web/src/content/blog/{es,en}/<slug>.mdx`.

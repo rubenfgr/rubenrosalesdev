@@ -1,10 +1,11 @@
-// Genera src/data/redirects.generated.json (lo aplica src/middleware.ts) y docs/redirecciones.md a partir de src/data/legacy.json.
+// Genera src/data/redirects.generated.json (lo aplica src/pages/[...path].ts) y docs/redirecciones.md (en la raíz del repo) a partir de src/data/legacy.json.
 // El destino de cada artículo o proyecto antiguo depende del contenido actual:
 // si sigue publicado, va a su URL nueva; si no, a /blog o /proyectos.
 import fs from 'node:fs';
 import path from 'node:path';
 
 const root = path.resolve(import.meta.dirname, '..');
+const repoRoot = path.resolve(root, '../..');
 const legacy = JSON.parse(fs.readFileSync(path.join(root, 'src/data/legacy.json'), 'utf8'));
 
 const frontmatter = (file) => fs.readFileSync(file, 'utf8').match(/^---\n([\s\S]*?)\n---/)?.[1] ?? '';
@@ -60,6 +61,6 @@ const md = [
   ...rows.map(([from, to]) => `| \`${from}\` | \`${to}\` |`),
   '',
 ].join('\n');
-fs.mkdirSync(path.join(root, 'docs'), { recursive: true });
-fs.writeFileSync(path.join(root, 'docs/redirecciones.md'), md);
+fs.mkdirSync(path.join(repoRoot, 'docs'), { recursive: true });
+fs.writeFileSync(path.join(repoRoot, 'docs/redirecciones.md'), md);
 console.log(`Redirecciones: ${rows.length} reglas`);

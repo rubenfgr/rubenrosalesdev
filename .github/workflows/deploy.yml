@@ -27,7 +27,7 @@ jobs:
       # GUARDS_STRICT=1: el build falla si queda un [VERIFICAR] o un borrador enlazado (nada de eso llega a producción).
       - name: Construir imagen
         run: |
-          docker build --build-arg GUARDS_STRICT=1 \
+          docker build -f apps/web/Dockerfile --build-arg GUARDS_STRICT=1 \
             --build-arg PUBLIC_ASSISTANT_ENABLED="${{ vars.PUBLIC_ASSISTANT_ENABLED }}" \
             --build-arg PUBLIC_CF_ANALYTICS_TOKEN="${{ vars.PUBLIC_CF_ANALYTICS_TOKEN }}" \
             -t "$IMAGE:latest" -t "$IMAGE:${{ github.sha }}" .

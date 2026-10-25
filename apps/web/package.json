@@ -1,0 +1,35 @@
+{
+  "name": "@rr/web",
+  "type": "module",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "dev": "astro dev",
+    "build": "node scripts/generate-redirects.mjs && astro build && node scripts/check-build.mjs",
+    "preview": "astro preview",
+    "check": "astro check",
+    "build:prod": "GUARDS_STRICT=1 pnpm build",
+    "i18n:check": "node scripts/i18n-check.mjs",
+    "prebuild": "node scripts/i18n-check.mjs",
+    "content:new": "node scripts/content-new.mjs",
+    "dev:tailscale": "astro dev --host"
+  },
+  "dependencies": {
+    "@astrojs/check": "^0.9.12",
+    "@astrojs/markdown-remark": "^7.3.4",
+    "@astrojs/mdx": "^8.1.1",
+    "@astrojs/node": "^11.1.9",
+    "@astrojs/preact": "^6.1.1",
+    "@astrojs/rss": "4.0.19",
+    "@astrojs/sitemap": "3.7.4",
+    "@fontsource-variable/archivo": "^5.3.0",
+    "@lucide/astro": "^1.61.0",
+    "astro": "^7.4.2",
+    "astro-expressive-code": "0.44.3",
+    "lenis": "^1.3.27",
+    "preact": "^11.0.2",
+    "remark-directive": "4.0.0",
+    "sharp": "^0.35.5",
+    "typescript": "^6.0.3"
+  }
+}
