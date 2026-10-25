@@ -1,5 +1,5 @@
 # Stack de la web en el VPS. Va detrás de Traefik (red externa «proxy», certresolver «letsencrypt»).
-# Se copia al servidor en /opt/rubenrosales/ y lo actualiza el workflow de GitHub Actions.
+# Se copia al servidor en /opt/apps/projects/rubenrosalesdev/ y lo actualiza el workflow de GitHub Actions.
 services:
   web:
     image: ghcr.io/rubenfgr/rubenrosalesdev-web:latest

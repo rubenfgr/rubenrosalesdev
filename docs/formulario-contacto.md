@@ -17,7 +17,7 @@ El formulario guiado, el directo y el resumen del asistente envían JSON a `POST
 
 Sin ellas, el endpoint responde 503 y el formulario muestra el aviso de error con el email de contacto.
 
-En producción se definen en `/opt/rubenrosales/.env` del VPS (ver [despliegue.md](despliegue.md)). En local, copia `.env.example` a `.env`.
+En producción se definen en `/opt/apps/projects/rubenrosalesdev/.env` del VPS (ver [despliegue.md](despliegue.md)). En local, copia `.env.example` a `.env`.
 
 ## Cómo obtener las credenciales
 

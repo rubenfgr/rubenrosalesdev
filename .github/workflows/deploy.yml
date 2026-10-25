@@ -50,5 +50,5 @@ jobs:
         run: |
           SSH="ssh -i ~/.ssh/id_deploy -p ${{ secrets.VPS_PORT || 22 }}"
           DEST="${{ secrets.VPS_USER }}@${{ secrets.VPS_HOST }}"
-          scp -i ~/.ssh/id_deploy -P ${{ secrets.VPS_PORT || 22 }} deploy/compose.yml "$DEST:/opt/rubenrosales/compose.yml"
-          $SSH "$DEST" "cd /opt/rubenrosales && docker compose pull && docker compose up -d --remove-orphans && docker image prune -f"
+          scp -i ~/.ssh/id_deploy -P ${{ secrets.VPS_PORT || 22 }} deploy/compose.yml "$DEST:/opt/apps/projects/rubenrosalesdev/compose.yml"
+          $SSH "$DEST" "cd /opt/apps/projects/rubenrosalesdev && docker compose pull && docker compose up -d --remove-orphans && docker image prune -f"

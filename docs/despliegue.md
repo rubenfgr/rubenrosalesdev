@@ -8,16 +8,16 @@ La web es un servidor Node (Astro con `@astrojs/node`, modo standalone) en un co
 
 1. Push a `main` → GitHub Actions construye la imagen con `GUARDS_STRICT=1` (si queda un `[VERIFICAR]` o un borrador enlazado, el build falla y **no se despliega nada**).
 2. Publica `ghcr.io/rubenfgr/rubenrosalesdev-web` (`latest` y el SHA del commit).
-3. Copia `deploy/compose.yml` al VPS (`/opt/rubenrosales/`) y ejecuta `docker compose pull && docker compose up -d`.
+3. Copia `deploy/compose.yml` al VPS (`/opt/apps/projects/rubenrosalesdev/`) y ejecuta `docker compose pull && docker compose up -d`.
 4. Traefik enruta `rubenrosales.dev` (y redirige `www` y HTTP a `https://rubenrosales.dev`) con el certificado de Let's Encrypt.
 
 ## Preparar el VPS (una sola vez)
 
 1. Directorio y variables:
    ```bash
-   sudo mkdir -p /opt/rubenrosales && sudo chown $USER /opt/rubenrosales
-   cp deploy/.env.example /opt/rubenrosales/.env   # y rellenar (ver más abajo)
-   chmod 600 /opt/rubenrosales/.env
+   sudo mkdir -p /opt/apps/projects/rubenrosalesdev && sudo chown $USER /opt/apps/projects/rubenrosalesdev
+   cp deploy/.env.example /opt/apps/projects/rubenrosalesdev/.env   # y rellenar (ver más abajo)
+   chmod 600 /opt/apps/projects/rubenrosalesdev/.env
    ```
 2. La red `proxy` de Traefik ya existe (externa). El contenedor se une a ella.
 3. Acceso a la imagen: o haces público el paquete en GitHub (Packages → rubenrosalesdev-web → Package settings → Change visibility), o inicias sesión en el VPS con un token de solo lectura de paquetes: `docker login ghcr.io -u rubenfgr`.
@@ -35,9 +35,9 @@ La web es un servidor Node (Astro con `@astrojs/node`, modo standalone) en un co
 | Variable (opcional) | `PUBLIC_ASSISTANT_ENABLED` | `1` muestra el asistente (ver [asistente.md](asistente.md)) |
 | Variable (opcional) | `PUBLIC_CF_ANALYTICS_TOKEN` | Token de Cloudflare Web Analytics (solo si se usa; antes, actualizar `/cookies`) |
 
-## Variables del servidor (`/opt/rubenrosales/.env`, nunca en el repo)
+## Variables del servidor (`/opt/apps/projects/rubenrosalesdev/.env`, nunca en el repo)
 
-Ver `deploy/.env.example`: proveedor de email (`CONTACT_PROVIDER` = `gmail` o `resend`, `CONTACT_TO`, credenciales) y, si se activa, el LLM del asistente. Detalles en [formulario-contacto.md](formulario-contacto.md). Tras editar el `.env`: `cd /opt/rubenrosales && docker compose up -d`.
+Ver `deploy/.env.example`: proveedor de email (`CONTACT_PROVIDER` = `gmail` o `resend`, `CONTACT_TO`, credenciales) y, si se activa, el LLM del asistente. Detalles en [formulario-contacto.md](formulario-contacto.md). Tras editar el `.env`: `cd /opt/apps/projects/rubenrosalesdev && docker compose up -d`.
 
 ## Operación
 
