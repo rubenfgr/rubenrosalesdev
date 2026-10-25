@@ -247,9 +247,10 @@ Objetivo: endpoint `POST /api/v1/chat` con streaming, herramientas y guardarraí
   - Añade el script al `build` de `@rr/api` (`prebuild`) y al `Dockerfile` de la API (copiar `apps/web/src/content` a la etapa de build; el `.dockerignore` raíz no debe excluirlo).
   - `packages/shared/generated/` se ignora en git (`.gitignore`) y se genera en cada build; añade un test que falla si el JSON no existe.
   - **Aceptación:** `pnpm --filter @rr/api build` genera el JSON; la imagen de la API contiene los datos; **no hay copias manuales** de textos en la API.
-- [ ] **T-3.2 Mover el motor de estimación a `packages/shared`**
+- [x] **T-3.2 Mover el motor de estimación a `packages/shared`**
   - Mueve `apps/web/src/lib/assistant/engine.ts` a `packages/shared/src/assistant/engine.ts` (con sus tipos) y haz que **web y API lo importen** de `@rr/shared`. Borra la copia en la web (`git mv`).
   - Mueve también sus pruebas si existen; si no, **escribe pruebas** de `estimate()` (casos: base; `systems=several` sube el máximo y las semanas; `systems=unknown` baja la confianza; `team=large/small`; redondeo; `canEstimate` con contexto incompleto).
+  - **Hecho en `083df93`.** Se importa por subruta `@rr/shared/engine` (no por el índice) para que la isla no arrastre Zod al bundle del cliente. Mismas estimaciones antes/después (3 casos en una prueba). `pnpm test` en raíz ejecuta todas las pruebas y CI lo usa. Dockerfile de la web copia `packages/shared`.
   - **Aceptación:** `pnpm check` en web y API; pruebas del motor verdes; la UI actual sigue dando las mismas estimaciones (compara 3 casos antes/después).
 - [ ] **T-3.3 Constructor del system prompt en la API**
   - Depende de: T-3.1, T-3.2.
