@@ -42,4 +42,4 @@ Si el formulario empieza a fallar (el servidor registra `contacto: fallo al envi
 
 ## Antispam
 
-El endpoint no tiene límite de peticiones propio. Si hiciera falta, se añade un middleware de Traefik (`ratelimit`) sobre `/api/contacto`.
+El endpoint no tiene límite de peticiones propio. Si hiciera falta, se añade un middleware de Traefik (`ratelimit`) sobre `/api/contact`.
