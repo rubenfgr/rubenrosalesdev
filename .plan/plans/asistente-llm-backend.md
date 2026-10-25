@@ -322,26 +322,32 @@ Objetivo: endpoint `POST /api/v1/chat` con streaming, herramientas y guardarraí
 
 Objetivo: guardar conversaciones, mensajes y leads de forma mínima y reversible. **Bloqueada por D-3 y D-4 para activar el guardado.**
 
-- [ ] **T-4.0 [DECISIÓN] D-3 y D-4** — plazo de conservación, base legal y texto de consentimiento. Anótalos en §4.
-- [ ] **T-4.1 Ajustes de esquema**
+- [x] **T-4.0 [DECISIÓN] D-3 y D-4** — plazo de conservación, base legal y texto de consentimiento. Anótalos en §4.
+- [x] **T-4.1 Ajustes de esquema**
   - Depende de: T-1.2.
   - En `apps/api/src/db/schema.ts` añade: `conversations.ip_hash text`, `conversations.consent_at timestamptz` (nulo = no hay consentimiento y **no se guardan mensajes**), `conversations.expires_at timestamptz` (= creación + plazo de D-3), `messages.tokens_in/tokens_out int` (opcionales), índices por `conversation_id` y `expires_at`. Genera la migración con `pnpm --filter @rr/api db:generate` y **revisa el SQL**.
+  - **Hecho en `351753f`.** Añadido también `leads.expires_at` (12 meses, D-3). Migración `0002` probada en BD limpia y ya migrada.
   - **Aceptación:** migración aplica sobre un Postgres limpio y sobre uno ya migrado.
-- [ ] **T-4.2 Repositorios**
+- [x] **T-4.2 Repositorios**
   - `apps/api/src/db/repositories.ts`: `createConversation`, `appendMessage`, `getRecentMessages`, `createLead`, `deleteExpired`. Pruebas contra Postgres real (contenedor de test o `pg-mem` si resulta fiable; elige la opción que funcione en CI y documenta).
+  - **Hecho en `96fad97`:** pruebas contra Postgres real (`TEST_DATABASE_URL`, se saltan sin ella) y servicio `postgres` en `ci.yml`.
   - **Aceptación:** pruebas de integración verdes (en CI con servicio Postgres: añade un `services: postgres` al job de pruebas de `ci.yml`).
-- [ ] **T-4.3 Guardado condicionado al consentimiento**
+- [x] **T-4.3 Guardado condicionado al consentimiento**
   - `/chat` solo persiste mensajes si la petición incluye `consent: true` (nuevo campo en el contrato) y crea/actualiza `consent_at`. Sin consentimiento, la conversación es **efímera** (solo en memoria del cliente) y funciona igual.
+  - **Hecho en `315a5e9`.** Smoke con Postgres real: conversación y 2 mensajes guardados.
   - **Aceptación:** pruebas: sin consentimiento no hay filas; con consentimiento sí; el contenido del mensaje no aparece en logs.
-- [ ] **T-4.4 `POST /api/v1/leads`**
+- [x] **T-4.4 `POST /api/v1/leads`**
   - Valida con `leadSchema`; antispam: campo señuelo `website` (si viene relleno, responde `200 {ok:true}` sin guardar ni enviar) y tiempo mínimo (`startedAt`, ≥ 3 s, como en `apps/web/src/pages/api/contact.ts`). Guarda el lead, **envía el email a Rubén** (T-4.5) y responde `{ok:true}`.
+  - **Hecho en `cb857f5`.** Si el email falla, el lead queda guardado y responde `502 mail_unavailable`.
   - **Aceptación:** pruebas de validación, honeypot y guardado; el email se prueba con un `Mailer` falso.
-- [ ] **T-4.5 Envío de email desde la API**
+- [x] **T-4.5 Envío de email desde la API**
   - Mueve `apps/web/src/lib/mailer.ts` (Gmail API por `fetch`) a `apps/api/src/services/mailer.ts` (o a `packages/shared` si se reutiliza). Interfaz `Mailer { send(msg) }`; implementación Gmail con `GMAIL_*` y `CONTACT_TO` por entorno; `FakeMailer` para pruebas. Mantén `Reply-To` = visitante y asunto `Asistente web: <nombre>`.
   - Si `CONTACT_PROVIDER=resend` mantén la implementación opcional; si no se usa, no la portes (sin sobreingeniería: Rubén usa Gmail).
+  - **Hecho en `cb857f5`** (`services/gmail.ts`, `mailer.ts`). La copia de la web (`lib/mailer.ts`, `mail.ts`) **se conserva** porque `/api/contact` sigue en uso hasta T-6.6 (D-7); se borra entonces. Resend no se porta.
   - **Aceptación:** pruebas con `FakeMailer`; el texto del email incluye nombre, email, idioma y las líneas del resumen.
-- [ ] **T-4.6 Borrado por caducidad**
+- [x] **T-4.6 Borrado por caducidad**
   - Tarea programada dentro de la API (un `setInterval` diario al arrancar, o comando `node dist/jobs/purge.js` invocado desde el contenedor de backup/cron) que ejecuta `deleteExpired()`. Registra solo el número de filas borradas.
+  - **Hecho en `cb857f5`** (`jobs/purge.ts`, al arrancar y diario; también purga leads caducados).
   - **Aceptación:** prueba que crea una conversación caducada y comprueba que se borra junto con sus mensajes (`ON DELETE CASCADE`) y que los leads **no** se borran con ella (`set null`).
 
 **Fin de la fase 4:** conversaciones y leads persisten solo con consentimiento y se purgan al caducar.
@@ -475,6 +481,7 @@ Depende de todo lo anterior, de **D-1 (cifras reales)** y de la aprobación de R
 
 | 2026-10-25 | **Fase 2** (T-2.1…T-2.4) | Hecha | `3ed49b7`, `1da41c6`, `8ab6986` | errores/validación, logging sin PII, rate limit, límite de cuerpo. 13 pruebas verdes; `check` y `build` ok. |
 | 2026-10-25 | **Fase 3** (T-3.1…T-3.9) | Hecha salvo 3 pendientes externos | `c14ff87`…`ollama` | Chat SSE con reglas→caché→LLM, `estimate`, validador de cifras, límites, Gemini y Ollama (simulados). 68+9 pruebas, `check`, `build`, `i18n:check` e imágenes Docker verdes. **Pendientes:** (1) clave de Gemini y prueba manual real + medición de tokens reales (T-3.0/T-3.4/T-3.8); (2) recursos del VPS y modelo Ollama (T-3.9); (3) alerta de presupuesto de 1 € en Google. |
+| 2026-10-25 | **Fase 4** (T-4.0…T-4.6) | Hecha | ver tareas | Persistencia con consentimiento, leads con antispam y email Gmail, purga diaria. 81 pruebas + 4 de integración con Postgres real; smoke extremo a extremo OK. |
 
 ### Cambios sobre la marcha
 - 2026-10-25: **D-2 decidida**: tope de 1 €/mes, saldo de 5 € y soporte de Ollama con modelos open; se añaden T-3.8 (optimización de coste), T-3.9 (Ollama) y se reescribe T-7.3 (tope mensual por coste).
