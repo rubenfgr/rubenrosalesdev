@@ -1,4 +1,4 @@
-# Stack de la web en el VPS. Va detrás de Traefik (red externa «proxy», certresolver «letsencrypt»).
+# Stack de la web, la API y Postgres en el VPS. Va detrás de Traefik (red externa «proxy», certresolver «letsencrypt»).
 # Se copia al servidor en /opt/apps/projects/rubenrosalesdev/ y lo actualiza el workflow de GitHub Actions.
 services:
   web:
@@ -33,6 +33,57 @@ services:
     security_opt:
       - no-new-privileges:true
 
+  api:
+    image: ghcr.io/rubenfgr/rubenrosalesdev-api:latest
+    container_name: rubenrosales-api
+    restart: unless-stopped
+    env_file: .env
+    depends_on:
+      postgres:
+        condition: service_healthy
+    networks:
+      - proxy
+      - internal
+    labels:
+      - traefik.enable=true
+      - traefik.docker.network=proxy
+      # Mismo dominio que la web, solo el prefijo /api/v1 (prioridad mayor que la web)
+      - traefik.http.routers.rr-api.rule=Host(`rubenrosales.dev`) && PathPrefix(`/api/v1`)
+      - traefik.http.routers.rr-api.entrypoints=websecure
+      - traefik.http.routers.rr-api.tls.certresolver=letsencrypt
+      - traefik.http.routers.rr-api.priority=100
+      - traefik.http.services.rr-api.loadbalancer.server.port=3000
+    security_opt:
+      - no-new-privileges:true
+
+  postgres:
+    image: postgres:17
+    container_name: rubenrosales-postgres
+    restart: unless-stopped
+    environment:
+      POSTGRES_DB: ${POSTGRES_DB:?define POSTGRES_DB en .env}
+      POSTGRES_USER: ${POSTGRES_USER:?define POSTGRES_USER en .env}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:?define POSTGRES_PASSWORD en .env}
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    networks:
+      - internal
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U $${POSTGRES_USER} -d $${POSTGRES_DB}"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    security_opt:
+      - no-new-privileges:true
+
+# El servicio de copias de seguridad se añade en T-8.1.
+
+volumes:
+  pgdata:
+
 networks:
   proxy:
     external: true
+  # Red privada API ↔ Postgres (sin acceso exterior; la API sale a Internet por «proxy»).
+  internal:
+    internal: true
