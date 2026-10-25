@@ -2,6 +2,8 @@
 
 Chatbot flotante (`src/components/islands/Assistant.tsx`, isla `client:idle` montada en el layout).
 
+**Estado: oculto.** El asistente no se muestra hasta definir la variable de build `PUBLIC_ASSISTANT_ENABLED=1`. Sin ella, el layout no lo monta ni descarga su código.
+
 ## Dónde está cada cosa
 
 | Qué | Dónde |
