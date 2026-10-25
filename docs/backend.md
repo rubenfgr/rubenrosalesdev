@@ -47,4 +47,17 @@ Formato único: `{ "error": "<codigo_snake_case>", "message"?: string }`. Códig
 | `RATE_LIMIT_CHAT_PER_MIN` | no | Peticiones de chat por IP y minuto (10) |
 | `RATE_LIMIT_LEADS_PER_HOUR` | no | Envíos de lead por IP y hora (5) |
 
+| `ASSISTANT_LLM_ENABLED` | no | `1` activa el LLM (kill switch: cualquier otro valor lo apaga al reiniciar) |
+| `ASSISTANT_LLM_PROVIDER` | no | `gemini` (por defecto) u `ollama` |
+| `ASSISTANT_LLM_API_KEY` | con Gemini | Clave de la Gemini API. Solo en el `.env` del VPS |
+| `ASSISTANT_LLM_MODEL` | con Gemini | Valor inicial `gemini-3.5-flash-lite` |
+| `ASSISTANT_LLM_MAX_OUTPUT_TOKENS` | no | Tope de salida por respuesta (300) |
+| `ASSISTANT_LLM_MONTHLY_BUDGET_EUR` | no | Tope mensual (1) |
+| `ASSISTANT_LLM_PRICE_IN_PER_MTOK` / `_OUT_PER_MTOK` | para el control de coste | Precio por millón de tokens (ver nota) |
+| `OLLAMA_BASE_URL`, `OLLAMA_MODEL` | con Ollama | Proveedor alternativo |
+
+**Precios y privacidad (verificado el 2026-10-25 en la documentación oficial):** Gemini 3.5 Flash-Lite, nivel de pago, estándar: 0,30 USD por millón de tokens de entrada y 2,50 USD de salida (incluye los tokens de razonamiento). Google indica que en el nivel de pago el contenido **no** se usa para mejorar sus productos (en el gratuito sí). La tabla está en dólares: se usan las mismas cifras como euros, lo que sobrestima el coste (lado seguro). Revísalo si cambia la tarifa.
+
+**Prueba manual con clave real (local):** `ASSISTANT_LLM_ENABLED=1 ASSISTANT_LLM_API_KEY=<tu clave> ASSISTANT_LLM_MODEL=gemini-3.5-flash-lite pnpm dev:api` y `curl -N -X POST localhost:3000/api/v1/chat ...` (cuando exista T-3.6). La clave solo en tu shell, nunca en el repo.
+
 En el VPS las pone `deploy/.env.example` → `.env` (ver [despliegue.md](despliegue.md)). Las demás variables (límites, LLM…) se documentan aquí al añadirlas.
