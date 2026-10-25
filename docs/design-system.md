@@ -5,29 +5,19 @@ Identidad visual base: logo, color, tipografía, espaciado, movimiento, iconogra
 ## Estructura
 
 ```
-design-system/
-├── README.md              ← este archivo
-├── brand-guidelines.md    ← concepto, decisiones, uso del logo, color, tipografía, voz
-├── tokens/
-│   └── tokens.css         ← fuente de verdad
-├── logo/
-│   ├── logo-horizontal.svg
-│   ├── logo-horizontal-inverse.svg
-│   ├── logo-horizontal-mono.svg
-│   ├── symbol.svg
-│   ├── symbol-inverse.svg
-│   ├── symbol-mono.svg
-│   └── favicon.svg
-└── motifs/
-    └── hilada.svg
+src/styles/tokens.css      ← fuente de verdad de los tokens
+src/assets/logo/           ← logo, símbolo y favicon (SVG)
+src/assets/motifs/         ← motivo «hilada»
+docs/brand-guidelines.md   ← concepto, decisiones, uso del logo, color, tipografía, voz
+docs/design-system.md      ← este archivo
 ```
 
 ## Uso de los tokens
 
 1. Carga la fuente y los tokens. En la web, **Archivo va autoalojada** (archivo variable con ejes `wght` y `wdth`), sin peticiones a Google Fonts. Para prototipos rápidos sirve el enlace de Google Fonts.
 
-```html
-<link rel="stylesheet" href="tokens/tokens.css">
+```css
+@import "./tokens.css";
 ```
 
 2. Usa **solo tokens semánticos** en componentes:
@@ -53,7 +43,7 @@ h1 {
 }
 ```
 
-3. Tema: sin atributo, sigue la preferencia del sistema. Para forzarlo, `data-theme="light"` o `data-theme="dark"` en `<html>`.
+3. Tema: la web es siempre clara (`data-theme="light"` fijo en `Layout.astro`). Los bloques oscuros de `tokens.css` no se usan.
 
 ## Añadir un token
 

@@ -1,6 +1,6 @@
 # rubenrosales.dev — Guía de marca
 
-Versión 1.0 · Fundamentos de identidad. Los tokens están en `tokens/tokens.css`, que es la fuente de verdad; esta guía explica el porqué y las reglas de uso.
+Versión 1.0 · Fundamentos de identidad. Los tokens están en `src/styles/tokens.css`, que es la fuente de verdad; esta guía explica el porqué y las reglas de uso.
 
 ---
 
@@ -270,7 +270,7 @@ Con `prefers-reduced-motion: reduce` las duraciones funcionales pasan a 0.
 
 [Lucide](https://lucide.dev), trazo `--icon-stroke` (1,5), tamaños 16, 20 y 24 px, color `currentColor`. Siempre de línea, sin rellenos. No mezclar con otras librerías.
 
-### Motivo «hilada» (`motifs/hilada.svg`)
+### Motivo «hilada» (`src/assets/motifs/hilada.svg`)
 
 Las juntas de un muro de piedra en seco como textura repetible (tile de 240 × 96).
 
