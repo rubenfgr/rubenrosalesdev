@@ -10,9 +10,9 @@ Chatbot flotante (`apps/web/src/components/islands/Assistant.tsx`, isla `client:
 |---|---|
 | Guiones, ramas, opciones, avisos, bio, textos de las tarjetas | `apps/web/src/content/assistant/{es,en}.json` |
 | Tabla de rangos y multiplicadores (sin idioma) | `apps/web/src/content/assistant/pricing.json` |
-| Motor de reglas (estimación, reglas de texto libre) | `apps/web/src/lib/assistant/engine.ts` |
-| System prompt del LLM | `apps/web/src/lib/assistant/prompt.ts` (se construye con los mismos datos) |
-| Ruta del LLM (desactivada por defecto) | `apps/web/src/pages/api/assistant.ts` |
+| Motor de reglas (estimación, reglas de texto libre) | `packages/shared/src/assistant/engine.ts` |
+| System prompt del LLM | `apps/api/src/services/prompt.ts` (se construye con los mismos datos, empaquetados en el build de la API) |
+| Ruta del LLM (desactivada por defecto) | `POST /api/v1/chat` en `apps/api` (fase 3 del plan) |
 | Envío del resumen | `POST /api/contact` con `kind: "assistant"` |
 
 ## Cifras de ejemplo
