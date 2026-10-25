@@ -13,7 +13,7 @@ Nada de esto se ha ejecutado. `main` = producción: cada paso que toque `main` o
   - LLM (puede esperar al paso 3): `ASSISTANT_LLM_API_KEY`, `ASSISTANT_LLM_MODEL=gemini-3.5-flash-lite`, `ASSISTANT_LLM_PRICE_IN_PER_MTOK=0.30`, `ASSISTANT_LLM_PRICE_OUT_PER_MTOK=2.50`, `ASSISTANT_LLM_MONTHLY_BUDGET_EUR=1`. **Sin los precios, Gemini no se activa.**
 - [ ] **Google:** alerta de presupuesto en 1 € y saldo cargado.
 - [ ] **Paquetes de GHCR:** `rubenrosalesdev-api` accesible para el VPS (público o `docker login`; ver `docs/despliegue.md`).
-- [ ] **Copia externa** de los backups funcionando (decisión D-6, pendiente) y restauración probada (`docs/restaurar-backup.md`, ya probada en local).
+- [ ] **Copias de seguridad:** sin copia externa por decisión D-6 (solo las nocturnas en el VPS; ver riesgo en `docs/restaurar-backup.md`). Restauración ya probada en local.
 - [ ] **Evals y red team:** `pnpm --filter @rr/api eval --out .plan/evidence/evals-1.md` sin fallos graves y la lista manual de `.plan/evidence/red-team.md` pasada con el modelo real.
 - [ ] `pnpm check`, `pnpm test`, `pnpm build`, `pnpm e2e` y las dos imágenes Docker en verde.
 
