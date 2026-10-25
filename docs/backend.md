@@ -94,3 +94,13 @@ El servicio `ollama` del compose está bajo el profile `llm-local` (no arranca p
 - **Conversaciones:** solo se guardan si la petición lleva `consent: true` (D-3). Sin consentimiento no se escribe nada. Se identifican por un UUID aleatorio y un hash con sal de la IP; caducan a los 90 días.
 - **Leads (`POST /api/v1/leads`):** valida con `leadSchema`, antispam (señuelo `website` y tiempo mínimo de 3 s desde `startedAt`), guarda el lead (caduca a los 12 meses) y envía el email a Rubén con `Reply-To` del visitante. Límite: `RATE_LIMIT_LEADS_PER_HOUR` por IP.
 - **Borrado:** `jobs/purge.ts` borra al arrancar y una vez al día lo caducado. Al borrar una conversación caen sus mensajes (`ON DELETE CASCADE`); los leads se purgan por su propia fecha y su `conversation_id` pasa a nulo. Solo se registran recuentos.
+
+## Tope de gasto del LLM (1 €/mes) y kill switch
+
+- Cada respuesta de Gemini devuelve sus tokens; `services/budget.ts` calcula el coste con `ASSISTANT_LLM_PRICE_IN/OUT_PER_MTOK` y lo acumula en memoria y en la tabla `llm_usage_monthly` (clave `YYYY-MM` + proveedor; el mes se reinicia solo y el contador se sincroniza al arrancar).
+- **Degradación en cadena** (`services/llm-router.ts`): hasta el 80 % del tope, Gemini. Entre el 80 % y el 100 %, Ollama si está configurado; si no, `503 llm_unavailable` y la web sigue con reglas (que no cuestan nada). Al 100 % no se llama a Gemini bajo ningún concepto. Lo que gasta Ollama no cuenta.
+- **Seguridad:** si faltan los precios, Gemini queda desactivado (con precio 0 el tope nunca saltaría).
+- **Kill switch:** `ASSISTANT_LLM_ENABLED` distinto de `1` y `docker compose up -d api` (o `restart api`) apaga el LLM.
+- **Ver el gasto del mes** (solo lectura, no hay endpoint público): `docker exec rubenrosales-api node dist/jobs/usage.js`.
+- Cuenta de ejemplo (usada en las pruebas): 1.000.000 de tokens de entrada × 0,30 + 200.000 de salida × 2,50, por millón = 0,30 + 0,50 = **0,80 €**, el 80 % del tope.
+- La alerta de presupuesto de Google en 1 € es una segunda red de seguridad: avisa, no corta.

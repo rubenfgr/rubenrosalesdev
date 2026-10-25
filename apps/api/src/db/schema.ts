@@ -1,4 +1,4 @@
-import { index, integer, jsonb, pgTable, primaryKey, serial, text, timestamp, uuid } from 'drizzle-orm/pg-core';
+import { bigint, index, integer, jsonb, numeric, pgTable, primaryKey, serial, text, timestamp, uuid } from 'drizzle-orm/pg-core';
 import { sql } from 'drizzle-orm';
 
 export const conversations = pgTable(
@@ -60,4 +60,17 @@ export const answerCache = pgTable(
     createdAt: timestamp('created_at', { withTimezone: true }).notNull().defaultNow(),
   },
   (t) => [primaryKey({ columns: [t.lang, t.questionHash] })],
+);
+
+/** Gasto acumulado del LLM por mes (`YYYY-MM`) y proveedor, para el tope mensual. */
+export const llmUsageMonthly = pgTable(
+  'llm_usage_monthly',
+  {
+    month: text('month').notNull(),
+    provider: text('provider').notNull(),
+    tokensIn: bigint('tokens_in', { mode: 'number' }).notNull().default(0),
+    tokensOut: bigint('tokens_out', { mode: 'number' }).notNull().default(0),
+    costEur: numeric('cost_eur', { precision: 12, scale: 6, mode: 'number' }).notNull().default(0),
+  },
+  (t) => [primaryKey({ columns: [t.month, t.provider] })],
 );

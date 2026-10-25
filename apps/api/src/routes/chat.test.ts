@@ -109,3 +109,15 @@ describe('persistencia con consentimiento', () => {
     expect(lines.join('\n')).not.toContain('1.1.1.1');
   });
 });
+
+describe('tope de gasto en el chat', () => {
+  it('sin LLM disponible por presupuesto responde 503 (la web usa reglas) pero las reglas siguen sin coste', async () => {
+    const llm = new FakeLlmClient([]);
+    const app = createApp({ env: loadEnv({ ...base, RATE_LIMIT_CHAT_PER_MIN: '100' }), db: {} as never, pingDb: async () => {}, llm, llmAvailable: () => false, logSink: () => {} });
+    expect((await post(app, body('¿Qué servicios ofreces?'))).status).toBe(503);
+    expect(llm.calls).toHaveLength(0);
+    const rule = await post(app, body('¿Cuánto cuesta?'));
+    expect(rule.status).toBe(200);
+    expect(await rule.text()).toContain('"source":"rule"');
+  });
+});

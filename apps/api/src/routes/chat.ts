@@ -29,10 +29,9 @@ export const chatRoutes = (deps: ResolvedDeps) => {
         llm,
         cache,
         maxOutputTokens: env.ASSISTANT_LLM_MAX_OUTPUT_TOKENS,
-        allowLlm: () => (deps.usage?.allowed() ?? true) && daily.take(ipKey),
+        allowLlm: () => (deps.llmAvailable?.() ?? true) && daily.take(ipKey),
         recordUsage: (u) => {
           lastUsage = u;
-          deps.usage?.record(u);
         },
         onBlocked: () => console.warn('chat: respuesta bloqueada por el validador de cifras'),
       },

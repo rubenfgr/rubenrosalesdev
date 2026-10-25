@@ -11,7 +11,7 @@ import { requestLogger, type LogSink } from './lib/logging';
 import { MemoryAnswerCache, type AnswerCache } from './services/answer-cache';
 import type { Mailer } from './services/mailer';
 import { leadRoutes } from './routes/leads';
-import type { LlmClient, LlmUsage } from './services/llm';
+import type { LlmClient } from './services/llm';
 import { chatRoutes } from './routes/chat';
 import { healthRoutes } from './routes/health';
 
@@ -30,8 +30,8 @@ export interface Deps {
   /** Envío de email; `null` = sin configurar. */
   mailer?: Mailer | null;
   knowledge?: Knowledge;
-  /** Control de gasto (T-7.3). */
-  usage?: { allowed(): boolean; record(u: LlmUsage): void };
+  /** ¿Hay LLM disponible ahora (tope de gasto)? Por defecto, sí. */
+  llmAvailable?: () => boolean;
 }
 
 export type ResolvedDeps = Deps & { llm: LlmClient | null; cache: AnswerCache; repos: Repositories; mailer: Mailer | null; knowledge: Knowledge };
