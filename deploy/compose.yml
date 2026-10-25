@@ -76,10 +76,29 @@ services:
     security_opt:
       - no-new-privileges:true
 
+  # Proveedor alternativo del LLM con modelos open (coste cero). Solo arranca con el profile «llm-local»:
+  #   docker compose --profile llm-local up -d ollama
+  # No activar sin comprobar RAM/CPU/disco del VPS (docs/backend.md). Sin puertos expuestos.
+  ollama:
+    image: ollama/ollama:latest
+    container_name: rubenrosales-ollama
+    profiles: [llm-local]
+    restart: unless-stopped
+    volumes:
+      - ollama:/root/.ollama
+    networks:
+      - internal
+      - proxy # solo para descargar modelos (la red internal no tiene salida)
+    labels:
+      - traefik.enable=false
+    security_opt:
+      - no-new-privileges:true
+
 # El servicio de copias de seguridad se añade en T-8.1.
 
 volumes:
   pgdata:
+  ollama:
 
 networks:
   proxy:

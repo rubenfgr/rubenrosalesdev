@@ -34,6 +34,8 @@ export type LlmEvent =
   | { type: 'error'; reason: string };
 
 export interface LlmClient {
+  /** `false` si el proveedor no usa function calling: la API entrega la estimación como dato en el prompt. */
+  readonly supportsTools?: boolean;
   stream(input: LlmInput): AsyncIterable<LlmEvent>;
 }
 

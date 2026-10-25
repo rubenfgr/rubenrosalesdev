@@ -77,3 +77,11 @@ Orden de un turno (`services/chat.ts`), pensado para gastar lo mínimo:
 ### Coste (objetivo ≤ 1 €/mes)
 
 Medido con el constructor de prompt real (caracteres / 4 como aproximación de tokens): el system prompt para una pregunta típica pesa entre ~450 y ~650 tokens (completo: ~1.150–1.190; límite de diseño 1.200). Con historial máximo (6 × 500 caracteres ≈ 750 tokens) y 300 de salida, una llamada cuesta como mucho unos 0,0012 USD a 0,30/2,50 USD por millón (entrada/salida); una típica (≈650 entrada, ≈150 salida) unos 0,0006 USD. El tope de 1 €/mes equivale a entre ~850 y ~1.700 llamadas al LLM, y las preguntas resueltas por reglas o caché no cuestan nada. **Pendiente:** medir tokens reales con la clave de Rubén (el uso real llega en `usageMetadata` y se registra desde T-7.3).
+
+## Proveedor alternativo: Ollama (modelos open)
+
+`ASSISTANT_LLM_PROVIDER=ollama`, `OLLAMA_BASE_URL` (por defecto `http://ollama:11434`) y `OLLAMA_MODEL`. Coste del proveedor: 0. API verificada en la documentación oficial (`POST /api/chat`, NDJSON). El cliente **no usa function calling**: la estimación se calcula en código a partir de `ctx` y se entrega al modelo como dato en el prompt. Sin `ctx` completo, el modelo no recibe cifras y el validador bloquea cualquiera que invente.
+
+El servicio `ollama` del compose está bajo el profile `llm-local` (no arranca por defecto, sin puertos, con volumen `ollama`). Para usarlo: `docker compose --profile llm-local up -d ollama` y `docker exec rubenrosales-ollama ollama pull <modelo>`.
+
+**Pendiente (requiere el VPS y los evals, no hecho):** comprobar RAM/CPU/disco del VPS (probablemente sin GPU), elegir el modelo con los evals de T-9.2 en es y en, y medir la latencia real. No se ha fijado ningún modelo ni se ha activado nada en producción.

@@ -87,8 +87,15 @@ export async function* chatTurn(deps: ChatDeps, req: ChatRequest, signal?: Abort
   const turns: LlmTurn[] = req.messages
     .slice(-HISTORY_MESSAGES)
     .map((m) => ({ role: m.role, text: m.content.slice(0, HISTORY_CHARS) }));
-  const system = buildSystemPrompt(lang, k, { question: last.content });
-  const tools = [estimateTool(k, lang)];
+  const toolsOk = deps.llm.supportsTools !== false;
+  let system = buildSystemPrompt(lang, k, { question: last.content });
+  // Sin function calling (Ollama): la estimación ya calculada en código se entrega al modelo como dato.
+  const known = authorised[0];
+  if (!toolsOk && known) {
+    const unit = lang === 'es' ? 'semanas' : 'weeks';
+    system += `\n\n${lang === 'es' ? 'Rango ya calculado (úsalo tal cual, no calcules otro)' : 'Range already calculated (use it as is, do not compute another)'}: ${known.minEur}–${known.maxEur} €, ${known.minWeeks}–${known.maxWeeks} ${unit}, ${A.estimate.levels[known.confidence]}.`;
+  }
+  const tools = toolsOk ? [estimateTool(k, lang)] : [];
   let text = '';
   let usedTool = false;
   let finished = false;
