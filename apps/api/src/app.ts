@@ -3,6 +3,8 @@ import { cors } from 'hono/cors';
 import { secureHeaders } from 'hono/secure-headers';
 import type { Db } from './db';
 import type { Env } from './env';
+import { registerErrorHandlers } from './lib/errors';
+import { healthRoutes } from './routes/health';
 
 export interface Deps {
   env: Env;
@@ -11,27 +13,14 @@ export interface Deps {
   pingDb: () => Promise<void>;
 }
 
-export function createApp({ env, pingDb }: Deps) {
+export function createApp(deps: Deps) {
   const app = new Hono().basePath('/api/v1');
 
   app.use(secureHeaders());
-  if (env.ALLOWED_ORIGIN) app.use(cors({ origin: env.ALLOWED_ORIGIN, allowMethods: ['GET', 'POST'] }));
+  if (deps.env.ALLOWED_ORIGIN) app.use(cors({ origin: deps.env.ALLOWED_ORIGIN, allowMethods: ['GET', 'POST'] }));
 
-  app.get('/health', async (c) => {
-    try {
-      await pingDb();
-      return c.json({ status: 'ok' });
-    } catch {
-      return c.json({ status: 'degraded' }, 503);
-    }
-  });
+  app.route('/health', healthRoutes(deps));
 
-  app.notFound((c) => c.json({ error: 'not_found' }, 404));
-  app.onError((err, c) => {
-    // Sin datos personales en el log.
-    console.error('api: error no controlado', err instanceof Error ? err.message : 'desconocido');
-    return c.json({ error: 'internal' }, 500);
-  });
-
+  registerErrorHandlers(app);
   return app;
 }
