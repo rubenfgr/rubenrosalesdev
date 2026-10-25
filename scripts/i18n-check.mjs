@@ -77,7 +77,8 @@ for (const lang of LANGS) {
     }
     if (blog[lang].has(key)) problems.push(`blog/${lang}/${f}: translationKey repetido «${key}»`);
     blog[lang].set(key, f);
-    if (/\bTODO\b/.test(text)) problems.push(`blog/${lang}/${f}: contiene TODO`);
+    // Pendiente = línea que solo dice TODO, valor «TODO» en el frontmatter o etiqueta todo (content:new).
+    if (/^\s*TODO\s*$|:\s*["']?TODO["']?\s*$|^tags:.*\btodo\b/m.test(text)) problems.push(`blog/${lang}/${f}: contiene TODO`);
   }
 }
 for (const lang of LANGS) {

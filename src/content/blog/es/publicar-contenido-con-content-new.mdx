@@ -1,0 +1,26 @@
+---
+title: "Cómo publicar contenido nuevo con content:new"
+description: "Guía breve del flujo para añadir un proyecto o un artículo en español e inglés sin tocar componentes."
+date: 2026-10-25
+tags: [contenido, flujo]
+translationKey: publicar-contenido-con-content-new
+draft: true
+---
+
+Este artículo es una demostración del flujo de contenido y está en borrador. Describe los pasos para añadir una entrada nueva sin tocar ningún componente.
+
+## Crear la entrada
+
+Un solo comando crea el fichero en español y en inglés con el esquema rellenado y la palabra `TODO` donde falta contenido:
+
+```bash
+pnpm content:new blog mi-articulo my-article
+```
+
+## Rellenar y validar
+
+Se sustituyen los `TODO` en los dos idiomas. Después, `pnpm i18n:check` comprueba que no falta ninguna clave ni queda ningún valor vacío, y el build valida los esquemas.
+
+## Publicar
+
+Se quita `draft: true` y se hace el cambio en una rama. Nada llega a producción sin revisión.

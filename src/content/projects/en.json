@@ -252,6 +252,22 @@
         "Antenna links",
         "Camera management"
       ]
+    },
+    {
+      "id": "flujo-de-contenido-demo",
+      "featured": false,
+      "category": "web",
+      "type": "Web",
+      "status": "in-development",
+      "year": 2026,
+      "title": "Demo entry for the content workflow",
+      "summary": "Sample project created with “content:new” to test the workflow. Replace it with a real project before publishing.",
+      "includes": [
+        "Created with content:new",
+        "Validated with Zod",
+        "Checked with i18n:check"
+      ],
+      "draft": true
     }
   ]
 }

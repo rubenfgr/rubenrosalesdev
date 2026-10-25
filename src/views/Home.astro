@@ -27,6 +27,7 @@ const [services, problem, tray, process, projects, faq, integrations, site] = aw
   getData('integrationCases', lang),
   getData('site', lang),
 ]);
+const visibleProjects = projects.items.filter((p) => import.meta.env.DEV || !p.draft);
 const contactHref = getLocalizedPath('/#contacto', lang);
 const projectsHref = getLocalizedPath('/#proyectos', lang);
 const hero = ui(lang, 'hero');
@@ -51,7 +52,7 @@ const hero = ui(lang, 'hero');
   <ComoFunciona client:visible items={tray.items} modes={tray.modes} log={tray.log} labels={ui(lang, 'tray')} />
   <Calculadora client:visible labels={ui(lang, 'calculator')} locale={locale} contactHref={contactHref} />
   <Proceso eyebrow={t('process.eyebrow')} title1={t('process.title1')} title2={t('process.title2')} steps={process.items} />
-  <Proyectos client:visible projects={projects.items} labels={ui(lang, 'projects')} locale={locale} contactHref={contactHref} />
+  <Proyectos client:visible projects={visibleProjects} labels={ui(lang, 'projects')} locale={locale} contactHref={contactHref} />
   <FAQ client:visible items={faq.items} labels={ui(lang, 'faq')} contactHref={contactHref} />
   <Contacto client:visible labels={ui(lang, 'contact')} lang={lang} email={site.contact.email} endpoint="/api/contact" />
 </Layout>

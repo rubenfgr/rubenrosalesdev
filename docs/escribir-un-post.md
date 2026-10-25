@@ -4,7 +4,7 @@ Un artículo = un fichero por idioma: `src/content/blog/es/<slug>.mdx` y `src/co
 
 ## Flujo
 
-1. Crea los dos ficheros con la plantilla de abajo (o usa `pnpm content:new blog <slug>` cuando exista).
+1. Crea los dos ficheros con la plantilla de abajo (o usa `pnpm content:new blog <slug> [slug-en]`).
 2. Revisa en local con `pnpm dev` (los borradores se ven en desarrollo).
 3. Quita `draft: true` (o ponlo en `false`), haz commit y `git push` a `main`.
 4. El hosting construye y despliega. Si el frontmatter es inválido, el build falla y la web anterior sigue publicada.

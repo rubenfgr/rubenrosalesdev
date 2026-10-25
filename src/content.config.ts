@@ -59,6 +59,8 @@ const projects = byLocale(
         title: text,
         summary: text,
         includes: z.array(text).min(1).max(4),
+        // true = solo visible en desarrollo; no se publica.
+        draft: z.boolean().default(false),
       }),
     ),
   }),

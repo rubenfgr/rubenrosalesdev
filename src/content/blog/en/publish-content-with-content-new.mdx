@@ -1,0 +1,26 @@
+---
+title: "How to publish new content with content:new"
+description: "A short guide to the workflow for adding a project or an article in Spanish and English without touching components."
+date: 2026-10-25
+tags: [content, workflow]
+translationKey: publicar-contenido-con-content-new
+draft: true
+---
+
+This article is a demonstration of the content workflow and is a draft. It describes the steps to add a new entry without touching any component.
+
+## Create the entry
+
+A single command creates the file in Spanish and English with the schema filled in and the word `TODO` wherever content is missing:
+
+```bash
+pnpm content:new blog my-article mi-articulo
+```
+
+## Fill in and validate
+
+The `TODO`s are replaced in both languages. Then `pnpm i18n:check` verifies that no key is missing and no value is left empty, and the build validates the schemas.
+
+## Publish
+
+Remove `draft: true` and make the change on a branch. Nothing reaches production without review.

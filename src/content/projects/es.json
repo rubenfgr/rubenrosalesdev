@@ -252,6 +252,22 @@
         "Enlaces por antena",
         "Gestión de cámaras"
       ]
+    },
+    {
+      "id": "flujo-de-contenido-demo",
+      "featured": false,
+      "category": "web",
+      "type": "Web",
+      "status": "in-development",
+      "year": 2026,
+      "title": "Entrada de demostración del flujo de contenido",
+      "summary": "Proyecto de ejemplo creado con «content:new» para comprobar el flujo. Sustituir por un proyecto real antes de publicar.",
+      "includes": [
+        "Alta con content:new",
+        "Validación con Zod",
+        "Comprobación con i18n:check"
+      ],
+      "draft": true
     }
   ]
 }
