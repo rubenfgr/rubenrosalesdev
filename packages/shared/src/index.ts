@@ -16,6 +16,8 @@ export const chatRequestSchema = z.object({
   lang: langSchema,
   conversationId: z.uuid().optional(),
   messages: z.array(chatMessageSchema).min(1).max(20),
+  /** El visitante aceptó guardar la conversación (D-3/D-4). Sin `true`, la conversación es efímera y no se guarda nada. */
+  consent: z.boolean().optional(),
   /** Respuestas ya conocidas de la estimación (ids de assistant.json / pricing.json). */
   ctx: z
     .object({ type: z.string().max(40).optional(), systems: z.string().max(40).optional(), team: z.string().max(40).optional() })

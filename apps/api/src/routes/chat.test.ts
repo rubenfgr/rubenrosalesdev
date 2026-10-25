@@ -1,6 +1,7 @@
 import { describe, expect, it } from 'vitest';
 import { createApp } from '../app';
 import { loadEnv } from '../env';
+import { MemoryRepositories } from '../db/repositories';
 import { FakeLlmClient, type LlmEvent } from '../services/llm';
 
 const base = { NODE_ENV: 'test', DATABASE_URL: 'postgres://test' };
@@ -62,5 +63,49 @@ describe('POST /chat', () => {
     for (let i = 0; i < 21; i++) last = (await post(app, body(`pregunta distinta número ${i} sobre servicios`))).status;
     expect(llm.calls).toHaveLength(20);
     expect(last).toBe(503);
+  });
+});
+
+describe('persistencia con consentimiento', () => {
+  const setup = () => {
+    const repos = new MemoryRepositories();
+    const lines: string[] = [];
+    const app = createApp({
+      env: loadEnv({ ...base, RATE_LIMIT_CHAT_PER_MIN: '100' }),
+      db: {} as never,
+      pingDb: async () => {},
+      llm: new FakeLlmClient([say('Hago webs y automatizaciones.')]),
+      repos,
+      logSink: (l) => lines.push(l),
+    });
+    return { app, repos, lines };
+  };
+  const secret = 'pregunta privada sobre servicios zzz';
+
+  it('sin consentimiento no hay filas', async () => {
+    const { app, repos } = setup();
+    expect((await post(app, body(secret))).status).toBe(200);
+    expect(repos.conversations.size).toBe(0);
+    expect(repos.messages).toHaveLength(0);
+  });
+
+  it('con consentimiento se guardan la conversación y los dos mensajes, con IP solo con hash', async () => {
+    const { app, repos } = setup();
+    const res = await post(app, { ...body(secret), consent: true });
+    const text = await res.text();
+    const id = /"conversationId":"([0-9a-f-]{36})"/.exec(text)![1]!;
+    expect(repos.conversations.get(id)).toMatchObject({ lang: 'es' });
+    expect(repos.conversations.get(id)!.ipHash).toMatch(/^[0-9a-f]{64}$/);
+    expect(repos.messages.map((m) => [m.role, m.content])).toEqual([
+      ['user', secret],
+      ['assistant', 'Hago webs y automatizaciones.'],
+    ]);
+  });
+
+  it('el contenido del mensaje no aparece en los logs', async () => {
+    const { app, lines } = setup();
+    await post(app, { ...body(secret), consent: true });
+    expect(lines.join('\n')).not.toContain('zzz');
+    expect(lines.join('\n')).not.toContain('1.1.1.1');
   });
 });
