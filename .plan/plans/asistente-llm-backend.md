@@ -178,20 +178,23 @@ Objetivo: que web y API se construyan, prueben y desplieguen juntas, con Postgre
   - **Aceptación:** `docker compose -f deploy/compose.yml config` valida sin errores; las etiquetas no colisionan con las de la web (la web sigue sirviendo `/` y `/api/contact`).
   - **Hecho en `9f9ced5`:** `compose config` valida; probados Postgres + API reales en local (health ok, migraciones aplicadas). El servicio `backup` se difiere a T-8.1 (se añade allí). Sin Traefik local no se probó el enrutado por etiquetas.
   - **Verificación:** levantar el compose en local con una red `proxy` creada (`docker network create proxy`) y un `.env` de prueba; `curl -k -H "Host: rubenrosales.dev" https://localhost/api/v1/health` → `{"status":"ok"}` si hay Traefik local; si no, probar los contenedores por separado.
-- [ ] **T-1.4 Workflow de despliegue para dos imágenes**
+- [x] **T-1.4 Workflow de despliegue para dos imágenes**
   - Depende de: T-1.3.
   - `.github/workflows/deploy.yml`: job `build-and-push` construye y publica **web** (`apps/web/Dockerfile`, `GUARDS_STRICT=1`, con los `--build-arg` actuales) y **api** (`apps/api/Dockerfile`) como `ghcr.io/rubenfgr/rubenrosalesdev-web` y `…-api`, con tags `latest` y el SHA. El job `deploy` copia `deploy/compose.yml` y ejecuta `docker compose pull && docker compose up -d --remove-orphans`.
   - Mantén el estilo actual: comandos `docker`/`ssh` directos, sin acciones de terceros (no se pueden verificar versiones).
   - **Aceptación:** el YAML es válido (`actionlint` si está disponible, o revisión manual); ambas imágenes se construyen con `docker build` local siguiendo los mismos comandos del workflow.
+  - **Hecho en `da813f7`:** YAML válido (sin `actionlint` instalado); ambas imágenes se construyen en local.
   - **No pruebes el despliegue real:** requiere push a `main` (prohibido sin aprobación). Se probará en el rollout.
-- [ ] **T-1.5 CI**
+- [x] **T-1.5 CI**
   - Depende de: T-1.1.
   - `.github/workflows/ci.yml` ya ejecuta `pnpm check`, tests de la API y `pnpm build`. Añade `pnpm --filter @rr/api build` si no se cubre con `pnpm build` (`pnpm -r build` ya lo incluye; comprueba).
+  - **Hecho (sin cambios):** `ci.yml` ya cubre la API vía `pnpm build` (`pnpm -r build`); verificada la secuencia en limpio.
   - **Aceptación:** `pnpm install --frozen-lockfile && pnpm check && pnpm --filter @rr/api test && pnpm build` pasa en limpio.
-- [ ] **T-1.6 Documentación de la fase**
+- [x] **T-1.6 Documentación de la fase**
   - `docs/despliegue.md`: actualizar rutas (`apps/web`, `apps/api`), variables nuevas (Postgres), arquitectura con dos contenedores + Postgres + backups, cómo restaurar.
   - `docs/backend.md` (nuevo): estructura de `apps/api`, cómo añadir una ruta, una migración y una prueba; variables de entorno; convenciones de errores en JSON.
   - `CLAUDE.md` raíz: actualizar la sección «Comandos» y las rutas citadas (`apps/web/...`).
+  - **Hecho en `a9e73c9`.**
   - **Aceptación:** ningún enlace roto; un lector nuevo puede levantar web + API + Postgres en local con solo los docs.
 
 **Fin de la fase 1:** todo lo anterior + `pnpm check`/`build` verdes. Resumen en §15.
@@ -454,6 +457,7 @@ Depende de todo lo anterior, de **D-1 (cifras reales)** y de la aprobación de R
 | Fecha | Tarea | Resultado | Commit | Notas |
 |---|---|---|---|---|
 | 2026-10-25 | T-1.1, T-1.2 | Hecho | `fdce25f` | Monorepo y esqueleto de la API verificados con Postgres real |
+| 2026-10-25 | **Fase 1** (T-1.3…T-1.6) | Hecha | `9f9ced5`, `da813f7`, `a9e73c9` | compose con api+postgres (sin `backup`, va en T-8.1); workflow con dos imágenes; docs. `pnpm check`, tests API y `pnpm build` verdes; imágenes web y api construyen; Postgres+API reales responden en local. Enrutado Traefik y despliegue sin probar (requieren VPS/main). |
 
 ### Cambios sobre la marcha
 - 2026-10-25: **D-2 decidida**: tope de 1 €/mes, saldo de 5 € y soporte de Ollama con modelos open; se añaden T-3.8 (optimización de coste), T-3.9 (Ollama) y se reescribe T-7.3 (tope mensual por coste).
