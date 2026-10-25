@@ -155,9 +155,9 @@ Principios de diseño:
 | D-2 | Proveedor y modelo del LLM y **tope de gasto mensual** en euros | **DECIDIDA y verificada** (ID, API y precios; ver T-3.0) | Proveedor Google Gemini, modelo **`gemini-3.5-flash-lite`** (ID facilitado por Rubén; el agente debe confirmar que existe y cómo se invoca en la documentación oficial). **Tope: 1 €/mes.** Rubén cargará **5 €** en la cuenta de la API (nivel de pago; ver T-3.0). Alternativa open: Ollama (T-3.9) |
 | D-3 | ¿Se guardan las conversaciones? Plazo de conservación (propuesta: 90 días) y base legal | **DECIDIDA (2026-10-25)** | Se guardan **solo con consentimiento** (RGPD art. 6.1.a), en el Postgres del VPS, con UUID aleatorio y hash de IP; **90 días** y borrado diario. Leads: **12 meses** (`leads.expires_at`; se purgan aparte). Marcar `[VERIFICAR: revisión legal]` en `/privacidad` |
 | D-4 | Texto del aviso/consentimiento al abrir el chat (es/en) | **DECIDIDA (2026-10-25)** | Borrador aceptado por Rubén (nombra a Google/Gemini, 90 días, hola@rubenrosales.dev, botones «Aceptar y continuar» / «Continuar sin guardar»). Texto en T-5.1 |
-| D-5 | Antibots: ¿Cloudflare Turnstile (gratis; el DNS ya está en Cloudflare) o solo rate limit + honeypot? | **PENDIENTE (fase 7)** | |
-| D-6 | Almacenamiento externo de backups (Hetzner Storage Box / Object Storage u otro S3) | **PENDIENTE (fase 8)** | |
-| D-7 | ¿Mover `/api/contact` de la web a la API? (propuesta: sí, T-6.6) | **PENDIENTE (fase 6)** | |
+| D-5 | Antibots: ¿Cloudflare Turnstile (gratis; el DNS ya está en Cloudflare) o solo rate limit + honeypot? | **DECIDIDA (2026-10-25)** | Solo límite de peticiones por IP + campo señuelo + tiempo mínimo. Sin Turnstile (se reconsidera si hay abuso) |
+| D-6 | Almacenamiento externo de backups (Hetzner Storage Box / Object Storage u otro S3) | **DECIDIDA (2026-10-25)** | De momento **no hay copia externa**; solo los backups nocturnos en el VPS. T-8.2 aplazada |
+| D-7 | ¿Mover `/api/contact` de la web a la API? (propuesta: sí, T-6.6) | **DECIDIDA (2026-10-25)** | Sí. Hecho en T-6.6 |
 
 ---
 
@@ -401,8 +401,9 @@ Objetivo: que `Assistant.tsx` use el LLM cuando esté disponible y degrade a reg
   - **Hecho.** Playwright (`playwright-core` + Chrome del sistema, instalado fuera del repo) a 1280, 390 y 390 con `prefers-reduced-motion: reduce`; API simulada con `page.route`: streaming con indicador de escritura, 503 → reglas + reintentar, flujo guiado hasta estimación y envío del resumen. Capturas en `.plan/evidence/hybrid-*.png`. Incidencia corregida en el camino: los chips de inicio se veían antes de elegir el consentimiento.
   - **Aceptación:** capturas guardadas en `.plan/evidence/` (no se versionan, añade la carpeta a `.gitignore` si hace falta) y descritas en la bitácora.
 
-- [ ] **T-6.6 [Opcional, requiere D-7] Mover el formulario de contacto a la API**
+- [x] **T-6.6 [Opcional, requiere D-7] Mover el formulario de contacto a la API**
   - Define `contactSchema` en `packages/shared` (mismos campos que `Contacto.tsx`: objetivos, tamaño, plazo, herramientas, mensaje, nombre, empresa, email, preferencia, teléfono, consentimiento, `startedAt`, honeypot). Endpoint `POST /api/v1/contact` en la API (reutiliza `Mailer` y rate limit). `Contacto.tsx` pasa a usarlo y se elimina `apps/web/src/pages/api/contact.ts` junto con `apps/web/src/lib/mail.ts` y `mailer.ts` (solo cuando nada más los importe).
+  - **Hecho en `528a870`.** `contactSchema` en `@rr/shared`, `POST /api/v1/contact` (mismo formato de email, probado literalmente; no se guarda), `Contacto.tsx` usa `sendContact`. Eliminados `pages/api/contact.ts`, `lib/mail.ts` y `lib/mailer.ts`, y los secretos de la web (también `env_file` del servicio `web` en el compose y el esquema `env` de Astro). Resend deja de existir. Proxy de desarrollo `/api/v1` → `localhost:3000`. `pnpm e2e` cubre ahora el formulario directo.
   - **Aceptación:** el formulario guiado y el directo siguen enviando; el email llega con el mismo formato que hoy; los tests de la API cubren validación y honeypot.
 
 ---
@@ -414,8 +415,9 @@ Objetivo: que `Assistant.tsx` use el LLM cuando esté disponible y degrade a reg
   - Documenta el resultado esperado en `.plan/evidence/red-team.md`.
   - **Hecho en `5d1de2f`.** 21 casos automáticos (`red-team.test.ts`), guardarraíl `leaksPrompt` nuevo y lista manual en `.plan/evidence/red-team.md`. La pasada manual con el modelo real queda pendiente de la clave.
   - **Aceptación:** ninguna respuesta filtra el system prompt ni da cifras fuera de la tabla; el validador bloquea los casos que el modelo deje pasar.
-- [ ] **T-7.2 [DECISIÓN] D-5 Antibots**
+- [x] **T-7.2 [DECISIÓN] D-5 Antibots**
   - Si Rubén elige Turnstile: widget en la web (carga diferida) y verificación del token en la API (`TURNSTILE_SECRET` por entorno; si falta, la verificación se omite). Si elige no usarlo: se deja rate limit + honeypot.
+  - **Cerrada por decisión D-5:** no se usa Turnstile; quedan el límite por IP, el señuelo y el tiempo mínimo (ya implementados en `/chat`, `/leads` y `/contact`).
   - **Aceptación:** con Turnstile activo, una petición sin token válido recibe 403.
 - [x] **T-7.3 Tope de gasto (1 €/mes) y kill switch**
   - Tabla `llm_usage_monthly(month, provider, tokens_in, tokens_out, cost_eur)` actualizada en cada respuesta con `tokensIn/tokensOut` y los precios de `ASSISTANT_LLM_PRICE_*`. Antes de cada llamada, si `cost_eur` del mes ≥ **80 %** de `ASSISTANT_LLM_MONTHLY_BUDGET_EUR`, aplica la **degradación en cadena**: `ollama` si está configurado, si no solo reglas (`503 llm_unavailable`, la web degrada). Al 100 % no se llama a Gemini bajo ningún concepto. El mes se reinicia solo (clave `YYYY-MM`).
@@ -439,7 +441,7 @@ Bloqueada parcialmente por D-6 (destino externo).
   - Servicio `backup` con la imagen `postgres:17` (mismo cliente que el servidor), que ejecuta cada noche `pg_dump -Fc` hacia `/backups/rr-YYYYmmdd-HHMM.dump`, en un volumen `backups`, con retención de 14 diarios (borra los más antiguos), y deja constancia en el log. Puede ser un bucle de shell con `sleep` o `cron`; elige lo más simple y fiable.
   - **Hecho en `f58a262`.** Probado: copia al arrancar, `pg_restore --list` la lee y la retención deja 14 de 17.
   - **Aceptación:** tras forzar una ejecución se genera un `.dump` válido (`pg_restore --list` lo lee).
-- [ ] **T-8.2 [DECISIÓN] D-6 Copia externa**
+- [~] **T-8.2 [DECISIÓN] D-6 Copia externa** (aplazada: de momento no hay copia externa)
   - Con el destino elegido por Rubén (Hetzner Storage Box/Object Storage u otro compatible), sube cada backup con `rclone` o `restic` (cifrado). Credenciales **solo** en el `.env` del VPS. Documenta cómo configurarlo; **no pongas credenciales ni las inventes**.
   - **Aceptación:** un backup aparece en el destino externo; hay un recordatorio de comprobarlo.
 - [x] **T-8.3 Prueba de restauración**
@@ -500,8 +502,8 @@ Depende de todo lo anterior, de **D-1 (cifras reales)** y de la aprobación de R
 | 2026-10-25 | **Fase 4** (T-4.0…T-4.6) | Hecha | ver tareas | Persistencia con consentimiento, leads con antispam y email Gmail, purga diaria. 81 pruebas + 4 de integración con Postgres real; smoke extremo a extremo OK. |
 | 2026-10-25 | **Fase 5** (T-5.1…T-5.3) | Hecha | ver tareas | Aviso y consentimiento en el chat (es/en), sección del asistente en `/privacidad` con 2 `[VERIFICAR]`, procedimiento de derechos. |
 | 2026-10-25 | **Fase 6** (T-6.1…T-6.5) | Hecha; **T-6.6 pendiente de D-7** | ver tareas | Isla híbrida con streaming y degradación, resumen por la API, flag `PUBLIC_ASSISTANT_LLM`, revisión visual a 1280/390/reduced-motion. |
-| 2026-10-25 | **Fase 7** (T-7.1, T-7.3, T-7.4) | Hecha salvo T-7.2 (D-5) | ver tareas | Tope de gasto y kill switch, red team automático, auditoría. |
-| 2026-10-25 | **Fase 8** (T-8.1, T-8.3, T-8.4) | Hecha salvo T-8.2 (D-6) | ver tareas | Backup nocturno, restauración verificada, salud. |
+| 2026-10-25 | **Fase 7** (T-7.1…T-7.4) | Hecha | ver tareas | Tope de gasto y kill switch, red team automático, auditoría. |
+| 2026-10-25 | **Fase 8** (T-8.1, T-8.3, T-8.4) | Hecha; T-8.2 aplazada por D-6 | ver tareas | Backup nocturno, restauración verificada, salud. |
 | 2026-10-25 | **Fase 9** (T-9.1, T-9.3; T-9.2 parcial) | Hecha salvo la primera pasada de evals (necesita clave) | ver tareas | Cobertura por regla, 39 casos de evals, `pnpm e2e`. |
 
 ### Cambios sobre la marcha
