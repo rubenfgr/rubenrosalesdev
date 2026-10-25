@@ -30,6 +30,7 @@ pnpm dev            # web en http://localhost:4321
 
 - **Una ruta:** crea la ruta en `app.ts` (o, desde la fase 2, un fichero en `src/routes/`), valida la entrada con un esquema de `@rr/shared` y devuelve errores con el formato de abajo.
 - **Una migración:** edita `src/db/schema.ts`, ejecuta `pnpm --filter @rr/api db:generate`, **revisa el SQL** generado en `drizzle/` y aplícalo con `pnpm --filter @rr/api db:migrate`. Las migraciones deben ser aditivas (la vuelta atrás a una imagen anterior no deshace la base de datos).
+- **Pruebas con Postgres real:** `src/db/repositories.test.ts` se salta sin `TEST_DATABASE_URL`. En local: `docker run -d --name rr-pg -e POSTGRES_PASSWORD=dev -e POSTGRES_DB=rr_test -p 55432:5432 postgres:17` y `TEST_DATABASE_URL=postgres://postgres:dev@localhost:55432/rr_test pnpm --filter @rr/api test`. En CI lo define un servicio `postgres` de `ci.yml`.
 - **Una prueba:** `src/*.test.ts` con vitest. `createApp` recibe sus dependencias (`db`, `pingDb`), así que se prueba con `app.request(...)` sin red ni base de datos reales. `pnpm --filter @rr/api test`.
 
 ## Errores
@@ -44,6 +45,7 @@ Formato único: `{ "error": "<codigo_snake_case>", "message"?: string }`. Códig
 | `PORT` | no | Puerto (3000 por defecto) |
 | `ALLOWED_ORIGIN` | no | Origen CORS; vacío = mismo origen (lo normal) |
 | `IP_HASH_SALT` | cuando se guarde algo de la IP | Sal para hashear IPs; nunca se guardan en claro |
+| `CONVERSATION_RETENTION_DAYS` / `LEAD_RETENTION_DAYS` | no | Conservación: 90 días las conversaciones, 365 los leads (D-3) |
 | `RATE_LIMIT_CHAT_PER_MIN` | no | Peticiones de chat por IP y minuto (10) |
 | `RATE_LIMIT_LEADS_PER_HOUR` | no | Envíos de lead por IP y hora (5) |
 

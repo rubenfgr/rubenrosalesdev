@@ -10,6 +10,9 @@ const schema = z.object({
   IP_HASH_SALT: z.string().default(''),
   RATE_LIMIT_CHAT_PER_MIN: z.coerce.number().int().positive().default(10),
   RATE_LIMIT_LEADS_PER_HOUR: z.coerce.number().int().positive().default(5),
+  /** Conservación (D-3): conversaciones 90 días, leads 12 meses. */
+  CONVERSATION_RETENTION_DAYS: z.coerce.number().int().positive().default(90),
+  LEAD_RETENTION_DAYS: z.coerce.number().int().positive().default(365),
   /** Asistente con LLM. Apagado salvo `ASSISTANT_LLM_ENABLED=1` (kill switch). */
   ASSISTANT_LLM_ENABLED: z.string().default(''),
   ASSISTANT_LLM_PROVIDER: z.enum(['gemini', 'ollama']).default('gemini'),
