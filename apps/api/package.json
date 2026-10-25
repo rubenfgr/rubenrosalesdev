@@ -10,7 +10,8 @@
     "check": "node ../../scripts/export-knowledge.mjs && tsc --noEmit",
     "test": "node ../../scripts/export-knowledge.mjs && vitest run",
     "db:generate": "drizzle-kit generate",
-    "db:migrate": "tsx --env-file-if-exists=.env src/db/migrate.ts"
+    "db:migrate": "tsx --env-file-if-exists=.env src/db/migrate.ts",
+    "eval": "node ../../scripts/export-knowledge.mjs && tsx --env-file-if-exists=.env evals/run.ts"
   },
   "dependencies": {
     "@hono/node-server": "^1.13.0",
