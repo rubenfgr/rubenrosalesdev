@@ -50,6 +50,8 @@ export default defineConfig({
   // Servidor Node (contenedor Docker en el VPS): sirve lo estático y ejecuta las rutas /api y las redirecciones.
   adapter: node({ mode: 'standalone' }),
   session: false,
+  // Detrás de Traefik, Astro solo confía en el Host si coincide con estos dominios; si no, `url` es localhost y /api rechaza el origen (403).
+  security: { allowedDomains: [{ hostname: 'rubenrosales.dev', protocol: 'https' }, { hostname: 'localhost' }] },
   // Secretos del formulario de contacto: solo variables de entorno, nunca en el repo.
   env: {
     schema: {
