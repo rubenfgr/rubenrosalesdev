@@ -3,6 +3,7 @@ import { canEstimate, estimate, matchRule, type Ctx, type Estimate, type Pricing
 import './Assistant.css';
 
 interface Data {
+  consent: { title: string; body: string[]; more: string; privacyLabel: string; accept: string; decline: string };
   panel: { title: string; status: string; banner: string; disclaimer: string };
   greeting: string[];
   steps: Record<string, { action: string; label: string }[]>;
@@ -14,7 +15,7 @@ interface Data {
   summary: { title: string; rows: Record<'name' | 'email' | 'project' | 'tools' | 'team' | 'range', string>; rangeNote: string; footer: string; thanks: string; userSent: string };
 }
 interface Labels { fabAria: string; panelAria: string; close: string; restart: string; send: string; messageAria: string; inputPlaceholder: string; fabTitle: string; fabSubtitle: string }
-interface Props { data: Data; pricing: Pricing; labels: Labels; lang: string; locale: string; showEstimates?: boolean; endpoint: string }
+interface Props { data: Data; pricing: Pricing; labels: Labels; lang: string; locale: string; showEstimates?: boolean; endpoint: string; privacyHref: string }
 
 type Msg =
   | { kind: 'bot' | 'user'; text: string }
@@ -22,8 +23,10 @@ type Msg =
   | { kind: 'summary'; rows: { k: string; v: string }[] };
 const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
-export default function Assistant({ data: D, pricing, labels: L, lang, locale, showEstimates = true, endpoint }: Props) {
+export default function Assistant({ data: D, pricing, labels: L, lang, locale, showEstimates = true, endpoint, privacyHref }: Props) {
   const [open, setOpen] = useState(false);
+  // Aviso de privacidad (D-4): hasta elegir, no se muestra el chat ni se envía nada. 'yes' = guardar la conversación.
+  const [consent, setConsent] = useState<'yes' | 'no' | null>(null);
   const [messages, setMessages] = useState<Msg[]>([]);
   const [typing, setTyping] = useState(false);
   const [step, setStep] = useState('start');
@@ -81,10 +84,15 @@ export default function Assistant({ data: D, pricing, labels: L, lang, locale, s
   const toggle = () => {
     if (open) return setOpen(false);
     setOpen(true);
-    boot();
+    if (consent) boot();
     setTimeout(() => innerWidth >= 560 && input.current?.focus(), 80);
   };
+  const choose = (value: 'yes' | 'no') => {
+    setConsent(value);
+    bot(D.greeting, 'start');
+  };
   const restart = () => {
+    if (!consent) return;
     clearTimeout(timer.current);
     setMessages([]);
     setCtx({});
@@ -167,7 +175,7 @@ export default function Assistant({ data: D, pricing, labels: L, lang, locale, s
     bot([D.summary.thanks.replace('{name}', name.split(' ')[0] ?? name), { kind: 'summary', rows }], 'done');
   };
 
-  const showChips = !typing && options.length > 0 && step !== 'contact';
+  const showChips = !!consent && !typing && options.length > 0 && step !== 'contact';
   const icon = (d: string, size = 18) => (
     <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d={d} /></svg>
   );
@@ -185,6 +193,17 @@ export default function Assistant({ data: D, pricing, labels: L, lang, locale, s
           </div>
           <div class="as-body" ref={body} data-lenis-prevent aria-live="polite">
             <div class="as-banner">{D.panel.banner}</div>
+            {!consent && (
+              <div class="as-consent-box">
+                <b>{D.consent.title}</b>
+                {D.consent.body.map((p) => <p>{p}</p>)}
+                <p>{D.consent.more} <a href={privacyHref} target="_blank" rel="noopener">{D.consent.privacyLabel}</a>.</p>
+                <div class="as-consent-actions">
+                  <button type="button" class="as-submit" onClick={() => choose('yes')}>{D.consent.accept}</button>
+                  <button type="button" class="as-chip" onClick={() => choose('no')}>{D.consent.decline}</button>
+                </div>
+              </div>
+            )}
             {messages.map((m) => {
               if (m.kind === 'bot') return <div class="as-bot">{m.text}</div>;
               if (m.kind === 'user') return <div class="as-user">{m.text}</div>;
@@ -225,8 +244,8 @@ export default function Assistant({ data: D, pricing, labels: L, lang, locale, s
             )}
           </div>
           <form class="as-input" onSubmit={onSend}>
-            <input ref={input} value={draft} placeholder={L.inputPlaceholder} aria-label={L.messageAria} onInput={(e) => setDraft((e.currentTarget as HTMLInputElement).value)} />
-            <button type="submit" aria-label={L.send}>{icon('M4 12l16-8-6 16-3-7z', 18)}</button>
+            <input ref={input} value={draft} disabled={!consent} placeholder={L.inputPlaceholder} aria-label={L.messageAria} onInput={(e) => setDraft((e.currentTarget as HTMLInputElement).value)} />
+            <button type="submit" aria-label={L.send} disabled={!consent}>{icon('M4 12l16-8-6 16-3-7z', 18)}</button>
           </form>
           <div class="as-foot">{D.panel.disclaimer}</div>
         </div>

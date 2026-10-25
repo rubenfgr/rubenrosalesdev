@@ -5,6 +5,17 @@
     "banner": "Automatic assistant · does not quote final prices",
     "disclaimer": "Automatic assistant. It can make mistakes; Rubén confirms everything in writing."
   },
+  "consent": {
+    "title": "Before we start",
+    "body": [
+      "I'm an automated assistant and I can get things wrong: Rubén confirms everything in writing. What you type is sent to Google (Gemini) to generate the answer, so please don't include personal or client data.",
+      "If you accept, Rubén will keep this conversation for 90 days to review it and improve the service. It isn't linked to your name or email unless you give them to me so he can contact you. You can ask for it to be deleted at hola@rubenrosales.dev."
+    ],
+    "more": "More information in the",
+    "privacyLabel": "privacy policy",
+    "accept": "Accept and continue",
+    "decline": "Continue without saving"
+  },
   "greeting": [
     "Hi, I'm Rubén Rosales's assistant. I do some groundwork for him: I work out what you need, explain how he works and, if you like, give you an indicative range.",
     "Where shall we start?"

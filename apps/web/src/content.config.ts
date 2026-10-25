@@ -159,6 +159,7 @@ const assistant = byLocale(
   'assistant',
   z.object({
     panel: z.object({ title: text, status: text, banner: text, disclaimer: text }),
+    consent: z.object({ title: text, body: z.array(text).min(1), more: text, privacyLabel: text, accept: text, decline: text }),
     greeting: z.array(text).min(1),
     bio: text,
     steps: z.record(key, z.array(stepOption).min(1)),

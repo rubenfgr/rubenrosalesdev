@@ -5,6 +5,17 @@
     "banner": "Asistente automático · no cierra precios",
     "disclaimer": "Asistente automático. Puede equivocarse; Rubén confirma todo por escrito."
   },
+  "consent": {
+    "title": "Antes de empezar",
+    "body": [
+      "Soy un asistente automático y puedo equivocarme: Rubén confirma todo por escrito. Lo que escribas se envía a Google (Gemini) para generar la respuesta, así que no incluyas datos personales ni de clientes.",
+      "Si aceptas, Rubén guardará esta conversación 90 días para revisarla y mejorar el servicio. No va asociada a tu nombre ni a tu email, salvo que me los des tú para que te contacte. Puedes pedir que se borre en hola@rubenrosales.dev."
+    ],
+    "more": "Más información en la",
+    "privacyLabel": "política de privacidad",
+    "accept": "Aceptar y continuar",
+    "decline": "Continuar sin guardar"
+  },
   "greeting": [
     "Hola, soy el asistente de Rubén Rosales. Le adelanto trabajo: entiendo qué necesitas, te cuento cómo trabaja y, si quieres, te doy un rango orientativo.",
     "¿Por dónde empezamos?"

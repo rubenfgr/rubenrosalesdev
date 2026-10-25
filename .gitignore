@@ -7,3 +7,4 @@ redesign-kit/
 .dev.vars
 !.env.example
 packages/shared/generated/
+.plan/evidence/

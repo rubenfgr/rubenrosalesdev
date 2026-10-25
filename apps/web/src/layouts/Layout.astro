@@ -64,7 +64,7 @@ const switchPaths = Object.fromEntries(locales.map((l) => [l, paths ? (paths[l] 
       <slot />
     </main>
     <Footer lang={lang} t={t} name={site.name} tagline={site.footer.tagline} motto={site.footer.motto} email={site.contact.email} nav={site.nav} legal={site.legal} social={site.social} />
-    {assistantEnabled && <Assistant client:idle data={assistant} pricing={pricing} labels={ui(lang, 'assistant')} lang={lang} locale={intlLocale[lang]} endpoint="/api/contact" />}
+    {assistantEnabled && <Assistant client:idle data={assistant} pricing={pricing} labels={ui(lang, 'assistant')} lang={lang} locale={intlLocale[lang]} endpoint="/api/contact" privacyHref="/privacidad" />}
     <Scroll />
     {
       analyticsToken && (
