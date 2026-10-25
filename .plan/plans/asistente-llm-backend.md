@@ -226,7 +226,7 @@ Objetivo: base sólida de la API (configuración, errores, logging, límites) an
 
 Objetivo: endpoint `POST /api/v1/chat` con streaming, herramientas y guardarraíles. **Bloqueada por D-2.**
 
-- [ ] **T-3.0 [DECISIÓN] D-2** — pregunta a Rubén proveedor/modelo y tope de gasto. Anótalo en §4. Crea la clave en el proveedor (lo hace Rubén) y se guarda **solo** como `ASSISTANT_LLM_API_KEY` en el `.env` del VPS. Variables: `ASSISTANT_LLM_ENABLED` (`1` activa), `ASSISTANT_LLM_API_KEY`, `ASSISTANT_LLM_MODEL`, `ASSISTANT_LLM_MAX_OUTPUT_TOKENS` (por defecto 600), `ASSISTANT_LLM_MONTHLY_BUDGET_EUR` (tope informativo, ver T-6.3).
+- [ ] **T-3.0 [DECISIÓN] D-2** — pregunta a Rubén proveedor/modelo y tope de gasto. Anótalo en §4. Crea la clave en el proveedor (lo hace Rubén) y se guarda **solo** como `ASSISTANT_LLM_API_KEY` en el `.env` del VPS. Variables: `ASSISTANT_LLM_ENABLED` (`1` activa), `ASSISTANT_LLM_API_KEY`, `ASSISTANT_LLM_MODEL`, `ASSISTANT_LLM_MAX_OUTPUT_TOKENS` (por defecto 600), `ASSISTANT_LLM_MONTHLY_BUDGET_EUR` (tope informativo, ver T-7.3).
 - [ ] **T-3.1 Conocimiento empaquetado para la API**
   - Depende de: T-1.1.
   - Problema: el contenido vive en `apps/web/src/content/**` y la API no puede leerlo en runtime (imagen aparte). Solución: un script `scripts/export-knowledge.mjs` (en la raíz) que, **antes del build de la API**, lee `apps/web/src/content/{services,process,faq,assistant,projects?}/{es,en}.json` y `assistant/pricing.json` y escribe `packages/shared/generated/knowledge.json` (con tipo exportado). `packages/shared` lo expone (`export { knowledge }`).
