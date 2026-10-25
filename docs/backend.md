@@ -44,7 +44,7 @@ Formato único: `{ "error": "<codigo_snake_case>", "message"?: string }`. Códig
 | `DATABASE_URL` | sí | Cadena de conexión a Postgres |
 | `PORT` | no | Puerto (3000 por defecto) |
 | `ALLOWED_ORIGIN` | no | Origen CORS; vacío = mismo origen (lo normal) |
-| `IP_HASH_SALT` | cuando se guarde algo de la IP | Sal para hashear IPs; nunca se guardan en claro |
+| `IP_HASH_SALT` | cuando se guarde algo de la IP | Sal para hashear IPs; nunca se guardan en claro. Si falta, se genera una aleatoria en cada arranque (los hashes cambian al reiniciar) |
 | `CONTACT_TO`, `GMAIL_SENDER`, `GMAIL_CLIENT_ID`, `GMAIL_CLIENT_SECRET`, `GMAIL_REFRESH_TOKEN` | para enviar leads | Gmail API (OAuth2); misma configuración que la web (ver [formulario-contacto.md](formulario-contacto.md)). Sin ellas el lead se guarda y la API responde `502 mail_unavailable` |
 | `CONVERSATION_RETENTION_DAYS` / `LEAD_RETENTION_DAYS` | no | Conservación: 90 días las conversaciones, 365 los leads (D-3) |
 | `RATE_LIMIT_CHAT_PER_MIN` | no | Peticiones de chat por IP y minuto (10) |

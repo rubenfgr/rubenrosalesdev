@@ -1,3 +1,4 @@
+import { randomBytes } from 'node:crypto';
 import { z } from 'zod';
 
 const schema = z.object({
@@ -35,4 +36,11 @@ const schema = z.object({
 
 export type Env = z.infer<typeof schema>;
 
-export const loadEnv = (source: NodeJS.ProcessEnv = process.env): Env => schema.parse(source);
+/**
+ * Sin `IP_HASH_SALT` se genera una sal aleatoria por arranque: el hash de la IP nunca queda sin sal (una IP sin sal
+ * se recuperaría por fuerza bruta). Con sal fija, los hashes se mantienen entre reinicios.
+ */
+export const loadEnv = (source: NodeJS.ProcessEnv = process.env): Env => {
+  const env = schema.parse(source);
+  return env.IP_HASH_SALT ? env : { ...env, IP_HASH_SALT: randomBytes(32).toString('hex') };
+};
