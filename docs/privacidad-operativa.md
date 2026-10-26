@@ -12,6 +12,17 @@ Objetivo: localizar y borrar los datos de una persona en menos de 10 minutos. **
 
 Las conversaciones **no llevan nombre ni email**. Solo se pueden relacionar con una persona por el `conversation_id` de su lead (si dejó el resumen) o porque la persona aporte el texto de un mensaje.
 
+## Ver las conversaciones guardadas
+
+No hay panel. Un comando de solo lectura las muestra con su lead (si lo hay) y los mensajes en orden:
+
+```bash
+docker exec rubenrosales-api node dist/jobs/conversations.js 10    # en el VPS; el número es cuántas (máx. 100)
+pnpm --filter @rr/api conversations 10                              # en local
+```
+
+Lleva datos personales: ejecútalo solo tú.
+
 ## Entrar a la base de datos (en el VPS)
 
 ```bash

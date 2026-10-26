@@ -27,12 +27,10 @@ La web reenvía `/api/v1` a la API, así que todo se ve desde una sola URL. Para
 9. **Degradación:** para la API (`Ctrl+C` en su terminal) y escribe en el asistente: sigue funcionando con reglas y aparece «Reintentar con el asistente».
 10. **Kill switch:** pon `ASSISTANT_LLM_ENABLED=` vacío en `apps/api/.env`, reinicia la API: el texto libre ya no llama a Gemini y la web usa reglas.
 
-Ver lo guardado (solo con «Aceptar y continuar» y los resúmenes):
+Ver lo guardado (solo con «Aceptar y continuar»; los resúmenes siempre llevan su lead):
 
 ```bash
-docker exec rr-pg psql -U postgres rr -c "select id, created_at from conversations order by created_at desc limit 5" \
-  -c "select role, left(content, 60) from messages order by id desc limit 6" \
-  -c "select name, email, created_at from leads order by created_at desc limit 3"
+pnpm --filter @rr/api conversations 10     # las 10 últimas, con su lead y los mensajes en orden
 ```
 
 Gasto del mes (en la base de datos local):
