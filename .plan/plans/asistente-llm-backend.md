@@ -151,7 +151,7 @@ Principios de diseño:
 
 | ID | Decisión | Estado | Respuesta |
 |---|---|---|---|
-| D-1 | Cifras reales de `pricing.json` (tipos, rangos €, semanas, multiplicadores) y quitar `placeholder` | **PENDIENTE (bloquea fase 10)** | |
+| D-1 | Cifras reales de `pricing.json` (tipos, rangos €, semanas, multiplicadores) y quitar `placeholder` | **YA NO APLICA (2026-10-26)** | Rubén: los precios son internos y los aplica él a cada cliente; el asistente **no da precios**. Se elimina `pricing.json` y todo el cálculo |
 | D-2 | Proveedor y modelo del LLM y **tope de gasto mensual** en euros | **DECIDIDA y verificada** (ID, API y precios; ver T-3.0) | Proveedor Google Gemini, modelo **`gemini-3.5-flash-lite`** (ID facilitado por Rubén; el agente debe confirmar que existe y cómo se invoca en la documentación oficial). **Tope: 1 €/mes.** Rubén cargará **5 €** en la cuenta de la API (nivel de pago; ver T-3.0). Alternativa open: Ollama (T-3.9) |
 | D-3 | ¿Se guardan las conversaciones? Plazo de conservación (propuesta: 90 días) y base legal | **DECIDIDA (2026-10-25)** | Se guardan **solo con consentimiento** (RGPD art. 6.1.a), en el Postgres del VPS, con UUID aleatorio y hash de IP; **90 días** y borrado diario. Leads: **12 meses** (`leads.expires_at`; se purgan aparte). Marcar `[VERIFICAR: revisión legal]` en `/privacidad` |
 | D-4 | Texto del aviso/consentimiento al abrir el chat (es/en) | **DECIDIDA (2026-10-25)** | Borrador aceptado por Rubén (nombra a Google/Gemini, 90 días, hola@rubenrosales.dev, botones «Aceptar y continuar» / «Continuar sin guardar»). Texto en T-5.1 |
@@ -235,12 +235,12 @@ Objetivo: base sólida de la API (configuración, errores, logging, límites) an
 
 Objetivo: endpoint `POST /api/v1/chat` con streaming, herramientas y guardarraíles. **Bloqueada por D-2.**
 
-- [~] **T-3.0 Configuración del proveedor (D-2 decidida)** — Gemini 3.5 Flash Lite, tope **1 €/mes**, Rubén pondrá **5 €** de saldo.
+- [x] **T-3.0 Configuración del proveedor (D-2 decidida)** — Gemini 3.5 Flash Lite, tope **1 €/mes**, Rubén pondrá **5 €** de saldo.
   - **Nota de privacidad (verificar):** según mi conocimiento, en los niveles gratuitos de la Gemini API Google puede usar el contenido para mejorar sus productos; con saldo/plan de pago no. Como el chat recibirá texto de visitantes, **verifica en los términos oficiales vigentes** que el uso con saldo de pago no se usa para entrenar y anótalo en §4. Si no puede garantizarse, el prompt enviado al modelo **no debe incluir datos personales** (nombre/email nunca van al LLM; solo el texto de la conversación sin identificadores).
   - **Cómo funciona el saldo (verificar con Rubén en la consola de Google AI Studio/Cloud):** cargar 5 € no limita por sí solo el gasto en todos los casos (algunos modos de facturación cobran después y los presupuestos de Google Cloud solo **avisan**, no cortan). Por eso **el tope real lo impone la propia API** (T-7.3) con el contador de coste; la alerta de Google es una segunda red de seguridad. Pide a Rubén que active una **alerta de presupuesto** en 1 € si la consola lo permite.
   - Rubén crea la clave y se guarda **solo** como `ASSISTANT_LLM_API_KEY` en el `.env` del VPS.
   - Variables: `ASSISTANT_LLM_PROVIDER` (`gemini` | `ollama`), `ASSISTANT_LLM_ENABLED` (`1` activa), `ASSISTANT_LLM_API_KEY`, `ASSISTANT_LLM_MODEL` (valor inicial `gemini-3.5-flash-lite`; confirmar en la documentación), `ASSISTANT_LLM_MAX_OUTPUT_TOKENS` (por defecto **300**), `ASSISTANT_LLM_MONTHLY_BUDGET_EUR` (**1**), `ASSISTANT_LLM_PRICE_IN_PER_MTOK` y `ASSISTANT_LLM_PRICE_OUT_PER_MTOK` (euros por millón de tokens de entrada/salida, **copiados de la tabla de precios oficial vigente**; no los inventes: si no puedes verificarlos, pregunta a Rubén), `OLLAMA_BASE_URL`, `OLLAMA_MODEL`.
-  - **Verificado el 2026-10-25** (docs oficiales: ai.google.dev/gemini-api/docs/models, /pricing, /api/generate-content): `gemini-3.5-flash-lite` existe y es estable; precio de pago estándar 0,30 USD/Mtok entrada y 2,50 USD/Mtok salida (incluye razonamiento); en pago el contenido no se usa para mejorar productos. Pendiente de Rubén: clave, alerta de presupuesto a 1 €, y confirmar el criterio USD≈EUR. Hecho en `6831b4a`.
+  - **Verificado el 2026-10-25 y ampliado el 2026-10-26** (los términos de la Gemini API exigen el servicio de pago para usuarios del EEE: la facturación debe estar activa en producción; el plan gratuito solo vale para pruebas locales) (docs oficiales: ai.google.dev/gemini-api/docs/models, /pricing, /api/generate-content): `gemini-3.5-flash-lite` existe y es estable; precio de pago estándar 0,30 USD/Mtok entrada y 2,50 USD/Mtok salida (incluye razonamiento); en pago el contenido no se usa para mejorar productos. Pendiente de Rubén: clave, alerta de presupuesto a 1 €, y confirmar el criterio USD≈EUR. Hecho en `6831b4a`.
   - **Aceptación:** variables documentadas en `deploy/.env.example` y `docs/backend.md`; D-2 verificada en §4 con enlaces a la documentación y a la tabla de precios consultadas.
 - [x] **T-3.1 Conocimiento empaquetado para la API**
   - Depende de: T-1.1.
@@ -288,13 +288,13 @@ Objetivo: endpoint `POST /api/v1/chat` con streaming, herramientas y guardarraí
     7. **Degradación en cadena:** tope mensual alcanzado → `ollama` si está configurado; si no → solo reglas (T-7.3).
   - **Hecho en `4529bbd`** (migración `0001`, `answer_cache` probada en Postgres real). Los tokens por conversación se han estimado con el prompt real (caracteres/4); la medición con uso real queda pendiente de la clave (ver `docs/backend.md`). Límites diario por IP (20) y por conversación (12) activos; el tope mensual y la degradación a Ollama llegan con T-7.3/T-3.9.
   - **Aceptación:** pruebas: una pregunta cubierta por reglas no llama al LLM (cliente falso con contador = 0); la segunda pregunta idéntica sale de la caché (contador no sube); el prompt construido para una pregunta de ejemplo no supera el límite de tokens (aproximación por caracteres/4 documentada); el límite por conversación bloquea el mensaje 13.
-- [~] **T-3.9 Proveedor alternativo: Ollama con modelos open**
+- [x] **T-3.9 Proveedor alternativo: Ollama con modelos open**
   - Depende de: T-3.4.
   - Implementa `OllamaClient` (misma interfaz `LlmClient`) contra la API de Ollama (`OLLAMA_BASE_URL`, por defecto `http://ollama:11434`). **Verifica en la documentación oficial** el endpoint de chat en streaming, el formato de eventos y si el modelo elegido admite herramientas (*tools*); si no las admite, la estimación se hace **fuera del modelo**: la API calcula `estimate()` en código cuando el contexto está completo y se la entrega ya redactada como dato al modelo (no depende de function calling).
   - Servicio opcional en `deploy/compose.yml` bajo un *profile* (`llm-local`), con volumen para los modelos, **sin puertos expuestos**, red interna. **Antes de habilitarlo, comprueba los recursos del VPS** (RAM, CPU, disco; probablemente sin GPU): documenta el tamaño de modelo viable y la latencia real. No actives nada en producción sin aprobación de Rubén.
   - Elección de modelo: decídela con los **evals** (T-9.2) sobre es y en; prioriza modelos pequeños multilingües. No fijes uno sin medirlo.
   - Coste del proveedor `ollama` = 0 (no cuenta contra el tope).
-  - **Hecho en `5f021ef`** el cliente, la factoría, el servicio bajo profile y las pruebas con servidor simulado. **Pendiente (necesita el VPS y T-9.2):** recursos medidos del VPS, modelo recomendado y prueba con un Ollama real. Se usa sin function calling.
+  - **Hecho en `5f021ef`** el cliente, la factoría, el servicio bajo profile y las pruebas con servidor simulado. **Recursos del VPS medidos (2026-10-26):** 2 vCPU, 3,7 GiB de RAM (2,7 libres), sin swap ni GPU. **Conclusión: no activar Ollama en este VPS** (riesgo de OOM sobre Postgres y latencia de pocos tokens/s); detalle en `docs/backend.md`. No se instaló nada en el servidor, así que la latencia es una estimación.
   - **Aceptación:** con `ASSISTANT_LLM_PROVIDER=ollama` y un Ollama local, `/chat` responde en streaming; pruebas con servidor Ollama simulado; documento con los recursos medidos del VPS y el modelo recomendado.
 - [x] **T-3.5 Herramienta `estimate`**
   - Define una función (*function calling* de Gemini) `estimate` con parámetros `{ type, systems, team }` (enums = ids de `assistant.json` y `pricing.json`: `process|ai|web|app`, `excel|erp|several|unknown`, `small|medium|large`). Su ejecución llama a `estimate()` de `@rr/shared` y devuelve `{ minEur, maxEur, minWeeks, maxWeeks, confidence }` (o error si faltan datos).
@@ -459,7 +459,7 @@ Bloqueada parcialmente por D-6 (destino externo).
 
 - [x] **T-9.1 Pruebas unitarias e integración** — API: engine, prompt, validador, repositorios, rutas; web: cliente de API. Objetivo mínimo: **todas las reglas de producto (§3, T-3.3) cubiertas por al menos una prueba**.
   - **Hecho.** Cobertura por regla: (1) idioma → `prompt.test.ts`, `red-team.test.ts`, evals; (2) cifras → `validator.test.ts`, `chat.test.ts`, `red-team.test.ts`; (3) no rango sin las tres respuestas → `tools.test.ts` (sin cifras con datos incompletos) y `chat.test.ts`; (4) rango + confianza + aviso → prompt (`prompt.test.ts`) y evals `rango-*` (comprobación del modelo real); (5) derivar → `chat.test.ts` (fallback) y evals `no-sabe-*`; (6) no inventar → prompt y evals; (7) inyección → `red-team.test.ts`. Esta revisión encontró un fallo real (ids como `constructor` pasaban la validación), corregido en `fix(shared)`.
-- [~] **T-9.2 Conjunto de evaluación del asistente (evals)**
+- [x] **T-9.2 Conjunto de evaluación del asistente (evals)**
   - Fichero `apps/api/evals/cases.json` con ≥ 30 casos (es y en): pregunta, comportamiento esperado (p. ej. «no da cifra», «da rango con confianza y aviso», «deriva a Rubén», «responde en inglés»). Script `pnpm --filter @rr/api eval` que ejecuta los casos contra el LLM real **solo si hay clave en el entorno** y comprueba con reglas simples (regex/validador) + imprime un informe. No se ejecuta en CI.
   - **Hecho:** 39 casos (`apps/api/evals/cases.json`), script `pnpm --filter @rr/api eval` (solo con clave, no corre en CI) y comprobaciones con pruebas unitarias. **Pendiente:** la primera pasada con el modelo real, que genera `.plan/evidence/evals-1.md` y las mejoras del prompt.
   - **Aceptación:** informe de la primera pasada guardado en `.plan/evidence/evals-1.md` con los casos que fallan y las mejoras del prompt aplicadas.
@@ -505,6 +505,8 @@ Depende de todo lo anterior, de **D-1 (cifras reales)** y de la aprobación de R
 | 2026-10-25 | **Fase 7** (T-7.1…T-7.4) | Hecha | ver tareas | Tope de gasto y kill switch, red team automático, auditoría. |
 | 2026-10-25 | **Fase 8** (T-8.1, T-8.3, T-8.4) | Hecha; T-8.2 aplazada por D-6 | ver tareas | Backup nocturno, restauración verificada, salud. |
 | 2026-10-25 | **Fase 9** (T-9.1, T-9.3; T-9.2 parcial) | Hecha salvo la primera pasada de evals (necesita clave) | ver tareas | Cobertura por regla, 39 casos de evals, `pnpm e2e`. |
+| 2026-10-26 | **Cambio de producto: sin precios** | Hecho | `e0cc30a` | Decisión de Rubén. Fuera `pricing.json`, `estimate`, motor de estimación, tarjeta de rango y D-1; la API bloquea cualquier importe en euros. Evals reales con Gemini 3.5 Flash-Lite: 37/37 (primera pasada 24/37 por cuota del plan gratuito, reglas demasiado amplias y 2 fallos de prompt, corregidos). Coste real medido: 512 tokens de entrada y 81 de salida por llamada (≈ 0,00036 USD; ≈ 2.800 llamadas por 1 USD). |
+| 2026-10-26 | `/privacidad` sección 10 | Hecha | ver tareas | Revisada con los términos oficiales (DPA de Google: encargado del tratamiento y cláusulas contractuales tipo; contenido de pago no usado para mejorar productos; registros temporales por abuso; solo servicio de pago para el EEE; no dirigido a menores). Sin marcas `[VERIFICAR]`. |
 
 ### Cambios sobre la marcha
 - 2026-10-25: **D-2 decidida**: tope de 1 €/mes, saldo de 5 € y soporte de Ollama con modelos open; se añaden T-3.8 (optimización de coste), T-3.9 (Ollama) y se reescribe T-7.3 (tope mensual por coste).
@@ -515,14 +517,16 @@ Depende de todo lo anterior, de **D-1 (cifras reales)** y de la aprobación de R
 - 2026-10-25: se adelantaron tareas de las fases 7-9 que no dependen de decisiones pendientes (D-5, D-6, D-7) para no parar; quedan abiertas T-6.6, T-7.2 y T-8.2. La fase 10 sigue bloqueada por D-1 y por la aprobación de Rubén.
 - 2026-10-25: el contrato `leadSchema` gana `website` y `startedAt`; `chatRequestSchema` gana `ctx` y `consent`; se añaden las tablas `answer_cache` y `llm_usage_monthly` y `leads.expires_at` (migraciones 0001-0003).
 - 2026-10-25: revisión propia del código: sin `IP_HASH_SALT` el hash de IP quedaba sin sal; ahora se genera una sal aleatoria por arranque (`fix(api)`). Preparado el guion de la fase 10 en `docs/rollout-asistente.md` (T-10.1 como lista de comprobación; nada ejecutado).
+- 2026-10-26: **Rubén decide que el asistente no da precios** (los aplica él a cada cliente). Sustituye a lo decidido en §1.2 y a las tareas T-3.5 (herramienta `estimate`), T-3.7 (el validador ahora bloquea todo importe, sin rangos autorizados) y T-6.2 (la tarjeta de estimación desaparece; tras las tres preguntas el asistente ofrece pasar el resumen). D-1 deja de existir. El resumen a Rubén sigue llevando proyecto, herramientas y equipo.
+- 2026-10-26: se estrechan las reglas de texto libre (`rules` en `assistant/{es,en}.json`): antes «cuánto», «cuándo», «rubén» o «who» disparaban respuestas enlatadas fuera de lugar.
+- 2026-10-26: hallazgo en los términos de la Gemini API: para el EEE solo se permite el servicio de pago. **Producción requiere facturación activa** (hoy está deshabilitada; vale para pruebas locales).
 
 ### `[VERIFICAR]` abiertos
-- Criterio USD≈EUR para los precios del LLM (la tabla oficial está en dólares).
-- Prueba manual con clave real de Gemini y tokens reales por conversación.
+- Criterio USD≈EUR para los precios del LLM (la tabla oficial está en dólares; se usan como euros, lado seguro).
+- Activar la facturación de Google Cloud antes de producción (obligatorio para el EEE) y crear la alerta de 1 €.
 - `thinkingConfig` en `generateContent` de Gemini 3.5 Flash-Lite: no verificado, no se usa.
 - Supuesto de que Traefik pone la IP real como primer valor de `X-Forwarded-For`.
-- Recursos del VPS y modelo de Ollama.
-- `/privacidad` sección 10 (2 marcas `[VERIFICAR: revisión legal]`): bases jurídicas del texto enviado a Google cuando no se guarda la conversación; condiciones vigentes de Google y transferencia internacional.
+- (Cerrado 2026-10-26) `/privacidad` sección 10 revisada con los términos oficiales de Google; sin marcas.
 
 ---
 
