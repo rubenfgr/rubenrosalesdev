@@ -26,7 +26,7 @@ Nada de esto se ha ejecutado. `main` = producción: cada paso que toque `main` o
    - `curl -s https://rubenrosales.dev/api/v1/health` → `{"status":"ok"}`.
    - En el VPS: `docker compose ps` con `api`, `postgres` y `web` en `healthy` (y `backup` arrancado); `docker logs rubenrosales-backup` con «backup ok».
    - `docker exec rubenrosales-postgres pg_isready` y que no haya puertos publicados.
-   - Que el límite por IP funciona con la IP real: es la primera comprobación pendiente de Traefik (`X-Forwarded-For`). Prueba: 11 peticiones seguidas a `/api/v1/chat` desde tu IP deben dar un 429 al final y no afectar a otra IP.
+   - Que el límite por IP funciona con la IP real (Cloudflare: cabecera `CF-Connecting-IP`). Prueba: 11–12 peticiones seguidas a `/api/v1/chat` con una pregunta de reglas (p. ej. «¿Cuánto cuesta?», sin coste) desde tu IP deben dar un 429 al final. Resultado de la primera prueba en producción (2026-10-26): **no limitaba** (usaba `X-Forwarded-For`, que con Cloudflare es la IP del borde); corregido en `fix/ip-cliente-cloudflare`.
 4. **Vuelta atrás:** en `compose.yml` del VPS, cambia `latest` por la etiqueta (SHA) anterior de cada imagen y `docker compose up -d`. La base de datos es aditiva: no hay migraciones destructivas.
 
 ## 2. Activar el asistente solo con reglas (T-10.3, paso 1)

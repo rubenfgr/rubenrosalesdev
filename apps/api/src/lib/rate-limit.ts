@@ -1,11 +1,21 @@
 import type { Context, MiddlewareHandler } from 'hono';
 import { errorBody } from './errors';
 
+const IP_SHAPE = /^[0-9a-fA-F:.]{3,45}$/;
+
 /**
- * IP del cliente: primer valor de `X-Forwarded-For` (lo pone Traefik). Si no hay, un valor fijo
- * (todo el tráfico sin cabecera comparte cubo, que es lo prudente). No se guarda ni se registra en claro.
+ * IP del cliente. La web va detrás de Cloudflare: la IP real llega en `CF-Connecting-IP`; el `X-Forwarded-For` que
+ * recibe la API trae la IP del servidor de borde de Cloudflare (distinta en cada petición), inútil para limitar.
+ * Sin Cloudflare (local, pruebas) se usa el primer valor de `X-Forwarded-For`. Si no hay nada, un valor fijo (todo el
+ * tráfico sin cabecera comparte cubo, que es lo prudente). No se guarda ni se registra en claro.
+ * Supuesto: el origen solo recibe tráfico de Cloudflare (si alguien llegara directo a la IP del VPS podría falsear
+ * `CF-Connecting-IP`; se mitiga restringiendo el firewall a los rangos de Cloudflare).
  */
-export const clientIp = (c: Context): string => c.req.header('x-forwarded-for')?.split(',')[0]?.trim() || 'unknown';
+export const clientIp = (c: Context): string => {
+  const cf = c.req.header('cf-connecting-ip')?.trim();
+  if (cf && IP_SHAPE.test(cf)) return cf;
+  return c.req.header('x-forwarded-for')?.split(',')[0]?.trim() || 'unknown';
+};
 
 interface Options {
   limit: number;

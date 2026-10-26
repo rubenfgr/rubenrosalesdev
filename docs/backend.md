@@ -35,7 +35,7 @@ pnpm dev            # web en http://localhost:4321
 
 ## Errores
 
-Formato único: `{ "error": "<codigo_snake_case>", "message"?: string }`. Códigos: `invalid_request` (400), `not_found` (404), `rate_limited` (429), `internal` (500), `llm_unavailable` (503). Un cuerpo de más de 32 KB devuelve `413 payload_too_large`. El rate limit (`lib/rate-limit.ts`) usa el primer valor de `X-Forwarded-For` (Traefik) y devuelve `429 rate_limited` con `Retry-After`; es en memoria, válido con una sola instancia. Los logs nunca contienen cuerpos de petición, emails ni mensajes de usuarios.
+Formato único: `{ "error": "<codigo_snake_case>", "message"?: string }`. Códigos: `invalid_request` (400), `not_found` (404), `rate_limited` (429), `internal` (500), `llm_unavailable` (503). Un cuerpo de más de 32 KB devuelve `413 payload_too_large`. El rate limit (`lib/rate-limit.ts`) usa la IP de la cabecera `CF-Connecting-IP` (la web está detrás de Cloudflare; el `X-Forwarded-For` que llega a la API trae la IP del servidor de borde de Cloudflare, distinta en cada petición) y, sin Cloudflare, el primer valor de `X-Forwarded-For`. Devuelve `429 rate_limited` con `Retry-After`; es en memoria, válido con una sola instancia. Los logs nunca contienen cuerpos de petición, emails ni mensajes de usuarios.
 
 ## Variables de entorno
 

@@ -521,12 +521,13 @@ Depende de todo lo anterior, de **D-1 (cifras reales)** y de la aprobación de R
 - 2026-10-26: se estrechan las reglas de texto libre (`rules` en `assistant/{es,en}.json`): antes «cuánto», «cuándo», «rubén» o «who» disparaban respuestas enlatadas fuera de lugar.
 - 2026-10-26: hallazgo en los términos de la Gemini API: para el EEE solo se permite el servicio de pago. **Producción requiere facturación activa** (hoy está deshabilitada; vale para pruebas locales).
 - 2026-10-26: **fallo hallado en las pruebas locales de Rubén**: el modelo dijo «Le paso este resumen a Rubén ahora mismo» y el visitante había escrito su correo en el chat (viajó a Google), y el resumen no incluía lo contado. Corregido: correo/teléfono no llegan al modelo (web y API; historial con datos ocultos), el prompt prohíbe afirmar envíos, tras cada respuesta del LLM aparece el botón «Enviar resumen a Rubén», las reglas con guion se aplican también en el cliente antes de llamar a la API y el resumen incluye lo escrito por el visitante. Evals ampliados a 41 casos: 41/41.
+- 2026-10-26: **primer despliegue en producción** (merge `cb31f44`). La pipeline falló al arrancar porque en el VPS existía una red `rubenrosalesdev_internal` de la app antigua (no creada por Compose); Rubén la borró y se arrancó a mano. Verificado en vivo: web 200, `/api/v1/health` ok, cabeceras de seguridad, `/api/contact` antiguo 404, formulario nuevo 400 con cuerpo vacío, chat respondiendo con Gemini. **Hallazgo:** el límite por IP no funcionaba (Cloudflare delante: el `X-Forwarded-For` es la IP del borde); el supuesto «Traefik pone la IP real» era falso. Corrección: `CF-Connecting-IP`.
 
 ### `[VERIFICAR]` abiertos
 - Criterio USD≈EUR para los precios del LLM (la tabla oficial está en dólares; se usan como euros, lado seguro).
 - Activar la facturación de Google Cloud antes de producción (obligatorio para el EEE) y crear la alerta de 1 €.
 - `thinkingConfig` en `generateContent` de Gemini 3.5 Flash-Lite: no verificado, no se usa.
-- Supuesto de que Traefik pone la IP real como primer valor de `X-Forwarded-For`.
+- (Cerrado: era falso con Cloudflare; ver «Cambios sobre la marcha».) Recomendado: restringir el firewall del VPS a los rangos de Cloudflare para que nadie falsee `CF-Connecting-IP` llegando directo al origen.
 - (Cerrado 2026-10-26) `/privacidad` sección 10 revisada con los términos oficiales de Google; sin marcas.
 
 ---
