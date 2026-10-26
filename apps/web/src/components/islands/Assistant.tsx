@@ -265,6 +265,13 @@ export default function Assistant({ data: D, labels: L, lang, privacyHref, llm =
   const icon = (d: string, size = 18) => (
     <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d={d} /></svg>
   );
+  // Símbolo oficial (muro con la pieza azul) para el botón flotante.
+  const mark = (size: number) => (
+    <svg class="as-mark" width={size} height={size} viewBox="0 0 84 84" aria-hidden="true">
+      <g class="w"><rect x="0" y="6" width="22" height="23" /><rect x="26" y="6" width="26" height="23" /><rect x="0" y="33" width="36" height="23" /><rect x="40" y="33" width="38" height="23" /><rect x="0" y="60" width="18" height="24" /><rect x="22" y="60" width="38" height="24" /><rect x="64" y="60" width="14" height="24" /></g>
+      <rect class="p" x="62" y="0" width="22" height="23" />
+    </svg>
+  );
   const chat = 'M21 12a8 8 0 0 1-11.6 7.1L4 20l1-4.6A8 8 0 1 1 21 12z';
 
   return (
@@ -323,12 +330,12 @@ export default function Assistant({ data: D, labels: L, lang, privacyHref, llm =
         </div>
       )}
       {!open && (
-        <button type="button" class="as-fab" aria-label={L.fabAria} onClick={toggle}>
-          <span class="as-fab-ico">{icon(chat, 20)}<i /></span>
+        <button type="button" class={`as-fab`} aria-label={L.fabAria} onClick={toggle}>
+          <span class="as-fab-ico">{mark(22)}<i /></span>
           <span class="as-fab-text"><b>{L.fabTitle}</b><small>{L.fabSubtitle}</small></span>
         </button>
       )}
-      <button type="button" class={`as-fab-mini${open ? ' open' : ''}`} aria-label={open ? L.close : L.fabAria} onClick={toggle}>{icon(open ? 'M6 6l12 12M18 6L6 18' : chat, 22)}</button>
+      <button type="button" class={`as-fab-mini${open ? ' open' : ''}`} aria-label={open ? L.close : L.fabAria} onClick={toggle}>{open ? icon('M6 6l12 12M18 6L6 18', 22) : <>{mark(28)}<i class="as-fab-dot" /></>}</button>
     </>
   );
 }

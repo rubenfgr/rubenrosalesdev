@@ -47,6 +47,20 @@ html.as-lock, html.as-lock body { overflow: hidden; overscroll-behavior: none; }
 .as-consent-box b { font-weight: var(--font-weight-strong); } .as-consent-box p { margin: 0; } .as-consent-box a { color: var(--color-primary); text-decoration: underline; }
 .as-consent-actions { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; } .as-consent-actions .as-submit { padding: 0 16px; }
 .as-input input:disabled, .as-input button:disabled { opacity: 0.5; cursor: not-allowed; }
+/* Botón flotante: símbolo oficial y un pulso del indicador de estado cada 5 s (nada con movimiento reducido). */
+.as-fab-ico { background: var(--color-dark); box-shadow: inset 0 0 0 1px var(--color-dark-border); }
+.as-mark .w { fill: var(--color-dark-text); } .as-mark .p { fill: var(--color-primary-on-dark); }
+.as-fab-ico i, .as-fab-dot { background: var(--color-ok); }
+.as-fab-mini { position: fixed; } .as-fab-dot { position: absolute; right: 8px; top: 8px; width: 10px; height: 10px; border-radius: 50%; border: 2px solid var(--color-dark-footer); box-sizing: content-box; }
+.as-fab-ico i::after, .as-fab-dot::after { content: ''; position: absolute; inset: -2px; border-radius: 50%; border: 2px solid var(--color-ok); opacity: 0; }
+.as-fab-ico svg, .as-fab-mini svg { transition: transform var(--duration-base) var(--ease-out); }
+.as-fab:hover .as-fab-ico svg, .as-fab-mini:hover svg { transform: scale(1.08); }
+.as-fab:active { transform: translateY(0) scale(.98); }
+.as-fab-text small { transition: color var(--duration-base) var(--ease-out); } .as-fab:hover .as-fab-text small { color: var(--color-dark-text); }
+@media (prefers-reduced-motion: no-preference) {
+  .as-fab-ico i::after, .as-fab-dot::after { animation: rrping 5s var(--ease-out) 2s infinite; }
+}
+@keyframes rrping { 0% { opacity: .9; transform: scale(1); } 22% { opacity: 0; transform: scale(2.4); } 100% { opacity: 0; transform: scale(2.4); } }
 /* Móvil: el panel cubre la pantalla por encima de la cabecera fija (--z-modal > --z-sticky) y sigue al viewport visual. */
 @media (max-width: 34.99rem) {
   .as-panel { z-index: var(--z-modal); inset: auto; left: 0; right: 0; top: var(--as-vt, 0px); width: auto; height: var(--as-vh, 100dvh); border: 0; border-radius: 0; animation: none; }
