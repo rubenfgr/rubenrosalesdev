@@ -15,6 +15,37 @@ const run = async (deps: Partial<ChatDeps> & { llm: FakeLlmClient }, content: st
   return { events, text: events.flatMap((e) => (e.type === 'delta' ? [e.text] : [])).join(''), last: events[events.length - 1]! };
 };
 
+describe('datos personales en el chat', () => {
+  it('un mensaje con correo no llega al modelo: se pide usar el formulario', async () => {
+    const llm = new FakeLlmClient([say('no debería llamarse')]);
+    const r = await run({ llm }, 'Mi correo es fran@ejemplo.com, escríbeme');
+    expect(llm.calls).toHaveLength(0);
+    expect(r.last).toMatchObject({ type: 'done', source: 'rule' });
+    expect(r.text).toContain(knowledge.assistant.es.actions.personalData!.say[0]!);
+  });
+
+  it('un teléfono tampoco', async () => {
+    const llm = new FakeLlmClient([]);
+    await run({ llm }, 'llámame al 600 123 123');
+    expect(llm.calls).toHaveLength(0);
+  });
+
+  it('el historial que sí se envía al modelo va con correos y teléfonos ocultos', async () => {
+    const llm = new FakeLlmClient([say('ok')]);
+    const events: ChatEvent[] = [];
+    const messages = [
+      { role: 'user' as const, content: 'soy ana@x.com y mi móvil es 600 123 123' },
+      { role: 'assistant' as const, content: 'Prefiero no recibir tus datos' },
+      { role: 'user' as const, content: 'vale, quiero automatizar facturas con Excel' },
+    ];
+    for await (const ev of chatTurn({ knowledge, llm, cache: new MemoryAnswerCache(), maxOutputTokens: 300 }, { lang: 'es', messages } as never)) events.push(ev);
+    const sent = JSON.stringify(llm.calls[0]!.turns);
+    expect(sent).not.toContain('ana@x.com');
+    expect(sent).not.toContain('600 123 123');
+    expect(sent).toContain('[correo omitido]');
+  });
+});
+
 describe('chatTurn', () => {
   it('una pregunta cubierta por reglas no llama al LLM', async () => {
     const llm = new FakeLlmClient([]);
@@ -33,14 +64,6 @@ describe('chatTurn', () => {
     expect(llm.calls).toHaveLength(1);
     expect(b.last).toMatchObject({ source: 'cache' });
     expect(b.text).toBe(a.text);
-  });
-
-  it('no cachea respuestas con cifras ni preguntas con datos personales', async () => {
-    const cache = new MemoryAnswerCache();
-    const llm = new FakeLlmClient([say('ok'), say('ok')]);
-    await run({ llm, cache }, 'Soy ana@example.com, ¿qué servicios ofreces?');
-    await run({ llm, cache }, 'Soy ana@example.com, ¿qué servicios ofreces?');
-    expect(llm.calls).toHaveLength(2);
   });
 
   it('el prompt enviado cabe en ~1.200 tokens y el historial se recorta', async () => {

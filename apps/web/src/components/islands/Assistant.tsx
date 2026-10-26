@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from 'preact/hooks';
-import { matchRule, type Ctx } from '@rr/shared/engine';
+import { hasPersonalData, matchRule, type Ctx } from '@rr/shared/engine';
 import { LlmUnavailable, sendLead, streamChat } from '../../lib/assistant/api';
 import './Assistant.css';
 
@@ -12,7 +12,7 @@ interface Data {
   rules: { pattern: string; action: string }[];
   types: Record<string, string>; systems: Record<string, string>; team: Record<string, string>;
   form: { name: string; namePlaceholder: string; email: string; emailPlaceholder: string; consent: string; submit: string; sending: string; errors: Record<'name' | 'email' | 'consent' | 'send', string> };
-  summary: { title: string; rows: Record<'name' | 'email' | 'project' | 'tools' | 'team', string>; footer: string; thanks: string; userSent: string };
+  summary: { title: string; rows: Record<'name' | 'email' | 'project' | 'tools' | 'team' | 'chat', string>; footer: string; thanks: string; userSent: string };
 }
 interface Labels { fabAria: string; panelAria: string; close: string; restart: string; send: string; messageAria: string; inputPlaceholder: string; fabTitle: string; fabSubtitle: string; retry: string }
 interface Props { data: Data; labels: Labels; lang: string; privacyHref: string; llm?: boolean }
@@ -161,12 +161,12 @@ export default function Assistant({ data: D, labels: L, lang, privacyHref, llm =
       );
       if (consent === 'yes') conversationId.current = done.conversationId;
       setTyping(false);
-      setStep('start');
+      setStep('after_chat');
     } catch (err) {
       if (ac.signal.aborted) return;
       setTyping(false);
       setRetry(text);
-      if (started || !(err instanceof LlmUnavailable)) return setStep('start');
+      if (started || !(err instanceof LlmUnavailable)) return setStep('after_chat');
       say(matchRule(D.rules, text) ?? 'fallback');
     }
   };
@@ -177,8 +177,13 @@ export default function Assistant({ data: D, labels: L, lang, privacyHref, llm =
     if (!t || typing) return;
     setDraft('');
     user(t);
+    // Correo o teléfono: no van al modelo; se abre el formulario (que sí los envía a Rubén).
+    if (hasPersonalData(t)) return say('personalData');
+    // Reglas primero (como en la API): lo que ya tiene guion no gasta una llamada al modelo.
+    const rule = matchRule(D.rules, t);
+    if (rule) return say(rule);
     if (llm && consent) void askLlm(t);
-    else say(matchRule(D.rules, t) ?? 'fallback');
+    else say('fallback');
   };
 
   const submitContact = async () => {
@@ -190,6 +195,9 @@ export default function Assistant({ data: D, labels: L, lang, privacyHref, llm =
     if (ctx.type) rows.push({ k: D.summary.rows.project, v: D.types[ctx.type] ?? ctx.type });
     if (ctx.systems) rows.push({ k: D.summary.rows.tools, v: D.systems[ctx.systems] ?? ctx.systems });
     if (ctx.team) rows.push({ k: D.summary.rows.team, v: D.team[ctx.team] ?? ctx.team });
+    // Lo que el visitante ha escrito con sus palabras (no los botones), para que Rubén tenga el contexto.
+    const typed = messages.flatMap((m) => (m.kind === 'user' && !chipLabels.has(m.text) ? [m.text] : [])).slice(-6);
+    if (typed.length) rows.push({ k: D.summary.rows.chat, v: typed.map((t) => t.slice(0, 250)).join(' · ') });
     setFormError('');
     setSending(true);
     try {
@@ -211,6 +219,7 @@ export default function Assistant({ data: D, labels: L, lang, privacyHref, llm =
     bot([D.summary.thanks.replace('{name}', name.split(' ')[0] ?? name), { kind: 'summary', rows }], 'done');
   };
 
+  const chipLabels = new Set(Object.values(D.steps).flatMap((list) => list.map((o) => o.label)).concat(Object.values(D.types), Object.values(D.systems), Object.values(D.team)));
   const showChips = !!consent && !typing && options.length > 0 && step !== 'contact';
   const icon = (d: string, size = 18) => (
     <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d={d} /></svg>

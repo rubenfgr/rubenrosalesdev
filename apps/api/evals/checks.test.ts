@@ -17,8 +17,12 @@ describe('check()', () => {
     expect(check('es', { noFigure: true }, { text: 'Tarda 3 semanas', source: 'llm' })).toEqual([]);
   });
   it('refers exige derivar a Rubén con nombre y email', () => {
-    expect(check('es', { refers: true }, { text: 'Se lo paso a Rubén; déjame tu nombre y email.', source: 'llm' })).toEqual([]);
+    expect(check('es', { refers: true }, { text: 'Prefiero no afirmarlo: pulsa el botón «Enviar resumen a Rubén» y lo ve él.', source: 'llm' })).toEqual([]);
     expect(check('es', { refers: true }, { text: 'No lo sé.', source: 'llm' })).toHaveLength(1);
+  });
+  it('detecta que el modelo afirme haber enviado algo', () => {
+    expect(check('es', {}, { text: 'Le paso este resumen a Rubén ahora mismo.', source: 'llm' })).toEqual(['afirma haber enviado o anotado algo']);
+    expect(check('es', {}, { text: 'Ya se lo he pasado a Rubén.', source: 'llm' })).toEqual(['afirma haber enviado o anotado algo']);
   });
   it('lang distingue es de en y source', () => {
     expect(check('en', { lang: 'en' }, { text: 'I can help you with that.', source: 'llm' })).toEqual([]);

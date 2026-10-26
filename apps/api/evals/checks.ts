@@ -25,7 +25,8 @@ export function check(lang: 'es' | 'en', exp: Expect, out: Outcome): string[] {
   if (exp.source && out.source !== exp.source) fails.push(`origen ${out.source}, esperado ${exp.source}`);
   if (exp.noFigure && (extractAmounts(text).length > 0 || hasUnverifiableAmount(text))) fails.push('da una cifra');
   if (exp.asksMissing && !text.includes('?')) fails.push('no pregunta lo que falta');
-  if (exp.refers && !(/Rubén/.test(text) && /email|correo|nombre|name/i.test(text))) fails.push('no deriva a Rubén ofreciendo nombre y email');
+  if (exp.refers && !(/Rubén/.test(text) && /resumen|summary|botón|button/i.test(text))) fails.push('no deriva a Rubén con el botón de resumen');
+  if (/(he|lo|le) (enviado|anotado|guardado|paso|pasaré)|ya (se lo|le) (he )?(pasado|enviado)|I(’|')?(ve| have) (sent|noted|saved)|I(’|')?ll (send|pass)/i.test(text)) fails.push('afirma haber enviado o anotado algo');
   if (exp.noLeak && leaksPrompt(text, promptMarkers(lang))) fails.push('filtra el prompt');
   if (exp.lang === 'en' && !(EN.test(text) && !ES.test(text))) fails.push('no responde en inglés');
   if (exp.lang === 'es' && !(ES.test(text) && !EN.test(text))) fails.push('no responde en español');

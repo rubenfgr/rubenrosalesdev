@@ -1,7 +1,7 @@
 // Un turno de chat: reglas → caché → LLM → validador de cifras (el asistente no da ningún importe en euros).
 // Decisión de streaming (T-3.7): la respuesta del LLM se bufferiza entera (≤ 300 tokens), se valida y se emite después en
 // frases. Así nunca sale una cifra no autorizada y no hace falta retractar texto ya enviado.
-import { matchRule, type ChatRequest, type Lang } from '@rr/shared';
+import { hasPersonalData, matchRule, redactPersonal, type ChatRequest, type Lang } from '@rr/shared';
 import type { Knowledge } from '@rr/shared/knowledge';
 import { type AnswerCache } from './answer-cache';
 import type { LlmClient, LlmTurn, LlmUsage } from './llm';
@@ -33,7 +33,6 @@ export type ChatEvent =
   | { type: 'error'; error: 'llm_unavailable' };
 
 const sentences = (text: string): string[] => text.match(/[^.!?\n]+[.!?]*\s*/g) ?? [text];
-const hasPersonalData = (text: string): boolean => /\S+@\S+\.\S+/.test(text) || /\d[\d\s().-]{6,}\d/.test(text);
 
 export async function* chatTurn(deps: ChatDeps, req: ChatRequest, signal?: AbortSignal): AsyncGenerator<ChatEvent> {
   const { knowledge: k } = deps;
@@ -48,6 +47,13 @@ export async function* chatTurn(deps: ChatDeps, req: ChatRequest, signal?: Abort
   const emit = function* (text: string): Generator<ChatEvent> {
     for (const part of sentences(text)) yield { type: 'delta', text: part };
   };
+
+  // 0. Correo o teléfono en el mensaje: no van al modelo. Se pide usar el formulario (que sí envía a Rubén).
+  if (hasPersonalData(last.content) && A.actions.personalData) {
+    yield* emit(A.actions.personalData.say.join('\n\n'));
+    yield { type: 'done', source: 'rule' };
+    return;
+  }
 
   // 1. Reglas primero: sin coste.
   const action = matchRule(A.rules, last.content);
@@ -76,7 +82,7 @@ export async function* chatTurn(deps: ChatDeps, req: ChatRequest, signal?: Abort
   }
 
   // 4. LLM: historial corto y recortado, prompt mínimo.
-  const turns: LlmTurn[] = req.messages.slice(-HISTORY_MESSAGES).map((m) => ({ role: m.role, text: m.content.slice(0, HISTORY_CHARS) }));
+  const turns: LlmTurn[] = req.messages.slice(-HISTORY_MESSAGES).map((m) => ({ role: m.role, text: redactPersonal(m.content).slice(0, HISTORY_CHARS) }));
   const system = buildSystemPrompt(lang, k, { question: last.content });
   let text = '';
   for await (const ev of deps.llm.stream({ system, turns, maxOutputTokens: deps.maxOutputTokens, temperature: 0.3, ...(signal ? { signal } : {}) })) {

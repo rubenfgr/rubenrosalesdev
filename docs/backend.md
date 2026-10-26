@@ -71,11 +71,13 @@ Entrada: `ChatRequest` de `@rr/shared` (idioma, hasta 20 mensajes y `consent`). 
 
 Orden de un turno (`services/chat.ts`), pensado para gastar lo mínimo:
 
+0. **Datos personales:** si el mensaje lleva un correo o un teléfono, **no se llama al modelo**: se responde con el guion `personalData` (usar el formulario/botón «Enviar resumen a Rubén»). Además, en el historial que sí se envía al modelo, los correos y teléfonos se sustituyen por un marcador. La web hace la misma comprobación antes de enviar.
 1. **Reglas primero:** si `matchRule()` resuelve la pregunta (precio, plazo, quién es Rubén, contacto, cómo trabaja), responde con el guion de `assistant.json` sin llamar al LLM.
 2. **Caché** (`answer_cache`, TTL 30 días): solo preguntas sueltas, sin email ni teléfono y sin importes en la respuesta. Se normaliza (minúsculas, sin tildes ni puntuación).
 3. **Límites:** más de 12 mensajes del usuario en la conversación, 20 llamadas al LLM por IP y día (IP con hash y sal) y, más adelante, el tope mensual → `llm_unavailable` (la web sigue con reglas).
 4. **LLM** con system prompt mínimo (reglas + bio + solo las secciones relevantes por palabras clave), últimos 6 mensajes recortados a 500 caracteres, `maxOutputTokens` 300 y temperatura 0,3. **El asistente no da precios**: los fija Rubén en cada propuesta; no hay tabla de precios en el repo ni en la web.
-5. **Validador de cifras** (`services/validator.ts`): ningún importe en euros puede llegar al visitante (tampoco «cinco mil euros» ni «5k €»), ni fragmentos del system prompt. Si el modelo los produce, se sustituye la respuesta por `actions.fallback` (derivar a Rubén) y se avisa en el log sin contenido. Decisión de streaming: la respuesta del LLM se **bufferiza entera** (≤ 300 tokens), se valida y se emite después en frases; así nunca se envía un importe ni hay que retractar texto.
+5. **Reglas del prompt sobre envíos:** el modelo no puede enviar nada; no debe afirmar que ha enviado, anotado o guardado algo ni pedir correo, teléfono o nombre en el chat. Solo el botón «Enviar resumen a Rubén» hace llegar el resumen (que incluye lo que el visitante escribió con sus palabras).
+6. **Validador de cifras** (`services/validator.ts`): ningún importe en euros puede llegar al visitante (tampoco «cinco mil euros» ni «5k €»), ni fragmentos del system prompt. Si el modelo los produce, se sustituye la respuesta por `actions.fallback` (derivar a Rubén) y se avisa en el log sin contenido. Decisión de streaming: la respuesta del LLM se **bufferiza entera** (≤ 300 tokens), se valida y se emite después en frases; así nunca se envía un importe ni hay que retractar texto.
 
 ### Coste (objetivo ≤ 1 €/mes)
 

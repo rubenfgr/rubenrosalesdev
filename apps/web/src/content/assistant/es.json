@@ -77,6 +77,20 @@
         "action": "humano",
         "label": "Hablar con Rubén"
       }
+    ],
+    "after_chat": [
+      {
+        "action": "humano",
+        "label": "Enviar resumen a Rubén"
+      },
+      {
+        "action": "proyecto",
+        "label": "Tengo un proyecto en mente"
+      },
+      {
+        "action": "como",
+        "label": "¿Cómo trabaja?"
+      }
     ]
   },
   "actions": {
@@ -96,7 +110,7 @@
     "precio": {
       "say": [
         "Depende mucho del alcance, así que no te voy a dar una cifra al aire.",
-        "Rubén prepara cada propuesta a medida, con alcance, plazo y precio cerrados por escrito, una vez que conoce tu caso. Si me cuentas tres cosas, le paso un resumen para que llegue preparado. ¿Lo hacemos?"
+        "Rubén prepara cada propuesta a medida, con alcance, plazo y precio cerrados por escrito, una vez que conoce tu caso. Si me cuentas tres cosas, preparo un resumen y tú decides si se lo envías. ¿Lo hacemos?"
       ],
       "step": "price_q"
     },
@@ -116,7 +130,7 @@
     "plazo": {
       "say": [
         "El plazo depende del alcance y se acuerda por escrito en la propuesta, con entregas cada 1–2 semanas.",
-        "Si me cuentas tres cosas sobre tu caso, le paso un resumen a Rubén para que lo concrete contigo."
+        "Si me cuentas tres cosas sobre tu caso, preparo un resumen que puedes enviarle a Rubén para que lo concrete contigo."
       ],
       "step": "price_q"
     },
@@ -145,6 +159,13 @@
         "Mientras, ¿te ayudo con algo de esto?"
       ],
       "step": "start"
+    },
+    "personalData": {
+      "say": [
+        "Prefiero no recibir tus datos de contacto por aquí: el chat usa inteligencia artificial y no deben pasar por ella.",
+        "Déjalos en este formulario y Rubén te escribe en menos de 24 h laborables, con lo que me has contado."
+      ],
+      "step": "contact"
     }
   },
   "rules": [
@@ -204,7 +225,8 @@
       "email": "Email",
       "project": "Proyecto",
       "tools": "Herramientas",
-      "team": "Equipo"
+      "team": "Equipo",
+      "chat": "Mensajes"
     },
     "footer": "Te escribe en menos de 24 h laborables. Así no tendrás que repetirle nada.",
     "thanks": "Gracias, {name}.",

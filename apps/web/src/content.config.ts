@@ -144,7 +144,7 @@ const assistant = byLocale(
       errors: z.object({ name: text, email: text, consent: text, send: text }),
     }),
     summary: z.object({
-      title: text, rows: z.object({ name: text, email: text, project: text, tools: text, team: text }),
+      title: text, rows: z.object({ name: text, email: text, project: text, tools: text, team: text, chat: text }),
       footer: text, thanks: text, userSent: text,
     }),
   }),

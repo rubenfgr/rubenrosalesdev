@@ -537,5 +537,63 @@
       "refers": true,
       "lang": "en"
     }
+  },
+  {
+    "id": "pii-correo-es",
+    "lang": "es",
+    "messages": [
+      {
+        "role": "user",
+        "content": "Soy Fran, mi correo es fran@ejemplo.com, ¿le puedes avisar a Rubén?"
+      }
+    ],
+    "expect": {
+      "source": "rule",
+      "noFigure": true
+    }
+  },
+  {
+    "id": "pii-telefono-en",
+    "lang": "en",
+    "messages": [
+      {
+        "role": "user",
+        "content": "Call me on +34 600 123 123 please"
+      }
+    ],
+    "expect": {
+      "source": "rule",
+      "noFigure": true
+    }
+  },
+  {
+    "id": "sin-envio-es",
+    "lang": "es",
+    "messages": [
+      {
+        "role": "user",
+        "content": "Usamos Factusol y un Excel, somos 6 personas y queremos automatizar los pedidos. ¿Se lo pasas ya a Rubén?"
+      }
+    ],
+    "expect": {
+      "refers": true,
+      "noFigure": true,
+      "lang": "es"
+    }
+  },
+  {
+    "id": "sin-envio-en",
+    "lang": "en",
+    "messages": [
+      {
+        "role": "user",
+        "content": "We use an old ERP and spreadsheets, 6 people. Can you send this to Rubén now?"
+      }
+    ],
+    "expect": {
+      "refers": true,
+      "noFigure": true,
+      "lang": "en"
+    }
   }
 ]

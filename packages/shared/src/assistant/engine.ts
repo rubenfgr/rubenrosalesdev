@@ -13,3 +13,12 @@ export function matchRule(rules: { pattern: string; action: string }[], text: st
   for (const r of rules) if (new RegExp(r.pattern, 'i').test(text)) return r.action;
   return null;
 }
+
+const EMAIL = /[\w.+-]+@[\w-]+(?:\.[\w-]+)+/g;
+const PHONE = /\+?\d[\d\s().-]{6,}\d/g;
+
+/** ¿El texto contiene un correo o un teléfono? Esos datos no deben viajar al modelo de lenguaje. */
+export const hasPersonalData = (text: string): boolean => new RegExp(EMAIL.source).test(text) || new RegExp(PHONE.source).test(text);
+
+/** Sustituye correos y teléfonos por un marcador (para el historial que sí se envía al modelo). */
+export const redactPersonal = (text: string): string => text.replace(EMAIL, '[correo omitido]').replace(PHONE, '[teléfono omitido]');
