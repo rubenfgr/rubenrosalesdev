@@ -137,9 +137,9 @@ export default function Servicios({ services, labels: L, locale, contactHref }: 
               </div>
               <div class="charts">
                 <div>
-                  <h4>{D.dash.weekly}</h4>
+                  <div class="chart-head"><h4>{D.dash.weekly}</h4><span class="goal-key">{D.dash.target}</span></div>
                   <div class="bars">
-                    <span class="goal" /><span class="goal-l">{D.dash.target}</span>
+                    <span class="goal" />
                     {base.map((v) => <i style={`height:${t === 0 ? 0 : v}%`} />)}
                     <i class="now" style={`height:${Math.round(30 + 54 * g)}%`} />
                   </div>
