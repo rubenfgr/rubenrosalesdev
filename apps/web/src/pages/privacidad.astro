@@ -81,8 +81,8 @@ import Legal from '../layouts/Legal.astro';
   <h2>10. Asistente virtual</h2>
   <p>
     La web incluye un asistente virtual automático (con inteligencia artificial) que responde dudas sobre
-    los servicios y puede dar un rango orientativo de precio. Sus respuestas no constituyen un presupuesto
-    ni producen efectos jurídicos: Rubén confirma cualquier propuesta por escrito.
+    los servicios y ayuda a preparar un resumen para Rubén. No da precios ni presupuestos: sus respuestas no
+    producen efectos jurídicos y Rubén confirma cualquier propuesta por escrito.
   </p>
   <ul>
     <li>
@@ -92,28 +92,46 @@ import Legal from '../layouts/Legal.astro';
       <strong>no se envían al modelo de lenguaje</strong>.
     </li>
     <li>
-      <strong>Finalidad:</strong> responder a su consulta, revisar las conversaciones para mejorar el
-      servicio y, si deja sus datos, contactar con usted.
+      <strong>Finalidad:</strong> responder a su consulta, revisar las conversaciones guardadas para mejorar
+      el servicio y, si deja sus datos, contactar con usted.
     </li>
     <li>
-      <strong>Base jurídica:</strong> su consentimiento (art. 6.1.a RGPD) para guardar la conversación, que
-      puede rechazar con «Continuar sin guardar» y retirar en cualquier momento. El contacto posterior se
-      basa en su solicitud (art. 6.1.b RGPD). [VERIFICAR: revisión legal de las bases jurídicas, en especial
-      del tratamiento del texto enviado al proveedor cuando no se guarda la conversación]
+      <strong>Base jurídica:</strong>
+      <ul>
+        <li>Guardar la conversación: su consentimiento (art. 6.1.a RGPD). Puede rechazarlo con «Continuar sin guardar» y retirarlo en cualquier momento.</li>
+        <li>
+          Enviar sus mensajes al proveedor de inteligencia artificial para generar la respuesta: el interés
+          legítimo en atender la consulta que usted mismo inicia en el asistente (art. 6.1.f RGPD). Se le informa antes
+          de empezar y puede no usar el asistente y escribir por el formulario o por correo electrónico.
+        </li>
+        <li>Contactar con usted tras dejar sus datos: su solicitud (art. 6.1.b RGPD).</li>
+      </ul>
     </li>
     <li>
       <strong>Plazo de conservación:</strong> las conversaciones guardadas, 90 días; el nombre, el correo y
-      el resumen del contacto, 12 meses. Después se borran automáticamente.
+      el resumen del contacto, 12 meses. Después se borran automáticamente. Si rechaza guardar la conversación,
+      no se conserva en nuestra base de datos.
     </li>
     <li>
-      <strong>Encargados del tratamiento:</strong> Hetzner (alojamiento y base de datos) y Google (Gemini API),
-      que procesa el texto de la conversación para generar la respuesta. Según las condiciones de Google para
-      el servicio de pago, ese contenido no se utiliza para mejorar sus productos. [VERIFICAR: condiciones
-      vigentes de Google y existencia de transferencia internacional con sus garantías]
+      <strong>Encargados del tratamiento:</strong> Hetzner (alojamiento y base de datos) y Google (Gemini API en
+      su modalidad de pago), que procesa el texto de la conversación para generar la respuesta y actúa como
+      encargado del tratamiento según su acuerdo de tratamiento de datos (Data Processing Addendum). Según los
+      términos de Google para el servicio de pago, ese contenido no se utiliza para mejorar sus productos; Google
+      registra los mensajes y las respuestas durante un tiempo limitado únicamente para detectar y prevenir usos
+      abusivos y para cumplir obligaciones legales.
+    </li>
+    <li>
+      <strong>Transferencias internacionales:</strong> Google puede tratar los datos en cualquier país donde ella o
+      sus subencargados tengan instalaciones. Las transferencias fuera del Espacio Económico Europeo se amparan en
+      las cláusulas contractuales tipo de la Comisión Europea incorporadas al acuerdo de tratamiento de datos de
+      Google o, en su caso, en otra solución de transferencia que Google adopte conforme al RGPD.
     </li>
     <li>
       <strong>Decisiones automatizadas:</strong> el asistente no toma decisiones que le afecten de forma
-      significativa; solo ofrece información y rangos orientativos.
+      significativa; solo ofrece información.
+    </li>
+    <li>
+      <strong>Menores:</strong> el asistente no está dirigido a menores de 18 años. No introduzca datos de menores.
     </li>
   </ul>
   <p>
