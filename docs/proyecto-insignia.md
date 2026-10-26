@@ -1,6 +1,8 @@
 # Proyecto insignia: agente de pedidos con revisión humana
 
-Estado: **propuesta pendiente de aprobación**. No hay nada implementado. Lo que se publique en la web saldrá de lo que se construya de verdad; hasta entonces no se escribe ni una línea de contenido sobre él.
+Estado: **tarea para más adelante, fuera de este repositorio**. Rubén la hará en otro repo, y solo cuando esta web esté del todo montada. Aquí no se implementa nada: ni `apps/agent` ni ninguna página de este proyecto. Cuando exista el repo con código y capturas reales, entonces se enlazará desde la web; hasta entonces no se escribe ni una línea de contenido sobre él.
+
+Pendiente de decidir cuando se retome: el caso y el alcance (§2), si el repo será público, si se empieza sin cuenta de Sentry (§4; por ahora sin cuenta) y el tope de coste (§5; se usaría la clave de Gemini de desarrollo ya existente).
 
 ## 1. Objetivo
 
