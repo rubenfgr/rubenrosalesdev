@@ -7,7 +7,7 @@ Nada de esto toca el VPS ni producción. Tu `apps/api/.env` ya tiene la clave de
 ```bash
 pnpm dev:db          # 1) Postgres local (contenedor rr-pg) + migraciones. Se puede repetir sin problema.
 pnpm dev:api         # 2) API en http://localhost:3000
-pnpm dev:assistant   # 3) Web con el asistente y el LLM activados. La URL sale en la terminal (normalmente http://localhost:4321)
+pnpm dev:web   # 3) Web con el asistente y el LLM activados. La URL sale en la terminal (normalmente http://localhost:4321)
 ```
 
 La web reenvía `/api/v1` a la API, así que todo se ve desde una sola URL. Para parar: `Ctrl+C` en cada terminal y `docker stop rr-pg`. Para empezar de cero con la base de datos: `docker rm -f rr-pg && pnpm dev:db`.

@@ -8,7 +8,7 @@
     "dev": "pnpm --filter @rr/web dev",
     "dev:api": "pnpm --filter @rr/api dev",
     "dev:db": "bash scripts/dev-db.sh",
-    "dev:assistant": "PUBLIC_ASSISTANT_ENABLED=1 PUBLIC_ASSISTANT_LLM=1 pnpm --filter @rr/web dev",
+    "dev:web": "PUBLIC_ASSISTANT_ENABLED=1 PUBLIC_ASSISTANT_LLM=1 pnpm --filter @rr/web dev",
     "build": "pnpm -r build",
     "check": "pnpm -r check",
     "build:prod": "pnpm --filter @rr/web build:prod && pnpm --filter @rr/api build",
