@@ -59,7 +59,7 @@ Formato único: `{ "error": "<codigo_snake_case>", "message"?: string }`. Códig
 | `ASSISTANT_LLM_PRICE_IN_PER_MTOK` / `_OUT_PER_MTOK` | para el control de coste | Precio por millón de tokens (ver nota) |
 | `OLLAMA_BASE_URL`, `OLLAMA_MODEL` | con Ollama | Proveedor alternativo |
 
-**Precios y privacidad (verificado el 2026-10-25 en la documentación oficial):** Gemini 3.5 Flash-Lite, nivel de pago, estándar: 0,30 USD por millón de tokens de entrada y 2,50 USD de salida (incluye los tokens de razonamiento). Google indica que en el nivel de pago el contenido **no** se usa para mejorar sus productos (en el gratuito sí). La tabla está en dólares: se usan las mismas cifras como euros, lo que sobrestima el coste (lado seguro). Revísalo si cambia la tarifa.
+**Precios y privacidad (verificado el 2026-10-25 en la documentación oficial):** Gemini 3.5 Flash-Lite, nivel de pago, estándar: 0,30 USD por millón de tokens de entrada y 2,50 USD de salida (incluye los tokens de razonamiento). Google indica que en el nivel de pago el contenido **no** se usa para mejorar sus productos (en el gratuito sí). **En producción hay que usar el nivel de pago:** los términos de la Gemini API (ai.google.dev/gemini-api/terms) dicen que para clientes disponibles en el EEE, Suiza o el Reino Unido «solo se pueden usar los servicios de pago» (cuenta de facturación de Cloud activa). El nivel gratuito sirve solo para pruebas locales con datos sintéticos. La tabla está en dólares: se usan las mismas cifras como euros, lo que sobrestima el coste (lado seguro). Revísalo si cambia la tarifa.
 
 **Prueba manual con clave real (local):** `ASSISTANT_LLM_ENABLED=1 ASSISTANT_LLM_API_KEY=<tu clave> ASSISTANT_LLM_MODEL=gemini-3.5-flash-lite pnpm dev:api` y `curl -N -X POST localhost:3000/api/v1/chat ...` (cuando exista T-3.6). La clave solo en tu shell, nunca en el repo.
 
@@ -67,19 +67,19 @@ En el VPS las pone `deploy/.env.example` → `.env` (ver [despliegue.md](desplie
 
 ## Chat del asistente (`POST /api/v1/chat`)
 
-Entrada: `ChatRequest` de `@rr/shared` (idioma, hasta 20 mensajes, `ctx` opcional con tipo/herramientas/equipo). Salida: `text/event-stream` con `delta` (`{text}`), `done` (`{conversationId, source: rule|cache|llm, estimate?}`) y `error`. Si el LLM está apagado, sin clave o falla antes de dar texto: `503 {"error":"llm_unavailable"}` y la web degrada a reglas.
+Entrada: `ChatRequest` de `@rr/shared` (idioma, hasta 20 mensajes y `consent`). Salida: `text/event-stream` con `delta` (`{text}`), `done` (`{conversationId, source: rule|cache|llm}`) y `error`. Si el LLM está apagado, sin clave o falla antes de dar texto: `503 {"error":"llm_unavailable"}` y la web degrada a reglas.
 
 Orden de un turno (`services/chat.ts`), pensado para gastar lo mínimo:
 
 1. **Reglas primero:** si `matchRule()` resuelve la pregunta (precio, plazo, quién es Rubén, contacto, cómo trabaja), responde con el guion de `assistant.json` sin llamar al LLM.
-2. **Caché** (`answer_cache`, TTL 30 días): solo preguntas sueltas, sin contexto de estimación, sin email ni teléfono, sin herramienta ni importes en la respuesta. Se normaliza (minúsculas, sin tildes ni puntuación).
+2. **Caché** (`answer_cache`, TTL 30 días): solo preguntas sueltas, sin email ni teléfono y sin importes en la respuesta. Se normaliza (minúsculas, sin tildes ni puntuación).
 3. **Límites:** más de 12 mensajes del usuario en la conversación, 20 llamadas al LLM por IP y día (IP con hash y sal) y, más adelante, el tope mensual → `llm_unavailable` (la web sigue con reglas).
-4. **LLM** con system prompt mínimo (reglas + bio + tabla de tipos + solo las secciones relevantes por palabras clave), últimos 6 mensajes recortados a 500 caracteres, `maxOutputTokens` 300, temperatura 0,3 y la herramienta `estimate` (máx. 3 iteraciones). El modelo no calcula precios.
-5. **Validador de cifras** (`services/validator.ts`): todo importe en euros debe ser un extremo de un rango producido por `estimate()` en esta conversación (o el que ya conoce `ctx`). Si no, se sustituye la respuesta por `actions.fallback` (derivar a Rubén) y se avisa en el log sin contenido. Decisión de streaming: la respuesta del LLM se **bufferiza entera** (≤ 300 tokens), se valida y se emite después en frases; así nunca se envía una cifra no autorizada ni hay que retractar texto.
+4. **LLM** con system prompt mínimo (reglas + bio + solo las secciones relevantes por palabras clave), últimos 6 mensajes recortados a 500 caracteres, `maxOutputTokens` 300 y temperatura 0,3. **El asistente no da precios**: los fija Rubén en cada propuesta; no hay tabla de precios en el repo ni en la web.
+5. **Validador de cifras** (`services/validator.ts`): ningún importe en euros puede llegar al visitante (tampoco «cinco mil euros» ni «5k €»), ni fragmentos del system prompt. Si el modelo los produce, se sustituye la respuesta por `actions.fallback` (derivar a Rubén) y se avisa en el log sin contenido. Decisión de streaming: la respuesta del LLM se **bufferiza entera** (≤ 300 tokens), se valida y se emite después en frases; así nunca se envía un importe ni hay que retractar texto.
 
 ### Coste (objetivo ≤ 1 €/mes)
 
-Medido con el constructor de prompt real (caracteres / 4 como aproximación de tokens): el system prompt para una pregunta típica pesa entre ~450 y ~650 tokens (completo: ~1.150–1.190; límite de diseño 1.200). Con historial máximo (6 × 500 caracteres ≈ 750 tokens) y 300 de salida, una llamada cuesta como mucho unos 0,0012 USD a 0,30/2,50 USD por millón (entrada/salida); una típica (≈650 entrada, ≈150 salida) unos 0,0006 USD. El tope de 1 €/mes equivale a entre ~850 y ~1.700 llamadas al LLM, y las preguntas resueltas por reglas o caché no cuestan nada. **Pendiente:** medir tokens reales con la clave de Rubén (el uso real llega en `usageMetadata` y se registra desde T-7.3).
+**Medido con Gemini 3.5 Flash-Lite real** (2026-10-26, 37 casos de `pnpm --filter @rr/api eval`, 27 llamadas al LLM): de media **512 tokens de entrada y 81 de salida** por llamada, es decir, unos **0,00036 USD** por llamada con la tarifa de pago (0,30/2,50 USD por millón). El tope de 1 € equivale a **unas 2.800 llamadas al mes**. Las preguntas resueltas por reglas o caché no cuestan nada, y la cuenta de ejemplo del tope está más abajo. Con conversaciones más largas (historial máximo de 6 mensajes) el coste por llamada puede duplicarse.
 
 ## Proveedor alternativo: Ollama (modelos open)
 
@@ -87,7 +87,7 @@ Medido con el constructor de prompt real (caracteres / 4 como aproximación de t
 
 El servicio `ollama` del compose está bajo el profile `llm-local` (no arranca por defecto, sin puertos, con volumen `ollama`). Para usarlo: `docker compose --profile llm-local up -d ollama` y `docker exec rubenrosales-ollama ollama pull <modelo>`.
 
-**Pendiente (requiere el VPS y los evals, no hecho):** comprobar RAM/CPU/disco del VPS (probablemente sin GPU), elegir el modelo con los evals de T-9.2 en es y en, y medir la latencia real. No se ha fijado ningún modelo ni se ha activado nada en producción.
+**Recursos del VPS (medidos el 2026-10-26 en `rr-core-prod-01`):** 2 vCPU Intel Xeon Skylake, 3,7 GiB de RAM (2,7 GiB disponibles con la web, la API y Postgres en marcha), sin swap, sin GPU, 27 GB de disco libres. **Conclusión: no activar Ollama en este VPS.** Un modelo pequeño multilingüe (1–3B cuantizado) necesita 1,5–3 GB de RAM sin contar el contexto; con 2,7 GiB libres y sin swap, el riesgo es que el sistema mate procesos (incluida la base de datos), y en 2 vCPU sin GPU la velocidad sería de unos pocos tokens por segundo (estimación, no medida: no se ha instalado nada en el servidor). Si algún día se cambia a un servidor con más RAM (≥ 8 GB), el cliente, la factoría y el servicio bajo el profile `llm-local` ya están listos; entonces habría que elegir el modelo con los evals (`pnpm --filter @rr/api eval`, con `ASSISTANT_LLM_PROVIDER=ollama`). Mientras tanto, la degradación al llegar al 80 % del tope es la de siempre: solo reglas.
 
 ## Persistencia y leads
 

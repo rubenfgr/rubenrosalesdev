@@ -4,14 +4,14 @@ Nada de esto se ha ejecutado. `main` = producción: cada paso que toque `main` o
 
 ## 0. Antes de empezar (lista de comprobación)
 
-- [ ] **Cifras reales** en `apps/web/src/content/assistant/pricing.json` y `placeholder` a `false` (decisión D-1). Con `placeholder: true` el build estricto falla.
-- [ ] **Textos legales** revisados: los dos `[VERIFICAR: revisión legal]` de la sección 10 de `/privacidad` resueltos. Comprobación: `GUARDS_STRICT=1 pnpm --filter @rr/web build` sin problemas.
+- [x] **Sin cifras de precio:** el asistente no da precios (decisión de Rubén), así que ya no hay `pricing.json` ni decisión D-1.
+- [x] **Textos legales:** sección 10 de `/privacidad` redactada con los términos oficiales de Google (sin marcas `[VERIFICAR]`). Opcional: que un profesional la revise. Comprobación: `GUARDS_STRICT=1 pnpm --filter @rr/web build` sin problemas (ya pasa).
 - [ ] **`.env` del VPS** (`/opt/apps/projects/rubenrosalesdev/.env`, permisos 600), a partir de `deploy/.env.example`:
   - Postgres: `POSTGRES_DB`, `POSTGRES_USER`, `POSTGRES_PASSWORD` (larga y aleatoria) y `DATABASE_URL` coherente.
   - `IP_HASH_SALT` (larga y aleatoria; con ella los hashes sobreviven a reinicios).
   - Gmail: las variables que ya usa la web (`CONTACT_TO`, `GMAIL_*`); la API las lee del mismo fichero.
   - LLM (puede esperar al paso 3): `ASSISTANT_LLM_API_KEY`, `ASSISTANT_LLM_MODEL=gemini-3.5-flash-lite`, `ASSISTANT_LLM_PRICE_IN_PER_MTOK=0.30`, `ASSISTANT_LLM_PRICE_OUT_PER_MTOK=2.50`, `ASSISTANT_LLM_MONTHLY_BUDGET_EUR=1`. **Sin los precios, Gemini no se activa.**
-- [ ] **Google:** alerta de presupuesto en 1 € y saldo cargado.
+- [ ] **Google (obligatorio para producción):** activar la facturación de Cloud en el proyecto de la clave. Los términos de la Gemini API solo permiten el servicio de pago para usuarios del EEE y en el gratuito Google puede usar el contenido para mejorar sus productos. Con la facturación activa, crear una alerta de presupuesto de 1 € (es un correo de aviso, no corta nada).
 - [ ] **Paquetes de GHCR:** `rubenrosalesdev-api` accesible para el VPS (público o `docker login`; ver `docs/despliegue.md`).
 - [ ] **Copias de seguridad:** sin copia externa por decisión D-6 (solo las nocturnas en el VPS; ver riesgo en `docs/restaurar-backup.md`). Restauración ya probada en local.
 - [ ] **Evals y red team:** `pnpm --filter @rr/api eval --out .plan/evidence/evals-1.md` sin fallos graves y la lista manual de `.plan/evidence/red-team.md` pasada con el modelo real.
