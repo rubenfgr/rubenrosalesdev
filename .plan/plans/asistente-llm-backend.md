@@ -472,12 +472,12 @@ Bloqueada parcialmente por D-6 (destino externo).
 Depende de todo lo anterior, de **D-1 (cifras reales)** y de la aprobación de Rubén.
 
 - [ ] **T-10.1 Lista de comprobación previa** (todo debe estar en verde):
-  - [ ] `pricing.json` sin `placeholder` (D-1) y `GUARDS_STRICT=1 pnpm --filter @rr/web build` sin problemas.
-  - [ ] Textos legales revisados por Rubén; sin `[VERIFICAR]`.
+  - [x] Sin precios (D-1 ya no aplica) y `GUARDS_STRICT=1 pnpm --filter @rr/web build` sin problemas (verificado 2026-10-26).
+  - [x] Textos legales: sección 10 de `/privacidad` revisada con los términos oficiales; sin `[VERIFICAR]` (revisión profesional opcional).
   - [ ] Secretos creados en el VPS (`.env`): Postgres, `ASSISTANT_LLM_*`, `IP_HASH_SALT`, Gmail.
-  - [ ] Backup externo funcionando y restauración probada.
-  - [ ] Evals pasadas y red team documentado.
-  - [ ] Tope de gasto configurado en el proveedor del LLM (Rubén) y límite diario en la API.
+  - [~] Restauración probada en local; **sin backup externo** por decisión D-6 (riesgo aceptado).
+  - [x] Evals 37/37 con Gemini real y red team documentado (`.plan/evidence/`).
+  - [ ] Facturación de Google en modo prepago (+ tope en AI Studio) configurada por Rubén; el límite diario y el tope de 1 €/mes en la API ya están hechos.
 - [ ] **T-10.2 Despliegue de la infraestructura sin activar el asistente**
   - Con aprobación explícita de Rubén: merge de la rama a `main` (dispara `deploy.yml`). El asistente sigue oculto (`PUBLIC_ASSISTANT_ENABLED` vacío). Verifica en producción: web igual que antes, `/api/v1/health` ok, Postgres sano, backup ejecutándose.
   - **Plan de vuelta atrás:** volver a la etiqueta de imagen anterior en `compose.yml` (`docker compose up -d`); la base de datos es aditiva, no hay migraciones destructivas.
