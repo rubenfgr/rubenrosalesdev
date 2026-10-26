@@ -14,7 +14,7 @@ interface Labels {
     fields: Record<'supplier' | 'number' | 'due' | 'base' | 'vat' | 'total', { label: string; value: string }>;
     reading: string; recorded: string;
     dash: { title: string; live: string; billed: string; billedDelta: string; orders: string; ordersDelta: string; ticket: string; ticketDelta: string; weekly: string; target: string; week: string; byChannel: string; store: string; web: string; distributors: string };
-    phone: { date: string; time: string; network: string; now: string; minutesAgo: string; n1: { title: string; text: string }; n2: { title: string; text: string }; n3: { title: string; text: string }; appInitial: string };
+    phone: { date: string; time: string; network: string; now: string; minutesAgo: string; n1: { title: string; text: string }; n2: { title: string; text: string }; n3: { title: string; text: string } };
   };
 }
 interface Props { services: Service[]; labels: Labels; locale: string; contactHref: string }
@@ -172,7 +172,7 @@ export default function Servicios({ services, labels: L, locale, contactHref }: 
                         const on = i < nc, age = nc - 1 - i;
                         return (
                           <div class="notif" style={`opacity:${on ? 1 : 0};transform:translateY(${on ? 0 : -14}px) scale(${on ? 1 : 0.96})`}>
-                            <span class="notif-ico">{D.phone.appInitial}</span>
+                            <span class="notif-ico" aria-hidden="true"><svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 8a6 6 0 0 1 12 0c0 7 3 8 3 8H3s3-1 3-8" /><path d="M10 20a2 2 0 0 0 4 0" /></svg></span>
                             <span class="notif-main">
                               <span class="notif-top"><span>{n.title}</span><span>{age <= 0 ? D.phone.now : D.phone.minutesAgo.replace('{n}', String(age * 2))}</span></span>
                               <small>{n.text}</small>
