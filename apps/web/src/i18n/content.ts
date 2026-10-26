@@ -19,10 +19,3 @@ export async function getData<C extends LocaleCollection>(collection: C, lang: L
   if (!entry) throw new Error(`content: falta src/content/${collection}/${lang}.json`);
   return entry.data;
 }
-
-/** Tabla de rangos del asistente (sin idioma). */
-export async function getPricing() {
-  const entry = await getEntry('assistantPricing', 'pricing');
-  if (!entry) throw new Error('content: falta src/content/assistant/pricing.json');
-  return entry.data;
-}

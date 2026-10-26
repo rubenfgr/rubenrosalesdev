@@ -1,4 +1,4 @@
-// Empaqueta el contenido de la web que necesita la API (servicios, proceso, FAQ, asistente y tabla de rangos)
+// Empaqueta el contenido de la web que necesita la API (servicios, proceso, FAQ y asistente)
 // en packages/shared/generated/knowledge.json. Es la única fuente: la API no copia textos a mano.
 // Se ejecuta antes de check, test y build de la API (y de @rr/shared).
 import { mkdirSync, readFileSync, writeFileSync } from 'node:fs';
@@ -18,7 +18,6 @@ const knowledge = {
   process: byLang('process'),
   faq: byLang('faq'),
   assistant: byLang('assistant'),
-  pricing: read('assistant/pricing.json'),
   // Etiquetas en español del formulario de contacto, para redactar el email a Rubén.
   contactEs: { goals: titles(uiContact.goals), sizes: uiContact.sizes, whens: uiContact.whens },
 };

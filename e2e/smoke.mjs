@@ -1,6 +1,6 @@
 // Prueba de humo extremo a extremo (T-9.3). Uso: pnpm e2e
 // Construye la web con el asistente activado, levanta web + API (LLM, email y BD simulados) detrás de un proxy local
-// y recorre con Playwright: aviso de consentimiento → texto libre con streaming → flujo guiado hasta la estimación → resumen.
+// y recorre con Playwright: aviso de consentimiento → texto libre con streaming → flujo guiado (sin precios) → resumen.
 // Necesita Chrome (CHROME_PATH, por defecto /usr/bin/google-chrome). No toca servidores reales.
 import { spawn, spawnSync } from 'node:child_process';
 import { createServer, request } from 'node:http';
@@ -53,7 +53,8 @@ try {
     await page.waitForSelector('.as-chips .as-chip');
     await page.locator('.as-chips .as-chip', { hasText: 'Tengo un proyecto' }).click();
     for (let i = 0; i < 3; i++) { await page.waitForSelector('.as-chips .as-chip'); await page.waitForTimeout(250); await page.locator('.as-chips .as-chip').first().click(); }
-    await page.waitForSelector('.as-est', { timeout: 15000 });
+    await page.waitForFunction(() => [...document.querySelectorAll('.as-bot')].some((e) => e.textContent.includes('propuesta concreta')), null, { timeout: 15000 });
+    if (await page.locator('.as-bot', { hasText: '€' }).count()) fail(`${name}: el asistente muestra importes en euros`);
     await page.locator('.as-chip', { hasText: 'Enviar resumen' }).click();
     await page.fill('.as-form input[type=text]', `Ana ${name}`);
     await page.fill('.as-form input[type=email]', 'ana@example.com');
@@ -77,7 +78,7 @@ try {
     if (cr.status() !== 200) fail(`contacto respondió ${cr.status()}: ${await cr.text()}`);
     await page.waitForSelector('.ct-form', { state: 'detached', timeout: 15000 });
     await page.close();
-    console.log(`✓ ${name}: consentimiento, streaming, estimación, resumen y formulario de contacto`);
+    console.log(`✓ ${name}: consentimiento, streaming, flujo guiado sin precios, resumen y formulario de contacto`);
   }
   const s = await state();
   if (s.leads !== 2 || s.emails.length !== 4) fail(`se esperaban 2 leads y 4 emails (2 resúmenes + 2 formularios); hay ${s.leads} y ${s.emails.length}`);

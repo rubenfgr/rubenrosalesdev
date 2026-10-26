@@ -1,4 +1,4 @@
-// Guardarraíl de salida: ningún importe en euros puede llegar al visitante si no sale de `estimate()`.
+// Guardarraíl de salida: ningún importe en euros puede llegar al visitante (los precios los fija Rubén en cada propuesta).
 
 const CURRENCY = String.raw`(?:€|eur\b|euros?\b)`;
 const NUM = String.raw`\d{1,3}(?:[.,\s]\d{3})+(?:[.,]\d+)?|\d+(?:[.,]\d+)?`;
@@ -39,7 +39,7 @@ export interface AllowedRange {
   maxEur: number;
 }
 
-/** Texto válido si cada importe coincide con un extremo de un rango producido por `estimate()` en esta conversación. */
+/** Texto válido si cada importe coincide con un extremo de uno de los rangos autorizados (el asistente pasa una lista vacía: ningún importe es válido). */
 export function checkAmounts(text: string, ranges: AllowedRange[]): { ok: true } | { ok: false; offending: number[] } {
   const allowed = new Set(ranges.flatMap((r) => [r.minEur, r.maxEur]));
   const offending = extractAmounts(text).filter((n) => !allowed.has(n));

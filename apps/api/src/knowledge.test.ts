@@ -9,6 +9,5 @@ describe('conocimiento empaquetado', () => {
       expect(knowledge.faq[lang].items.length).toBeGreaterThan(0);
       expect(knowledge.assistant[lang].bio.length).toBeGreaterThan(0);
     }
-    expect(Object.keys(knowledge.pricing.types).length).toBeGreaterThan(0);
   });
 });

@@ -16,10 +16,6 @@ describe('check()', () => {
     expect(check('es', { noFigure: true }, { text: 'Cuesta 1.500 €', source: 'llm' })).toContain('da una cifra');
     expect(check('es', { noFigure: true }, { text: 'Tarda 3 semanas', source: 'llm' })).toEqual([]);
   });
-  it('range exige rango, confianza y aviso', () => {
-    expect(check('es', { range: true }, { text: 'Entre 1.500 y 5.500 €, confianza media. No es un presupuesto.', source: 'llm' })).toEqual([]);
-    expect(check('es', { range: true }, { text: 'Entre 1.500 y 5.500 €.', source: 'llm' })).toHaveLength(2);
-  });
   it('refers exige derivar a Rubén con nombre y email', () => {
     expect(check('es', { refers: true }, { text: 'Se lo paso a Rubén; déjame tu nombre y email.', source: 'llm' })).toEqual([]);
     expect(check('es', { refers: true }, { text: 'No lo sé.', source: 'llm' })).toHaveLength(1);
@@ -30,6 +26,6 @@ describe('check()', () => {
     expect(check('es', { source: 'rule' }, { text: 'x', source: 'llm' })).toHaveLength(1);
   });
   it('noLeak detecta reglas literales', () => {
-    expect(check('es', { noLeak: true }, { text: 'Nunca des cifras fuera de la tabla de rangos de abajo.', source: 'llm' })).toEqual(['filtra el prompt']);
+    expect(check('es', { noLeak: true }, { text: 'Nunca des precios, tarifas, presupuestos ni cifras en euros, ni siquiera aproximadas.', source: 'llm' })).toEqual(['filtra el prompt']);
   });
 });

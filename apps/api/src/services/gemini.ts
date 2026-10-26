@@ -1,4 +1,4 @@
-// Implementación de LlmClient para la Gemini API (REST `streamGenerateContent` con SSE).
+// Implementación de LlmClient para la Gemini API (REST `streamGenerateContent` con SSE; sin function calling, el asistente no usa herramientas).
 // Formato verificado en https://ai.google.dev/api/generate-content (2026-10-25). Sin SDK: solo fetch.
 import type { LlmClient, LlmEvent, LlmInput, LlmTurn } from './llm';
 
@@ -7,8 +7,6 @@ const TIMEOUT_MS = 30_000;
 
 interface GeminiPart {
   text?: string;
-  functionCall?: { name: string; args?: Record<string, unknown> };
-  functionResponse?: { name: string; response: Record<string, unknown> };
 }
 interface GeminiContent {
   role: 'user' | 'model';
@@ -18,26 +16,19 @@ interface GeminiChunk {
   candidates?: { content?: { parts?: GeminiPart[] } }[];
   usageMetadata?: {
     promptTokenCount?: number;
-    toolUsePromptTokenCount?: number;
     candidatesTokenCount?: number;
     thoughtsTokenCount?: number;
   };
 }
 
-/** Convierte los turnos a `contents`: roles user/model; las respuestas de herramienta van como `user`. Une turnos contiguos del mismo rol. */
+/** Convierte los turnos a `contents`: roles user/model. Une turnos contiguos del mismo rol. */
 export function toContents(turns: LlmTurn[]): GeminiContent[] {
   const out: GeminiContent[] = [];
   for (const t of turns) {
-    const role = t.role === 'user' || t.role === 'tool_result' ? 'user' : 'model';
-    const part: GeminiPart =
-      t.role === 'tool_call'
-        ? { functionCall: { name: t.name, args: t.args } }
-        : t.role === 'tool_result'
-          ? { functionResponse: { name: t.name, response: t.result } }
-          : { text: t.text };
+    const role = t.role === 'user' ? 'user' : 'model';
     const last = out[out.length - 1];
-    if (last && last.role === role) last.parts.push(part);
-    else out.push({ role, parts: [part] });
+    if (last && last.role === role) last.parts.push({ text: t.text });
+    else out.push({ role, parts: [{ text: t.text }] });
   }
   return out;
 }
@@ -58,9 +49,6 @@ export class GeminiClient implements LlmClient {
     const body = {
       systemInstruction: { parts: [{ text: input.system }] },
       contents: toContents(input.turns),
-      ...(input.tools?.length
-        ? { tools: [{ functionDeclarations: input.tools.map((t) => ({ name: t.name, description: t.description, parameters: t.parameters })) }] }
-        : {}),
       generationConfig: { maxOutputTokens: input.maxOutputTokens, temperature: input.temperature ?? 0.3 },
     };
     const url = `${BASE}/models/${encodeURIComponent(this.opts.model)}:streamGenerateContent?alt=sse`;
@@ -103,12 +91,11 @@ export class GeminiClient implements LlmClient {
           if (!json) continue;
           const chunk = JSON.parse(json) as GeminiChunk;
           for (const part of chunk.candidates?.[0]?.content?.parts ?? []) {
-            if (part.functionCall) yield { type: 'tool_call', name: part.functionCall.name, args: part.functionCall.args ?? {} };
-            else if (part.text) yield { type: 'text', text: part.text };
+            if (part.text) yield { type: 'text', text: part.text };
           }
           const u = chunk.usageMetadata;
           if (u) {
-            tokensIn = (u.promptTokenCount ?? 0) + (u.toolUsePromptTokenCount ?? 0);
+            tokensIn = u.promptTokenCount ?? 0;
             // Los tokens de razonamiento se facturan como salida.
             tokensOut = (u.candidatesTokenCount ?? 0) + (u.thoughtsTokenCount ?? 0);
           }

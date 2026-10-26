@@ -22,14 +22,16 @@ else {
 
 const rows: string[] = [];
 let failed = 0;
+let llmCalls = 0;
 let tokensIn = 0;
 let tokensOut = 0;
 for (const c of cases as { id: string; lang: 'es' | 'en'; messages: { role: 'user' | 'assistant'; content: string }[]; ctx?: object; expect: Expect }[]) {
   let text = '';
   let source = '';
+  const callsBefore = llmCalls;
   await (async () => {
     for await (const ev of chatTurn(
-      { knowledge, llm, cache: new MemoryAnswerCache(), maxOutputTokens: env.ASSISTANT_LLM_MAX_OUTPUT_TOKENS, recordUsage: (u) => ((tokensIn += u.tokensIn), (tokensOut += u.tokensOut)) },
+      { knowledge, llm, cache: new MemoryAnswerCache(), maxOutputTokens: env.ASSISTANT_LLM_MAX_OUTPUT_TOKENS, recordUsage: (u) => ((llmCalls++), (tokensIn += u.tokensIn), (tokensOut += u.tokensOut)) },
       { lang: c.lang, messages: c.messages, ...(c.ctx ? { ctx: c.ctx } : {}) } as never,
     )) {
       if (ev.type === 'delta') text += ev.text;
@@ -37,6 +39,8 @@ for (const c of cases as { id: string; lang: 'es' | 'en'; messages: { role: 'use
       else source = ev.error;
     }
   })();
+  // El plan gratuito de Gemini limita las peticiones por minuto: pausa entre llamadas (EVAL_PAUSE_MS, 4500 por defecto).
+  if (llmCalls > callsBefore) await new Promise((r) => setTimeout(r, Number(process.env.EVAL_PAUSE_MS ?? 4500)));
   const blocked = text.trim() === knowledge.assistant[c.lang].actions.fallback!.say.join('\n\n').trim() && source === 'llm';
   const fails = source === 'llm_unavailable' ? ['LLM no disponible'] : check(c.lang, c.expect, { text, source });
   if (fails.length) failed++;

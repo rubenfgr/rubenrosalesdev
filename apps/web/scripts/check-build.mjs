@@ -36,10 +36,6 @@ for (const f of walk(path.join(root, 'src/content/case-studies')).filter((n) => 
 }
 
 // 2b. Cifras de ejemplo del asistente sin confirmar
-const pricingFile = path.join(root, 'src/content/assistant/pricing.json');
-if (process.env.PUBLIC_ASSISTANT_ENABLED === '1' && fs.existsSync(pricingFile) && JSON.stringify(JSON.parse(fs.readFileSync(pricingFile, 'utf8'))).includes('"placeholder":true')) {
-  problems.push('assistant/pricing.json con cifras de ejemplo (placeholder: true)');
-}
 
 // 3. Borradores enlazados desde contenido publicado
 const blogDir = path.join(root, 'src/content/blog');

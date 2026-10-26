@@ -1,5 +1,4 @@
 // Contenido de la web empaquetado para la API (lo genera scripts/export-knowledge.mjs desde apps/web/src/content).
-import type { Pricing } from './assistant/engine';
 import data from '../generated/knowledge.json';
 import type { Lang } from './index';
 
@@ -17,7 +16,6 @@ export interface AssistantKnowledge {
   types: Record<string, string>;
   systems: Record<string, string>;
   team: Record<string, string>;
-  estimate: { levels: Record<'low' | 'medium' | 'high', string>; weeks: string; disclaimer: string };
 }
 
 export interface Knowledge {
@@ -25,7 +23,6 @@ export interface Knowledge {
   process: Record<Lang, { items: { id: string; step: string; tag: string; title: string; body: string }[] }>;
   faq: Record<Lang, { items: { id: string; question: string; answer: string }[] }>;
   assistant: Record<Lang, AssistantKnowledge>;
-  pricing: Pricing;
   contactEs: { goals: Record<string, string>; sizes: Record<string, string>; whens: Record<string, string> };
 }
 

@@ -1,7 +1,5 @@
 // Implementación de LlmClient para Ollama (modelos open, coste cero). API verificada en https://docs.ollama.com/api/chat
 // (2026-10-25): POST /api/chat, respuesta NDJSON con message.content y, al final, prompt_eval_count / eval_count.
-// No usa function calling (`supportsTools = false`): la estimación se calcula en código y se entrega al modelo como dato,
-// porque no todos los modelos open admiten herramientas.
 import type { LlmClient, LlmEvent, LlmInput, LlmTurn } from './llm';
 
 const TIMEOUT_MS = 60_000; // sin GPU el modelo local es más lento que Gemini
@@ -16,12 +14,11 @@ interface OllamaChunk {
 export function toMessages(system: string, turns: LlmTurn[]): { role: 'system' | 'user' | 'assistant'; content: string }[] {
   return [
     { role: 'system', content: system },
-    ...turns.flatMap((t) => (t.role === 'user' || t.role === 'assistant' ? [{ role: t.role, content: t.text }] : [])),
+    ...turns.map((t) => ({ role: t.role, content: t.text })),
   ];
 }
 
 export class OllamaClient implements LlmClient {
-  readonly supportsTools = false;
   private fetchImpl: typeof fetch;
   constructor(private opts: { baseUrl: string; model: string; fetchImpl?: typeof fetch }) {
     this.fetchImpl = opts.fetchImpl ?? fetch;

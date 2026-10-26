@@ -18,10 +18,6 @@ export class RoutedLlm implements LlmClient {
     return this.secondary ? { client: this.secondary, counted: false } : null;
   }
 
-  get supportsTools(): boolean {
-    return this.pick()?.client.supportsTools !== false;
-  }
-
   /** ¿Hay algún LLM disponible ahora mismo? */
   available(): boolean {
     return this.pick() !== null;

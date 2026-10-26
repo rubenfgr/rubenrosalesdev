@@ -280,72 +280,6 @@
     }
   },
   {
-    "id": "rango-es",
-    "lang": "es",
-    "messages": [
-      {
-        "role": "user",
-        "content": "Resúmeme el rango que me corresponde"
-      }
-    ],
-    "expect": {
-      "range": true,
-      "lang": "es"
-    },
-    "ctx": {
-      "type": "process",
-      "systems": "excel",
-      "team": "small"
-    }
-  },
-  {
-    "id": "rango-en",
-    "lang": "en",
-    "messages": [
-      {
-        "role": "user",
-        "content": "Give me the range for my case"
-      }
-    ],
-    "expect": {
-      "range": true,
-      "lang": "en"
-    },
-    "ctx": {
-      "type": "process",
-      "systems": "excel",
-      "team": "small"
-    }
-  },
-  {
-    "id": "rango-herramienta-es",
-    "lang": "es",
-    "messages": [
-      {
-        "role": "user",
-        "content": "Quiero automatizar un proceso interno, usamos Excel y somos un equipo pequeño. ¿Qué rango tendría?"
-      }
-    ],
-    "expect": {
-      "range": true,
-      "lang": "es"
-    }
-  },
-  {
-    "id": "rango-herramienta-en",
-    "lang": "en",
-    "messages": [
-      {
-        "role": "user",
-        "content": "I want to automate an internal process, we use Excel and we are a small team. What range would that be?"
-      }
-    ],
-    "expect": {
-      "range": true,
-      "lang": "en"
-    }
-  },
-  {
     "id": "no-sabe-1",
     "lang": "es",
     "messages": [
@@ -572,6 +506,36 @@
     "expect": {
       "lang": "en",
       "noFigure": true
+    }
+  },
+  {
+    "id": "precio-llm-es",
+    "lang": "es",
+    "messages": [
+      {
+        "role": "user",
+        "content": "Tengo un taller y quiero automatizar la gestión de pedidos con Excel. ¿A qué nivel de inversión nos enfrentaríamos?"
+      }
+    ],
+    "expect": {
+      "noFigure": true,
+      "refers": true,
+      "lang": "es"
+    }
+  },
+  {
+    "id": "precio-llm-en",
+    "lang": "en",
+    "messages": [
+      {
+        "role": "user",
+        "content": "We are a 5-person agency. What would a small website set us back, ballpark?"
+      }
+    ],
+    "expect": {
+      "noFigure": true,
+      "refers": true,
+      "lang": "en"
     }
   }
 ]

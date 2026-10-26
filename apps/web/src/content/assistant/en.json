@@ -17,7 +17,7 @@
     "decline": "Continue without saving"
   },
   "greeting": [
-    "Hi, I'm Rubén Rosales's assistant. I do some groundwork for him: I work out what you need, explain how he works and, if you like, give you an indicative range.",
+    "Hi, I'm Rubén Rosales's assistant. I do some groundwork for him: I work out what you need, explain how he works and, if you like, pass him a summary so he can write to you.",
     "Where shall we start?"
   ],
   "bio": "Rubén is an independent developer. Since 2019 he has been building software for small businesses: he automates processes, connects the tools you already use and applies AI where it really saves hours.",
@@ -50,7 +50,7 @@
         "label": "I'd rather talk to Rubén"
       }
     ],
-    "after_est": [
+    "after_brief": [
       {
         "action": "humano",
         "label": "Send the summary to Rubén"
@@ -96,7 +96,7 @@
     "precio": {
       "say": [
         "It depends a lot on the scope, so I'm not going to throw out a number at random.",
-        "If you tell me three things, I can give you an indicative range based on similar projects. Shall we?"
+        "Rubén prepares each proposal individually, with scope, timeline and a fixed price in writing, after a free 30-minute call. If you tell me three things, I can pass him a summary so he comes prepared. Shall we?"
       ],
       "step": "price_q"
     },
@@ -115,7 +115,8 @@
     },
     "plazo": {
       "say": [
-        "Timelines range from 2 to 16 weeks depending on the type of project. With three details I can give you a tighter range."
+        "The timeline depends on the scope and is agreed in writing in the proposal, with deliveries every 1–2 weeks.",
+        "If you tell me three things about your case, I can pass Rubén a summary so he can go through it with you."
       ],
       "step": "price_q"
     },
@@ -131,24 +132,12 @@
       ],
       "step": "team"
     },
-    "estimateIntro": {
-      "say": [
-        "Based on what you've told me, similar projects usually end up in this range:"
-      ],
-      "step": "after_est"
-    },
-    "estimateOutro": {
-      "say": [
-        "It is a reference so you can tell whether it fits your budget, not a commitment. What next?"
-      ],
-      "step": "after_est"
-    },
-    "noEstimate": {
+    "briefDone": {
       "say": [
         "Thanks. With this Rubén can prepare a concrete proposal for you.",
         "Shall I pass him the summary?"
       ],
-      "step": "after_est"
+      "step": "after_brief"
     },
     "fallback": {
       "say": [
@@ -164,7 +153,7 @@
       "action": "precio"
     },
     {
-      "pattern": "timeline|how long|weeks|when|deadline",
+      "pattern": "timeline|how long|weeks|deadline",
       "action": "plazo"
     },
     {
@@ -172,7 +161,7 @@
       "action": "humano"
     },
     {
-      "pattern": "who|experience|rubén|ruben",
+      "pattern": "who (is|are)|experience|background|about rubén|about ruben",
       "action": "info"
     }
   ],
@@ -192,21 +181,6 @@
     "small": "1–5 people",
     "medium": "6–20 people",
     "large": "More than 20"
-  },
-  "estimate": {
-    "title": "Indicative range",
-    "confidence": "Confidence: {level}",
-    "levels": {
-      "low": "low",
-      "medium": "medium",
-      "high": "high"
-    },
-    "weeks": "{min}–{max} weeks",
-    "upTitle": "What could push it up",
-    "up": "Integrating programs without an API, many special cases, messy data or very tight deadlines.",
-    "downTitle": "What could bring it down",
-    "down": "Starting with a single process, tools that already have an API, or reusing pieces from previous projects.",
-    "disclaimer": "This is not a quote. It is a range based on similar projects; the real figure comes from a 30-minute call with Rubén and a written proposal."
   },
   "form": {
     "name": "Name",
@@ -230,10 +204,8 @@
       "email": "Email",
       "project": "Project",
       "tools": "Tools",
-      "team": "Team",
-      "range": "Range"
+      "team": "Team"
     },
-    "rangeNote": "{range} (indicative)",
     "footer": "He will write to you within 24 working hours. That way you won't have to repeat anything.",
     "thanks": "Thanks, {name}.",
     "userSent": "Sent: {name}"

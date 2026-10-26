@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from 'preact/hooks';
-import { canEstimate, estimate, matchRule, type Ctx, type Estimate, type Pricing } from '@rr/shared/engine';
+import { matchRule, type Ctx } from '@rr/shared/engine';
 import { LlmUnavailable, sendLead, streamChat } from '../../lib/assistant/api';
 import './Assistant.css';
 
@@ -11,20 +11,18 @@ interface Data {
   actions: Record<string, { say: string[]; step: string }>;
   rules: { pattern: string; action: string }[];
   types: Record<string, string>; systems: Record<string, string>; team: Record<string, string>;
-  estimate: { title: string; confidence: string; levels: Record<'low' | 'medium' | 'high', string>; weeks: string; upTitle: string; up: string; downTitle: string; down: string; disclaimer: string };
   form: { name: string; namePlaceholder: string; email: string; emailPlaceholder: string; consent: string; submit: string; sending: string; errors: Record<'name' | 'email' | 'consent' | 'send', string> };
-  summary: { title: string; rows: Record<'name' | 'email' | 'project' | 'tools' | 'team' | 'range', string>; rangeNote: string; footer: string; thanks: string; userSent: string };
+  summary: { title: string; rows: Record<'name' | 'email' | 'project' | 'tools' | 'team', string>; footer: string; thanks: string; userSent: string };
 }
 interface Labels { fabAria: string; panelAria: string; close: string; restart: string; send: string; messageAria: string; inputPlaceholder: string; fabTitle: string; fabSubtitle: string; retry: string }
-interface Props { data: Data; pricing: Pricing; labels: Labels; lang: string; locale: string; showEstimates?: boolean; privacyHref: string; llm?: boolean }
+interface Props { data: Data; labels: Labels; lang: string; privacyHref: string; llm?: boolean }
 
 type Msg =
   | { kind: 'bot' | 'user'; text: string }
-  | { kind: 'estimate'; est: Estimate; label: string; range: string }
   | { kind: 'summary'; rows: { k: string; v: string }[] };
 const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
-export default function Assistant({ data: D, pricing, labels: L, lang, locale, showEstimates = true, privacyHref, llm = false }: Props) {
+export default function Assistant({ data: D, labels: L, lang, privacyHref, llm = false }: Props) {
   const [open, setOpen] = useState(false);
   // Aviso de privacidad (D-4): hasta elegir, no se muestra el chat ni se envía nada. 'yes' = guardar la conversación.
   const [consent, setConsent] = useState<'yes' | 'no' | null>(null);
@@ -58,10 +56,6 @@ export default function Assistant({ data: D, pricing, labels: L, lang, locale, s
   }, [messages.length, typing, step]);
   useEffect(() => () => { clearTimeout(timer.current); abort.current?.abort(); }, []);
 
-  const fmtRange = (e: Estimate) => {
-    const nf = new Intl.NumberFormat(locale);
-    return `${nf.format(e.minEur)} – ${nf.format(e.maxEur)} €`;
-  };
   const bot = (items: (string | Msg)[], next: string) => {
     setTyping(true);
     setStep('wait');
@@ -110,13 +104,6 @@ export default function Assistant({ data: D, pricing, labels: L, lang, locale, s
     setTimeout(() => bot(D.greeting, 'start'), 0);
   };
 
-  const finishEstimate = (c: Required<Ctx>) => {
-    const est = showEstimates ? estimate(pricing, c) : null;
-    if (!est) return say('noEstimate');
-    const a = D.actions.estimateIntro!, b = D.actions.estimateOutro!;
-    bot([...a.say, { kind: 'estimate', est, label: D.types[c.type] ?? c.type, range: fmtRange(est) }, ...b.say], b.step);
-  };
-
   const pick = (action: string, label: string) => {
     user(label);
     if (D.types[action]) {
@@ -130,8 +117,7 @@ export default function Assistant({ data: D, pricing, labels: L, lang, locale, s
     if (D.team[action]) {
       const next = { ...ctxRef.current, team: action };
       setCtx(next);
-      if (canEstimate(next)) return finishEstimate(next);
-      return say('noEstimate');
+      return say('briefDone');
     }
     if (action === 'proyecto') setCtx({});
     say(action);
@@ -153,7 +139,6 @@ export default function Assistant({ data: D, pricing, labels: L, lang, locale, s
     const history = messages
       .flatMap((m) => (m.kind === 'bot' || m.kind === 'user' ? [{ role: m.kind === 'user' ? ('user' as const) : ('assistant' as const), content: m.text.slice(0, 2000) }] : []))
       .slice(-19);
-    const c = ctxRef.current;
     let acc = '';
     let started = false;
     try {
@@ -163,7 +148,6 @@ export default function Assistant({ data: D, pricing, labels: L, lang, locale, s
           ...(conversationId.current ? { conversationId: conversationId.current } : {}),
           messages: [...history, { role: 'user', content: text.slice(0, 2000) }],
           consent: consent === 'yes',
-          ...(Object.keys(c).length ? { ctx: c } : {}),
         },
         (t) => {
           acc += t;
@@ -206,10 +190,6 @@ export default function Assistant({ data: D, pricing, labels: L, lang, locale, s
     if (ctx.type) rows.push({ k: D.summary.rows.project, v: D.types[ctx.type] ?? ctx.type });
     if (ctx.systems) rows.push({ k: D.summary.rows.tools, v: D.systems[ctx.systems] ?? ctx.systems });
     if (ctx.team) rows.push({ k: D.summary.rows.team, v: D.team[ctx.team] ?? ctx.team });
-    if (showEstimates && canEstimate(ctx)) {
-      const est = estimate(pricing, ctx);
-      if (est) rows.push({ k: D.summary.rows.range, v: D.summary.rangeNote.replace('{range}', fmtRange(est)) });
-    }
     setFormError('');
     setSending(true);
     try {
@@ -263,21 +243,6 @@ export default function Assistant({ data: D, pricing, labels: L, lang, locale, s
             {messages.map((m) => {
               if (m.kind === 'bot') return <div class="as-bot">{m.text}</div>;
               if (m.kind === 'user') return <div class="as-user">{m.text}</div>;
-              if (m.kind === 'estimate')
-                return (
-                  <div class="as-est">
-                    <div class="as-est-top">
-                      <div class="as-est-row"><span>{D.estimate.title}</span><span class="as-conf">{D.estimate.confidence.replace('{level}', D.estimate.levels[m.est.confidence])}</span></div>
-                      <div class="as-range">{m.range}</div>
-                      <div class="as-meta">{D.estimate.weeks.replace('{min}', String(m.est.minWeeks)).replace('{max}', String(m.est.maxWeeks))} · {m.label}</div>
-                    </div>
-                    <div class="as-est-body">
-                      <div><b>{D.estimate.upTitle}</b><span>{D.estimate.up}</span></div>
-                      <div><b>{D.estimate.downTitle}</b><span>{D.estimate.down}</span></div>
-                    </div>
-                    <div class="as-warn">{icon('M12 9v4M12 17h.01M10.3 3.9L1.8 18a2 2 0 0 0 1.7 3h17a2 2 0 0 0 1.7-3L13.7 3.9a2 2 0 0 0-3.4 0z', 16)}<span>{D.estimate.disclaimer}</span></div>
-                  </div>
-                );
               if (m.kind !== 'summary') return null;
               return (
                 <div class="as-sum">

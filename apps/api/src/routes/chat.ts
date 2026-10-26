@@ -57,7 +57,7 @@ export const chatRoutes = (deps: ResolvedDeps) => {
     const send = async (stream: { writeSSE: (m: { event: string; data: string }) => Promise<void> }, ev: ChatEvent) => {
       if (ev.type === 'delta') await stream.writeSSE({ event: 'delta', data: JSON.stringify({ text: ev.text }) });
       else if (ev.type === 'done')
-        await stream.writeSSE({ event: 'done', data: JSON.stringify({ conversationId, source: ev.source, ...(ev.estimate ? { estimate: ev.estimate } : {}) }) });
+        await stream.writeSSE({ event: 'done', data: JSON.stringify({ conversationId, source: ev.source }) });
       else await stream.writeSSE({ event: 'error', data: JSON.stringify({ error: ev.error }) });
     };
     return streamSSE(c, async (stream) => {

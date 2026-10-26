@@ -1,4 +1,3 @@
-import { estimate } from '@rr/shared';
 import { knowledge } from '@rr/shared/knowledge';
 import { describe, expect, it } from 'vitest';
 import { MemoryAnswerCache } from './answer-cache';
@@ -74,47 +73,14 @@ describe('chatTurn', () => {
     expect(r.events).toEqual([{ type: 'error', error: 'llm_unavailable' }]);
   });
 
-  it('herramienta estimate: la respuesta final usa el resultado y la cifra está autorizada', async () => {
-    const expected = estimate(knowledge.pricing, { type: 'process', systems: 'excel', team: 'small' })!;
-    const fmt = (n: number) => n.toLocaleString('es-ES');
-    const llm = new FakeLlmClient([
-      [{ type: 'tool_call', name: 'estimate', args: { type: 'process', systems: 'excel', team: 'small' } }, done],
-      say(`Entre ${fmt(expected.minEur)} y ${fmt(expected.maxEur)} €, confianza media. No es un presupuesto.`),
-    ]);
-    const r = await run({ llm }, 'Quiero automatizar un proceso en Excel con un equipo pequeño');
-    expect(r.text).toContain(fmt(expected.maxEur));
-    expect(r.last).toMatchObject({ source: 'llm', estimate: expected });
-    const second = llm.calls[1]!.turns;
-    expect(second.some((t) => t.role === 'tool_result' && (t.result as { maxEur?: number }).maxEur === expected.maxEur)).toBe(true);
-  });
 
-  it('parámetros inválidos: la herramienta no da cifras y una cifra inventada se sustituye por la derivación', async () => {
-    const llm = new FakeLlmClient([
-      [{ type: 'tool_call', name: 'estimate', args: { type: 'luna', systems: 'excel', team: 'small' } }, done],
-      say('Serán 3.000 € aproximadamente.'),
-    ]);
-    const blocked: number[] = [];
-    const r = await run({ llm, onBlocked: () => blocked.push(1) }, 'Quiero algo');
-    const toolTurn = llm.calls[1]!.turns.find((t) => t.role === 'tool_result');
-    expect(toolTurn).toMatchObject({ result: { error: expect.any(String) } });
-    expect(r.text).not.toContain('3.000');
-    expect(r.text).toContain(knowledge.assistant.es.actions.fallback!.say[0]!);
-    expect(blocked).toHaveLength(1);
-    expect(r.last).not.toHaveProperty('estimate');
-  });
 
-  it('una cifra de la tabla sin estimate en la conversación se bloquea', async () => {
+  it('cualquier importe en euros se bloquea y se deriva a Rubén', async () => {
     const llm = new FakeLlmClient([say('Una web cuesta entre 4.000 y 15.000 €.')]);
     const r = await run({ llm }, 'Háblame de webs');
     expect(r.text).toContain(knowledge.assistant.es.actions.fallback!.say[0]!);
   });
 
-  it('con contexto completo en la petición, esa estimación queda autorizada', async () => {
-    const expected = estimate(knowledge.pricing, { type: 'web', systems: 'excel', team: 'small' })!;
-    const llm = new FakeLlmClient([say(`Te salió de ${expected.minEur} a ${expected.maxEur} €, no es un presupuesto.`)]);
-    const r = await run({ llm }, 'Repítemelo', { ctx: { type: 'web', systems: 'excel', team: 'small' } });
-    expect(r.text).toContain(String(expected.maxEur));
-  });
 
   it('error del proveedor -> llm_unavailable', async () => {
     const llm = new FakeLlmClient([[{ type: 'error', reason: 'x' }]]);

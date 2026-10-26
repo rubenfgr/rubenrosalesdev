@@ -14,11 +14,8 @@ describe('buildSystemPrompt', () => {
         for (const rule of RULES[lang]) expect(prompt).toContain(rule);
       });
 
-      it('contiene la bio y la tabla de rangos', () => {
+      it('contiene la bio', () => {
         expect(prompt).toContain(knowledge.assistant[lang].bio);
-        for (const [id, p] of Object.entries(knowledge.pricing.types)) {
-          expect(prompt).toContain(`${knowledge.assistant[lang].types[id]}: ${p.minEur}–${p.maxEur} €`);
-        }
       });
 
       it('contiene servicios, proceso y FAQ del idioma', () => {
@@ -27,15 +24,9 @@ describe('buildSystemPrompt', () => {
         expect(prompt).toContain(knowledge.faq[lang].items[0]!.question);
       });
 
-      it('no contiene importes en euros fuera de pricing.json', () => {
-        const allowed = new Set<number>();
-        for (const p of Object.values(knowledge.pricing.types)) {
-          allowed.add(p.minEur);
-          allowed.add(p.maxEur);
-        }
-        const amounts = [...prompt.matchAll(/(\d[\d.,]*)\s*(?:€|EUR|euros?)/gi)].map((m) => Number(m[1]!.replace(/[.,]/g, '')));
-        expect(amounts.length).toBeGreaterThan(0);
-        for (const a of amounts) expect(allowed.has(a), `cifra no autorizada: ${a}`).toBe(true);
+      it('no contiene ningún importe en euros ni tabla de precios', () => {
+        expect([...prompt.matchAll(/(\d[\d.,]*)\s*(?:€|EUR|euros?)/gi)]).toHaveLength(0);
+        expect(prompt).not.toMatch(/rounding|minEur|maxEur/);
       });
     });
   }

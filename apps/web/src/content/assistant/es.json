@@ -17,7 +17,7 @@
     "decline": "Continuar sin guardar"
   },
   "greeting": [
-    "Hola, soy el asistente de Rubén Rosales. Le adelanto trabajo: entiendo qué necesitas, te cuento cómo trabaja y, si quieres, te doy un rango orientativo.",
+    "Hola, soy el asistente de Rubén Rosales. Le adelanto trabajo: entiendo qué necesitas, te cuento cómo trabaja y, si quieres, le paso un resumen para que te escriba.",
     "¿Por dónde empezamos?"
   ],
   "bio": "Rubén es desarrollador independiente. Desde 2019 construye software para pymes: automatiza procesos, conecta los programas que ya usáis y aplica IA donde ahorra horas de verdad.",
@@ -50,7 +50,7 @@
         "label": "Mejor hablo con Rubén"
       }
     ],
-    "after_est": [
+    "after_brief": [
       {
         "action": "humano",
         "label": "Enviar resumen a Rubén"
@@ -96,7 +96,7 @@
     "precio": {
       "say": [
         "Depende mucho del alcance, así que no te voy a dar una cifra al aire.",
-        "Si me cuentas tres cosas, te doy un rango orientativo basado en proyectos parecidos. ¿Lo hacemos?"
+        "Rubén prepara cada propuesta a medida, con alcance, plazo y precio cerrados por escrito, tras una llamada gratuita de 30 min. Si me cuentas tres cosas, le paso un resumen para que llegue preparado. ¿Lo hacemos?"
       ],
       "step": "price_q"
     },
@@ -115,7 +115,8 @@
     },
     "plazo": {
       "say": [
-        "Los plazos van de 2 a 16 semanas según el tipo de proyecto. Con tres datos te doy un rango más ajustado."
+        "El plazo depende del alcance y se acuerda por escrito en la propuesta, con entregas cada 1–2 semanas.",
+        "Si me cuentas tres cosas sobre tu caso, le paso un resumen a Rubén para que lo concrete contigo."
       ],
       "step": "price_q"
     },
@@ -131,24 +132,12 @@
       ],
       "step": "team"
     },
-    "estimateIntro": {
-      "say": [
-        "Con lo que me cuentas, proyectos parecidos suelen quedar en este rango:"
-      ],
-      "step": "after_est"
-    },
-    "estimateOutro": {
-      "say": [
-        "Es una referencia para que sepas si encaja en tu presupuesto, no un compromiso. ¿Siguiente paso?"
-      ],
-      "step": "after_est"
-    },
-    "noEstimate": {
+    "briefDone": {
       "say": [
         "Gracias. Con esto Rubén puede prepararte una propuesta concreta.",
         "¿Te parece que le pase el resumen?"
       ],
-      "step": "after_est"
+      "step": "after_brief"
     },
     "fallback": {
       "say": [
@@ -160,11 +149,11 @@
   },
   "rules": [
     {
-      "pattern": "precio|cuesta|cuánto|cuanto|presupuesto|coste|€",
+      "pattern": "precio|cuesta|cuánto (cuesta|vale|cobra|sale|es|me)|cuanto (cuesta|vale|cobra|sale|es|me)|presupuesto|coste|tarifa|€",
       "action": "precio"
     },
     {
-      "pattern": "plazo|tarda|semanas|cuándo|cuando",
+      "pattern": "plazo|tarda|cuánto tiempo|cuanto tiempo|semanas|cuándo (empez|podr|estar)|cuando (empez|podr|estar)",
       "action": "plazo"
     },
     {
@@ -172,7 +161,7 @@
       "action": "humano"
     },
     {
-      "pattern": "quién|quien|experiencia|rubén|ruben",
+      "pattern": "quién (es|eres)|quien (es|eres)|experiencia|trayectoria|sobre rubén|sobre ruben",
       "action": "info"
     }
   ],
@@ -192,21 +181,6 @@
     "small": "1–5 personas",
     "medium": "6–20 personas",
     "large": "Más de 20"
-  },
-  "estimate": {
-    "title": "Rango orientativo",
-    "confidence": "Confianza {level}",
-    "levels": {
-      "low": "baja",
-      "medium": "media",
-      "high": "alta"
-    },
-    "weeks": "{min}–{max} semanas",
-    "upTitle": "Lo que lo puede subir",
-    "up": "Integrar programas sin API, muchos casos especiales, datos desordenados o plazos muy cortos.",
-    "downTitle": "Lo que lo puede bajar",
-    "down": "Empezar por un solo proceso, que ya uses herramientas con API o reutilizar piezas de proyectos previos.",
-    "disclaimer": "No es un presupuesto. Es un rango a partir de proyectos parecidos; la cifra real sale de una llamada de 30 min con Rubén y una propuesta por escrito."
   },
   "form": {
     "name": "Nombre",
@@ -230,10 +204,8 @@
       "email": "Email",
       "project": "Proyecto",
       "tools": "Herramientas",
-      "team": "Equipo",
-      "range": "Rango"
+      "team": "Equipo"
     },
-    "rangeNote": "{range} (orientativo)",
     "footer": "Te escribe en menos de 24 h laborables. Así no tendrás que repetirle nada.",
     "thanks": "Gracias, {name}.",
     "userSent": "Enviado: {name}"

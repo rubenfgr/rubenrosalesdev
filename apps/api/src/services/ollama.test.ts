@@ -1,9 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { FakeLlmClient, type LlmEvent } from './llm';
-import { chatTurn } from './chat';
-import { MemoryAnswerCache } from './answer-cache';
-import { knowledge } from '@rr/shared/knowledge';
-import { estimate } from '@rr/shared';
+import type { LlmEvent } from './llm';
 import { OllamaClient, toMessages } from './ollama';
 
 const collect = async (it: AsyncIterable<LlmEvent>) => {
@@ -44,22 +40,12 @@ describe('OllamaClient (servidor simulado)', () => {
     expect((await collect(down.stream(input)))[0]).toMatchObject({ type: 'error' });
   });
 
-  it('toMessages omite turnos de herramienta', () => {
-    expect(toMessages('s', [{ role: 'user', text: 'a' }, { role: 'tool_call', name: 'x', args: {} }])).toEqual([
+  it('toMessages antepone el system prompt', () => {
+    expect(toMessages('s', [{ role: 'user', text: 'a' }, { role: 'assistant', text: 'b' }])).toEqual([
       { role: 'system', content: 's' },
       { role: 'user', content: 'a' },
+      { role: 'assistant', content: 'b' },
     ]);
   });
 });
 
-describe('proveedor sin function calling', () => {
-  it('no envía herramientas y entrega la estimación del contexto como dato en el prompt', async () => {
-    const llm = new FakeLlmClient([[{ type: 'text', text: 'ok' }, { type: 'done', usage: { tokensIn: 1, tokensOut: 1 } }]]);
-    Object.defineProperty(llm, 'supportsTools', { value: false });
-    const ctx = { type: 'web', systems: 'excel', team: 'small' };
-    const est = estimate(knowledge.pricing, ctx as never)!;
-    for await (const _ of chatTurn({ knowledge, llm, cache: new MemoryAnswerCache(), maxOutputTokens: 300 }, { lang: 'es', messages: [{ role: 'user', content: 'Cuéntame más' }], ctx } as never));
-    expect(llm.calls[0]!.tools).toEqual([]);
-    expect(llm.calls[0]!.system).toContain(`${est.minEur}–${est.maxEur} €`);
-  });
-});

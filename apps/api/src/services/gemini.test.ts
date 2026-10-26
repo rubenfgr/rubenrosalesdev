@@ -25,12 +25,6 @@ describe('GeminiClient', () => {
     ]);
   });
 
-  it('emite llamadas a herramienta', async () => {
-    const body = sse({ candidates: [{ content: { parts: [{ functionCall: { name: 'estimate', args: { type: 'web' } } }] } }] });
-    const c = new GeminiClient({ apiKey: 'k', model: 'm', fetchImpl: respond(body) as never });
-    const events = await collect(c.stream(input));
-    expect(events[0]).toEqual({ type: 'tool_call', name: 'estimate', args: { type: 'web' } });
-  });
 
   it('error del proveedor (tras un reintento) -> evento error sin filtrar el cuerpo', async () => {
     let calls = 0;
@@ -57,18 +51,10 @@ describe('GeminiClient', () => {
 });
 
 describe('toContents', () => {
-  it('traduce roles y herramientas', () => {
-    expect(
-      toContents([
-        { role: 'user', text: 'a' },
-        { role: 'assistant', text: 'b' },
-        { role: 'tool_call', name: 'estimate', args: { x: 1 } },
-        { role: 'tool_result', name: 'estimate', result: { ok: true } },
-      ]),
-    ).toEqual([
-      { role: 'user', parts: [{ text: 'a' }] },
-      { role: 'model', parts: [{ text: 'b' }, { functionCall: { name: 'estimate', args: { x: 1 } } }] },
-      { role: 'user', parts: [{ functionResponse: { name: 'estimate', response: { ok: true } } }] },
+  it('traduce roles y une turnos contiguos del mismo rol', () => {
+    expect(toContents([{ role: 'user', text: 'a' }, { role: 'user', text: 'b' }, { role: 'assistant', text: 'c' }])).toEqual([
+      { role: 'user', parts: [{ text: 'a' }, { text: 'b' }] },
+      { role: 'model', parts: [{ text: 'c' }] },
     ]);
   });
 });
