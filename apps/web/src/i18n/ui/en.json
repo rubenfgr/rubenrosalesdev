@@ -285,16 +285,6 @@
     "title2": "You decide how far it goes.",
     "lead": "When something isn't clear, it doesn't make it up: it asks you. And everything it does is written down, with the reason. Try it.",
     "howMuchFreedom": "How much freedom do you give it?",
-    "pause": "Pause",
-    "resume": "Resume",
-    "isItClear": "Is it sure?",
-    "confidence": {
-      "yes": "Yes",
-      "maybe": "More or less",
-      "no": "No"
-    },
-    "waitingForOk": "Waiting for your OK",
-    "nothingPending": "Nothing pending. Everything that arrived was clear.",
     "approve": "Approve",
     "doItMyself": "I'll do it",
     "logTitle": "What it has done, and why",
@@ -315,13 +305,24 @@
       "ownTitle": "The system is yours",
       "ownText": "Code and documentation delivered."
     },
-    "reading": "Reading…",
-    "handOver": "Handing it over for review",
-    "asks": "Not sure: it asks you",
-    "paused": "Paused · nothing is executed",
     "selfHandled": "You handle it",
     "selfHandledWhy": "{title}. I'll make a note for next time.",
-    "modeLabel": "Mode"
+    "modeLabel": "Mode",
+    "listTitle": "Example inbox",
+    "clearness": "Clarity",
+    "autoLabel": "Go through alone",
+    "reviewLabel": "Wait for your OK",
+    "thresholdNote": "It goes through alone if clarity is {n}% or higher.",
+    "thresholdNone": "None go through alone: everything waits for your OK.",
+    "state": {
+      "auto": "Goes through",
+      "review": "Waits for your OK",
+      "approved": "Approved by you",
+      "corrected": "Done by you"
+    },
+    "reset": "Reset example",
+    "marker": "Mode threshold",
+    "example": "Illustrative example"
   },
   "calculator": {
     "eyebrow": "03 / calculator",

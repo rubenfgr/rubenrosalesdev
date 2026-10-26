@@ -285,16 +285,6 @@
     "title2": "Tú decides hasta dónde.",
     "lead": "Cuando algo no está claro, no se lo inventa: te lo pregunta. Y todo lo que hace queda apuntado, con el motivo. Pruébalo.",
     "howMuchFreedom": "¿Cuánta libertad le das?",
-    "pause": "Pausar",
-    "resume": "Reanudar",
-    "isItClear": "¿Lo tiene claro?",
-    "confidence": {
-      "yes": "Sí",
-      "maybe": "Más o menos",
-      "no": "No"
-    },
-    "waitingForOk": "Esperando tu OK",
-    "nothingPending": "Nada pendiente. Todo lo que ha llegado estaba claro.",
     "approve": "Aprobar",
     "doItMyself": "Lo hago yo",
     "logTitle": "Qué ha hecho, y por qué",
@@ -315,13 +305,24 @@
       "ownTitle": "El sistema es tuyo",
       "ownText": "Código y documentación entregados."
     },
-    "reading": "Leyendo…",
-    "handOver": "Te lo paso para revisar",
-    "asks": "No lo tiene claro: te pregunta",
-    "paused": "En pausa · no se ejecuta nada",
     "selfHandled": "Lo gestionas tú",
     "selfHandledWhy": "{title}. Tomo nota para la próxima vez.",
-    "modeLabel": "Modo"
+    "modeLabel": "Modo",
+    "listTitle": "Bandeja de ejemplo",
+    "clearness": "Claridad",
+    "autoLabel": "Pasan solos",
+    "reviewLabel": "Esperan tu OK",
+    "thresholdNote": "Pasa solo si la claridad es del {n} % o más.",
+    "thresholdNone": "Ninguno pasa solo: todo espera tu OK.",
+    "state": {
+      "auto": "Pasa solo",
+      "review": "Espera tu OK",
+      "approved": "Aprobado por ti",
+      "corrected": "Lo hiciste tú"
+    },
+    "reset": "Reiniciar ejemplo",
+    "marker": "Umbral del modo",
+    "example": "Ejemplo ilustrativo"
   },
   "calculator": {
     "eyebrow": "03 / calculadora",
