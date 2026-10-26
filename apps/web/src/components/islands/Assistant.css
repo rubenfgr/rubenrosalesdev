@@ -54,9 +54,9 @@ html.as-lock, html.as-lock body { overflow: hidden; overscroll-behavior: none; }
 .as-fab:active { transform: translateY(0) scale(.98); }
 .as-fab-text small { transition: color var(--duration-base) var(--ease-out); } .as-fab:hover .as-fab-text small { color: var(--color-dark-text); }
 @media (prefers-reduced-motion: no-preference) {
-  .as-fab .lm-piece, .as-fab-mini .lm-piece { animation: rrblink 5s ease-in-out 2s infinite; }
+  .as-fab .lm-piece, .as-fab-mini .lm-piece { animation: rrpiece 5s ease-in-out 2s infinite; }
 }
-@keyframes rrblink { 0%, 24%, 100% { opacity: 1; } 8% { opacity: .2; } 16% { opacity: 1; } }
+@keyframes rrpiece { 0%, 24%, 100% { opacity: 1; } 8% { opacity: .2; } 16% { opacity: 1; } }
 /* Móvil: el panel cubre la pantalla por encima de la cabecera fija (--z-modal > --z-sticky) y sigue al viewport visual. */
 @media (max-width: 34.99rem) {
   .as-panel { z-index: var(--z-modal); inset: auto; left: 0; right: 0; top: var(--as-vt, 0px); width: auto; height: var(--as-vh, 100dvh); border: 0; border-radius: 0; animation: none; }

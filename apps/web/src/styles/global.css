@@ -32,9 +32,15 @@ main {
   padding-top: var(--nav-height);
 }
 
+/* ::selection no admite degradados (se quedaba sin fondo y con texto claro): color sólido, y otro sobre fondos oscuros. */
 ::selection {
-  background: var(--gradient-brand);
+  background: var(--color-primary);
   color: var(--color-primary-foreground);
+}
+.prob ::selection, .ct ::selection, .footer ::selection, .srv-card.dark ::selection,
+.tray-ctl ::selection, .as-head ::selection, .as-sum ::selection {
+  background: var(--color-primary-on-dark);
+  color: var(--color-dark);
 }
 
 input,
