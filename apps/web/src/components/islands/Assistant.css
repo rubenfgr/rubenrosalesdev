@@ -49,7 +49,6 @@ html.as-lock, html.as-lock body { overflow: hidden; overscroll-behavior: none; }
 .as-input input:disabled, .as-input button:disabled { opacity: 0.5; cursor: not-allowed; }
 /* Botón flotante: símbolo oficial y un pulso del indicador de estado cada 5 s (nada con movimiento reducido). */
 .as-fab-ico { background: var(--color-dark); box-shadow: inset 0 0 0 1px var(--color-dark-border); }
-.as-mark .w { fill: var(--color-dark-text); } .as-mark .p { fill: var(--color-primary-on-dark); }
 .as-fab-ico i, .as-fab-dot { background: var(--color-ok); }
 .as-fab-mini { position: fixed; } .as-fab-dot { position: absolute; right: 8px; top: 8px; width: 10px; height: 10px; border-radius: 50%; border: 2px solid var(--color-dark-footer); box-sizing: content-box; }
 .as-fab-ico i::after, .as-fab-dot::after { content: ''; position: absolute; inset: -2px; border-radius: 50%; border: 2px solid var(--color-ok); opacity: 0; }

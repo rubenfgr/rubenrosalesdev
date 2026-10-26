@@ -1,6 +1,7 @@
 import { useEffect, useRef, useState } from 'preact/hooks';
 import { sendContact } from '../../lib/assistant/api';
 import Eyebrow from './Eyebrow';
+import LogoMark from './LogoMark';
 import './Contacto.css';
 
 type Mode = 'guided' | 'direct';
@@ -310,7 +311,7 @@ export default function Contacto({ labels: L, lang, email: contactEmail }: Props
               </div>
               <div><h5>{L.sheet.tools}</h5>{toolTags.length ? <div class="ct-tags">{toolTags.map((x) => <span>{x}</span>)}</div> : <span class="ct-empty">{L.sheet.empty}</span>}</div>
               <div><h5>{L.sheet.jamTitle}</h5><p class="ct-quote" style={`font-style:${q ? 'italic' : 'normal'};color:${q ? 'inherit' : 'var(--color-foreground-subtle)'}`}>{q ? `«${q.length > 180 ? `${q.slice(0, 180)}…` : q}»` : L.sheet.jamEmpty}</p></div>
-              <div class="ct-by"><span>RR</span><div><b>{L.aside.reviewer}</b><small>{L.aside.reviewerText}</small></div></div>
+              <div class="ct-by"><span class="ct-by-mark"><LogoMark size={28} /></span><div><b>{L.aside.reviewer}</b><small>{L.aside.reviewerText}</small></div></div>
             </div>
             <div class="ct-mail"><span>{L.aside.preferWrite}</span><a href={`mailto:${contactEmail}`}>{contactEmail}</a><span>{L.aside.location}</span></div>
           </div>

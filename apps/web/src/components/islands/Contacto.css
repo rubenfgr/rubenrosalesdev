@@ -83,7 +83,7 @@
 .ct-tags { display: flex; flex-wrap: wrap; gap: 6px; } .ct-tags span { font-size: 13px; padding: 4px 9px; border-radius: 3px; background: var(--color-background); border: 1px solid var(--color-border); }
 .ct-quote { font-size: 14.5px; line-height: 1.5; margin: 0; }
 .ct-by { display: flex; align-items: center; gap: var(--space-3); padding-top: var(--space-4); border-top: 1px solid var(--color-border); }
-.ct-by > span { width: 36px; height: 36px; border-radius: 50%; background: var(--color-foreground); color: #fff; font-size: 12px; font-weight: var(--font-weight-heavy); display: flex; align-items: center; justify-content: center; }
+.ct-by-mark { flex: none; width: 44px; height: 44px; display: flex; align-items: center; justify-content: center; } /* 28 px de símbolo + zona de respeto (≥ 27 %) */
 .ct-by b { display: block; font-size: 14px; } .ct-by small { font-size: 13px; color: var(--color-foreground-muted); }
 .ct-mail { display: flex; flex-wrap: wrap; justify-content: space-between; align-items: center; gap: var(--space-2) var(--space-4); padding: 18px 20px; border: 1px solid var(--color-dark-border); border-radius: var(--radius-lg); font-size: 14px; color: var(--color-dark-text-muted); }
 .ct-mail a { color: var(--color-dark-text); font-weight: var(--font-weight-strong); font-family: var(--font-family-mono); }

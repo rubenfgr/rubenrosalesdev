@@ -2,6 +2,7 @@ import { useEffect, useRef, useState } from 'preact/hooks';
 import { hasPersonalData, matchRule, type Ctx } from '@rr/shared/engine';
 import { LlmUnavailable, sendLead, streamChat } from '../../lib/assistant/api';
 import { summaryLines } from '../../lib/assistant/summary';
+import LogoMark from './LogoMark';
 import './Assistant.css';
 
 interface Data {
@@ -265,21 +266,13 @@ export default function Assistant({ data: D, labels: L, lang, privacyHref, llm =
   const icon = (d: string, size = 18) => (
     <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d={d} /></svg>
   );
-  // Símbolo oficial (muro con la pieza azul) para el botón flotante.
-  const mark = (size: number) => (
-    <svg class="as-mark" width={size} height={size} viewBox="0 0 84 84" aria-hidden="true">
-      <g class="w"><rect x="0" y="6" width="22" height="23" /><rect x="26" y="6" width="26" height="23" /><rect x="0" y="33" width="36" height="23" /><rect x="40" y="33" width="38" height="23" /><rect x="0" y="60" width="18" height="24" /><rect x="22" y="60" width="38" height="24" /><rect x="64" y="60" width="14" height="24" /></g>
-      <rect class="p" x="62" y="0" width="22" height="23" />
-    </svg>
-  );
-  const chat = 'M21 12a8 8 0 0 1-11.6 7.1L4 20l1-4.6A8 8 0 1 1 21 12z';
 
   return (
     <>
       {open && (
         <div class="as-panel" role="dialog" aria-label={L.panelAria}>
           <div class="as-head">
-            <div class="as-avatar">{icon(chat, 20)}<i /></div>
+            <div class="as-avatar"><LogoMark tone="dark" size={24} /><i /></div>
             <div class="as-head-text"><b>{D.panel.title}</b><small>{D.panel.status}</small></div>
             <button type="button" class="as-icon" aria-label={L.restart} title={L.restart} onClick={restart}>{icon('M3 12a9 9 0 1 0 3-6.7M3 4v5h5')}</button>
             <button type="button" class="as-icon" aria-label={L.close} onClick={() => setOpen(false)}>{icon('M6 6l12 12M18 6L6 18')}</button>
@@ -331,11 +324,11 @@ export default function Assistant({ data: D, labels: L, lang, privacyHref, llm =
       )}
       {!open && (
         <button type="button" class={`as-fab`} aria-label={L.fabAria} onClick={toggle}>
-          <span class="as-fab-ico">{mark(22)}<i /></span>
+          <span class="as-fab-ico"><LogoMark tone="dark" size={24} /><i /></span>
           <span class="as-fab-text"><b>{L.fabTitle}</b><small>{L.fabSubtitle}</small></span>
         </button>
       )}
-      <button type="button" class={`as-fab-mini${open ? ' open' : ''}`} aria-label={open ? L.close : L.fabAria} onClick={toggle}>{open ? icon('M6 6l12 12M18 6L6 18', 22) : <>{mark(28)}<i class="as-fab-dot" /></>}</button>
+      <button type="button" class={`as-fab-mini${open ? ' open' : ''}`} aria-label={open ? L.close : L.fabAria} onClick={toggle}>{open ? icon('M6 6l12 12M18 6L6 18', 22) : <><LogoMark tone="dark" size={28} /><i class="as-fab-dot" /></>}</button>
     </>
   );
 }
