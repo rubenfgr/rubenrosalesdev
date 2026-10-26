@@ -44,7 +44,7 @@ pnpm --filter @rr/api exec tsx --env-file=.env src/jobs/usage.ts
 Mira la terminal de la API:
 - Errores de base de datos (`chat: no se pudo crear la conversación`, `leads: fallo al guardar el lead (ECONNREFUSED)`): el contenedor de Postgres está parado. `pnpm dev:db` y vuelve a probar (la API se reconecta sola). Aun así el email a Rubén sale, aunque la base de datos falle.
 - `leads: fallo al enviar el email`: en local no debería pasar (los emails van a `apps/api/.dev-mail/`).
-- Si ves `undefined:` en una fila del resumen, es que la web de desarrollo tiene el contenido antiguo en caché: reinicia `pnpm dev:web`.
+- Si ves `undefined:` en una fila del resumen, es que la web de desarrollo tiene el contenido o el esquema antiguos (Astro descarta los campos que no conoce): para `pnpm dev:web` con `Ctrl+C` y vuelve a arrancarlo. No se puede arrancar una segunda web de desarrollo mientras la primera siga viva.
 
 ## Si el asistente responde «Buena pregunta. Prefiero no inventarme la respuesta» y sale «Reintentar con el asistente»
 

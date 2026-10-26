@@ -83,6 +83,11 @@ try {
   const s = await state();
   if (s.leads !== 2 || s.emails.length !== 4) fail(`se esperaban 2 leads y 4 emails (2 resúmenes + 2 formularios); hay ${s.leads} y ${s.emails.length}`);
   if (s.emails.filter((m) => m.subject.startsWith('Contacto web: Bea')).length !== 2) fail('faltan los emails del formulario de contacto');
+  for (const m of s.emails.filter((m) => m.subject.startsWith('Asistente web'))) {
+    if ((m.text.match(/Nombre:/g) ?? []).length !== 1 || (m.text.match(/Email:/g) ?? []).length !== 1) fail('el resumen del asistente repite nombre o correo');
+    if (m.text.includes('undefined')) fail('el resumen del asistente contiene «undefined»');
+    if (!m.text.includes('Mensajes:\n- Háblame de lo que haces')) fail('el resumen no incluye lo que escribió el visitante como lista');
+  }
   if (!s.emails[0].subject.startsWith('Asistente web: Ana')) fail(`asunto inesperado: ${s.emails[0].subject}`);
   if (s.conversations !== 2 || s.messages < 4) fail(`la conversación aceptada no se guardó (${s.conversations} conv., ${s.messages} mensajes)`);
   console.log(`✓ API: ${s.leads} leads guardados, ${s.emails.length} emails enviados (asunto «${s.emails[0].subject}», Reply-To ${s.emails[0].replyTo}), ${s.conversations} conversaciones con ${s.messages} mensajes`);

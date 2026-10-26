@@ -1,6 +1,7 @@
 import { useEffect, useRef, useState } from 'preact/hooks';
 import { hasPersonalData, matchRule, type Ctx } from '@rr/shared/engine';
 import { LlmUnavailable, sendLead, streamChat } from '../../lib/assistant/api';
+import { summaryLines } from '../../lib/assistant/summary';
 import './Assistant.css';
 
 interface Data {
@@ -196,8 +197,10 @@ export default function Assistant({ data: D, labels: L, lang, privacyHref, llm =
     if (ctx.systems) rows.push({ k: D.summary.rows.tools, v: D.systems[ctx.systems] ?? ctx.systems });
     if (ctx.team) rows.push({ k: D.summary.rows.team, v: D.team[ctx.team] ?? ctx.team });
     // Lo que el visitante ha escrito con sus palabras (no los botones), para que Rubén tenga el contexto.
-    const typed = messages.flatMap((m) => (m.kind === 'user' && !chipLabels.has(m.text) ? [m.text] : [])).slice(-6);
-    if (typed.length) rows.push({ k: D.summary.rows.chat, v: typed.map((t) => t.slice(0, 250)).join(' · ') });
+    const typed = messages.flatMap((m) => (m.kind === 'user' && !chipLabels.has(m.text) ? [m.text] : []));
+    const details = rows.slice(2); // sin nombre ni correo: el email ya los lleva en la cabecera
+    const lines = summaryLines(details, typed, D.summary.rows.chat);
+    if (typed.length) rows.push({ k: D.summary.rows.chat, v: typed.slice(-6).map((t) => t.slice(0, 250)).join(' · ') });
     setFormError('');
     setSending(true);
     try {
@@ -207,7 +210,7 @@ export default function Assistant({ data: D, labels: L, lang, privacyHref, llm =
         name,
         email: form.email.trim(),
         consent: true,
-        summary: rows.map((r) => `${r.k}: ${r.v}`),
+        summary: lines,
         ...(conversationId.current ? { conversationId: conversationId.current } : {}),
       });
     } catch {
