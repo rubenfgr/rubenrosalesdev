@@ -19,8 +19,9 @@ export const errorBody = (error: ErrorCode, message?: string) => (message ? { er
 export function registerErrorHandlers(app: Hono) {
   app.notFound((c) => c.json(errorBody('not_found'), 404));
   app.onError((err, c) => {
-    // Sin datos personales en el log.
-    console.error('api: error no controlado', err instanceof Error ? err.message : 'desconocido');
+    // Sin datos personales en el log: nunca el mensaje (el de una consulta fallida incluye sus parámetros), solo el tipo y el código.
+    const code = (err as { cause?: { code?: string } })?.cause?.code;
+    console.error('api: error no controlado', err instanceof Error ? err.name : 'desconocido', code ?? '');
     return c.json(errorBody('internal'), 500);
   });
 }

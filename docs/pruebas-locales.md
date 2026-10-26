@@ -39,6 +39,13 @@ Gasto del mes (en la base de datos local):
 pnpm --filter @rr/api exec tsx --env-file=.env src/jobs/usage.ts
 ```
 
+## Si al enviar el resumen sale «No se ha podido enviar»
+
+Mira la terminal de la API:
+- Errores de base de datos (`chat: no se pudo crear la conversación`, `leads: fallo al guardar el lead (ECONNREFUSED)`): el contenedor de Postgres está parado. `pnpm dev:db` y vuelve a probar (la API se reconecta sola). Aun así el email a Rubén sale, aunque la base de datos falle.
+- `leads: fallo al enviar el email`: en local no debería pasar (los emails van a `apps/api/.dev-mail/`).
+- Si ves `undefined:` en una fila del resumen, es que la web de desarrollo tiene el contenido antiguo en caché: reinicia `pnpm dev:web`.
+
 ## Si el asistente responde «Buena pregunta. Prefiero no inventarme la respuesta» y sale «Reintentar con el asistente»
 
 Significa que la web no ha podido usar el modelo y ha caído a reglas. Mira la terminal de `pnpm dev:api`: ahora escribe `chat: llm_unavailable (motivo)`:

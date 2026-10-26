@@ -41,6 +41,7 @@ describe('errores de la API', () => {
     const res = await make().request('/boom');
     expect(res.status).toBe(500);
     expect(await res.json()).toEqual({ error: 'internal' });
+    expect(spy.mock.calls.flat().join(' ')).not.toContain('secreto@example.com'); // el mensaje del error no llega al log
     spy.mockRestore();
   });
 });

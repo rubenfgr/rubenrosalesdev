@@ -63,6 +63,25 @@ describe('POST /leads', () => {
     spy.mockRestore();
   });
 
+  it('si falla la base de datos, el email a Rubén sale igualmente y el visitante ve ok', async () => {
+    const spy = vi.spyOn(console, 'error').mockImplementation(() => {});
+    const { app, repos, mailer } = setup();
+    vi.spyOn(repos, 'createLead').mockRejectedValue(new Error('Failed query: insert into "leads" params: ana@example.com'));
+    const res = await post(app, valid);
+    expect(res.status).toBe(200);
+    expect(mailer!.sent).toHaveLength(1);
+    expect(spy.mock.calls.flat().join(' ')).not.toContain('ana@example.com');
+    spy.mockRestore();
+  });
+
+  it('si fallan la base de datos y el email, responde error', async () => {
+    const spy = vi.spyOn(console, 'error').mockImplementation(() => {});
+    const { app, repos } = setup(new FakeMailer(true));
+    vi.spyOn(repos, 'createLead').mockRejectedValue(new Error('down'));
+    expect((await post(app, valid)).status).toBe(500);
+    spy.mockRestore();
+  });
+
   it('429 al superar los envíos por hora', async () => {
     const { app } = setup(new FakeMailer(), { RATE_LIMIT_LEADS_PER_HOUR: '2' });
     expect((await post(app, valid)).status).toBe(200);
