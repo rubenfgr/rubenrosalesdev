@@ -3,7 +3,7 @@
     {
       "id": "discovery",
       "step": "01",
-      "tag": "Llamada de 30 min",
+      "tag": "Primera conversación",
       "title": "Descubrimiento",
       "body": "Me cuentas qué te frena y te digo si tiene sentido automatizarlo. Si no lo tiene, te lo digo también."
     },

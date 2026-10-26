@@ -96,7 +96,7 @@
     "precio": {
       "say": [
         "It depends a lot on the scope, so I'm not going to throw out a number at random.",
-        "Rubén prepares each proposal individually, with scope, timeline and a fixed price in writing, after a free 30-minute call. If you tell me three things, I can pass him a summary so he comes prepared. Shall we?"
+        "Rubén prepares each proposal individually, with scope, timeline and a fixed price in writing, once he knows your case. If you tell me three things, I can pass him a summary so he comes prepared. Shall we?"
       ],
       "step": "price_q"
     },
@@ -108,7 +108,7 @@
     },
     "como": {
       "say": [
-        "1. A 30-minute call to understand the problem (free).\n2. A proposal with scope, timeline and a fixed price.\n3. Development in deliveries you can test as you go.\n4. Deployment, training and support.",
+        "1. We talk to understand the problem.\n2. A proposal with scope, timeline and a fixed price.\n3. Development in deliveries you can test as you go.\n4. Deployment, training and support.",
         "You only pay for what is agreed in the proposal."
       ],
       "step": "after_info"

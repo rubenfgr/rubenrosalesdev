@@ -96,7 +96,7 @@
     "precio": {
       "say": [
         "Depende mucho del alcance, así que no te voy a dar una cifra al aire.",
-        "Rubén prepara cada propuesta a medida, con alcance, plazo y precio cerrados por escrito, tras una llamada gratuita de 30 min. Si me cuentas tres cosas, le paso un resumen para que llegue preparado. ¿Lo hacemos?"
+        "Rubén prepara cada propuesta a medida, con alcance, plazo y precio cerrados por escrito, una vez que conoce tu caso. Si me cuentas tres cosas, le paso un resumen para que llegue preparado. ¿Lo hacemos?"
       ],
       "step": "price_q"
     },
@@ -108,7 +108,7 @@
     },
     "como": {
       "say": [
-        "1. Llamada de 30 min para entender el problema (gratis).\n2. Propuesta con alcance, plazo y precio cerrado.\n3. Desarrollo por entregas que vas probando.\n4. Despliegue, formación y soporte.",
+        "1. Hablamos para entender el problema.\n2. Propuesta con alcance, plazo y precio cerrado.\n3. Desarrollo por entregas que vas probando.\n4. Despliegue, formación y soporte.",
         "Solo pagas por lo acordado en la propuesta."
       ],
       "step": "after_info"

@@ -3,7 +3,7 @@
     {
       "id": "discovery",
       "step": "01",
-      "tag": "30-minute call",
+      "tag": "First conversation",
       "title": "Discovery",
       "body": "You tell me what is holding you back and I tell you whether automating it makes sense. If it doesn't, I'll tell you that too."
     },

@@ -45,7 +45,7 @@ describe('validador de cifras', () => {
   it('no confunde números no monetarios', () => {
     expect(ok('El proyecto tarda 3 semanas.')).toBe(true);
     expect(ok('Rubén construye software desde 2019.')).toBe(true);
-    expect(ok('La llamada dura 30 minutos y es gratis.')).toBe(true);
+    expect(ok('La reunión dura 30 minutos.')).toBe(true);
     expect(ok('Entregas cada 1–2 semanas.')).toBe(true);
     expect(ok('Plazos de 2 a 16 semanas.')).toBe(true);
   });
