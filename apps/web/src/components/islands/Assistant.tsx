@@ -21,12 +21,22 @@ interface Props { data: Data; labels: Labels; lang: string; privacyHref: string;
 type Msg =
   | { kind: 'bot' | 'user'; text: string }
   | { kind: 'summary'; rows: { k: string; v: string }[] };
+// La elección del aviso se recuerda solo durante la sesión de la pestaña (sobrevive al refresco, no a cerrarla).
+const CONSENT_KEY = 'rr-assistant-consent';
+const readConsent = (): 'yes' | 'no' | null => {
+  try {
+    const v = typeof sessionStorage === 'undefined' ? null : sessionStorage.getItem(CONSENT_KEY);
+    return v === 'yes' || v === 'no' ? v : null;
+  } catch {
+    return null; // almacenamiento bloqueado: se vuelve a preguntar
+  }
+};
 const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
 export default function Assistant({ data: D, labels: L, lang, privacyHref, llm = false }: Props) {
   const [open, setOpen] = useState(false);
   // Aviso de privacidad (D-4): hasta elegir, no se muestra el chat ni se envía nada. 'yes' = guardar la conversación.
-  const [consent, setConsent] = useState<'yes' | 'no' | null>(null);
+  const [consent, setConsent] = useState<'yes' | 'no' | null>(readConsent);
   const [messages, setMessages] = useState<Msg[]>([]);
   const [typing, setTyping] = useState(false);
   const [step, setStep] = useState('start');
@@ -89,6 +99,11 @@ export default function Assistant({ data: D, labels: L, lang, privacyHref, llm =
   };
   const choose = (value: 'yes' | 'no') => {
     setConsent(value);
+    try {
+      sessionStorage.setItem(CONSENT_KEY, value);
+    } catch {
+      /* sin almacenamiento: no se recuerda */
+    }
     bot(D.greeting, 'start');
   };
   const restart = () => {

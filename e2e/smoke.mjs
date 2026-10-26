@@ -44,6 +44,12 @@ try {
     await page.click('.as-consent-actions .as-submit');
     await page.waitForSelector('.as-chips');
 
+    // la elección del aviso se recuerda al refrescar (sesión de la pestaña): no vuelve a salir
+    await page.reload({ waitUntil: 'networkidle' });
+    await page.locator('.as-fab, .as-fab-mini').locator('visible=true').first().click();
+    await page.waitForSelector('.as-chips');
+    if (await page.locator('.as-consent-box').count()) fail(`${name}: el aviso vuelve a salir tras refrescar`);
+
     // texto libre → /chat con streaming (LLM simulado)
     await page.fill('.as-input input', 'Háblame de lo que haces');
     await page.press('.as-input input', 'Enter');
