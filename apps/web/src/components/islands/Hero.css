@@ -20,7 +20,7 @@
 }
 .hero-title .grad { background: var(--gradient-brand-text); -webkit-background-clip: text; background-clip: text; color: transparent; }
 .hero-lead {
-  font-size: clamp(17px, 1.5vw, 20px); line-height: 1.55; color: var(--color-foreground-muted);
+  font-size: var(--font-size-lead); line-height: 1.55; color: var(--color-foreground-muted);
   margin: 28px 0 0; max-width: 520px; text-wrap: pretty;
 }
 .hero-lead strong { color: var(--color-foreground); font-weight: var(--font-weight-strong); }
@@ -45,7 +45,7 @@
 .tile.on .tile-icon { background: #fff; }
 .tile-text { display: flex; flex-direction: column; gap: 4px; min-width: 0; }
 .tile-title { font-size: clamp(15px, 1.7vw, 20px); line-height: 1.08; letter-spacing: var(--letter-spacing-tight); font-weight: var(--font-weight-heavy); }
-.tile-sub { font-size: 12.5px; line-height: 1.35; color: var(--color-foreground-muted); transition: color 600ms ease-out; }
+.tile-sub { font-size: var(--font-size-caption); line-height: 1.35; color: var(--color-foreground-muted); transition: color 600ms ease-out; }
 .tile.on .tile-sub { color: var(--color-primary-on-gradient); }
 .tile-bar { position: absolute; left: 0; bottom: 0; height: 3px; width: 0; background: var(--color-accent); }
 .tile.on .tile-bar { width: 100%; transition: width 3000ms linear; }

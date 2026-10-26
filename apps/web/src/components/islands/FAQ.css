@@ -3,12 +3,12 @@
 .faq-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 380px), 1fr)); gap: clamp(32px, 5vw, 80px); margin-top: 40px; align-items: start; }
 .faq-title { font-size: var(--font-size-section); line-height: 1; letter-spacing: -0.04em; font-weight: var(--font-weight-heavy); margin: 0; text-wrap: balance; }
 .faq-title span { color: var(--color-foreground-faint); }
-.faq-more { color: var(--color-foreground-muted); font-size: 16px; line-height: 1.55; margin: 20px 0 0; max-width: 380px; }
+.faq-more { color: var(--color-foreground-muted); font-size: var(--font-size-body); line-height: 1.55; margin: 20px 0 0; max-width: 380px; }
 .faq-more a { font-weight: var(--font-weight-strong); border-bottom: 1px solid currentColor; }
 .faq-list { display: flex; flex-direction: column; gap: var(--space-2); min-width: 0; }
 .faq-item { background: var(--color-surface); border: 1px solid var(--color-border); border-radius: var(--radius-lg); transition: border-color var(--duration-base) var(--ease-out); }
 .faq-item.open { border-color: var(--color-primary); }
-.faq-q { width: 100%; display: flex; justify-content: space-between; align-items: center; gap: var(--space-4); padding: 20px 22px; background: transparent; border: 0; text-align: left; cursor: pointer; color: var(--color-foreground); font-size: 17px; font-weight: var(--font-weight-strong); }
+.faq-q { width: 100%; display: flex; justify-content: space-between; align-items: center; gap: var(--space-4); padding: 20px 22px; background: transparent; border: 0; text-align: left; cursor: pointer; color: var(--color-foreground); font-size: var(--font-size-lead); font-weight: var(--font-weight-strong); }
 .faq-sign { width: 30px; height: 30px; flex-shrink: 0; border-radius: 3px; background: var(--color-background); color: var(--color-primary); display: flex; align-items: center; justify-content: center; font-family: var(--font-family-mono); transition: all var(--duration-base) var(--ease-out); }
 .faq-item.open .faq-sign { background: var(--color-primary); color: #fff; }
-.faq-a { margin: 0; padding: 0 66px 22px 22px; color: var(--color-foreground-muted); font-size: 16px; line-height: 1.6; }
+.faq-a { margin: 0; padding: 0 66px 22px 22px; color: var(--color-foreground-muted); font-size: var(--font-size-body); line-height: 1.6; }

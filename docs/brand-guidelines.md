@@ -213,17 +213,17 @@ Comprobado con simulación de protanopia, deuteranopia y tritanopia (matrices de
 
 | Rol | Tamaño | Anchura | Peso | Interlineado | Tracking |
 |---|---|---|---|---|---|
-| Display | `--font-size-display` (39→61 px) | 118 % | 620 | 1,1 | −0,015 em |
-| H2 | `--font-size-h2` (31→39 px) | 118 % | 620 | 1,2 | −0,01 em |
-| H3 | `--font-size-h3` (25→31 px) | 118 % | 620 | 1,2 | −0,01 em |
-| H4 | `--font-size-h4` (25 px) | 100 % | 620 | 1,2 | 0 |
-| Lead | `--font-size-lead` (20 px) | 100 % | 400 | 1,6 | 0 |
+| Display | `--font-size-display` (32→52 px) | 118 % | 620 | 1,1 | −0,015 em |
+| H2 | `--font-size-h2` (26→36 px) | 118 % | 620 | 1,2 | −0,01 em |
+| H3 | `--font-size-h3` (22→28 px) | 118 % | 620 | 1,2 | −0,01 em |
+| H4 | `--font-size-h4` (19→22 px) | 100 % | 620 | 1,2 | 0 |
+| Lead | `--font-size-lead` (18→20 px) | 100 % | 400 | 1,6 | 0 |
 | Body | `--font-size-body` (16 px) | 100 % | 400 | 1,6 | 0 |
 | Label | `--font-size-label` (14 px) | 100 % | 500 | 1,45 | 0 |
 | Caption / metadatos | `--font-size-caption` (12,8 px) | 100 % | 400 | 1,45 | 0 |
 | Código | `--font-size-label` | — | 400 | 1,6 | 0 |
 
-- Escala de razón 1,25. Los tres tamaños mayores fluyen con `clamp()` entre móvil y escritorio.
+- Escala fluida con `clamp()` entre 360 y 1440 px (ver `docs/design-system.md`). Los titulares tienen tope en pantallas grandes y el cuerpo nunca baja de 16 px.
 - Pesos en uso: 400, 500 y 620. No añadir más.
 - Longitud de línea máxima en texto corrido: `--measure` (66 caracteres).
 - Cifras tabulares (`font-variant-numeric: tabular-nums`) en tablas, precios, fechas y cualquier dato que se compare en columna.

@@ -263,7 +263,7 @@ export default function Contacto({ labels: L, lang, email: contactEmail }: Props
                         <textarea ref={msgRef} class={`ct-text${errors.msg ? ' err' : ''}`} rows={6} value={f.msg} placeholder={L.placeholders.messageGuided} aria-label={L.q3.title}
                           onInput={(e) => { set({ msg: (e.currentTarget as HTMLTextAreaElement).value }); setStepErr(''); setErrors({}); }} />
                         <div class="ct-meter"><i style={`width:${Math.min(100, (len / 20) * 100)}%;background:${len >= 20 ? 'var(--color-ok-strong)' : 'var(--color-primary-on-dark)'}`} /></div>
-                        <span style={`font-size:13px;color:${len >= 20 ? 'var(--color-ok-soft)' : 'var(--color-dark-text-subtle)'}`}>{len >= 20 ? L.q3.enough : L.q3.notEnough}</span>
+                        <span style={`font-size: var(--font-size-small);color:${len >= 20 ? 'var(--color-ok-soft)' : 'var(--color-dark-text-subtle)'}`}>{len >= 20 ? L.q3.enough : L.q3.notEnough}</span>
                       </div>
                       <div class="ct-examples">
                         <span>{L.q3.examplesTitle}</span>

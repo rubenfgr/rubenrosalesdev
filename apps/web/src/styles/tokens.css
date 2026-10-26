@@ -130,19 +130,21 @@
   --font-weight-bold: 700;
   --font-weight-heavy: 800;     /* titulares del rediseño */
 
-  /* Escala 1.25 (tercera mayor), base 1rem. Los tres mayores fluyen con clamp. */
-  --font-size-caption: 0.8rem;                                   /* 12.8px */
-  --font-size-label:   0.875rem;                                 /* 14px  */
-  --font-size-body:    1rem;                                     /* 16px  */
-  --font-size-lead:    1.25rem;                                  /* 20px  */
-  --font-size-h4:      1.5625rem;                                /* 25px  */
-  --font-size-h3:      clamp(1.5625rem, 1.3rem + 1.1vw, 1.953rem); /* 25→31px */
-  --font-size-h2:      clamp(1.953rem, 1.5rem + 1.9vw, 2.441rem);  /* 31→39px */
-  --font-size-display: clamp(2.441rem, 1.7rem + 3.2vw, 3.815rem);  /* 39→61px */
-  --font-size-hero: clamp(2.875rem, 7.6vw, 6.5rem);                /* 46→104px */
-  --font-size-section: clamp(2.125rem, 5vw, 4rem);                 /* 34→64px */
-  --font-size-mono: 0.6875rem;                                     /* 11px, etiquetas mono */
-  --font-size-small: 0.8125rem;                                    /* 13px */
+  /* Escala fluida: cada token crece con el ancho (clamp) y tiene un tope. Cuerpo ≥ 16 px en cualquier ancho.
+     Rango: 360 px → 1440 px. Los titulares usan estos tokens; no se fijan tamaños en px en los componentes. */
+  --font-size-hero:    clamp(2.25rem, 1.35rem + 4.4vw, 5.25rem);     /* 36→84px: h1 de la home */
+  --font-size-section: clamp(1.875rem, 1.2rem + 2.9vw, 3.5rem);      /* 30→56px: título de sección */
+  --font-size-display: clamp(2rem, 1.3rem + 2.6vw, 3.25rem);         /* 32→52px: h1 de páginas interiores */
+  --font-size-h2:      clamp(1.625rem, 1.3rem + 1.4vw, 2.25rem);     /* 26→36px */
+  --font-size-h3:      clamp(1.375rem, 1.2rem + 0.9vw, 1.75rem);     /* 22→28px */
+  --font-size-h4:      clamp(1.1875rem, 1.1rem + 0.45vw, 1.375rem);  /* 19→22px */
+  --font-size-figure:  clamp(2.5rem, 2rem + 2vw, 3.5rem);           /* 40→56px: cifras grandes (pasos, calculadora) */
+  --font-size-lead:    clamp(1.125rem, 1.05rem + 0.35vw, 1.25rem);   /* 18→20px: entradillas */
+  --font-size-body:    1rem;                                         /* 16px: texto corrido */
+  --font-size-label:   0.875rem;                                     /* 14px: texto secundario, etiquetas */
+  --font-size-small:   0.8125rem;                                    /* 13px: metadatos */
+  --font-size-caption: 0.8rem;                                       /* 12.8px: pies y notas */
+  --font-size-mono:    0.6875rem;                                    /* 11px: etiquetas mono en mayúsculas */
 
   --line-height-tight: 1.1;   /* display */
   --line-height-snug: 1.2;    /* headings */
@@ -156,7 +158,7 @@
   --letter-spacing-tighter: -0.045em; /* hero y cifras */
   --letter-spacing-label: 0.08em;     /* eyebrows y etiquetas mono */
 
-  --measure: 66ch;            /* longitud máxima de línea en texto corrido */
+  --measure: 66ch;            /* longitud máxima de línea en texto corrido (≤ 70) */
 
   /* ---------- Espaciado (base 4px) ---------- */
   --space-0: 0;
@@ -194,6 +196,7 @@
 
   --border-width-thin: 1px;
   --border-width-thick: 2px;
+  --target-min: 2.75rem;      /* 44px: tamaño mínimo de objetivos táctiles */
   --focus-ring-width: 2px;
   --focus-ring-offset: 3px;
 

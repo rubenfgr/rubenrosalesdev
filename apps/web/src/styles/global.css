@@ -211,7 +211,7 @@ a:hover { color: var(--color-primary-hover); }
 .mono-arrow { font-family: var(--font-family-mono); }
 
 /* Eyebrow de sección: «00 / diagnóstico» + filete */
-.eb { display: flex; align-items: center; gap: var(--space-3); font-family: var(--font-family-mono); font-size: 12px; color: var(--color-foreground-subtle); }
+.eb { display: flex; align-items: center; gap: var(--space-3); font-family: var(--font-family-mono); font-size: var(--font-size-caption); color: var(--color-foreground-subtle); }
 .eb .eb-num { color: var(--color-primary); }
 .eb .eb-rule { flex: 1; height: 1px; background: var(--color-border); }
 .eb.dark { color: var(--color-dark-text-subtle); }

@@ -59,3 +59,6 @@
 .admonition-icon { flex: none; }
 .prose .admonition-body { margin-top: var(--space-2); }
 .prose .admonition-body > * + * { margin-top: var(--space-3); }
+
+/* Botón de copiar del bloque de código: objetivo táctil de 44 px. */
+.expressive-code .frame .copy button { width: var(--target-min); height: var(--target-min); }

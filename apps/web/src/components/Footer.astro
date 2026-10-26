@@ -59,11 +59,13 @@ const year = new Date().getFullYear();
   }
   .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 200px), 1fr)); gap: var(--space-6); }
   .brand { display: flex; align-items: center; gap: var(--space-3); }
-  .name { font-size: 22px; font-weight: var(--font-weight-heavy); letter-spacing: var(--letter-spacing-tight); color: var(--color-dark-text); }
+  .name { font-size: var(--font-size-h4); font-weight: var(--font-weight-heavy); letter-spacing: var(--letter-spacing-tight); color: var(--color-dark-text); }
   .about p { font-size: var(--font-size-label); line-height: 1.55; margin: 10px 0 0; max-width: 260px; }
-  .col { display: flex; flex-direction: column; gap: 10px; font-size: var(--font-size-label); }
+  .col { display: flex; flex-direction: column; gap: 0; font-size: var(--font-size-label); }
   .label { font-family: var(--font-family-mono); font-size: var(--font-size-mono); color: var(--color-dark-text-faint); letter-spacing: var(--letter-spacing-label); }
-  .col a { color: var(--color-dark-text-muted); }
+  .col { gap: 0; }
+  .label { margin-bottom: var(--space-2); }
+  .col a { color: var(--color-dark-text-muted); display: flex; align-items: center; min-height: var(--target-min); }
   .col a:hover { color: var(--color-primary-foreground); }
   .meta {
     display: flex;
@@ -75,5 +77,5 @@ const year = new Date().getFullYear();
     border-top: var(--border-width-thin) solid var(--color-dark-raised);
     font-size: var(--font-size-small);
   }
-  .prompt { font-family: var(--font-family-mono); font-size: 12px; color: var(--color-dark-text-faint); }
+  .prompt { font-family: var(--font-family-mono); font-size: var(--font-size-caption); color: var(--color-dark-text-faint); }
 </style>

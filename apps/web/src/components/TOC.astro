@@ -65,7 +65,7 @@ const items = headings.filter((h) => h.depth === 2 || h.depth === 3);
 <style>
   .toc { font-size: var(--font-size-label); }
   h2, summary { font-size: var(--font-size-label); font-stretch: var(--font-width-body); letter-spacing: 0; font-weight: var(--font-weight-medium); color: var(--color-foreground-muted); }
-  summary { cursor: pointer; padding: var(--space-2) 0; }
+  summary { cursor: pointer; padding: var(--space-2) 0; min-height: var(--target-min); display: flex; align-items: center; }
   ul { list-style: none; margin: var(--space-2) 0 0; padding: 0; display: grid; gap: var(--space-2); border-inline-start: var(--border-width-thin) solid var(--color-border); }
   li { padding-inline-start: var(--space-3); }
   li.d3 { padding-inline-start: var(--space-5); }
