@@ -9,12 +9,9 @@ import { clientIp, rateLimit } from '../lib/rate-limit';
 import { validate } from '../lib/validate';
 import { chatTurn, type ChatEvent } from '../services/chat';
 
-/** Mensajes al LLM por IP y día; a partir de ahí, solo reglas (T-3.8). */
-const LLM_PER_IP_PER_DAY = 20;
-
 export const chatRoutes = (deps: ResolvedDeps) => {
   const { env, llm, cache, knowledge, repos } = deps;
-  const daily = dailyCounter(LLM_PER_IP_PER_DAY);
+  const daily = dailyCounter(env.ASSISTANT_LLM_PER_IP_PER_DAY);
   const r = new Hono();
   r.use(rateLimit({ limit: env.RATE_LIMIT_CHAT_PER_MIN, windowMs: 60_000 }));
 
@@ -29,7 +26,7 @@ export const chatRoutes = (deps: ResolvedDeps) => {
         llm,
         cache,
         maxOutputTokens: env.ASSISTANT_LLM_MAX_OUTPUT_TOKENS,
-        allowLlm: () => (deps.llmAvailable?.() ?? true) && daily.take(ipKey),
+        allowLlm: () => ((deps.llmAvailable?.() ?? true) ? (daily.take(ipKey) ? null : 'limite_diario_ip') : 'presupuesto'),
         recordUsage: (u) => {
           lastUsage = u;
         },
@@ -41,7 +38,12 @@ export const chatRoutes = (deps: ResolvedDeps) => {
 
     // Si falla antes de producir texto, responde 503 normal para que la web degrade a reglas.
     const first = await events.next();
-    if (first.done || first.value.type === 'error') return c.json(errorBody('llm_unavailable'), 503);
+    if (first.done) return c.json(errorBody('llm_unavailable'), 503);
+    if (first.value.type === 'error') {
+      // El motivo (sin contenido ni datos personales) ayuda a diagnosticar por qué la web cae a reglas.
+      console.warn(`chat: llm_unavailable (${first.value.reason})`);
+      return c.json(errorBody('llm_unavailable'), 503);
+    }
 
     // Persistencia solo con consentimiento (D-3). Sin él, la conversación es efímera.
     let conversationId = req.conversationId ?? randomUUID();
@@ -58,7 +60,10 @@ export const chatRoutes = (deps: ResolvedDeps) => {
       if (ev.type === 'delta') await stream.writeSSE({ event: 'delta', data: JSON.stringify({ text: ev.text }) });
       else if (ev.type === 'done')
         await stream.writeSSE({ event: 'done', data: JSON.stringify({ conversationId, source: ev.source }) });
-      else await stream.writeSSE({ event: 'error', data: JSON.stringify({ error: ev.error }) });
+      else {
+        console.warn(`chat: llm_unavailable a mitad de respuesta (${ev.reason})`);
+        await stream.writeSSE({ event: 'error', data: JSON.stringify({ error: ev.error }) });
+      }
     };
     return streamSSE(c, async (stream) => {
       let answer = '';

@@ -26,6 +26,8 @@ const schema = z.object({
   ASSISTANT_LLM_API_KEY: z.string().default(''),
   ASSISTANT_LLM_MODEL: z.string().default(''),
   ASSISTANT_LLM_MAX_OUTPUT_TOKENS: z.coerce.number().int().positive().default(300),
+  /** Respuestas del LLM por IP y día; a partir de ahí, solo reglas. */
+  ASSISTANT_LLM_PER_IP_PER_DAY: z.coerce.number().int().positive().default(20),
   ASSISTANT_LLM_MONTHLY_BUDGET_EUR: z.coerce.number().positive().default(1),
   /** Euros por millón de tokens (copiados de la tabla oficial de precios). */
   ASSISTANT_LLM_PRICE_IN_PER_MTOK: z.coerce.number().nonnegative().default(0),

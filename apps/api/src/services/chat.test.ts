@@ -86,14 +86,14 @@ describe('chatTurn', () => {
     const messages = Array.from({ length: MAX_LLM_USER_MESSAGES + 1 }, () => ({ role: 'user' as const, content: 'hola qué tal' }));
     const events: ChatEvent[] = [];
     for await (const ev of chatTurn({ knowledge, llm, cache: new MemoryAnswerCache(), maxOutputTokens: 300 }, { lang: 'es', messages } as never)) events.push(ev);
-    expect(events).toEqual([{ type: 'error', error: 'llm_unavailable' }]);
+    expect(events).toEqual([{ type: 'error', error: 'llm_unavailable', reason: expect.any(String) }]);
     expect(llm.calls).toHaveLength(0);
   });
 
   it('respeta allowLlm (tope de gasto / límite diario)', async () => {
     const llm = new FakeLlmClient([say('ok')]);
-    const r = await run({ llm, allowLlm: () => false }, '¿Qué servicios ofreces?');
-    expect(r.events).toEqual([{ type: 'error', error: 'llm_unavailable' }]);
+    const r = await run({ llm, allowLlm: () => 'presupuesto' }, '¿Qué servicios ofreces?');
+    expect(r.events).toEqual([{ type: 'error', error: 'llm_unavailable', reason: expect.any(String) }]);
   });
 
 
@@ -108,7 +108,7 @@ describe('chatTurn', () => {
   it('error del proveedor -> llm_unavailable', async () => {
     const llm = new FakeLlmClient([[{ type: 'error', reason: 'x' }]]);
     const r = await run({ llm }, '¿Qué servicios ofreces?');
-    expect(r.events).toEqual([{ type: 'error', error: 'llm_unavailable' }]);
+    expect(r.events).toEqual([{ type: 'error', error: 'llm_unavailable', reason: expect.any(String) }]);
   });
 
   it('registra el uso de tokens', async () => {

@@ -21,8 +21,8 @@ export interface ChatDeps {
   maxOutputTokens: number;
   /** Se llama al terminar cada respuesta del LLM con el uso de tokens (control de coste). */
   recordUsage?: (usage: LlmUsage) => void;
-  /** Se consulta antes de cada llamada al LLM (tope mensual, límite diario por IP). */
-  allowLlm?: () => boolean;
+  /** Se consulta antes de cada llamada al LLM: `null` si se permite o el motivo (tope mensual, límite diario por IP). */
+  allowLlm?: () => string | null;
   /** Aviso (sin contenido) de que el validador sustituyó una respuesta. */
   onBlocked?: () => void;
 }
@@ -30,7 +30,7 @@ export interface ChatDeps {
 export type ChatEvent =
   | { type: 'delta'; text: string }
   | { type: 'done'; source: 'rule' | 'cache' | 'llm' }
-  | { type: 'error'; error: 'llm_unavailable' };
+  | { type: 'error'; error: 'llm_unavailable'; reason: string };
 
 const sentences = (text: string): string[] => text.match(/[^.!?\n]+[.!?]*\s*/g) ?? [text];
 
@@ -40,7 +40,7 @@ export async function* chatTurn(deps: ChatDeps, req: ChatRequest, signal?: Abort
   const A = k.assistant[lang];
   const last = req.messages[req.messages.length - 1]!;
   if (last.role !== 'user') {
-    yield { type: 'error', error: 'llm_unavailable' };
+    yield { type: 'error', error: 'llm_unavailable', reason: 'sin_mensaje_de_usuario' };
     return;
   }
   const fallback = A.actions.fallback!.say.join('\n\n');
@@ -76,8 +76,9 @@ export async function* chatTurn(deps: ChatDeps, req: ChatRequest, signal?: Abort
 
   // 3. Límites: por conversación y los que decida quien llama (mensual, diario por IP).
   const userMessages = req.messages.filter((m) => m.role === 'user').length;
-  if (userMessages > MAX_LLM_USER_MESSAGES || (deps.allowLlm && !deps.allowLlm())) {
-    yield { type: 'error', error: 'llm_unavailable' };
+  const denied = userMessages > MAX_LLM_USER_MESSAGES ? 'limite_conversacion' : (deps.allowLlm?.() ?? null);
+  if (denied) {
+    yield { type: 'error', error: 'llm_unavailable', reason: denied };
     return;
   }
 
@@ -89,7 +90,7 @@ export async function* chatTurn(deps: ChatDeps, req: ChatRequest, signal?: Abort
     if (ev.type === 'text') text += ev.text;
     else if (ev.type === 'done') deps.recordUsage?.(ev.usage);
     else if (ev.type === 'error') {
-      yield { type: 'error', error: 'llm_unavailable' };
+      yield { type: 'error', error: 'llm_unavailable', reason: ev.reason };
       return;
     }
   }

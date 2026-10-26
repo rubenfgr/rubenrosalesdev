@@ -39,6 +39,15 @@ Gasto del mes (en la base de datos local):
 pnpm --filter @rr/api exec tsx --env-file=.env src/jobs/usage.ts
 ```
 
+## Si el asistente responde «Buena pregunta. Prefiero no inventarme la respuesta» y sale «Reintentar con el asistente»
+
+Significa que la web no ha podido usar el modelo y ha caído a reglas. Mira la terminal de `pnpm dev:api`: ahora escribe `chat: llm_unavailable (motivo)`:
+- `limite_diario_ip`: has gastado las respuestas del LLM de hoy para tu IP (20 por defecto; en tu `apps/api/.env` ya está en 500). Reinicia la API para poner el contador a cero.
+- `limite_conversacion`: más de 12 mensajes tuyos en la misma conversación. «Empezar de nuevo».
+- `presupuesto`: se alcanzó el 80 % del tope mensual (`pnpm --filter @rr/api exec tsx --env-file=.env src/jobs/usage.ts`).
+- `proveedor 4xx/5xx`: Gemini ha rechazado la petición (clave, facturación, cuota). El número es el estado HTTP.
+- Si no aparece nada en esa terminal, la API no está arrancada o no es la que usa la web (comprueba el puerto 3000).
+
 ## Pruebas automáticas
 
 `pnpm check`, `pnpm test`, `pnpm build` y `pnpm e2e` (ver [asistente.md](asistente.md)). Los evals contra Gemini real: `pnpm --filter @rr/api eval`.
