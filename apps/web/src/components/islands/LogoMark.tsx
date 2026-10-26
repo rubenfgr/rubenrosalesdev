@@ -12,7 +12,7 @@ export default function LogoMark({ tone = 'light', size = 28, label }: Props) {
         <rect x="0" y="33" width="36" height="23" /><rect x="40" y="33" width="38" height="23" />
         <rect x="0" y="60" width="18" height="24" /><rect x="22" y="60" width="38" height="24" /><rect x="64" y="60" width="14" height="24" />
       </g>
-      <rect x="62" y="0" width="22" height="23" style={`fill:${piece}`} />
+      <rect class="lm-piece" x="62" y="0" width="22" height="23" style={`fill:${piece}`} />
     </svg>
   );
 }

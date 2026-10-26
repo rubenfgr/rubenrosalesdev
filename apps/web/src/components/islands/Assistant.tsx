@@ -324,11 +324,11 @@ export default function Assistant({ data: D, labels: L, lang, privacyHref, llm =
       )}
       {!open && (
         <button type="button" class={`as-fab`} aria-label={L.fabAria} onClick={toggle}>
-          <span class="as-fab-ico"><LogoMark tone="dark" size={24} /><i /></span>
+          <span class="as-fab-ico"><LogoMark tone="dark" size={24} /></span>
           <span class="as-fab-text"><b>{L.fabTitle}</b><small>{L.fabSubtitle}</small></span>
         </button>
       )}
-      <button type="button" class={`as-fab-mini${open ? ' open' : ''}`} aria-label={open ? L.close : L.fabAria} onClick={toggle}>{open ? icon('M6 6l12 12M18 6L6 18', 22) : <><LogoMark tone="dark" size={28} /><i class="as-fab-dot" /></>}</button>
+      <button type="button" class={`as-fab-mini${open ? ' open' : ''}`} aria-label={open ? L.close : L.fabAria} onClick={toggle}>{open ? icon('M6 6l12 12M18 6L6 18', 22) : <LogoMark tone="dark" size={28} />}</button>
     </>
   );
 }
