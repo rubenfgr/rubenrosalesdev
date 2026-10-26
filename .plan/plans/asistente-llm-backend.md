@@ -532,6 +532,7 @@ Depende de todo lo anterior, de **D-1 (cifras reales)** y de la aprobación de R
 
 ## 16. Fuera de alcance (no hacer en este plan)
 
+- WhatsApp Business API (decisión de Rubén, 2026-10-26: el primer contacto va por correo; más adelante dará de alta un número y se integrará WhatsApp). Ver también el campo «preferencia» del formulario.
 - Panel de administración y mover el contenido de la web a la base de datos (se planteará aparte; hoy el contenido vive en git).
 - Autenticación de usuarios finales.
 - Colas, cron distribuido o más de una instancia de API (el rate limit en memoria asume una sola).
