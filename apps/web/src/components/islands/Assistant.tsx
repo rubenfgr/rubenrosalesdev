@@ -62,6 +62,29 @@ export default function Assistant({ data: D, labels: L, lang, privacyHref, llm =
     addEventListener('keydown', onKey);
     return () => removeEventListener('keydown', onKey);
   }, [open]);
+  // Con el panel abierto se bloquea el scroll de la página y, en móvil, el panel sigue al viewport visual
+  // (el teclado lo recorta; así el campo de texto y la cabecera del panel siguen a la vista).
+  useEffect(() => {
+    if (!open) return;
+    const root = document.documentElement;
+    root.classList.add('as-lock');
+    const vv = window.visualViewport;
+    const sync = () => {
+      if (!vv) return;
+      root.style.setProperty('--as-vh', `${vv.height}px`);
+      root.style.setProperty('--as-vt', `${vv.offsetTop}px`);
+    };
+    sync();
+    vv?.addEventListener('resize', sync);
+    vv?.addEventListener('scroll', sync);
+    return () => {
+      root.classList.remove('as-lock');
+      root.style.removeProperty('--as-vh');
+      root.style.removeProperty('--as-vt');
+      vv?.removeEventListener('resize', sync);
+      vv?.removeEventListener('scroll', sync);
+    };
+  }, [open]);
   useEffect(() => {
     body.current?.scrollTo({ top: body.current.scrollHeight, behavior: reduced() ? 'auto' : 'smooth' });
   }, [messages.length, typing, step]);
