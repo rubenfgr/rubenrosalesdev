@@ -60,7 +60,7 @@
   color:var(--color-foreground)}
 
 .mm-nav a>svg{
-  color:var(--color-foreground-faint)}
+  color:var(--color-foreground-subtle)}
 
 .mm-icon{
   width:32px;

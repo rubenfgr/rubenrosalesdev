@@ -195,7 +195,7 @@ export default function Proyectos({ projects, labels: L, locale, contactHref }: 
           </div>
         </div>
 
-        <div class="rail" ref={rail} data-lenis-prevent onScroll={(e) => {
+        <div class="rail" ref={rail} onScroll={(e) => {
           const el = e.currentTarget as HTMLElement;
           const i = Math.round(el.scrollLeft / (step(el) + 16));
           if (i !== cur) setCur(i);
@@ -241,7 +241,7 @@ export default function Proyectos({ projects, labels: L, locale, contactHref }: 
               </button>
             ))}
           </div>
-          <div class="more-rail" ref={moreRail} data-lenis-prevent>
+          <div class="more-rail" ref={moreRail}>
             {filtered.map((p) => (
               <article class="card">
                 <div class="card-top"><span>{p.year} · {p.type}</span><span class={`status ${p.status}`}>{L.status[p.status]}</span></div>

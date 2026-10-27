@@ -85,6 +85,7 @@
   --rr-paper-600: #C9CDC6;
   --rr-ink-300: #9AA29E;
   --rr-ink-350: #7E8885;
+  --rr-ink-380: #667370;
   --rr-ink-400: #5E6865;
   --rr-ink-500: #C2C8C1;
   --rr-ink-600: #4A5653;
@@ -256,7 +257,7 @@
 
   --color-foreground: var(--rr-stone-950);
   --color-foreground-muted: var(--rr-ink-400);
-  --color-foreground-subtle: var(--rr-ink-350);   /* solo texto grande o no esencial */
+  --color-foreground-subtle: var(--rr-ink-380);   /* AA (4,51:1 sobre papel); el más suave que admite texto pequeño */
   --color-foreground-faint: var(--rr-ink-300);
   --color-foreground-inverse: var(--rr-paper-200);
 
@@ -306,7 +307,7 @@
   --color-dark-text: var(--rr-paper-200);
   --color-dark-text-muted: var(--rr-ink-500);
   --color-dark-text-subtle: var(--rr-ink-300);
-  --color-dark-text-faint: var(--rr-ink-350);
+  --color-dark-text-faint: var(--rr-ink-300);
 
   /* Estados y acentos */
   --color-ok: var(--rr-ok-300);

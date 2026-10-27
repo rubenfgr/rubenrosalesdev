@@ -302,15 +302,15 @@ export default function Contacto({ labels: L, lang, email: contactEmail }: Props
                 <span class={`ct-state${sent ? ' sent' : filled ? ' forming' : ''}`}>{sent ? L.sheet.status.sent : filled ? L.sheet.status.forming : L.sheet.status.blank}</span>
               </div>
               <div>
-                <h5>{L.sheet.whereStart}</h5>
+                <p class="ct-h5">{L.sheet.whereStart}</p>
                 {chosen.length ? <ol class="ct-route">{chosen.map((g, i) => <li><span>{i + 1}</span><span><b>{g.routeTitle}</b><small>{g.routeText}</small></span></li>)}</ol> : <p class="ct-empty">{L.sheet.fillHint}</p>}
               </div>
               <div class="ct-facts">
-                <div><h5>{L.sheet.team}</h5><b style={`color:${f.size ? 'inherit' : 'var(--color-foreground-faint)'}`}>{f.size ? L.sheet.teamValue.replace('{size}', L.sizes[f.size]!) : L.sheet.empty}</b></div>
-                <div><h5>{L.sheet.when}</h5><b style={`color:${f.when ? 'inherit' : 'var(--color-foreground-faint)'}`}>{f.when ? L.whens[f.when] : L.sheet.empty}</b></div>
+                <div><p class="ct-h5">{L.sheet.team}</p><b style={`color:${f.size ? 'inherit' : 'var(--color-foreground-subtle)'}`}>{f.size ? L.sheet.teamValue.replace('{size}', L.sizes[f.size]!) : L.sheet.empty}</b></div>
+                <div><p class="ct-h5">{L.sheet.when}</p><b style={`color:${f.when ? 'inherit' : 'var(--color-foreground-subtle)'}`}>{f.when ? L.whens[f.when] : L.sheet.empty}</b></div>
               </div>
-              <div><h5>{L.sheet.tools}</h5>{toolTags.length ? <div class="ct-tags">{toolTags.map((x) => <span>{x}</span>)}</div> : <span class="ct-empty">{L.sheet.empty}</span>}</div>
-              <div><h5>{L.sheet.jamTitle}</h5><p class="ct-quote" style={`font-style:${q ? 'italic' : 'normal'};color:${q ? 'inherit' : 'var(--color-foreground-subtle)'}`}>{q ? `«${q.length > 180 ? `${q.slice(0, 180)}…` : q}»` : L.sheet.jamEmpty}</p></div>
+              <div><p class="ct-h5">{L.sheet.tools}</p>{toolTags.length ? <div class="ct-tags">{toolTags.map((x) => <span>{x}</span>)}</div> : <span class="ct-empty">{L.sheet.empty}</span>}</div>
+              <div><p class="ct-h5">{L.sheet.jamTitle}</p><p class="ct-quote" style={`font-style:${q ? 'italic' : 'normal'};color:${q ? 'inherit' : 'var(--color-foreground-subtle)'}`}>{q ? `«${q.length > 180 ? `${q.slice(0, 180)}…` : q}»` : L.sheet.jamEmpty}</p></div>
               <div class="ct-by"><span class="ct-by-mark"><LogoMark size={28} /></span><div><b>{L.aside.reviewer}</b><small>{L.aside.reviewerText}</small></div></div>
             </div>
             <div class="ct-mail"><span>{L.aside.preferWrite}</span><a href={`mailto:${contactEmail}`}>{contactEmail}</a><span>{L.aside.location}</span></div>

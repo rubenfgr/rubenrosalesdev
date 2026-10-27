@@ -50,7 +50,8 @@ Un muro de tres hiladas con un hueco en la esquina superior derecha y la pieza a
 | `logo-horizontal-mono.svg` | Un solo color (`currentColor`): impresión a una tinta, grabados, sellos. |
 | `symbol.svg` / `symbol-inverse.svg` | Avatares, perfiles sociales, espacios cuadrados. |
 | `symbol-mono.svg` | Símbolo a una tinta (`currentColor`). |
-| `favicon.svg` | Pestaña del navegador y tamaños por debajo de 24 px. Versión simplificada sobre fondo propio. |
+| `favicon.svg` | Pestaña del navegador y tamaños por debajo de 24 px. Versión simplificada sobre fondo propio, cuadrado y sin radio (como el resto de la geometría). |
+| `public/og-es.png`, `public/og-en.png` | Imagen para compartir (1200 × 630): titular del hero a 118 %, punto en `--color-signal`, hilada en la esquina. Se regenera con `node scripts/og/render.mjs` desde `apps/web` (plantilla en `scripts/og/og.html`). |
 
 ### Descriptor
 
@@ -105,7 +106,7 @@ Alrededor de los límites visibles del logo, dejar como mínimo la **altura de l
 - `--color-accent` (esparto) es **decorativo**: filetes, marcadores, detalles. Nunca texto ni único indicador de estado (no llega a 3:1 sobre papel).
 - **Un gesto cálido por pantalla**: `--color-signal` (almagra, 5,20:1 sobre papel) se reserva para una sola cifra o subrayado clave. Sobre petróleo, el equivalente es `--color-bleed-accent` (esparto claro).
 - **Al menos una sección a sangre** en petróleo profundo (`--color-bleed`, texto `--color-bleed-text`). Sin degradados: el color es plano.
-- `--color-foreground-subtle` solo para texto grande (≥ 24 px, o ≥ 18,66 px en negrita) o información no esencial.
+- `--color-foreground-subtle` (4,51:1 sobre papel) es el texto más suave admitido, también en tamaños pequeños; `--color-foreground-faint` es solo decorativo (bordes, puntos), nunca texto.
 - El estado nunca se comunica solo con color: siempre acompañado de texto o icono.
 
 ### Contraste (WCAG 2.x)
@@ -120,7 +121,7 @@ Calculado a partir de los valores de `tokens.css` (tema claro, el único). Texto
 | foreground-muted (#5E6865) | background (#F4F5F2) | 5.27:1 | AA |
 | foreground-muted (#5E6865) | surface (#FFFFFF) | 5.76:1 | AA |
 | foreground-muted (#5E6865) | surface-alt (#ECEEE9) | 4.93:1 | AA |
-| foreground-subtle (#7E8885) | background (#F4F5F2) | 3.34:1 | Solo texto grande |
+| foreground-subtle (#667370) | background (#F4F5F2) | 4.51:1 | AA |
 | primary (#285A6E) | background (#F4F5F2) | 6.91:1 | AA |
 | primary (#285A6E) | surface (#FFFFFF) | 7.56:1 | AAA |
 | primary-foreground (#FFFFFF) | primary (#285A6E) | 7.56:1 | AAA |
@@ -158,7 +159,6 @@ Calculado a partir de los valores de `tokens.css` (tema claro, el único). Texto
 Pares que **no** cumplen y cómo se usan:
 
 - `accent` (esparto, 2,37:1) y `border-strong` (1,47:1) son solo decorativos. Un campo de formulario necesita un borde de 3:1: usar `--color-rule` o `--color-foreground-muted`, no `--color-border-strong`.
-- `foreground-subtle` queda restringido a texto grande (≥ 24 px, o ≥ 18,66 px en negrita) o información no esencial.
 - El tema oscuro se ha eliminado: la web es solo clara. Las secciones oscuras son paneles (`--color-dark-*`) o la sección a sangre (`--color-bleed-*`), con los pares de arriba.
 
 ### Gráficos
@@ -221,15 +221,24 @@ Comprobado con simulación de protanopia, deuteranopia y tritanopia (matrices de
 | `--duration-fast` | 120 ms | Hover, foco |
 | `--duration-base` | 200 ms | Desplegables, cambios de estado |
 | `--duration-slow` | 320 ms | Entrada de paneles |
-| `--duration-ambient` | 120 s | Solo el motivo del hero |
+| `--duration-ambient` | 120 s | Sin uso (el motivo es estático) |
 | `--ease-out` | `cubic-bezier(0.2, 0, 0, 1)` | Entradas |
 | `--ease-in-out` | `cubic-bezier(0.4, 0, 0.2, 1)` | Transiciones de estado |
 
-El movimiento es funcional: confirma una acción o explica un cambio. Sin animaciones de entrada al hacer scroll ni efectos de parallax.
+El movimiento es funcional: confirma una acción, explica un cambio o marca la apertura de una sección. Todo es CSS o JS mínimo, solo `transform` y `opacity` (sin saltos de layout), y desaparece con `prefers-reduced-motion: reduce`.
 
-**Única excepción ambiental:** el motivo hilada puede desplazarse muy lentamente en el fondo del hero (`--duration-ambient`, 120 s por ciclo, lineal), a baja opacidad. Solo en el hero, nunca detrás de texto de lectura largo, y con `animation: none` bajo `prefers-reduced-motion: reduce`. Si en pruebas con usuarios distrae, se elimina.
+**Movimiento permitido (v2):**
 
-Con `prefers-reduced-motion: reduce` las duraciones funcionales pasan a 0.
+- **Apertura de sección.** Al entrar una sección en el viewport, la regla de 2 px se dibuja de izquierda a derecha (700 ms) y el titular sube 0,3 em mientras aparece (600 ms, con 150 ms de retraso). Una sola vez por sección. Lo que ya está en pantalla al cargar no se anima.
+- **Estados de las demos** (flujos, índice del hero, calculadora): cambios de estado de 120 a 320 ms, y la rotación del índice del hero (3 s por paso), que se pausa al pasar el cursor o enfocar.
+- **Microinteracciones:** la flecha de los botones se desplaza 4 px, los enlaces dentro de texto engordan el subrayado de 2 a 4 px y el botón principal se invierte a tinta.
+- **Scroll a anclas:** `scroll-behavior: smooth` solo con `prefers-reduced-motion: no-preference`. No hay scroll suave por JS (se eliminó Lenis).
+
+**Sigue prohibido:** parallax, animar bloques de contenido al hacer scroll (solo la apertura de sección), animaciones largas o en bucle detrás de texto, y contadores que sustituyan a la cifra real.
+
+**Excepción ambiental retirada:** el motivo hilada ya no se desplaza en el hero; es estático (`--duration-ambient` queda sin uso).
+
+Con `prefers-reduced-motion: reduce` las duraciones funcionales pasan a 0 y no se activa el reveal.
 
 ---
 

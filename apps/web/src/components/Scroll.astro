@@ -1,10 +1,9 @@
 ---
-// Scroll suave (Lenis), reveal al entrar en viewport y barra de progreso. Todo se desactiva con prefers-reduced-motion.
+// Barra de progreso, anclas con el offset del header y reveal de apertura de sección (regla + titular, una vez).
+// Todo se desactiva con prefers-reduced-motion.
 ---
 
 <script>
-  import Lenis from 'lenis';
-
   const reduced = matchMedia('(prefers-reduced-motion: reduce)').matches;
   const OFFSET = -68;
   const progress = document.querySelector<HTMLElement>('[data-progress]');
@@ -18,17 +17,7 @@
   addEventListener('scroll', updateProgress, { passive: true });
   addEventListener('resize', updateProgress);
 
-  let lenis: Lenis | null = null;
-  if (!reduced) {
-    lenis = new Lenis({ duration: 1.15, easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)), smoothWheel: true });
-    const raf = (time: number) => {
-      lenis?.raf(time);
-      requestAnimationFrame(raf);
-    };
-    requestAnimationFrame(raf);
-  }
-
-  // Anclas de la misma página: scroll con el offset del header.
+  // Anclas de la misma página: scroll con el offset del header (suave solo si el usuario no pide menos movimiento).
   document.addEventListener('click', (e) => {
     const a = (e.target as Element).closest<HTMLAnchorElement>('a[href*="#"]');
     if (!a || a.target === '_blank' || e.defaultPrevented || e.metaKey || e.ctrlKey) return;
@@ -39,19 +28,12 @@
     if (!target) return;
     e.preventDefault();
     history.pushState(null, '', url.hash);
-    if (lenis) lenis.scrollTo(target as HTMLElement, { offset: OFFSET });
-    else scrollTo({ top: target.getBoundingClientRect().top + scrollY + OFFSET });
+    scrollTo({ top: target.getBoundingClientRect().top + scrollY + OFFSET, behavior: reduced ? 'auto' : 'smooth' });
   });
 
-  // Reveal: hijos directos de cada sección, una sola vez, con escalonado de 90 ms (máx. 8).
+  // Reveal: al entrar la sección en el viewport se dibuja la regla y sube el titular. Una sola vez.
   if (!reduced && 'IntersectionObserver' in window) {
     const groups = document.querySelectorAll<HTMLElement>('[data-reveal]');
-    groups.forEach((group) => {
-      Array.from(group.children).forEach((child, i) => {
-        child.setAttribute('data-reveal-item', '');
-        (child as HTMLElement).style.setProperty('--reveal-index', String(Math.min(i, 8)));
-      });
-    });
     document.documentElement.classList.add('js-reveal');
     const io = new IntersectionObserver(
       (entries) =>
@@ -60,8 +42,12 @@
           en.target.classList.add('is-revealed');
           io.unobserve(en.target);
         }),
-      { threshold: 0.08, rootMargin: '0px 0px -8% 0px' },
+      { threshold: 0.05 },
     );
-    document.querySelectorAll('[data-reveal-item]').forEach((el) => io.observe(el));
+    groups.forEach((g) => {
+      // Lo que ya está dentro del viewport al cargar no se anima: no hay que esconderlo y volver a mostrarlo.
+      if (g.getBoundingClientRect().top < innerHeight) g.classList.add('is-revealed');
+      else io.observe(g);
+    });
   }
 </script>

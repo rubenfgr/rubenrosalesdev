@@ -37,15 +37,15 @@
 .ct-group { display: flex; flex-direction: column; gap: var(--space-3); }
 .ct-group > span { font-size: var(--font-size-body); font-weight: var(--font-weight-bold); } .ct-group > span em { font-style: normal; font-weight: var(--font-weight-medium); color: var(--color-dark-text-subtle); }
 .ct-chips { display: flex; flex-wrap: wrap; gap: var(--space-2); }
-.ct-chip { min-height: 48px; padding: 0 20px; border-radius: var(--radius-md); border: 1px solid var(--color-dark-border-strong); background: transparent; color: var(--color-dark-text); font-size: var(--font-size-body); font-weight: var(--font-weight-strong); cursor: pointer; transition: all var(--duration-base) var(--ease-out); }
+.ct-chip { min-height: 48px; padding: 0 20px; border-radius: var(--radius-md); border: var(--border-width-thick) solid var(--color-dark-text-faint); background: transparent; color: var(--color-dark-text); font-size: var(--font-size-body); font-weight: var(--font-weight-strong); cursor: pointer; transition: all var(--duration-base) var(--ease-out); }
 .ct-chip.sm { min-height: 40px; padding: 0 14px; border-radius: var(--radius-md); font-size: var(--font-size-label); }
 .ct-chip:hover { border-color: var(--color-primary-on-dark); }
 .ct-chip.on { background: var(--color-dark-text); color: var(--color-dark-contact); border-color: var(--color-dark-text); }
 .ct-field { display: flex; flex-direction: column; gap: var(--space-2); }
 .ct-field > span { font-size: var(--font-size-label); font-weight: var(--font-weight-strong); } .ct-field > span em { font-style: normal; font-weight: var(--font-weight-medium); color: var(--color-dark-text-subtle); }
-.ct-input, .ct-text { font-size: var(--font-size-body); color: var(--color-dark-text); background: var(--color-dark-contact); border: 1px solid var(--color-dark-border); border-radius: var(--radius-md); outline: none; transition: all var(--duration-base) var(--ease-out); }
+.ct-input, .ct-text { font-size: var(--font-size-body); color: var(--color-dark-text); background: var(--color-dark-contact); border: var(--border-width-thick) solid var(--color-dark-text-faint); border-radius: var(--radius-md); transition: all var(--duration-base) var(--ease-out); }
 .ct-input { min-height: 52px; padding: 0 14px; } .ct-text { padding: 16px; line-height: 1.55; resize: vertical; }
-.ct-input:focus, .ct-text:focus { border-color: var(--color-primary-on-dark); box-shadow: var(--shadow-focus); }
+.ct-input:focus, .ct-text:focus { border-color: var(--color-bleed-text); }
 .ct-input.err, .ct-text.err { border-color: var(--color-alert-soft); }
 .ct-err { font-size: var(--font-size-small); color: var(--color-alert-soft); }
 .ct-two { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 200px), 1fr)); gap: var(--space-4); }
@@ -74,7 +74,7 @@
 .ct-sheet-top b { display: block; font-size: var(--font-size-h4); font-weight: var(--font-weight-heavy); letter-spacing: var(--letter-spacing-tight); margin-top: 2px; }
 .ct-state { font-size: var(--font-size-caption); font-weight: var(--font-weight-bold); padding: 4px 10px; border-radius: var(--radius-md); background: var(--color-surface-tint); color: var(--color-foreground-subtle); white-space: nowrap; }
 .ct-state.forming { background: var(--color-tint-sea); color: var(--color-primary); animation: rrpulse 1.6s ease-in-out infinite; } .ct-state.sent { background: var(--color-ok-surface); color: var(--color-secondary); }
-.ct-sheet h5 { font-family: var(--font-family-mono); font-size: var(--font-size-mono); letter-spacing: var(--letter-spacing-label); text-transform: uppercase; color: var(--color-foreground-subtle); margin: 0 0 var(--space-2); font-weight: var(--font-weight-regular); }
+.ct-sheet .ct-h5 { font-family: var(--font-family-mono); font-size: var(--font-size-mono); letter-spacing: var(--letter-spacing-label); text-transform: uppercase; color: var(--color-foreground-subtle); margin: 0 0 var(--space-2); font-weight: var(--font-weight-regular); }
 .ct-route { list-style: none; margin: 0; padding: 0; } .ct-route li { display: grid; grid-template-columns: 28px minmax(0, 1fr); gap: var(--space-3); padding: 10px 0; border-bottom: 1px solid var(--color-surface-alt); } .ct-route li:last-child { border: 0; }
 .ct-route li > span { width: 28px; height: 28px; border-radius: var(--radius-md); background: var(--color-primary); color: #fff; font-size: var(--font-size-small); font-weight: var(--font-weight-heavy); display: flex; align-items: center; justify-content: center; }
 .ct-route b { display: block; font-size: var(--font-size-body); } .ct-route small { display: block; font-size: var(--font-size-small); color: var(--color-foreground-muted); line-height: 1.4; margin-top: 2px; }

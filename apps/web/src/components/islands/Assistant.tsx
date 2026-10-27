@@ -277,7 +277,7 @@ export default function Assistant({ data: D, labels: L, lang, privacyHref, llm =
             <button type="button" class="as-icon" aria-label={L.restart} title={L.restart} onClick={restart}>{icon('M3 12a9 9 0 1 0 3-6.7M3 4v5h5')}</button>
             <button type="button" class="as-icon" aria-label={L.close} onClick={() => setOpen(false)}>{icon('M6 6l12 12M18 6L6 18')}</button>
           </div>
-          <div class="as-body" ref={body} data-lenis-prevent aria-live="polite">
+          <div class="as-body" ref={body} aria-live="polite">
             <div class="as-banner">{D.panel.banner}</div>
             {!consent && (
               <div class="as-consent-box">
