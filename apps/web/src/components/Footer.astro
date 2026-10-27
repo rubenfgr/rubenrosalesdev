@@ -23,6 +23,7 @@ const year = new Date().getFullYear();
 ---
 
 <footer class="footer">
+  <div class="hilada footer-hilada" aria-hidden="true"></div>
   <div class="inner">
     <div class="grid">
       <div class="about">
@@ -52,10 +53,11 @@ const year = new Date().getFullYear();
 
 <style>
   .footer { background: var(--color-dark-footer); color: var(--color-dark-text-muted); }
+  .footer-hilada { --hilada-height: 4.5rem; --hilada-color: var(--color-dark-border); }
   .inner {
     max-width: var(--container-max);
     margin-inline: auto;
-    padding: clamp(3rem, 6vw, 5rem) var(--container-padding) var(--space-6);
+    padding: var(--space-7) var(--container-padding) var(--space-6);
   }
   .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 200px), 1fr)); gap: var(--space-6); }
   .brand { display: flex; align-items: center; gap: var(--space-3); }
@@ -74,7 +76,7 @@ const year = new Date().getFullYear();
     gap: var(--space-3);
     margin-top: 56px;
     padding-top: var(--space-5);
-    border-top: var(--border-width-thin) solid var(--color-dark-raised);
+    border-top: var(--border-width-thick) solid var(--color-dark-border-strong);
     font-size: var(--font-size-small);
   }
   .prompt { font-family: var(--font-family-mono); font-size: var(--font-size-caption); color: var(--color-dark-text-faint); }

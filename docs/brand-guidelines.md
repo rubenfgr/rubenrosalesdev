@@ -243,8 +243,9 @@ Con `prefers-reduced-motion: reduce` las duraciones funcionales pasan a 0.
 
 Las juntas de un muro de piedra en seco como textura repetible (tile de 240 × 96).
 
-- **Sí:** fondo de secciones amplias (cabecera, pie, separadores), portadas de documentos, fondos de redes sociales. Color `--color-border` en claro u oscuro.
-- **No:** detrás de texto de lectura, en más de una zona por vista, combinado con fotografía, ni en color de marca.
+- **Sí:** divisor de sección y de pie (`.hilada` en `global.css`: máscara del SVG sobre un color de token, con `--hilada-color` y `--hilada-height`), fondo de bloques a sangre, portadas de documentos y redes sociales.
+- **No:** detrás de texto de lectura, combinado con fotografía, ni en color de marca (los divisores usan `--color-border-strong` o `--color-dark-border`).
+- **Cambio v2:** deja de ser una textura discreta y pasa a ser estructura: la home la usa como divisor al cerrar el hero y como remate del pie. Ya no hay límite de una zona por vista, pero sí de una por transición de sección.
 
 ### Fotografía
 
@@ -260,7 +261,7 @@ Patrones generales para la web. Los valores salen siempre de los tokens.
 | Patrón | Regla |
 |---|---|
 | **Ritmo de secciones** | Separación vertical `--space-section` (64→128 px). Mucho aire entre secciones, densidad moderada dentro. |
-| **Navegación fija** | Altura `--nav-height`, fondo `--color-background` opaco y borde inferior `--color-border` al hacer scroll. En la home, anclas a las secciones; en el resto, enlaces a páginas. Respeta safe-area en móvil. |
+| **Navegación fija** | Altura `--nav-height`, fondo `--color-background` opaco (sin desenfoque) y regla inferior de 2 px (`--color-rule`) siempre visible. Enlaces con subrayado de 2 px en hover/actual. En la home, anclas a las secciones; en el resto, enlaces a páginas. Respeta safe-area en móvil. |
 | **Apertura de sección** | Titular `h2` y entradilla de 1–2 frases (`--font-size-lead`, `--color-foreground-muted`, máximo `--measure`). Sin etiquetas decorativas encima del titular ni numeración. |
 | **Demo de proceso** | Componente que muestra un proceso «antes / después» paso a paso (p. ej. pedido por email → extracción → validación → alta en ERP). El usuario avanza con botones; nada se reproduce solo. Siempre marcado como **ejemplo ilustrativo** si no es un caso real. |
 | **Cifras** | Solo datos reales y verificables. Sin cifras, no hay fila de cifras. |

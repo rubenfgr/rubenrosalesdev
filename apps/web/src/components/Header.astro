@@ -75,13 +75,9 @@ const contactHref = getLocalizedPath('/#contacto', lang);
     position: fixed;
     inset: 0 0 auto 0;
     z-index: var(--z-sticky);
-    background: rgb(244 245 242 / 0.78);
-    backdrop-filter: blur(16px) saturate(140%);
-    border-bottom: var(--border-width-thin) solid transparent;
-    transition: border-color var(--duration-base) var(--ease-out);
+    background: var(--color-background);
+    border-bottom: var(--border-width-thick) solid var(--color-rule);
   }
-  .header[data-scrolled],
-  .header[data-solid] { border-bottom-color: var(--color-border); }
   .bar {
     max-width: var(--container-max);
     margin-inline: auto;
@@ -103,11 +99,14 @@ const contactHref = getLocalizedPath('/#contacto', lang);
     font-size: var(--font-size-label);
     font-weight: var(--font-weight-medium);
     padding: var(--space-2) var(--space-3);
-    border-radius: var(--radius-md);
-    transition: all var(--duration-base) var(--ease-out);
+    text-decoration: underline;
+    text-decoration-color: transparent;
+    text-decoration-thickness: var(--border-width-thick);
+    text-underline-offset: 8px;
+    transition: text-decoration-color var(--duration-base) var(--ease-out);
   }
-  .link:hover, .link[aria-current='page'] { background: var(--color-surface-alt); color: var(--color-primary); }
-  .divider { width: 1px; height: 20px; background: var(--color-border); margin-inline: 10px; }
+  .link:hover, .link[aria-current='page'] { color: var(--color-foreground); text-decoration-color: var(--color-foreground); }
+  .divider { width: 2px; height: 20px; background: var(--color-rule); margin-inline: 10px; }
   .cta {
     display: inline-flex;
     align-items: center;
@@ -118,13 +117,13 @@ const contactHref = getLocalizedPath('/#contacto', lang);
     font-size: var(--font-size-label);
     font-weight: var(--font-weight-strong);
     padding: 10px var(--space-4);
-    border-radius: var(--radius-md);
     transition: background var(--duration-base) var(--ease-out);
   }
-  .cta:hover { background: var(--gradient-brand); color: var(--color-primary-foreground); }
-  .arrow { font-size: var(--font-size-caption); opacity: 0.7; }
-  .progress { position: absolute; inset: auto 0 -1px 0; height: 2px; pointer-events: none; }
-  .progress-bar { height: 100%; background: var(--gradient-brand); transform-origin: 0 50%; transform: scaleX(0); }
+  .cta:hover { background: var(--color-primary); color: var(--color-primary-foreground); }
+  .arrow { font-size: var(--font-size-caption); opacity: 0.7; transition: transform var(--duration-base) var(--ease-out); }
+  .cta:hover .arrow { transform: translateX(3px); opacity: 1; }
+  .progress { position: absolute; inset: auto 0 -2px 0; height: 2px; pointer-events: none; }
+  .progress-bar { height: 100%; background: var(--color-primary); transform-origin: 0 50%; transform: scaleX(0); }
 
   .link, .cta { white-space: nowrap; }
   .role, .sep { display: none; }
