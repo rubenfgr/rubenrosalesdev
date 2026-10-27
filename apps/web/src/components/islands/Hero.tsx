@@ -41,38 +41,36 @@ export default function Hero(p: Props) {
   return (
     <section id="top" class="hero">
       <div class="hero-inner">
-        <h1 class="hero-title">
-          {h.l1}<br />{h.l2}<br />{l3}{dot && <span class="dot">.</span>}
-        </h1>
-        <div class="hero-body">
-          <div class="hero-copy">
-            <p class="hero-lead">{p.lead} <strong>{p.leadStrong}</strong></p>
-            <div class="hero-ctas">
-              <a class="btn btn-primary" href={p.contactHref}>{p.ctaPrimary} <span class="mono-arrow">→</span></a>
-              <a class="hero-link" href={p.projectsHref}><span class="u">{p.ctaSecondary}</span> <span class="mono-arrow">→</span></a>
-            </div>
+        <div class="hero-copy">
+          <h1 class="hero-title">
+            {h.l1}<br />{h.l2}<br /><span class="solos">{l3}</span>{dot && <span class="dot">.</span>}
+          </h1>
+          <p class="hero-lead">{p.lead} <strong>{p.leadStrong}</strong></p>
+          <div class="hero-ctas">
+            <a class="btn btn-primary" href={p.contactHref}>{p.ctaPrimary} <span class="mono-arrow">→</span></a>
+            <a class="hero-link" href={p.projectsHref}><span class="u">{p.ctaSecondary}</span> <span class="mono-arrow">→</span></a>
           </div>
-          <ol class="hero-list" onMouseEnter={() => clearInterval(timer.current)} onMouseLeave={loop} onFocusIn={() => clearInterval(timer.current)} onFocusOut={loop}>
-            {rows.map((row, i) => (
-              <li>
-                <button
-                  type="button"
-                  class={`row${i === k ? ' on' : ''}`}
-                  aria-pressed={i === k}
-                  onClick={() => {
-                    setK(i);
-                    loop();
-                  }}
-                >
-                  <span class="row-num">{String(i + 1).padStart(2, '0')}</span>
-                  <span class="row-title">{row.title}</span>
-                  <span class="row-sub">{row.text}</span>
-                  <span class="row-bar" aria-hidden="true" />
-                </button>
-              </li>
-            ))}
-          </ol>
         </div>
+        <ol class="hero-list" onMouseEnter={() => clearInterval(timer.current)} onMouseLeave={loop} onFocusIn={() => clearInterval(timer.current)} onFocusOut={loop}>
+          {rows.map((row, i) => (
+            <li>
+              <button
+                type="button"
+                class={`row${i === k ? ' on' : ''}`}
+                aria-pressed={i === k}
+                onClick={() => {
+                  setK(i);
+                  loop();
+                }}
+              >
+                <span class="row-num">{String(i + 1).padStart(2, '0')}</span>
+                <span class="row-title">{row.title}</span>
+                <span class="row-sub">{row.text}</span>
+                <span class="row-bar" aria-hidden="true" />
+              </button>
+            </li>
+          ))}
+        </ol>
       </div>
       <div class="hero-stats-wrap">
         <div class="hero-stats">

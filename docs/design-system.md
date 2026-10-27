@@ -51,7 +51,7 @@ Los tamaños viven en `tokens.css` como `clamp()` (rango de 360 a 1440 px) y los
 
 | Token | Rango | Uso |
 |---|---|---|
-| `--font-size-hero` | 40 → 132 px a 1440 (tope 176) | h1 de la home |
+| `--font-size-hero` | 36 → 84 px | h1 de la home |
 | `--font-size-section` | 32 → 72 px | título de sección de la home |
 | `--font-size-display` | 36 → 68 px | h1 de páginas interiores |
 | `--font-size-h2` / `-h3` / `-h4` | 28→44 / 22→28 / 19→22 px | titulares de contenido |

@@ -134,7 +134,7 @@
 
   /* Escala fluida: cada token crece con el ancho (clamp) y tiene un tope. Cuerpo ≥ 16 px en cualquier ancho.
      Rango: 360 px → 1440 px. Los titulares usan estos tokens; no se fijan tamaños en px en los componentes. */
-  --font-size-hero:    clamp(2.5rem, 0.9rem + 8.2vw, 11rem);           /* 40→132px a 1440 (tope 176): h1 de la home */
+  --font-size-hero:    clamp(2.25rem, 1.35rem + 4.4vw, 5.25rem);       /* 36→84px: h1 de la home */
   --font-size-section: clamp(2rem, 0.95rem + 4.1vw, 4.5rem);           /* 32→72px: título de sección */
   --font-size-display: clamp(2.25rem, 1.2rem + 3.6vw, 4.25rem);        /* 36→68px: h1 de páginas interiores */
   --font-size-h2:      clamp(1.75rem, 1.2rem + 1.8vw, 2.75rem);       /* 28→44px */

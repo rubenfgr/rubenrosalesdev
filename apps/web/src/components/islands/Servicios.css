@@ -17,7 +17,7 @@
 .srv-card.dark { background: var(--color-bleed); color: var(--color-bleed-text); }
 .srv-card.tint { background: var(--color-tint-sea); }
 @media (min-width: 75rem) {
-  .srv-card { display: grid; grid-template-columns: minmax(0, 5fr) minmax(0, 6fr); align-items: start; column-gap: clamp(32px, 4vw, 64px); }
+  .srv-card { display: grid; grid-template-columns: minmax(0, 5fr) minmax(0, 6fr); align-items: center; column-gap: clamp(32px, 4vw, 64px); }
   .srv-card .srv-demo, .srv-card .phone-wrap { margin-block: clamp(24px, 3vw, 40px); }
 }
 .srv-top { padding: clamp(24px, 3vw, 36px) clamp(24px, 3vw, 36px) 0; }
@@ -63,16 +63,16 @@
 .doc-tot .grand { font-weight: var(--font-weight-heavy); font-size: 11px; border-top: 1px solid var(--color-foreground); padding-top: 2px; }
 .hl { padding: 0 3px; border-radius: var(--radius-md); transition: background 300ms; }
 .hl.on { background: rgb(201 183 143 / 0.55); }
-.srv-sep { display: flex; align-items: center; gap: var(--space-2); font-size: var(--font-size-caption); font-weight: var(--font-weight-strong); color: var(--color-dark-text-subtle); margin-top: 12px; }
-.srv-sep::before, .srv-sep::after { content: ''; flex: 1; height: 1px; background: var(--color-dark-raised); }
-.ext { background: var(--color-dark-panel); border: 1px solid var(--color-dark-raised); border-radius: var(--radius-md); overflow: hidden; margin-top: 12px; }
+.srv-sep { display: flex; align-items: center; gap: var(--space-2); font-size: var(--font-size-caption); font-weight: var(--font-weight-strong); color: var(--color-bleed-text-subtle); margin-top: 12px; }
+.srv-sep::before, .srv-sep::after { content: ''; flex: 1; height: 1px; background: var(--color-bleed-border); }
+.ext { background: var(--color-bleed-panel); border: var(--border-width-thick) solid var(--color-bleed-text); border-radius: var(--radius-md); overflow: hidden; margin-top: 12px; }
 .ext-head, .ext-row { display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: var(--space-3); padding: 5px 12px; font-size: var(--font-size-small); }
-.ext-head { padding: 8px 12px; background: var(--color-dark-panel-alt); font-size: var(--font-size-mono); font-weight: var(--font-weight-bold); letter-spacing: 0.04em; text-transform: uppercase; color: var(--color-dark-text-muted); }
-.ext-row { border-top: 1px solid var(--color-dark-raised); transition: background 300ms; }
-.ext-row.on { background: rgb(201 183 143 / 0.1); }
-.ext-row span:first-child { color: var(--color-dark-text-subtle); }
-.ext-row span:last-child { font-weight: var(--font-weight-strong); text-align: right; font-variant-numeric: tabular-nums; transition: all 350ms ease-out; }
-.stamp { margin: 8px 12px 12px; padding: 6px 12px; border-radius: var(--radius-md); font-size: var(--font-size-small); font-weight: var(--font-weight-strong); display: flex; align-items: center; gap: 8px; background: rgb(201 183 143 / 0.1); color: var(--color-accent-soft); transition: all 350ms ease-out; }
+.ext-head { padding: 8px 12px; background: var(--color-bleed-text); font-size: var(--font-size-mono); font-weight: var(--font-weight-bold); letter-spacing: 0.04em; text-transform: uppercase; color: var(--color-bleed); }
+.ext-row { border-top: 1px solid var(--color-bleed-border); transition: background 300ms; }
+.ext-row.on { background: rgb(205 181 130 / 0.14); }
+.ext-row span:first-child { color: var(--color-bleed-text-muted); }
+.ext-row span:last-child { color: var(--color-bleed-text); font-weight: var(--font-weight-strong); text-align: right; font-variant-numeric: tabular-nums; transition: all 350ms ease-out; }
+.stamp { margin: 8px 12px 12px; padding: 6px 12px; border-radius: var(--radius-md); font-size: var(--font-size-small); font-weight: var(--font-weight-strong); display: flex; align-items: center; gap: 8px; background: rgb(205 181 130 / 0.14); color: var(--color-bleed-accent); transition: all 350ms ease-out; }
 .stamp.ok { background: rgb(169 184 140 / 0.16); color: var(--color-ok); }
 .stamp::before { content: ''; width: 6px; height: 6px; border-radius: 50%; background: currentColor; }
 /* 1.3 panel */

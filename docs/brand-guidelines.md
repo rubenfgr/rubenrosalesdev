@@ -178,7 +178,7 @@ Comprobado con simulación de protanopia, deuteranopia y tritanopia (matrices de
 
 | Rol | Tamaño | Anchura | Peso | Interlineado | Tracking |
 |---|---|---|---|---|---|
-| Hero (h1 de la home) | `--font-size-hero` (40→132 px a 1440, tope 176) | 118 % (100 % bajo 26 rem) | 800 | 0,94 | −0,04 em |
+| Hero (h1 de la home) | `--font-size-hero` (36→84 px) | 100 % | 800 | 0,94 | −0,04 em |
 | Título de sección (h2 de la home) | `--font-size-section` (32→72 px) | 118 % (100 % bajo 26 rem) | 800 | 1 | −0,04 em |
 | Display (h1 interior) | `--font-size-display` (36→68 px) | 118 % (100 % bajo 26 rem) | 620 | 1,1 | −0,02 em |
 | H2 | `--font-size-h2` (28→44 px) | 118 % | 620 | 1,2 | −0,01 em |
@@ -193,7 +193,7 @@ Comprobado con simulación de protanopia, deuteranopia y tritanopia (matrices de
 | Código | `--font-size-label` | — | 400 | 1,6 | 0 |
 
 - Escala fluida con `clamp()` entre 360 y 1440 px (ver `docs/design-system.md`). Los titulares tienen tope en pantallas grandes y el cuerpo nunca baja de 16 px.
-- **Por qué 118 % solo en h1 y h2:** el ancho expandido da carácter a los titulares, pero en tarjetas y demos (h3) ocupa demasiado y parte palabras. Por debajo de 26 rem (416 px) los titulares vuelven a 100 %.
+- **Por qué 118 % solo en h1 interiores y h2 (no en el hero):** el ancho expandido da carácter a los titulares, pero en tarjetas y demos (h3) ocupa demasiado y parte palabras. Por debajo de 26 rem (416 px) los titulares vuelven a 100 %.
 - Pesos en uso: 400, 500, 620 y 800 (titulares y cifras). No añadir más.
 - Longitud de línea máxima en texto corrido: `--measure` (66 caracteres).
 - Cifras tabulares (`font-variant-numeric: tabular-nums`) en tablas, precios, fechas y cualquier dato que se compare en columna.
@@ -272,7 +272,8 @@ Patrones generales para la web. Los valores salen siempre de los tokens.
 | **Ritmo de secciones** | Separación vertical `--space-section` (64→128 px). Mucho aire entre secciones, densidad moderada dentro. |
 | **Navegación fija** | Altura `--nav-height`, fondo `--color-background` opaco (sin desenfoque) y regla inferior de 2 px (`--color-rule`) siempre visible. Enlaces con subrayado de 2 px en hover/actual. En la home, anclas a las secciones; en el resto, enlaces a páginas. Respeta safe-area en móvil. |
 | **Apertura de sección** | Regla de 2 px (`--color-rule`) con el número de sección en mono (sin etiqueta de texto), titular `h2` y entradilla de 1–2 frases (`--font-size-lead`, `--color-foreground-muted`, máximo `--measure`). La segunda parte del titular va en `--color-primary` (en `--color-bleed-text-muted` sobre petróleo), nunca en gris. El número es estructura, no decoración; no se añade ninguna otra etiqueta. |
-| **Secciones a sangre** | Problema y el bloque 1.2 de Servicios van en petróleo profundo (`--color-bleed`), con paneles en `--color-bleed-panel`, reglas de 2 px en `--color-bleed-text` y el motivo hilada en `--color-bleed-rule`. La calculadora usa el mismo bloque para el resultado; su cifra lleva `--color-bleed-accent`. |
+| **Secciones a sangre** | Problema y el bloque 1.2 de Servicios van en petróleo profundo (`--color-bleed`), con paneles en `--color-bleed-panel`, reglas de 2 px en `--color-bleed-text` y el motivo hilada en `--color-bleed-rule`. El cuadro «Datos extraídos» de 1.2 lleva cabecera invertida (`--color-bleed-text` sobre petróleo) y borde de 2 px para que destaque del fondo. El resultado de la calculadora va en `--color-primary` con rejilla tenue y recuadros de fondo suave (blanco al 8 %), no en petróleo. |
+| **Hero y Servicios** | El hero son dos bloques horizontales a partir de 64 rem: titular, entradilla y botones a la izquierda, índice numerado a la derecha, centrados entre sí. «solos» va en `--color-primary` y el punto en `--color-signal`. En Servicios, cada fila (1.1–1.4) centra verticalmente el texto y el ejemplo uno respecto al otro. |
 | **Listas y preguntas** | Filas separadas por regla de 2 px, no tarjetas con borde (FAQ, índice de servicios del hero). El estado abierto o activo se marca con fondo, no con color de borde. |
 | **Demo de proceso** | Componente que muestra un proceso «antes / después» paso a paso (p. ej. pedido por email → extracción → validación → alta en ERP). El usuario avanza con botones; nada se reproduce solo. Siempre marcado como **ejemplo ilustrativo** si no es un caso real. |
 | **Cifras** | Solo datos reales y verificables. Sin cifras, no hay fila de cifras. En mono (`--font-family-mono`), peso 700. |
