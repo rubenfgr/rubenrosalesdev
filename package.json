@@ -14,6 +14,7 @@
     "build:prod": "pnpm --filter @rr/web build:prod && pnpm --filter @rr/api build",
     "i18n:check": "pnpm --filter @rr/web i18n:check",
     "content:new": "pnpm --filter @rr/web content:new",
+    "content:list": "pnpm --filter @rr/web content:list",
     "test": "pnpm -r --if-present test",
     "e2e": "node e2e/smoke.mjs"
   },

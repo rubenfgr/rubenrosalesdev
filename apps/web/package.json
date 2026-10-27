@@ -12,6 +12,7 @@
     "i18n:check": "node scripts/i18n-check.mjs",
     "prebuild": "node scripts/i18n-check.mjs",
     "content:new": "node scripts/content-new.mjs",
+    "content:list": "node scripts/content-list.mjs",
     "dev:tailscale": "astro dev --host",
     "test": "vitest run"
   },

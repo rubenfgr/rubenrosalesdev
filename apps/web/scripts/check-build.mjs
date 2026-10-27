@@ -5,6 +5,7 @@
 //  3. Ningún artículo en borrador enlazado desde contenido publicado.
 import fs from 'node:fs';
 import path from 'node:path';
+import { readPosts } from './blog-posts.mjs';
 
 const root = path.resolve(import.meta.dirname, '..');
 const strict = process.env.GUARDS_STRICT === '1';
@@ -38,13 +39,17 @@ for (const f of walk(path.join(root, 'src/content/case-studies')).filter((n) => 
 // 2b. Cifras de ejemplo del asistente sin confirmar
 
 // 3. Borradores enlazados desde contenido publicado
-const blogDir = path.join(root, 'src/content/blog');
 const drafts = [];
 const published = [];
-for (const f of walk(blogDir).filter((n) => /\.mdx?$/.test(n))) {
-  (is(fm(f), 'draft', 'true') ? drafts : published).push(f);
+const draftSlugs = [];
+for (const post of readPosts()) {
+  for (const l of Object.values(post.langs)) {
+    if (l.draft) {
+      drafts.push(l.file);
+      draftSlugs.push(l.slug);
+    } else published.push(l.file);
+  }
 }
-const draftSlugs = drafts.map((f) => path.basename(f).replace(/\.mdx?$/, ''));
 const publishedFiles = [...published, ...walk(path.join(root, 'src/content/case-studies')), ...outputs];
 for (const f of publishedFiles) {
   const text = fs.readFileSync(f, 'utf8');

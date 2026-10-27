@@ -1,10 +1,11 @@
 // Comprueba que es y en tienen las mismas claves y ningún valor vacío o pendiente (TODO).
 //  1. Textos de interfaz: src/i18n/ui/{es,en}.json
 //  2. Colecciones de datos: src/content/<colección>/{es,en}.json (los elementos de una lista se emparejan por `id`)
-//  3. Blog: cada artículo (translationKey) debe existir en los dos idiomas
+//  3. Blog: cada carpeta <AAAA-MM-DD>-<clave> tiene es.mdx y en.mdx, y su fecha coincide con `date`
 // Sale con código 1 si encuentra algo. Uso: node scripts/i18n-check.mjs
 import fs from 'node:fs';
 import path from 'node:path';
+import { readPosts } from './blog-posts.mjs';
 
 const root = path.resolve(import.meta.dirname, '..');
 const LANGS = ['es', 'en'];
@@ -63,28 +64,25 @@ for (const entry of fs.readdirSync(contentDir, { withFileTypes: true })) {
   compare(entry.name, Object.fromEntries(LANGS.map((l) => [l, path.join(dir, `${l}.json`)])));
 }
 
-// 3. Blog: pares por translationKey (también detecta TODO en el cuerpo)
-const blog = { es: new Map(), en: new Map() };
-for (const lang of LANGS) {
-  const dir = path.join(contentDir, 'blog', lang);
-  if (!fs.existsSync(dir)) continue;
-  for (const f of fs.readdirSync(dir).filter((n) => /\.mdx?$/.test(n))) {
-    const text = fs.readFileSync(path.join(dir, f), 'utf8');
-    const key = text.match(/^translationKey:\s*["']?([^"'\n]+?)["']?\s*$/m)?.[1];
-    if (!key) {
-      problems.push(`blog/${lang}/${f}: falta translationKey`);
+// 3. Blog: una carpeta por artículo con es y en; el prefijo de fecha coincide con `date` (también detecta TODO)
+const slugs = { es: new Map(), en: new Map() };
+for (const post of readPosts()) {
+  if (!post.valid) {
+    problems.push(`blog/${post.folder}: la carpeta debe llamarse AAAA-MM-DD-<clave> (minúsculas y kebab-case)`);
+    continue;
+  }
+  for (const lang of LANGS) {
+    const l = post.langs[lang];
+    if (!l) {
+      problems.push(`blog/${post.folder}: falta ${lang}.mdx (sin traducción «${lang}»)`);
       continue;
     }
-    if (blog[lang].has(key)) problems.push(`blog/${lang}/${f}: translationKey repetido «${key}»`);
-    blog[lang].set(key, f);
+    const where = `blog/${post.folder}/${lang}`;
+    if (l.date !== post.date) problems.push(`${where}: la carpeta empieza por ${post.date} pero date es ${l.date}`);
+    if (slugs[lang].has(l.slug)) problems.push(`${where}: slug repetido «${l.slug}» (también en ${slugs[lang].get(l.slug)})`);
+    slugs[lang].set(l.slug, post.folder);
     // Pendiente = línea que solo dice TODO, valor «TODO» en el frontmatter o etiqueta todo (content:new).
-    if (/^\s*TODO\s*$|:\s*["']?TODO["']?\s*$|^tags:.*\btodo\b/m.test(text)) problems.push(`blog/${lang}/${f}: contiene TODO`);
-  }
-}
-for (const lang of LANGS) {
-  const other = LANGS.find((l) => l !== lang);
-  for (const [key, f] of blog[lang]) {
-    if (!blog[other].has(key)) problems.push(`blog/${lang}/${f}: no tiene traducción «${other}» (translationKey «${key}»)`);
+    if (/^\s*TODO\s*$|:\s*["']?TODO["']?\s*$|^tags:.*\btodo\b/m.test(l.text)) problems.push(`${where}: contiene TODO`);
   }
 }
 

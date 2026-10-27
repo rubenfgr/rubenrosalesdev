@@ -1,25 +1,38 @@
 # Escribir un post
 
-Un artículo = un fichero por idioma: `src/content/blog/es/<slug>.mdx` y `src/content/blog/en/<slug>.mdx`. El slug es el nombre del fichero y forma la URL: `/blog/<slug>` (es) y `/en/blog/<slug>` (en). Los dos ficheros se emparejan con el mismo `translationKey`; los slugs pueden ser distintos.
+Un artículo = **una carpeta** con la fecha por delante y un fichero por idioma:
+
+```
+apps/web/src/content/blog/2026-10-27-automatizar-pedidos/
+├── es.mdx
+├── en.mdx
+├── portada.webp        ← imágenes compartidas por los dos idiomas
+└── flujo.png
+```
+
+- El nombre de la carpeta es `AAAA-MM-DD-<clave>`. El prefijo de fecha **debe coincidir con `date`** del frontmatter (si no, `pnpm i18n:check` y el build fallan). Así el explorador de archivos los ordena por fecha.
+- La clave (la carpeta sin la fecha) empareja `es.mdx` y `en.mdx` y es el slug de la URL: `/blog/<clave>` (es) y `/en/blog/<clave>` (en). Si el slug inglés debe ser otro, ponlo en `urlSlug:` del `en.mdx`.
+- No cambies la clave ni `urlSlug` una vez publicado: se rompen los enlaces. La fecha de la carpeta es la de publicación; si revisas el artículo después, usa `updated`, no renombres.
+- Dentro de la carpeta no hay subcarpetas por año: con la fecha en el nombre basta.
 
 ## Flujo
 
-1. Crea los dos ficheros con la plantilla de abajo (o usa `pnpm content:new blog <slug> [slug-en]`).
-2. Revisa en local con `pnpm dev` (los borradores se ven en desarrollo).
-3. Quita `draft: true` (o ponlo en `false`), haz commit y `git push` a `main`.
+1. `pnpm content:new blog <clave> [slug-en]` crea la carpeta de hoy con `es.mdx` y `en.mdx` (o créalos a mano con la plantilla de abajo).
+2. Revisa en local con `pnpm dev` (los borradores se ven en desarrollo). `pnpm content:list` lista los artículos de más nuevo a más antiguo, con su estado.
+3. Quita `draft: true` (o ponlo en `false`) en los dos ficheros, haz commit y `git push`. Si `main` es producción, pide aprobación antes.
 4. El hosting construye y despliega. Si el frontmatter es inválido, el build falla y la web anterior sigue publicada.
 
 ## Plantilla
 
-Copia esto en `src/content/blog/es/mi-articulo.mdx` (y la versión inglesa en `src/content/blog/en/`):
+Copia esto en `es.mdx` (y la versión inglesa en `en.mdx`, de la misma carpeta):
 
 ````md
 ---
 title: "Título claro y concreto"            # obligatorio, máximo 70 caracteres
 description: "Una o dos frases que resuman el artículo para buscadores y redes."  # 50–160 caracteres
-date: 2026-10-22                            # obligatorio
-translationKey: mi-articulo                 # obligatorio, igual en es y en
+date: 2026-10-27                            # obligatorio; igual que el prefijo de la carpeta
 updated: 2026-11-05                         # opcional, si lo revisas después
+urlSlug: my-article                         # opcional; solo si el slug de este idioma no es la clave
 tags: [automatizacion, procesos]            # de 1 a 4, en minúsculas y kebab-case
 draft: true                                 # true = no se publica en producción
 cover: ./portada.webp                       # opcional
@@ -42,12 +55,12 @@ Reglas del frontmatter (si no se cumplen, el build falla):
 - `title` ≤ 70 caracteres y `description` entre 50 y 160.
 - `tags`: de 1 a 4, solo minúsculas, números y guiones (`ia-aplicada`, no `IA aplicada`).
 - Si hay `cover`, `coverAlt` es obligatorio.
-- No se admiten campos que no estén en la plantilla. El autor es fijo (Rubén Rosales).
+- No se admiten campos que no estén en la plantilla (no uses `slug`: Astro lo toma como id de la entrada; para eso está `urlSlug`). El autor es fijo (Rubén Rosales).
 - El tiempo de lectura se calcula solo.
 
 ## Imágenes
 
-Guárdalas junto al artículo (p. ej. `src/content/blog/es/portada.webp`) y enlázalas con ruta relativa. Astro las optimiza. El texto alternativo es obligatorio:
+Guárdalas en la carpeta del artículo (p. ej. `portada.webp`, que usan los dos idiomas) y enlázalas con ruta relativa. Astro las optimiza. El texto alternativo es obligatorio:
 
 ```md
 ![Diagrama del flujo de pedidos](./flujo.png)

@@ -167,8 +167,9 @@ const site = byLocale(
 );
 
 const blog = defineCollection({
-  // Un artículo por idioma: blog/es/<slug>.mdx y blog/en/<slug>.mdx. El id es «es/<slug>» o «en/<slug>».
-  loader: glob({ pattern: '{es,en}/*.{md,mdx}', base: './src/content/blog' }),
+  // Una carpeta por artículo, con la fecha por delante: blog/<AAAA-MM-DD>-<clave>/{es,en}.mdx (+ imágenes).
+  // El id es «<carpeta>/<idioma>»; la clave (carpeta sin fecha) empareja las traducciones y es el slug por defecto.
+  loader: glob({ pattern: '*/{es,en}.{md,mdx}', base: './src/content/blog' }),
   schema: ({ image }) =>
     z
       .object({
@@ -180,7 +181,7 @@ const blog = defineCollection({
           .array(z.string().regex(/^[a-z0-9]+(-[a-z0-9]+)*$/, 'etiqueta en minúsculas y kebab-case'))
           .min(1)
           .max(4),
-        translationKey: id,
+        urlSlug: id.optional(), // no `slug`: Astro lo usaría como id de la entrada
         draft: z.boolean().default(false),
         cover: image().optional(),
         coverAlt: z.string().optional(),

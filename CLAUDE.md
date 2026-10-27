@@ -37,4 +37,4 @@ Estructura: `apps/web` (Astro), `apps/api` (Hono + Postgres, ver `docs/backend.m
 
 ## Blog
 
-Ver `docs/escribir-un-post.md`. Un artículo = un fichero por idioma en `apps/web/src/content/blog/{es,en}/<slug>.mdx`.
+Ver `docs/escribir-un-post.md`. Un artículo = una carpeta `apps/web/src/content/blog/<AAAA-MM-DD>-<clave>/` con `es.mdx` y `en.mdx`. `pnpm content:list` los lista.

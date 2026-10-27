@@ -28,14 +28,15 @@ if (!collection || !slug) fail('uso: pnpm content:new <colección> <slug> [slug-
 if (!/^[a-z0-9]+(-[a-z0-9]+)*$/.test(slug) || !/^[a-z0-9]+(-[a-z0-9]+)*$/.test(slugEn)) fail('el slug va en minúsculas y kebab-case');
 
 if (collection === 'blog') {
-  const files = { es: path.join(root, 'src/content/blog/es', `${slug}.mdx`), en: path.join(root, 'src/content/blog/en', `${slugEn}.mdx`) };
-  for (const f of Object.values(files)) if (fs.existsSync(f)) fail(`ya existe ${path.relative(root, f)}`);
+  // Una carpeta por artículo: blog/<hoy>-<slug>/{es,en}.mdx. Si el slug inglés es otro, va en `urlSlug:` del en.mdx.
+  const dir = path.join(root, 'src/content/blog', `${today}-${slug}`);
+  if (fs.existsSync(dir)) fail(`ya existe ${path.relative(root, dir)}`);
+  fs.mkdirSync(dir, { recursive: true });
   for (const lang of ['es', 'en']) {
-    fs.writeFileSync(
-      files[lang],
-      `---\ntitle: "TODO"\ndescription: "TODO"\ndate: ${today}\ntags: [todo]\ntranslationKey: ${slug}\ndraft: true\n---\n\nTODO\n`,
-    );
-    console.log(`creado ${path.relative(root, files[lang])}`);
+    const extra = lang === 'en' && slugEn !== slug ? `urlSlug: ${slugEn}\n` : '';
+    const file = path.join(dir, `${lang}.mdx`);
+    fs.writeFileSync(file, `---\ntitle: "TODO"\ndescription: "TODO"\ndate: ${today}\n${extra}tags: [todo]\ndraft: true\n---\n\nTODO\n`);
+    console.log(`creado ${path.relative(root, file)}`);
   }
 } else if (ITEMS[collection]) {
   for (const lang of ['es', 'en']) {

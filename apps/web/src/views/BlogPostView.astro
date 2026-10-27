@@ -16,7 +16,7 @@ interface Props {
   older?: Post | undefined;
   newer?: Post | undefined;
   recent: Post[];
-  /** Ruta equivalente por idioma (según `translationKey`). */
+  /** Ruta equivalente por idioma (misma carpeta del artículo). */
   paths: Partial<Record<Lang, string>>;
 }
 
@@ -25,7 +25,7 @@ const lang = postLang(post);
 const t = makeT(lang);
 const site = await getData('site', lang);
 const { Content, headings } = await render(post);
-const editUrl = `${site.social.find((s) => s.id === 'github')?.url}/rubenrosalesdev/edit/main/src/content/blog/${post.id}.mdx`;
+const editUrl = `${site.social.find((s) => s.id === 'github')?.url}/rubenrosalesdev/edit/main/apps/web/src/content/blog/${post.id}.mdx`;
 ---
 
 <Layout title={post.data.title} description={post.data.description} ogType="article" paths={paths}>

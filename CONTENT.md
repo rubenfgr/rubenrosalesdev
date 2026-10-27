@@ -16,10 +16,10 @@ Cómo añadir contenido nuevo (en español e inglés) sin tocar componentes. Com
 | Navegación, footer, SEO, contacto, redes | `apps/web/src/content/site/{es,en}.json` | A mano |
 | Asistente (guiones, bio, tarjetas) | `apps/web/src/content/assistant/{es,en}.json` | A mano |
 | Rangos de precio del asistente (sin idioma) | `apps/web/src/content/assistant/pricing.json` | A mano; `placeholder: true` hasta confirmar |
-| Artículos | `apps/web/apps/web/src/content/blog/{es,en}/<slug>.mdx` | `pnpm content:new blog <slug> [slug-en]` |
+| Artículos | `apps/web/src/content/blog/<AAAA-MM-DD>-<clave>/{es,en}.mdx` | `pnpm content:new blog <clave> [slug-en]`; `pnpm content:list` |
 | Casos de estudio largos (diseño anterior, sin usar) | `apps/web/src/content/case-studies/*.md` | — |
 
-Regla de oro: **mismo `id` en `es` y `en`** (en blog, mismo `translationKey`). Los esquemas Zod están en `apps/web/src/content.config.ts`.
+Regla de oro: **mismo `id` en `es` y `en`** (en blog, los dos idiomas van en la misma carpeta). Los esquemas Zod están en `apps/web/src/content.config.ts`.
 
 ## Esquemas (resumen)
 
@@ -27,7 +27,7 @@ Regla de oro: **mismo `id` en `es` y `en`** (en blog, mismo `translationKey`). L
 - **faq** → `items[]`: `id`, `question`, `answer`.
 - **process** → `items[]`: `id`, `step` (`"01"`), `tag`, `title`, `body`.
 - **problemTasks** → `items[]`: `id`, `label`, `path`, `hoursPerWeek`, `defaultOn`.
-- **blog** → frontmatter: `title` (≤ 70), `description` (50–160), `date`, `tags` (1–4, kebab-case), `translationKey`, `draft`, opcional `updated`, `cover` + `coverAlt`.
+- **blog** → frontmatter: `title` (≤ 70), `description` (50–160), `date` (igual que el prefijo de la carpeta), `tags` (1–4, kebab-case), `draft`, opcional `updated`, `urlSlug`, `cover` + `coverAlt`.
 
 Ejemplo (proyecto):
 
@@ -59,7 +59,7 @@ Si pasan 3 y 4, la entrada está completa y válida en los dos idiomas.
 
 ## Checklist de publicación
 
-- [ ] Entrada en `es` y `en`, mismo `id` / `translationKey`.
+- [ ] Entrada en `es` y `en`, mismo `id`; en blog, carpeta con `es.mdx` y `en.mdx`.
 - [ ] Sin `TODO` ni `[VERIFICAR…]`; `draft` en `false` (o `draft` quitado).
 - [ ] `pnpm i18n:check`, `pnpm check` y `pnpm build` sin errores.
 - [ ] Revisión visual en `/` y `/en` (1280 px y 390 px).

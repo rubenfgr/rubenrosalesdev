@@ -11,14 +11,9 @@ const legacy = JSON.parse(fs.readFileSync(path.join(root, 'src/data/legacy.json'
 const frontmatter = (file) => fs.readFileSync(file, 'utf8').match(/^---\n([\s\S]*?)\n---/)?.[1] ?? '';
 const flag = (fm, key) => new RegExp(`^${key}:\\s*true\\b`, 'm').test(fm);
 
-const liveBlog = new Set();
-const blogDir = path.join(root, 'src/content/blog');
-if (fs.existsSync(blogDir)) {
-  const esDir = path.join(blogDir, 'es');
-  for (const f of fs.existsSync(esDir) ? fs.readdirSync(esDir).filter((n) => /\.mdx?$/.test(n)) : []) {
-    if (!flag(frontmatter(path.join(esDir, f)), 'draft')) liveBlog.add(f.replace(/\.mdx?$/, ''));
-  }
-}
+import { readPosts } from './blog-posts.mjs';
+
+const liveBlog = new Set(readPosts().filter((p) => p.langs.es && !p.langs.es.draft).map((p) => p.langs.es.slug));
 const liveProjects = new Set();
 const projDir = path.join(root, 'src/content/case-studies');
 if (fs.existsSync(projDir)) {

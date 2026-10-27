@@ -1,7 +1,7 @@
 const kinds = ['note', 'tip', 'warning', 'danger'] as const;
 type Kind = (typeof kinds)[number];
 
-// Títulos por defecto según el idioma del artículo (blog/es o blog/en).
+// Títulos por defecto según el idioma del artículo (blog/<carpeta>/es.mdx o en.mdx).
 const titlesByLang: Record<'es' | 'en', Record<Kind, string>> = {
   es: { note: 'Nota', tip: 'Consejo', warning: 'Aviso', danger: 'Peligro' },
   en: { note: 'Note', tip: 'Tip', warning: 'Warning', danger: 'Danger' },
@@ -111,7 +111,7 @@ const walk = (node: DirectiveNode) => {
 // Plugin remark: `:::note`, `:::tip`, `:::warning` y `:::danger` (sintaxis de Docusaurus).
 export default function remarkAdmonitions() {
   return (tree: DirectiveNode, file: { path?: string }) => {
-    defaultTitles = /[\\/]blog[\\/]en[\\/]/.test(file.path ?? '') ? titlesByLang.en : titlesByLang.es;
+    defaultTitles = /[\\/]blog[\\/][^\\/]+[\\/]en\.mdx?$/.test(file.path ?? '') ? titlesByLang.en : titlesByLang.es;
     return walk(tree);
   };
 }
