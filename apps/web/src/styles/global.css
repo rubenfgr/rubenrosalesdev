@@ -1,5 +1,6 @@
 @import './tokens.css';
 @import '@fontsource-variable/archivo/wdth.css';
+@import '@fontsource-variable/jetbrains-mono/wght.css';
 
 *,
 *::before,
@@ -100,7 +101,7 @@ html.lenis, html.lenis body { height: auto; }
 h1,
 h2,
 h3 {
-  font-stretch: var(--font-width-display);
+  font-stretch: var(--font-width-body);
   font-weight: var(--font-weight-strong);
   line-height: var(--line-height-snug);
   letter-spacing: var(--letter-spacing-heading);
@@ -109,13 +110,17 @@ h3 {
   hyphens: auto;
 }
 
+h1,
+h2 {
+  font-stretch: var(--font-width-display);
+}
 h1 {
   font-size: var(--font-size-display);
   line-height: var(--line-height-tight);
   letter-spacing: var(--letter-spacing-display);
 }
 @media (max-width: 25.99rem) {
-  h1 { font-stretch: var(--font-width-body); }
+  h1, h2 { font-stretch: var(--font-width-body); }
 }
 h2 { font-size: var(--font-size-h2); }
 h3 { font-size: var(--font-size-h3); }

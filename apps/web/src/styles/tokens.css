@@ -3,7 +3,8 @@
    Fuente de verdad. Primitivos (--rr-<familia>-<paso>) + semánticos
    (--color-*, --font-*, --space-*, ...). Los componentes usan SOLO
    semánticos; los primitivos solo se referencian desde este archivo.
-   Tema: [data-theme="light"|"dark"] y, sin atributo, prefers-color-scheme.
+   Tema único: claro. La web no tiene modo oscuro; los bloques oscuros
+   (--color-dark-*, --color-bleed-*) son paneles de color dentro del tema claro.
    ===================================================================== */
 
 :root {
@@ -119,9 +120,9 @@
 
   /* ---------- Tipografía ---------- */
   --font-family-sans: "Archivo Variable", "Archivo", system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
-  --font-family-mono: ui-monospace, "SFMono-Regular", "JetBrains Mono", Menlo, Consolas, monospace;
+  --font-family-mono: "JetBrains Mono Variable", ui-monospace, "SFMono-Regular", Menlo, Consolas, monospace;
 
-  --font-width-display: 100%;   /* eje wdth de Archivo (el rediseño usa el ancho normal) */
+  --font-width-display: 118%;   /* eje wdth de Archivo (62–125 %): h1 y h2 expandidos; h3 y UI a ancho normal */
   --font-width-body: 100%;
 
   --font-weight-regular: 400;
@@ -132,31 +133,31 @@
 
   /* Escala fluida: cada token crece con el ancho (clamp) y tiene un tope. Cuerpo ≥ 16 px en cualquier ancho.
      Rango: 360 px → 1440 px. Los titulares usan estos tokens; no se fijan tamaños en px en los componentes. */
-  --font-size-hero:    clamp(2.25rem, 1.35rem + 4.4vw, 5.25rem);     /* 36→84px: h1 de la home */
-  --font-size-section: clamp(1.875rem, 1.2rem + 2.9vw, 3.5rem);      /* 30→56px: título de sección */
-  --font-size-display: clamp(2rem, 1.3rem + 2.6vw, 3.25rem);         /* 32→52px: h1 de páginas interiores */
-  --font-size-h2:      clamp(1.625rem, 1.3rem + 1.4vw, 2.25rem);     /* 26→36px */
-  --font-size-h3:      clamp(1.375rem, 1.2rem + 0.9vw, 1.75rem);     /* 22→28px */
-  --font-size-h4:      clamp(1.1875rem, 1.1rem + 0.45vw, 1.375rem);  /* 19→22px */
-  --font-size-figure:  clamp(2.5rem, 2rem + 2vw, 3.5rem);           /* 40→56px: cifras grandes (pasos, calculadora) */
-  --font-size-lead:    clamp(1.125rem, 1.05rem + 0.35vw, 1.25rem);   /* 18→20px: entradillas */
-  --font-size-body:    1rem;                                         /* 16px: texto corrido */
-  --font-size-label:   0.875rem;                                     /* 14px: texto secundario, etiquetas */
-  --font-size-small:   0.8125rem;                                    /* 13px: metadatos */
-  --font-size-caption: 0.8rem;                                       /* 12.8px: pies y notas */
-  --font-size-mono:    0.6875rem;                                    /* 11px: etiquetas mono en mayúsculas */
+  --font-size-hero:    clamp(2.5rem, 0.9rem + 8.2vw, 11rem);           /* 40→132px a 1440 (tope 176): h1 de la home */
+  --font-size-section: clamp(2rem, 0.95rem + 4.1vw, 4.5rem);           /* 32→72px: título de sección */
+  --font-size-display: clamp(2.25rem, 1.2rem + 3.6vw, 4.25rem);        /* 36→68px: h1 de páginas interiores */
+  --font-size-h2:      clamp(1.75rem, 1.2rem + 1.8vw, 2.75rem);       /* 28→44px */
+  --font-size-h3:      clamp(1.375rem, 1.2rem + 0.9vw, 1.75rem);       /* 22→28px */
+  --font-size-h4:      clamp(1.1875rem, 1.1rem + 0.45vw, 1.375rem);    /* 19→22px */
+  --font-size-figure:  clamp(3rem, 2rem + 4vw, 5.5rem);                /* 48→88px: cifras grandes (pasos, calculadora) */
+  --font-size-lead:    clamp(1.125rem, 1.05rem + 0.35vw, 1.25rem);     /* 18→20px: entradillas */
+  --font-size-body:    1rem;                                           /* 16px: texto corrido */
+  --font-size-label:   0.875rem;                                       /* 14px: texto secundario, etiquetas */
+  --font-size-small:   0.8125rem;                                      /* 13px: metadatos */
+  --font-size-caption: 0.8rem;                                         /* 12.8px: pies y notas */
+  --font-size-mono:    0.75rem;                                        /* 12px: cifras y metadatos en mono */
 
   --line-height-tight: 1.1;   /* display */
   --line-height-snug: 1.2;    /* headings */
   --line-height-normal: 1.45; /* labels, UI */
   --line-height-relaxed: 1.6; /* body */
 
-  --letter-spacing-display: -0.015em;
+  --letter-spacing-display: -0.02em;
   --letter-spacing-heading: -0.01em;
   --letter-spacing-body: 0;
-  --letter-spacing-tight: -0.03em;   /* titulares del rediseño */
-  --letter-spacing-tighter: -0.045em; /* hero y cifras */
-  --letter-spacing-label: 0.08em;     /* eyebrows y etiquetas mono */
+  --letter-spacing-tight: -0.025em;  /* titulares del rediseño */
+  --letter-spacing-tighter: -0.04em;  /* hero y cifras (a 118 % de anchura, menos cerrado que antes) */
+  --letter-spacing-label: 0.06em;     /* etiquetas mono */
 
   --measure: 66ch;            /* longitud máxima de línea en texto corrido (≤ 70) */
 
@@ -189,26 +190,28 @@
 
   /* ---------- Geometría ---------- */
   --radius-none: 0;
-  --radius-sm: 2px;
-  --radius-md: 4px;
-  --radius-lg: 6px;      /* máximo: tarjetas, paneles */
+  --radius-sm: 0;        /* esquinas rectas: un solo lenguaje geométrico */
+  --radius-md: 0;
+  --radius-lg: 0;
   --radius-full: 9999px; /* solo avatares o indicadores circulares */
 
   --border-width-thin: 1px;
-  --border-width-thick: 2px;
+  --border-width-thick: 2px;  /* reglas estructurales, énfasis y foco */
   --target-min: 2.75rem;      /* 44px: tamaño mínimo de objetivos táctiles */
   --focus-ring-width: 2px;
   --focus-ring-offset: 3px;
 
-  /* ---------- Elevación (sombras tintadas en stone, nunca negras) ---------- */
-  --shadow-sm: 0 1px 2px rgb(30 39 37 / 0.08);
-  --shadow-cta: 0 1px 0 var(--rr-brand-700) inset, 0 10px 24px -12px rgb(40 90 110 / 0.7);
-  --shadow-card: 0 24px 48px -32px rgb(40 90 110 / 0.45);
-  --shadow-panel: 0 24px 48px -32px rgb(43 53 51 / 0.35);
-  --shadow-panel-dark: 0 24px 48px -28px rgb(28 36 34 / 0.7);
-  --shadow-menu: 0 18px 40px -20px rgb(43 53 51 / 0.45);
+  /* ---------- Elevación ---------- */
+  /* Sin sombras: la profundidad la dan las reglas de 2 px y el color. Los tokens se
+     conservan en «none» mientras los componentes se migran (fases 2–4). */
+  --shadow-sm: none;
+  --shadow-cta: none;
+  --shadow-card: none;
+  --shadow-panel: none;
+  --shadow-panel-dark: none;
+  --shadow-menu: none;
+  --shadow-md: none;
   --shadow-focus: 0 0 0 3px rgb(127 176 194 / 0.18);
-  --shadow-md: 0 2px 4px rgb(30 39 37 / 0.06), 0 8px 24px rgb(30 39 37 / 0.08);
 
   --z-base: 0;
   --z-raised: 10;
@@ -240,7 +243,7 @@
   --chart-6: var(--rr-stone-500);
 }
 
-/* ---------- Tema claro (por defecto y único) ---------- */
+/* ---------- Tema claro (único) ---------- */
 :root,
 [data-theme="light"] {
   color-scheme: light;
@@ -251,7 +254,7 @@
   --color-surface-sunken: var(--rr-paper-100);
   --color-surface-tint: var(--rr-paper-300);
 
-  --color-foreground: var(--rr-stone-900);
+  --color-foreground: var(--rr-stone-950);
   --color-foreground-muted: var(--rr-ink-400);
   --color-foreground-subtle: var(--rr-ink-350);   /* solo texto grande o no esencial */
   --color-foreground-faint: var(--rr-ink-300);
@@ -259,6 +262,18 @@
 
   --color-border: var(--rr-paper-500);
   --color-border-strong: var(--rr-paper-600);
+  --color-rule: var(--rr-stone-950);                /* reglas estructurales de 2 px (tinta) */
+
+  /* Sección a sangre en petróleo profundo */
+  --color-bleed: var(--rr-sea-900);
+  --color-bleed-text: var(--rr-paper-200);
+  --color-bleed-text-muted: var(--rr-sea-200);
+  --color-bleed-accent: var(--rr-esparto-300);      /* el único acento cálido sobre petróleo */
+  --color-bleed-rule: var(--rr-sea-700);            /* decorativo: juntas del motivo hilada */
+
+  /* Gesto cálido: uno por pantalla (cifra o subrayado clave) */
+  --color-signal: var(--rr-almagra-500);
+  --color-signal-foreground: var(--rr-paper-50);
 
   --color-primary: var(--rr-brand-600);
   --color-primary-hover: var(--rr-brand-700);
@@ -267,9 +282,10 @@
   --color-primary-on-dark: var(--rr-brand-300);
   --color-primary-on-dark-strong: var(--rr-brand-350);
   --color-primary-foreground: var(--rr-paper-50);
-  --gradient-brand: linear-gradient(135deg, var(--rr-brand-400) 0%, var(--rr-brand-600) 52%, var(--rr-brand-650) 100%);
-  --gradient-brand-hover: linear-gradient(135deg, #326A80 0%, var(--rr-brand-650) 52%, #1A3D4B 100%);
-  --gradient-brand-text: linear-gradient(100deg, var(--rr-brand-400) 0%, var(--rr-brand-600) 55%, var(--rr-brand-650) 100%);
+  /* Provisional: degradados sustituidos por color sólido; los nombres se retiran al migrar los componentes. */
+  --gradient-brand: var(--rr-brand-600);
+  --gradient-brand-hover: var(--rr-brand-700);
+  --gradient-brand-text: var(--rr-brand-600);
   --color-secondary: var(--rr-olive-600);
   --color-secondary-foreground: var(--rr-paper-200);
   --color-accent: var(--rr-sand-400);               /* decorativo, nunca texto */
@@ -327,109 +343,6 @@
   --color-code-number: var(--rr-almagra-600);
   --color-code-function: var(--rr-esparto-700);
   --color-code-punctuation: var(--rr-stone-700);
-}
-
-/* ---------- Tema oscuro ---------- */
-[data-theme="dark"] {
-  color-scheme: dark;
-
-  --color-background: var(--rr-stone-950);
-  --color-surface: var(--rr-stone-900);
-  --color-surface-alt: var(--rr-stone-800);
-
-  --color-foreground: var(--rr-stone-100);
-  --color-foreground-muted: var(--rr-stone-400);
-  --color-foreground-subtle: var(--rr-stone-500);
-  --color-foreground-inverse: var(--rr-stone-900);
-
-  --color-border: var(--rr-stone-800);
-  --color-border-strong: var(--rr-stone-500);
-
-  --color-primary: var(--rr-sea-300);
-  --color-primary-hover: var(--rr-sea-200);
-  --color-primary-foreground: var(--rr-stone-950);
-  --color-secondary: var(--rr-lichen-300);
-  --color-secondary-foreground: var(--rr-stone-950);
-  --color-accent: var(--rr-esparto-400);
-
-  --color-focus: var(--rr-sea-300);
-
-  --color-success: var(--rr-lichen-300);
-  --color-warning: var(--rr-esparto-300);
-  --color-destructive: var(--rr-almagra-300);
-  --color-info: var(--rr-sea-200);
-
-  --color-brand-mark: var(--rr-stone-100);
-  --color-brand-piece: var(--rr-sea-300);
-
-  --color-info-surface: var(--rr-sea-950);
-  --color-success-surface: var(--rr-lichen-950);
-  --color-warning-surface: var(--rr-esparto-950);
-  --color-destructive-surface: var(--rr-almagra-950);
-
-  --color-code-background: var(--rr-stone-900);
-  --color-code-foreground: var(--rr-stone-100);
-  --color-code-comment: var(--rr-stone-400);
-  --color-code-keyword: var(--rr-sea-300);
-  --color-code-string: var(--rr-lichen-300);
-  --color-code-number: var(--rr-almagra-300);
-  --color-code-function: var(--rr-esparto-300);
-  --color-code-punctuation: var(--rr-stone-300);
-
-  --shadow-sm: 0 1px 2px rgb(0 0 0 / 0.3);
-  --shadow-md: 0 2px 4px rgb(0 0 0 / 0.25), 0 8px 24px rgb(0 0 0 / 0.3);
-}
-
-@media (prefers-color-scheme: dark) {
-  :root:not([data-theme="light"]) {
-    color-scheme: dark;
-
-    --color-background: var(--rr-stone-950);
-    --color-surface: var(--rr-stone-900);
-    --color-surface-alt: var(--rr-stone-800);
-
-    --color-foreground: var(--rr-stone-100);
-    --color-foreground-muted: var(--rr-stone-400);
-    --color-foreground-subtle: var(--rr-stone-500);
-    --color-foreground-inverse: var(--rr-stone-900);
-
-    --color-border: var(--rr-stone-800);
-    --color-border-strong: var(--rr-stone-500);
-
-    --color-primary: var(--rr-sea-300);
-    --color-primary-hover: var(--rr-sea-200);
-    --color-primary-foreground: var(--rr-stone-950);
-    --color-secondary: var(--rr-lichen-300);
-    --color-secondary-foreground: var(--rr-stone-950);
-    --color-accent: var(--rr-esparto-400);
-
-    --color-focus: var(--rr-sea-300);
-
-    --color-success: var(--rr-lichen-300);
-    --color-warning: var(--rr-esparto-300);
-    --color-destructive: var(--rr-almagra-300);
-    --color-info: var(--rr-sea-200);
-
-    --color-brand-mark: var(--rr-stone-100);
-    --color-brand-piece: var(--rr-sea-300);
-
-    --color-info-surface: var(--rr-sea-950);
-    --color-success-surface: var(--rr-lichen-950);
-    --color-warning-surface: var(--rr-esparto-950);
-    --color-destructive-surface: var(--rr-almagra-950);
-
-    --color-code-background: var(--rr-stone-900);
-    --color-code-foreground: var(--rr-stone-100);
-    --color-code-comment: var(--rr-stone-400);
-    --color-code-keyword: var(--rr-sea-300);
-    --color-code-string: var(--rr-lichen-300);
-    --color-code-number: var(--rr-almagra-300);
-    --color-code-function: var(--rr-esparto-300);
-    --color-code-punctuation: var(--rr-stone-300);
-
-    --shadow-sm: 0 1px 2px rgb(0 0 0 / 0.3);
-    --shadow-md: 0 2px 4px rgb(0 0 0 / 0.25), 0 8px 24px rgb(0 0 0 / 0.3);
-  }
 }
 
 /* ---------- Movimiento reducido ---------- */
