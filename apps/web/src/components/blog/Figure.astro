@@ -1,0 +1,25 @@
+---
+// Marco común de los diagramas del blog: <figure> con pie y los tonos de color compartidos.
+interface Props { caption?: string | undefined }
+const { caption } = Astro.props;
+---
+
+<figure class="bfig">
+  <slot />
+  {caption && <figcaption>{caption}</figcaption>}
+</figure>
+
+<style>
+  .bfig { margin: var(--space-6) 0; container-type: inline-size; }
+  figcaption { margin-top: var(--space-3); font-size: var(--font-size-small); line-height: var(--line-height-snug); color: var(--color-foreground-muted); }
+</style>
+
+<style is:global>
+  /* Tonos: qué es cada cosa. Modelo = arena, código = mar, persona = verde, dato = neutro. */
+  .tone-model { --t-bg: var(--color-tint-sand); --t-bd: var(--color-accent); --t-fg: var(--color-foreground); }
+  .tone-code { --t-bg: var(--color-tint-sea); --t-bd: var(--color-primary-light); --t-fg: var(--color-foreground); }
+  .tone-person { --t-bg: var(--color-ok-surface); --t-bd: var(--color-ok-border); --t-fg: var(--color-foreground); }
+  .tone-data { --t-bg: var(--color-surface); --t-bd: var(--color-border-strong); --t-fg: var(--color-foreground); }
+  .tone-alert { --t-bg: var(--color-destructive-surface); --t-bd: var(--color-destructive); --t-fg: var(--color-foreground); }
+  .tone-ok { --t-bg: var(--color-success-surface); --t-bd: var(--color-success); --t-fg: var(--color-foreground); }
+</style>

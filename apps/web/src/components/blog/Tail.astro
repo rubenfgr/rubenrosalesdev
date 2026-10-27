@@ -1,0 +1,29 @@
+---
+// Distribución de tiempos de respuesta (forma ilustrativa): la media queda a la izquierda y el p95 lejos, en la cola.
+import Figure from './Figure.astro';
+interface Props { fast: string; slow: string; mean: string; p95: string; caption?: string }
+const { fast, slow, mean, p95, caption } = Astro.props;
+const bars = [6, 18, 42, 72, 96, 100, 84, 60, 42, 28, 18, 12, 9, 7, 5, 4, 4, 3, 3, 4, 3, 2, 2, 1];
+---
+
+<Figure caption={caption}>
+  <div class="tail">
+    <div class="plot" aria-hidden="true">
+      {bars.map((h) => <i style={`height:${h}%`}></i>)}
+      <span class="mk mean" style="left:30%"><b>{mean}</b></span>
+      <span class="mk p95" style="left:82%"><b>{p95}</b></span>
+    </div>
+    <p class="ax" aria-hidden="true"><span>{fast}</span><span>{slow}</span></p>
+  </div>
+</Figure>
+
+<style>
+  .tail { padding: var(--space-4) var(--space-4) var(--space-3); background: var(--color-surface); border: var(--border-width-thin) solid var(--color-border); border-radius: var(--radius-md); }
+  .plot { position: relative; display: flex; align-items: flex-end; gap: var(--space-1); block-size: 9rem; padding-top: var(--space-6); }
+  .plot i { flex: 1; background: var(--color-tint-sea); border: var(--border-width-thin) solid var(--color-primary-light); border-bottom: 0; border-radius: var(--radius-sm) var(--radius-sm) 0 0; }
+  .mk { position: absolute; top: 0; bottom: 0; inline-size: var(--border-width-thin); background: var(--color-foreground); }
+  .mk b { position: absolute; top: 0; left: 50%; transform: translateX(-50%); padding: var(--space-1) var(--space-2); border-radius: var(--radius-sm); background: var(--color-foreground); color: var(--color-foreground-inverse); font-size: var(--font-size-small); font-weight: var(--font-weight-strong); white-space: nowrap; }
+  .p95 { background: var(--color-destructive); }
+  .p95 b { background: var(--color-destructive); color: var(--color-surface); }
+  .ax { display: flex; justify-content: space-between; margin: var(--space-2) 0 0; font-size: var(--font-size-small); color: var(--color-foreground-muted); }
+</style>

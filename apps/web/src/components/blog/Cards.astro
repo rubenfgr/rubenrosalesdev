@@ -1,0 +1,30 @@
+---
+// Rejilla de tarjetas: sustituye a las listas largas. `tags` muestra campos o etiquetas cortas.
+import Figure from './Figure.astro';
+interface Item { title: string; text?: string; tags?: string[]; tone?: 'model' | 'code' | 'person' | 'data' | 'alert' | 'ok' }
+interface Props { items: Item[]; numbered?: boolean; caption?: string }
+const { items, numbered = false, caption } = Astro.props;
+---
+
+<Figure caption={caption}>
+  <ul class="cards">
+    {items.map((it, i) => (
+      <li class={`card tone-${it.tone ?? 'data'}`}>
+        <b>{numbered && <em>{i + 1}</em>}{it.title}</b>
+        {it.text && <span>{it.text}</span>}
+        {it.tags && <p class="tags">{it.tags.map((t) => <code>{t}</code>)}</p>}
+      </li>
+    ))}
+  </ul>
+</Figure>
+
+<style>
+  .cards { list-style: none; margin: 0; padding: 0; display: grid; gap: var(--space-3); }
+  .card { display: grid; gap: var(--space-2); align-content: start; padding: var(--space-4); background: var(--color-surface); border: var(--border-width-thin) solid var(--color-border); border-top: var(--border-width-thick) solid var(--t-bd); border-radius: var(--radius-md); }
+  .card b { display: flex; align-items: center; gap: var(--space-2); font-size: var(--font-size-body); line-height: var(--line-height-snug); font-weight: var(--font-weight-strong); }
+  .card em { display: inline-grid; place-items: center; flex: none; inline-size: var(--space-5); block-size: var(--space-5); border-radius: var(--radius-full); background: var(--t-bg); border: var(--border-width-thin) solid var(--t-bd); font-style: normal; font-size: var(--font-size-small); }
+  .card span { font-size: var(--font-size-label); line-height: var(--line-height-snug); color: var(--color-foreground-muted); }
+  .tags { display: flex; flex-wrap: wrap; gap: var(--space-1); margin: 0; }
+  .tags code { padding: var(--space-1) var(--space-2); border-radius: var(--radius-sm); background: var(--t-bg); border: var(--border-width-thin) solid var(--color-border); font-size: var(--font-size-small); }
+  @container (min-width: 32rem) { .cards { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+</style>

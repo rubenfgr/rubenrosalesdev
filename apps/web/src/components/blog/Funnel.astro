@@ -1,0 +1,27 @@
+---
+// Embudo de enrutado: cada caso baja por el escalón más barato que lo resuelve; cada escalón es más caro y más lento.
+import Figure from './Figure.astro';
+interface Tier { title: string; text: string; tone: 'code' | 'model' | 'person' | 'data' }
+interface Props { tiers: Tier[]; top: string; bottom: string; caption?: string }
+const { tiers, top, bottom, caption } = Astro.props;
+---
+
+<Figure caption={caption}>
+  <p class="end" aria-hidden="true">{top}</p>
+  <ol class="funnel">
+    {tiers.map((t, i) => (
+      <li class={`tier tone-${t.tone}`} style={`--i:${i}`}>
+        <b>{t.title}</b><span>{t.text}</span>
+      </li>
+    ))}
+  </ol>
+  <p class="end" aria-hidden="true">{bottom}</p>
+</Figure>
+
+<style>
+  .funnel { list-style: none; margin: var(--space-2) 0; padding: 0; display: grid; gap: var(--space-2); justify-items: center; }
+  .tier { inline-size: calc(100% - var(--i) * 6%); display: grid; gap: var(--space-1); padding: var(--space-3) var(--space-4); background: var(--t-bg); border: var(--border-width-thin) solid var(--t-bd); border-radius: var(--radius-md); text-align: center; }
+  .tier b { font-size: var(--font-size-label); font-weight: var(--font-weight-strong); }
+  .tier span { font-size: var(--font-size-small); line-height: var(--line-height-snug); color: var(--color-foreground-muted); }
+  .end { margin: 0; text-align: center; font-family: var(--font-family-mono); font-size: var(--font-size-mono); letter-spacing: var(--letter-spacing-label); text-transform: uppercase; color: var(--color-foreground-subtle); }
+</style>

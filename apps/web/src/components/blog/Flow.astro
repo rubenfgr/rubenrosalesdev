@@ -1,0 +1,57 @@
+---
+// Flujo de pasos (en fila si hay sitio, en columna si no), con salidas opcionales que se bifurcan al final.
+import Figure from './Figure.astro';
+interface Step { title: string; text?: string; tone?: 'model' | 'code' | 'person' | 'data' | 'alert' | 'ok'; stack?: boolean }
+interface Props { steps: Step[]; outcomes?: Step[]; caption?: string; legend?: { tone: Step['tone']; label: string }[] }
+const { steps, outcomes, caption, legend } = Astro.props;
+---
+
+<Figure caption={caption}>
+  <ol class="flow">
+    {steps.map((s) => (
+      <li class={`node tone-${s.tone ?? 'data'}${s.stack ? ' stack' : ''}`}>
+        <b>{s.title}</b>
+        {s.text && <span>{s.text}</span>}
+      </li>
+    ))}
+  </ol>
+  {outcomes && (
+    <>
+      <div class="split" aria-hidden="true"></div>
+      <ul class="outcomes">
+        {outcomes.map((o) => (
+          <li class={`node tone-${o.tone ?? 'data'}`}>
+            <b>{o.title}</b>
+            {o.text && <span>{o.text}</span>}
+          </li>
+        ))}
+      </ul>
+    </>
+  )}
+  {legend && (
+    <ul class="legend">
+      {legend.map((l) => <li><i class={`tone-${l.tone}`}></i>{l.label}</li>)}
+    </ul>
+  )}
+</Figure>
+
+<style>
+  ol, ul { list-style: none; margin: 0; padding: 0; }
+  .flow { display: grid; gap: var(--space-5); }
+  .node { position: relative; display: grid; gap: var(--space-1); align-content: start; padding: var(--space-3) var(--space-3); background: var(--t-bg); border: var(--border-width-thin) solid var(--t-bd); border-radius: var(--radius-md); color: var(--t-fg); }
+  .node b { font-size: var(--font-size-label); line-height: var(--line-height-snug); font-weight: var(--font-weight-strong); }
+  .node span { font-size: var(--font-size-small); line-height: var(--line-height-snug); color: var(--color-foreground-muted); }
+  .stack { box-shadow: var(--space-1) var(--space-1) 0 0 var(--color-surface), var(--space-1) var(--space-1) 0 var(--border-width-thin) var(--t-bd), calc(var(--space-1) * 2) calc(var(--space-1) * 2) 0 0 var(--color-surface), calc(var(--space-1) * 2) calc(var(--space-1) * 2) 0 var(--border-width-thin) var(--t-bd); }
+  /* Flecha hacia el paso siguiente (abajo en columna). */
+  .flow .node:not(:last-child)::after { content: '↓'; position: absolute; left: 50%; top: calc(100% + var(--space-1)); transform: translateX(-50%); font-size: var(--font-size-lead); line-height: 1; color: var(--color-foreground-muted); }
+  .split { height: var(--space-5); margin: 0 auto; inline-size: var(--border-width-thin); background: var(--color-border-strong); }
+  .outcomes { display: grid; gap: var(--space-3); }
+  .legend { display: flex; flex-wrap: wrap; gap: var(--space-2) var(--space-4); margin-top: var(--space-4); font-size: var(--font-size-small); color: var(--color-foreground-muted); }
+  .legend li { display: flex; align-items: center; gap: var(--space-2); }
+  .legend i { inline-size: var(--space-4); block-size: var(--space-3); border-radius: var(--radius-sm); background: var(--t-bg); border: var(--border-width-thin) solid var(--t-bd); }
+  @container (min-width: 34rem) {
+    .flow { grid-auto-flow: column; grid-auto-columns: minmax(0, 1fr); gap: var(--space-5); }
+    .flow .node:not(:last-child)::after { content: '→'; left: calc(100% + var(--space-2)); top: 50%; transform: translate(-50%, -50%); }
+    .outcomes { grid-template-columns: repeat(auto-fit, minmax(10rem, 1fr)); }
+  }
+</style>

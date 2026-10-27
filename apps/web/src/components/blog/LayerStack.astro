@@ -1,0 +1,39 @@
+---
+// Mapa de capas: el agente arriba y las capas agrupadas debajo. Sustituye a la tabla resumen.
+import Figure from './Figure.astro';
+interface Layer { n: number; title: string; question: string }
+interface Group { name: string; tone: 'code' | 'person' | 'ok' | 'data'; layers: Layer[] }
+interface Props { core: { title: string; text: string }; groups: Group[]; caption?: string }
+const { core, groups, caption } = Astro.props;
+---
+
+<Figure caption={caption}>
+  <div class="stack">
+    <div class="core tone-model"><b>{core.title}</b><span>{core.text}</span></div>
+    {groups.map((g) => (
+      <section class={`group tone-${g.tone}`}>
+        <h4>{g.name}</h4>
+        <ol>
+          {g.layers.map((l) => (
+            <li><em>{l.n}</em><b>{l.title}</b><span>{l.question}</span></li>
+          ))}
+        </ol>
+      </section>
+    ))}
+  </div>
+</Figure>
+
+<style>
+  .stack { display: grid; gap: var(--space-2); }
+  .core { display: grid; gap: var(--space-1); padding: var(--space-4); background: var(--t-bg); border: var(--border-width-thin) solid var(--t-bd); border-radius: var(--radius-md); text-align: center; }
+  .core b { font-size: var(--font-size-body); font-weight: var(--font-weight-strong); }
+  .core span { font-size: var(--font-size-label); color: var(--color-foreground-muted); }
+  .group { display: grid; gap: var(--space-2); padding: var(--space-3); background: var(--t-bg); border: var(--border-width-thin) solid var(--t-bd); border-radius: var(--radius-md); }
+  .group h4 { margin: 0; font-family: var(--font-family-mono); font-size: var(--font-size-mono); font-weight: var(--font-weight-medium); letter-spacing: var(--letter-spacing-label); text-transform: uppercase; color: var(--color-foreground-muted); }
+  ol { list-style: none; margin: 0; padding: 0; display: grid; gap: var(--space-2); }
+  li { display: grid; grid-template-columns: var(--space-5) minmax(0, 1fr); column-gap: var(--space-3); align-items: baseline; padding: var(--space-2) var(--space-3); background: var(--color-surface); border-radius: var(--radius-sm); }
+  li em { grid-row: span 2; align-self: center; display: grid; place-items: center; inline-size: var(--space-5); block-size: var(--space-5); border-radius: var(--radius-full); background: var(--t-bg); border: var(--border-width-thin) solid var(--t-bd); font-style: normal; font-size: var(--font-size-small); font-weight: var(--font-weight-strong); }
+  li b { font-size: var(--font-size-label); font-weight: var(--font-weight-strong); }
+  li span { font-size: var(--font-size-small); color: var(--color-foreground-muted); }
+  @container (min-width: 36rem) { ol { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+</style>
