@@ -18,9 +18,9 @@ Debe transmitir: rigor técnico, claridad, cercanía, fiabilidad y durabilidad.
 |---|---|
 | Neutros mineral verdoso en vez de blanco y negro | Da carácter mediterráneo sin recurrir a colores llamativos; evita el aspecto de plantilla SaaS. |
 | Azul mar de fondo como único color con intención | Un solo color de acción hace la interfaz predecible; el azul aporta fiabilidad sin el tono corporativo del azul eléctrico. |
-| Una sola familia tipográfica (Archivo) con eje de anchura | El contraste entre titulares (expandidos) y cuerpo (normal) sale del mismo archivo: menos peso de carga, coherencia total. |
-| Monoespaciada del sistema, sin fuente adicional | El código aparece poco; no justifica cargar otra familia. |
-| Radios de 2–6 px | Coherente con piezas talladas: precisas, no redondeadas como un producto de consumo. |
+| Archivo con eje de anchura para titulares (118 %) | El contraste entre titulares expandidos y cuerpo normal sale del mismo archivo: sin peso de carga extra. |
+| JetBrains Mono para cifras y metadatos | Las cifras y las etiquetas técnicas son parte de la voz del sitio (plano técnico). Una variable `wght` latin pesa unos 40 KB (OFL). |
+| Esquinas rectas, reglas de 2 px y sin sombras | Piezas talladas: aristas vivas y juntas visibles. La profundidad la dan la regla y el color, no el desenfoque. |
 | Símbolo sin iniciales | Un símbolo con concepto propio es más reconocible y no depende del nombre. |
 
 ---
@@ -102,47 +102,50 @@ Alrededor de los límites visibles del logo, dejar como mínimo la **altura de l
 
 - Los componentes usan solo tokens semánticos (`--color-*`), nunca primitivos.
 - Un solo color de acción por vista: `--color-primary`.
-- `--color-accent` (esparto) es **decorativo**: filetes, marcadores, detalles. Nunca texto ni único indicador de estado (en tema claro no llega a 3:1).
+- `--color-accent` (esparto) es **decorativo**: filetes, marcadores, detalles. Nunca texto ni único indicador de estado (no llega a 3:1 sobre papel).
+- **Un gesto cálido por pantalla**: `--color-signal` (almagra, 5,20:1 sobre papel) se reserva para una sola cifra o subrayado clave. Sobre petróleo, el equivalente es `--color-bleed-accent` (esparto claro).
+- **Al menos una sección a sangre** en petróleo profundo (`--color-bleed`, texto `--color-bleed-text`). Sin degradados: el color es plano.
 - `--color-foreground-subtle` solo para texto grande (≥ 24 px, o ≥ 18,66 px en negrita) o información no esencial.
 - El estado nunca se comunica solo con color: siempre acompañado de texto o icono.
 
 ### Contraste (WCAG 2.x)
 
-Calculado a partir de los valores de `tokens.css`. Texto: AA ≥ 4,5:1, AAA ≥ 7:1, texto grande ≥ 3:1. Elementos de interfaz no textuales: ≥ 3:1.
-
-### Tema claro
+Calculado a partir de los valores de `tokens.css` (tema claro, el único). Texto: AA ≥ 4,5:1, AAA ≥ 7:1, texto grande ≥ 3:1. Elementos de interfaz no textuales: ≥ 3:1.
 
 | Texto / elemento | Fondo | Ratio | Resultado |
 |---|---|---|---|
-| foreground (#2B3533) | background (#E6E8E3) | 10.25:1 | AAA |
-| foreground (#2B3533) | surface (#F4F5F2) | 11.56:1 | AAA |
-| foreground (#2B3533) | surface-alt (#D4D8D2) | 8.77:1 | AAA |
-| foreground-muted (#5C6662) | background (#E6E8E3) | 4.82:1 | AA |
-| foreground-muted (#5C6662) | surface (#F4F5F2) | 5.43:1 | AA |
-| foreground-subtle (#7A847F) | background (#E6E8E3) | 3.13:1 | Solo texto grande |
-| foreground-subtle (#7A847F) | surface (#F4F5F2) | 3.53:1 | Solo texto grande |
-| primary (#285A6E) | background (#E6E8E3) | 6.13:1 | AA |
-| primary (#285A6E) | surface (#F4F5F2) | 6.91:1 | AA |
-| primary-foreground (#F4F5F2) | primary (#285A6E) | 6.91:1 | AA |
-| secondary-foreground (#F4F5F2) | secondary (#4F5A3E) | 6.70:1 | AA |
-| secondary (#4F5A3E) | background (#E6E8E3) | 5.94:1 | AA |
-| success (#4F5A3E) | background (#E6E8E3) | 5.94:1 | AA |
-| warning (#635234) | background (#E6E8E3) | 6.11:1 | AA |
-| destructive (#8E3B26) | background (#E6E8E3) | 6.07:1 | AA |
-| info (#214B5C) | background (#E6E8E3) | 7.65:1 | AAA |
-| foreground-inverse (#F4F5F2) | foreground (#2B3533) | 11.56:1 | AAA |
-| accent (#B79E6A) | background (#E6E8E3) | 2.10:1 | No cumple 3:1 |
-| border-strong (#7A847F) | background (#E6E8E3) | 3.13:1 | Cumple 3:1 |
-| focus (#285A6E) | background (#E6E8E3) | 6.13:1 | Cumple 3:1 |
-| focus (#285A6E) | surface (#F4F5F2) | 6.91:1 | Cumple 3:1 |
-| brand-piece (#285A6E) | background (#E6E8E3) | 6.13:1 | Cumple 3:1 |
-| foreground (#2B3533) | info-surface (#EEF5F8) | 11.48:1 | AAA |
+| foreground (#1E2725) | background (#F4F5F2) | 13.99:1 | AAA |
+| foreground (#1E2725) | surface (#FFFFFF) | 15.30:1 | AAA |
+| foreground (#1E2725) | surface-alt (#ECEEE9) | 13.10:1 | AAA |
+| foreground-muted (#5E6865) | background (#F4F5F2) | 5.27:1 | AA |
+| foreground-muted (#5E6865) | surface (#FFFFFF) | 5.76:1 | AA |
+| foreground-muted (#5E6865) | surface-alt (#ECEEE9) | 4.93:1 | AA |
+| foreground-subtle (#7E8885) | background (#F4F5F2) | 3.34:1 | Solo texto grande |
+| primary (#285A6E) | background (#F4F5F2) | 6.91:1 | AA |
+| primary (#285A6E) | surface (#FFFFFF) | 7.56:1 | AAA |
+| primary-foreground (#FFFFFF) | primary (#285A6E) | 7.56:1 | AAA |
+| secondary (#4F5A3E) | background (#F4F5F2) | 6.70:1 | AA |
+| warning (#635234) | background (#F4F5F2) | 6.89:1 | AA |
+| destructive (#8E3B26) | background (#F4F5F2) | 6.84:1 | AA |
+| info (#214B5C) | background (#F4F5F2) | 8.62:1 | AAA |
+| signal (#A84A31) | background (#F4F5F2) | 5.20:1 | AA |
+| signal (#A84A31) | surface (#FFFFFF) | 5.69:1 | AA |
+| signal-foreground (#FFFFFF) | signal (#A84A31) | 5.69:1 | AA |
+| bleed-text (#F4F5F2) | bleed (#152F3A) | 12.80:1 | AAA |
+| bleed-text-muted (#ADCFDC) | bleed (#152F3A) | 8.49:1 | AAA |
+| bleed-accent (#CDB582) | bleed (#152F3A) | 7.02:1 | AAA |
+| accent (#B79E6A) | background (#F4F5F2) | 2.37:1 | Decorativo, no cumple 3:1 |
+| border-strong (#C9CDC6) | background (#F4F5F2) | 1.47:1 | Decorativo, no cumple 3:1 |
+| rule (#1E2725) | background (#F4F5F2) | 13.99:1 | Cumple 3:1 |
+| focus (#285A6E) | background (#F4F5F2) | 6.91:1 | Cumple 3:1 |
+| focus (#285A6E) | surface (#FFFFFF) | 7.56:1 | Cumple 3:1 |
+| foreground (#1E2725) | info-surface (#EEF5F8) | 13.88:1 | AAA |
 | info (#214B5C) | info-surface (#EEF5F8) | 8.56:1 | AAA |
-| foreground (#2B3533) | success-surface (#F2F4EE) | 11.42:1 | AAA |
-| success (#4F5A3E) | success-surface (#F2F4EE) | 6.62:1 | AA |
-| foreground (#2B3533) | warning-surface (#F8F4EA) | 11.52:1 | AAA |
+| foreground (#1E2725) | success-surface (#F2F4EE) | 13.81:1 | AAA |
+| secondary (#4F5A3E) | success-surface (#F2F4EE) | 6.62:1 | AA |
+| foreground (#1E2725) | warning-surface (#F8F4EA) | 13.93:1 | AAA |
 | warning (#635234) | warning-surface (#F8F4EA) | 6.86:1 | AA |
-| foreground (#2B3533) | destructive-surface (#FAF0EC) | 11.29:1 | AAA |
+| foreground (#1E2725) | destructive-surface (#FAF0EC) | 13.66:1 | AAA |
 | destructive (#8E3B26) | destructive-surface (#FAF0EC) | 6.68:1 | AA |
 | code-foreground (#2B3533) | code-background (#F4F5F2) | 11.56:1 | AAA |
 | code-comment (#5C6662) | code-background (#F4F5F2) | 5.43:1 | AA |
@@ -152,49 +155,11 @@ Calculado a partir de los valores de `tokens.css`. Texto: AA ≥ 4,5:1, AAA ≥ 
 | code-function (#635234) | code-background (#F4F5F2) | 6.89:1 | AA |
 | code-punctuation (#444F4C) | code-background (#F4F5F2) | 7.77:1 | AAA |
 
-### Tema oscuro
+Pares que **no** cumplen y cómo se usan:
 
-| Texto / elemento | Fondo | Ratio | Resultado |
-|---|---|---|---|
-| foreground (#E6E8E3) | background (#1E2725) | 12.40:1 | AAA |
-| foreground (#E6E8E3) | surface (#2B3533) | 10.25:1 | AAA |
-| foreground (#E6E8E3) | surface-alt (#333E3B) | 8.99:1 | AAA |
-| foreground-muted (#9AA39F) | background (#1E2725) | 5.91:1 | AA |
-| foreground-muted (#9AA39F) | surface (#2B3533) | 4.89:1 | AA |
-| foreground-subtle (#7A847F) | background (#1E2725) | 3.96:1 | Solo texto grande |
-| foreground-subtle (#7A847F) | surface (#2B3533) | 3.27:1 | Solo texto grande |
-| primary (#7FB0C2) | background (#1E2725) | 6.48:1 | AA |
-| primary (#7FB0C2) | surface (#2B3533) | 5.36:1 | AA |
-| primary-foreground (#1E2725) | primary (#7FB0C2) | 6.48:1 | AA |
-| secondary-foreground (#1E2725) | secondary (#A9B68F) | 7.12:1 | AAA |
-| secondary (#A9B68F) | background (#1E2725) | 7.12:1 | AAA |
-| success (#A9B68F) | background (#1E2725) | 7.12:1 | AAA |
-| warning (#CDB582) | background (#1E2725) | 7.67:1 | AAA |
-| destructive (#D88A72) | background (#1E2725) | 5.68:1 | AA |
-| info (#ADCFDC) | background (#1E2725) | 9.28:1 | AAA |
-| foreground-inverse (#2B3533) | foreground (#E6E8E3) | 10.25:1 | AAA |
-| accent (#B79E6A) | background (#1E2725) | 5.91:1 | Cumple 3:1 |
-| border-strong (#7A847F) | background (#1E2725) | 3.96:1 | Cumple 3:1 |
-| focus (#7FB0C2) | background (#1E2725) | 6.48:1 | Cumple 3:1 |
-| focus (#7FB0C2) | surface (#2B3533) | 5.36:1 | Cumple 3:1 |
-| brand-piece (#7FB0C2) | background (#1E2725) | 6.48:1 | Cumple 3:1 |
-| foreground (#E6E8E3) | info-surface (#0E2029) | 13.53:1 | AAA |
-| info (#ADCFDC) | info-surface (#0E2029) | 10.13:1 | AAA |
-| foreground (#E6E8E3) | success-surface (#1C2117) | 13.30:1 | AAA |
-| success (#A9B68F) | success-surface (#1C2117) | 7.64:1 | AAA |
-| foreground (#E6E8E3) | warning-surface (#211B12) | 13.83:1 | AAA |
-| warning (#CDB582) | warning-surface (#211B12) | 8.56:1 | AAA |
-| foreground (#E6E8E3) | destructive-surface (#2A110B) | 14.38:1 | AAA |
-| destructive (#D88A72) | destructive-surface (#2A110B) | 6.59:1 | AA |
-| code-foreground (#E6E8E3) | code-background (#2B3533) | 10.25:1 | AAA |
-| code-comment (#9AA39F) | code-background (#2B3533) | 4.89:1 | AA |
-| code-keyword (#7FB0C2) | code-background (#2B3533) | 5.36:1 | AA |
-| code-string (#A9B68F) | code-background (#2B3533) | 5.89:1 | AA |
-| code-number (#D88A72) | code-background (#2B3533) | 4.70:1 | AA |
-| code-function (#CDB582) | code-background (#2B3533) | 6.34:1 | AA |
-| code-punctuation (#B9BFB9) | code-background (#2B3533) | 6.76:1 | AA |
-
-Pares que **no** cumplen y cómo se usan: `accent` en tema claro (2,10:1) es solo decorativo. `foreground-subtle` queda restringido a texto grande en ambos temas.
+- `accent` (esparto, 2,37:1) y `border-strong` (1,47:1) son solo decorativos. Un campo de formulario necesita un borde de 3:1: usar `--color-rule` o `--color-foreground-muted`, no `--color-border-strong`.
+- `foreground-subtle` queda restringido a texto grande (≥ 24 px, o ≥ 18,66 px en negrita) o información no esencial.
+- El tema oscuro se ha eliminado: la web es solo clara. Las secciones oscuras son paneles (`--color-dark-*`) o la sección a sangre (`--color-bleed-*`), con los pares de arriba.
 
 ### Gráficos
 
@@ -209,37 +174,41 @@ Comprobado con simulación de protanopia, deuteranopia y tritanopia (matrices de
 
 ## 4. Tipografía
 
-**Archivo** (Google Fonts, licencia SIL Open Font License), variable con ejes de peso y anchura. Monoespaciada: la del sistema.
+**Archivo** (autoalojada, licencia SIL Open Font License), variable con ejes de peso y anchura (`wdth` 62–125 %). **JetBrains Mono** (autoalojada, OFL), variable con eje de peso, solo para cifras y metadatos.
 
 | Rol | Tamaño | Anchura | Peso | Interlineado | Tracking |
 |---|---|---|---|---|---|
-| Display | `--font-size-display` (32→52 px) | 118 % | 620 | 1,1 | −0,015 em |
-| H2 | `--font-size-h2` (26→36 px) | 118 % | 620 | 1,2 | −0,01 em |
-| H3 | `--font-size-h3` (22→28 px) | 118 % | 620 | 1,2 | −0,01 em |
+| Hero (h1 de la home) | `--font-size-hero` (40→132 px a 1440, tope 176) | 118 % (100 % bajo 26 rem) | 800 | 0,94 | −0,04 em |
+| Título de sección (h2 de la home) | `--font-size-section` (32→72 px) | 118 % (100 % bajo 26 rem) | 800 | 1 | −0,04 em |
+| Display (h1 interior) | `--font-size-display` (36→68 px) | 118 % (100 % bajo 26 rem) | 620 | 1,1 | −0,02 em |
+| H2 | `--font-size-h2` (28→44 px) | 118 % | 620 | 1,2 | −0,01 em |
+| H3 | `--font-size-h3` (22→28 px) | 100 % | 620 | 1,2 | −0,01 em |
 | H4 | `--font-size-h4` (19→22 px) | 100 % | 620 | 1,2 | 0 |
+| Cifra | `--font-size-figure` (48→88 px) | 100 % | 800 | 1 | −0,04 em |
 | Lead | `--font-size-lead` (18→20 px) | 100 % | 400 | 1,6 | 0 |
 | Body | `--font-size-body` (16 px) | 100 % | 400 | 1,6 | 0 |
 | Label | `--font-size-label` (14 px) | 100 % | 500 | 1,45 | 0 |
 | Caption / metadatos | `--font-size-caption` (12,8 px) | 100 % | 400 | 1,45 | 0 |
+| Mono (cifras, metadatos) | `--font-size-mono` (12 px) | — | 400–500 | 1,45 | 0,06 em |
 | Código | `--font-size-label` | — | 400 | 1,6 | 0 |
 
 - Escala fluida con `clamp()` entre 360 y 1440 px (ver `docs/design-system.md`). Los titulares tienen tope en pantallas grandes y el cuerpo nunca baja de 16 px.
-- Pesos en uso: 400, 500 y 620. No añadir más.
+- **Por qué 118 % solo en h1 y h2:** el ancho expandido da carácter a los titulares, pero en tarjetas y demos (h3) ocupa demasiado y parte palabras. Por debajo de 26 rem (416 px) los titulares vuelven a 100 %.
+- Pesos en uso: 400, 500, 620 y 800 (titulares y cifras). No añadir más.
 - Longitud de línea máxima en texto corrido: `--measure` (66 caracteres).
 - Cifras tabulares (`font-variant-numeric: tabular-nums`) en tablas, precios, fechas y cualquier dato que se compare en columna.
-- Nunca mayúsculas sostenidas en etiquetas o titulares.
-
----
+- Nunca mayúsculas sostenidas en titulares. En etiquetas mono cortas (≤ 3 palabras) sí se admiten.
 
 ## 5. Espaciado, retícula y geometría
 
 - **Unidad base:** 4 px. Escala `--space-1` (4) a `--space-10` (128).
-- **Contenedor:** máximo 72 rem (1152 px); columnas de lectura de 42 rem. Margen lateral fluido `--container-padding`.
+- **Contenedor:** máximo 80 rem (1280 px, `--container-max`); columnas de lectura de 42 rem. Margen lateral fluido `--container-padding`.
 - **Retícula:** 12 columnas, gutter fluido de 16 a 32 px.
 - **Breakpoints:** 40 rem (640), 64 rem (1024), 80 rem (1280).
-- **Radios:** 2 px (etiquetas, campos pequeños), 4 px (campos, botones), 6 px (tarjetas, paneles). Sin radios mayores; `--radius-full` solo para elementos circulares.
-- **Bordes:** 1 px por defecto, 2 px para énfasis y anillo de foco.
-- **Elevación:** dos niveles de sombra suaves, tintadas en stone. Preferir borde a sombra para separar superficies.
+- **Radios:** 0. Esquinas rectas en todo (`--radius-sm/md/lg` valen 0). `--radius-full` solo para elementos circulares.
+- **Bordes:** 1 px (`--color-border`) para separar contenido, 2 px (`--color-rule`, tinta) para estructura: reglas entre secciones, cabeceras de bloque y anillo de foco.
+- **Elevación:** ninguna. Sin sombras (los tokens `--shadow-*` valen `none`, salvo `--shadow-focus`). La jerarquía la dan el color, la regla y la escala.
+- **Por qué:** esquinas rectas y reglas visibles leen como plano técnico y piedra tallada. Una geometría única es más reconocible que radios suaves con sombra, que es lo que producen las plantillas por defecto.
 
 **Composición:** mucho espacio entre secciones (`--space-8` a `--space-10`) y densidad moderada dentro de ellas. Alineación a la retícula, sin elementos flotando en ángulos. Como en un muro: piezas de tamaños distintos, juntas regulares.
 
