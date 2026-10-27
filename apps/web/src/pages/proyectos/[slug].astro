@@ -31,10 +31,18 @@ const contextLabel = { profesional: 'Experiencia profesional', propio: 'Proyecto
 </Layout>
 
 <style>
-  .wrap { padding-top: var(--space-8); display: grid; gap: var(--space-6); }
-  .head { display: grid; gap: var(--space-4); max-width: var(--measure); }
-  .meta { font-size: var(--font-size-label); color: var(--color-foreground-muted); }
+  .wrap { padding-top: var(--space-7); padding-bottom: var(--space-section); display: grid; gap: var(--space-6); }
+  .back { padding-bottom: var(--space-3); }
+  .head { display: grid; gap: var(--space-4); align-content: start; padding-top: var(--space-3); border-top: var(--border-width-thick) solid var(--color-rule); }
+  .head h1 { font-size: var(--font-size-display); font-weight: var(--font-weight-heavy); letter-spacing: var(--letter-spacing-tighter); line-height: 1; }
+  .meta { font-family: var(--font-family-mono); font-size: var(--font-size-mono); letter-spacing: var(--letter-spacing-label); color: var(--color-foreground-muted); }
   .lead { font-size: var(--font-size-lead); color: var(--color-foreground-muted); }
-  .stack { list-style: none; margin: 0; padding: 0; display: flex; flex-wrap: wrap; gap: var(--space-2); }
-  .stack li { padding: var(--space-1) var(--space-2); font-size: var(--font-size-caption); background: var(--color-surface-alt); border-radius: var(--radius-sm); }
+  .stack { list-style: none; margin: 0; padding: var(--space-3) 0 0; border-top: var(--border-width-thin) solid var(--color-border-strong); display: flex; flex-wrap: wrap; gap: var(--space-1) var(--space-4); }
+  .stack li { font-family: var(--font-family-mono); font-size: var(--font-size-mono); letter-spacing: var(--letter-spacing-label); }
+  .prose { border-top: var(--border-width-thick) solid var(--color-rule); padding-top: var(--space-3); }
+  @media (min-width: 64rem) {
+    .wrap { grid-template-columns: minmax(0, 5fr) minmax(0, 7fr); column-gap: var(--space-8); align-items: start; }
+    .back { grid-column: 1 / -1; }
+    .head { position: sticky; top: calc(var(--nav-height) + var(--space-5)); }
+  }
 </style>

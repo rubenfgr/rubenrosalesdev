@@ -1,7 +1,8 @@
 /* Estilos del contenido Markdown del blog. */
 .prose { font-size: var(--font-size-body); line-height: var(--line-height-relaxed); max-width: var(--measure); }
 .prose > * + * { margin-top: var(--space-4); }
-.prose h2 { font-size: var(--font-size-h3); margin-top: var(--space-7); }
+.prose h2 { font-size: var(--font-size-h3); font-stretch: var(--font-width-body); font-weight: var(--font-weight-heavy); letter-spacing: var(--letter-spacing-tight); margin-top: var(--space-7); padding-top: var(--space-3); border-top: var(--border-width-thick) solid var(--color-rule); }
+.prose > h2:first-child { margin-top: 0; padding-top: 0; border-top: 0; }
 .prose h3 { font-size: var(--font-size-h4); font-stretch: var(--font-width-body); letter-spacing: 0; margin-top: var(--space-6); }
 .prose h4 { margin-top: var(--space-5); }
 .prose ul, .prose ol { padding-inline-start: var(--space-5); display: grid; gap: var(--space-2); }
@@ -9,7 +10,7 @@
 .prose blockquote {
   margin-inline: 0;
   padding-inline-start: var(--space-4);
-  border-inline-start: var(--border-width-thick) solid var(--color-border-strong);
+  border-inline-start: var(--border-width-thick) solid var(--color-rule);
   color: var(--color-foreground-muted);
 }
 .prose :not(pre) > code {
@@ -22,6 +23,7 @@
 }
 .prose table { border-collapse: collapse; width: 100%; font-variant-numeric: tabular-nums; }
 .prose th, .prose td { padding: var(--space-2) var(--space-3); border: var(--border-width-thin) solid var(--color-border); text-align: start; }
+.prose th { border-bottom: var(--border-width-thick) solid var(--color-rule); font-family: var(--font-family-mono); font-size: var(--font-size-mono); letter-spacing: var(--letter-spacing-label); }
 /* En pantallas estrechas, una tabla ancha se desplaza dentro del artículo en vez de ensanchar la página. */
 @media (max-width: 40rem) { .prose table { display: block; overflow-x: auto; } }
 .prose hr { border: 0; border-top: var(--border-width-thin) solid var(--color-border); }

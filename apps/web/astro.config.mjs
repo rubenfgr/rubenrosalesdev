@@ -66,7 +66,9 @@ export default defineConfig({
       useDarkModeMediaQuery: false,
       styleOverrides: {
         borderRadius: 'var(--radius-md)',
-        borderColor: 'var(--color-border)',
+        borderColor: 'var(--color-rule)',
+        borderWidth: 'var(--border-width-thick)',
+        frames: { frameBoxShadowCssValue: 'none' },
         codeFontFamily: 'var(--font-family-mono)',
         codeFontSize: 'var(--font-size-label)',
         codeLineHeight: 'var(--line-height-relaxed)',

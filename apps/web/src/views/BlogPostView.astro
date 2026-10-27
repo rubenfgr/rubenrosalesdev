@@ -71,12 +71,14 @@ const editUrl = `${site.social.find((s) => s.id === 'github')?.url}/rubenrosales
   .toc-aside { display: none; grid-area: tocside; }
   .article { grid-area: article; min-width: 0; display: grid; grid-template-columns: minmax(0, 1fr); gap: var(--space-5); align-content: start; }
   .recent { grid-area: recent; }
-  .head { display: grid; gap: var(--space-3); }
-  .cover { width: 100%; height: auto; border-radius: var(--radius-lg); }
-  .adjacent { display: grid; gap: var(--space-4); margin-top: var(--space-6); padding-top: var(--space-5); border-top: var(--border-width-thin) solid var(--color-border); }
-  .adjacent a { display: grid; gap: var(--space-1); text-decoration: none; color: var(--color-foreground); }
+  .head { display: grid; gap: var(--space-3); padding-top: var(--space-3); border-top: var(--border-width-thick) solid var(--color-rule); }
+  .head h1 { font-size: clamp(2rem, 1.2rem + 2.6vw, 3.25rem); font-stretch: var(--font-width-body); font-weight: var(--font-weight-heavy); letter-spacing: var(--letter-spacing-tight); line-height: 1.05; }
+  .head :global(.meta) { font-family: var(--font-family-mono); font-size: var(--font-size-mono); letter-spacing: var(--letter-spacing-label); }
+  .cover { width: 100%; height: auto; border: var(--border-width-thick) solid var(--color-rule); }
+  .adjacent { display: grid; gap: var(--space-4); margin-top: var(--space-6); padding-top: var(--space-5); border-top: var(--border-width-thick) solid var(--color-rule); }
+  .adjacent a { display: grid; gap: var(--space-1); text-decoration: none; color: var(--color-foreground); font-weight: var(--font-weight-heavy); letter-spacing: var(--letter-spacing-tight); }
   .adjacent a:hover { color: var(--color-primary); }
-  .adjacent span { font-size: var(--font-size-label); color: var(--color-foreground-muted); }
+  .adjacent span { font-family: var(--font-family-mono); font-size: var(--font-size-mono); letter-spacing: var(--letter-spacing-label); font-weight: var(--font-weight-regular); color: var(--color-foreground-muted); }
   .edit { font-size: var(--font-size-label); }
 
   @media (min-width: 40rem) {

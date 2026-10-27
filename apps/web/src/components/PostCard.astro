@@ -20,11 +20,21 @@ const Heading = featured ? 'h2' : level;
 </article>
 
 <style>
-  .card { display: grid; gap: var(--space-3); padding-block: var(--space-5); border-bottom: var(--border-width-thin) solid var(--color-border); }
-  .featured { padding: var(--space-5); background: var(--color-surface); border: var(--border-width-thin) solid var(--color-border); border-radius: var(--radius-lg); }
-  h2, h3 { font-size: var(--font-size-h4); font-stretch: var(--font-width-body); letter-spacing: 0; }
-  .featured h2 { font-size: var(--font-size-h3); font-stretch: var(--font-width-display); letter-spacing: var(--letter-spacing-heading); }
+  .card {
+    display: grid; gap: var(--space-2) var(--space-6); padding-block: var(--space-5);
+    border-top: var(--border-width-thick) solid var(--color-rule);
+    grid-template-columns: minmax(0, 1fr);
+  }
+  .card :global(.meta) { font-family: var(--font-family-mono); font-size: var(--font-size-mono); letter-spacing: var(--letter-spacing-label); }
+  h2, h3 { font-size: var(--font-size-h3); font-stretch: var(--font-width-body); font-weight: var(--font-weight-heavy); letter-spacing: var(--letter-spacing-tight); line-height: 1.1; }
+  .featured h2 { font-size: var(--font-size-h2); font-stretch: var(--font-width-display); letter-spacing: var(--letter-spacing-display); }
   h2 a, h3 a { color: var(--color-foreground); text-decoration: none; }
-  h2 a:hover, h3 a:hover { color: var(--color-primary); text-decoration: underline; }
+  h2 a:hover, h3 a:hover { color: var(--color-primary); text-decoration: underline; text-decoration-thickness: var(--border-width-thick); text-underline-offset: 6px; }
   .desc { color: var(--color-foreground-muted); max-width: var(--measure); }
+  @media (min-width: 64rem) {
+    .card { grid-template-columns: 11rem minmax(0, 1fr); }
+    .card > :global(.meta) { grid-row: 1 / span 3; align-self: start; flex-direction: column; padding-top: 0.5em; }
+    .card > :global(.meta span[aria-hidden]) { display: none; }
+    .card > :not(:global(.meta)) { grid-column: 2; }
+  }
 </style>

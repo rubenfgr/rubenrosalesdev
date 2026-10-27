@@ -273,14 +273,16 @@ Patrones generales para la web. Los valores salen siempre de los tokens.
 
 ### Blog
 
-Lectura tipo documentación (inspirado en Docusaurus):
+Lectura tipo documentación (inspirado en Docusaurus), con carácter editorial en el índice:
 
-- **Escritorio:** tres columnas (posts recientes · artículo · índice de contenidos). El artículo no supera `--measure`. Las columnas laterales son `position: sticky` bajo la navegación.
-- **Móvil:** una columna; el índice se pliega al inicio del artículo y los recientes pasan al final.
+- **Índice:** una fila por artículo, separadas por regla de 2 px (`--color-rule`). A la izquierda, fecha y tiempo de lectura en mono; a la derecha, titular (`--font-size-h3`, peso 800), descripción y etiquetas en mono con `#`. Sin tarjeta destacada. El título de página usa `--font-size-section`.
+- **Artículo, escritorio:** tres columnas (posts recientes · artículo · índice de contenidos). El artículo no supera `--measure`. Las columnas laterales son `position: sticky` bajo la navegación. Titular a peso 800 sobre una regla de 2 px; los `h2` del cuerpo llevan regla de 2 px encima (salvo el primero).
+- **Artículo, móvil:** una columna; el índice se pliega al inicio y los recientes pasan al final.
+- **Portada:** borde de 2 px (`--color-rule`), sin radio.
 - **Admoniciones** (`note`, `tip`, `warning`, `danger`): fondo `--color-*-surface`, borde izquierdo de 2 px en el color de estado, título con icono Lucide.
-- **Código:** fondo `--color-code-background`, borde `--color-border`, radio `--radius-md`, tokens `--color-code-*` para el resaltado, título de archivo opcional y botón de copiar.
-
----
+- **Código:** fondo `--color-code-background`, borde de 2 px `--color-rule`, sin radio ni sombra, tokens `--color-code-*` para el resaltado, título de archivo opcional y botón de copiar.
+- **Ficha de proyecto:** a 64 rem o más, dos columnas: a la izquierda cabecera fija (contexto en mono, titular a `--font-size-display`, entradilla, pila en mono); a la derecha, el contenido con reglas de 2 px sobre cada sección. En móvil, una columna.
+- **Páginas legales:** titular a `--font-size-display` sobre regla de 2 px; los apartados llevan una regla de 1 px. No llevan más recursos gráficos: es texto de lectura.
 
 ## 9. Voz y tono
 
