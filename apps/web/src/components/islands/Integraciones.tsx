@@ -173,7 +173,6 @@ export default function Integraciones({ cases, labels: L, approvedLabel, waitLab
     <section id="integraciones" class="int" ref={sec}>
       <div class="int-inner" data-reveal>
         <div class="int-text">
-          <div class="int-eyebrow">{L.eyebrow}</div>
           <h2 class="int-title">{L.title1} <span>{L.title2}</span></h2>
           <p class="int-lead">{L.lead}</p>
           <p class="int-other"><span>{L.otherTitle}</span> <strong>{L.otherText}</strong></p>

@@ -231,10 +231,9 @@ a:hover { color: var(--color-primary-hover); }
   mask: url('../assets/motifs/hilada.svg') repeat left top / 360px 144px;
 }
 
-/* Eyebrow de sección: «00 / diagnóstico» + filete */
-.eb { display: flex; align-items: center; gap: var(--space-3); font-family: var(--font-family-mono); font-size: var(--font-size-caption); color: var(--color-foreground-subtle); }
-.eb .eb-num { color: var(--color-primary); }
-.eb .eb-rule { flex: 1; height: 1px; background: var(--color-border); }
-.eb.dark { color: var(--color-dark-text-subtle); }
-.eb.dark .eb-num { color: var(--color-primary-on-dark); }
-.eb.dark .eb-rule { background: var(--color-dark-border); }
+/* Apertura de sección: regla de 2 px con el número de sección en mono (la etiqueta de texto no se muestra) */
+.eb { display: flex; align-items: baseline; border-top: var(--border-width-thick) solid var(--color-rule); padding-top: var(--space-3); font-family: var(--font-family-mono); font-size: var(--font-size-mono); letter-spacing: var(--letter-spacing-label); color: var(--color-foreground-muted); }
+.eb > :not(.eb-num) { display: none; }
+.eb .eb-num { color: var(--color-foreground); font-weight: var(--font-weight-bold); }
+.eb.dark { border-top-color: var(--color-bleed-text); color: var(--color-bleed-text-muted); }
+.eb.dark .eb-num { color: var(--color-bleed-text); }

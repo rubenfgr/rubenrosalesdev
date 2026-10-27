@@ -21,6 +21,7 @@ export default function Problema({ tasks, labels: L, locale }: Props) {
   const allOn = on.every(Boolean);
   return (
     <section class="prob" id="problema">
+      <div class="hilada prob-hilada" aria-hidden="true" />
       <div class="prob-inner" data-reveal>
         <Eyebrow text={L.eyebrow} dark />
         <div class="prob-grid">

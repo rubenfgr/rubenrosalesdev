@@ -138,8 +138,8 @@ function NoiseMock({ M, t }: { M: Mock; t: number }) {
 
 const LockIcon = () => (
   <span style="flex:none;position:relative;width:14px;height:16px" aria-hidden="true">
-    <span style="position:absolute;left:2px;top:0;width:10px;height:9px;border:2px solid currentColor;border-bottom:none;border-radius:5px 5px 0 0" />
-    <span style="position:absolute;left:0;bottom:0;width:14px;height:9px;background:currentColor;border-radius:2px" />
+    <span style="position:absolute;left:2px;top:0;width:10px;height:9px;border:2px solid currentColor;border-bottom:none;border-radius: var(--radius-md)0 0" />
+    <span style="position:absolute;left:0;bottom:0;width:14px;height:9px;background:currentColor;border-radius: var(--radius-md)" />
   </span>
 );
 

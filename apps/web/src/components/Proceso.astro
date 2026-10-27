@@ -40,16 +40,16 @@ const tone = ['brand', 'ink', 'ink', 'sand'];
 <style>
   .proceso { padding: 0 0 clamp(72px, 10vw, 128px); }
   .inner { max-width: var(--container-max); margin: 0 auto; padding: 0 var(--container-padding); }
-  .title { font-size: var(--font-size-section); line-height: 1; letter-spacing: -0.04em; font-weight: var(--font-weight-heavy); margin: 40px 0 0; max-width: 900px; text-wrap: balance; }
-  .title span { color: var(--color-foreground-faint); }
+  .title { font-size: var(--font-size-section); line-height: 1; letter-spacing: var(--letter-spacing-tighter); font-weight: var(--font-weight-heavy); margin: 40px 0 0; text-wrap: balance; }
+  .title span { color: var(--color-primary); }
   .steps { list-style: none; margin: 56px 0 0; padding: 0; display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 260px), 1fr)); gap: var(--space-4); }
-  .step { border-top: 3px solid var(--color-foreground); padding-top: var(--space-5); }
+  .step { border-top: var(--border-width-thick) solid var(--color-rule); padding-top: var(--space-5); }
   .step.brand { border-top-color: var(--color-primary); }
-  .step.sand { border-top-color: var(--color-accent); }
+  .step.sand { border-top-color: var(--color-signal); }
   .top { display: flex; justify-content: space-between; align-items: baseline; gap: var(--space-3); }
-  .num { font-size: var(--font-size-figure); font-weight: var(--font-weight-heavy); letter-spacing: -0.05em; line-height: 1; font-variant-numeric: tabular-nums; }
-  .brand .num { color: var(--color-primary); } .sand .num { color: var(--color-accent); }
-  .tag { font-size: var(--font-size-small); font-weight: var(--font-weight-strong); color: var(--color-foreground-muted); border: 1px solid var(--color-border); padding: 4px 9px; border-radius: 3px; white-space: nowrap; }
+  .num { font-family: var(--font-family-mono); font-size: var(--font-size-figure); font-weight: var(--font-weight-bold); letter-spacing: var(--letter-spacing-tighter); line-height: 1; font-variant-numeric: tabular-nums; }
+  .brand .num { color: var(--color-primary); } .sand .num { color: var(--color-signal); }
+  .tag { font-family: var(--font-family-mono); font-size: var(--font-size-mono); font-weight: var(--font-weight-medium); color: var(--color-foreground-muted); border: 1px solid var(--color-border-strong); padding: 4px 9px; border-radius: var(--radius-md); white-space: nowrap; }
   h3 { font-size: var(--font-size-lead); font-weight: var(--font-weight-bold); letter-spacing: -0.02em; margin: 18px 0 0; }
   p { color: var(--color-foreground-muted); font-size: var(--font-size-body); line-height: 1.55; margin: 8px 0 0; }
 </style>

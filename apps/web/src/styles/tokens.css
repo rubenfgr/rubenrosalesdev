@@ -270,6 +270,9 @@
   --color-bleed-text-muted: var(--rr-sea-200);
   --color-bleed-accent: var(--rr-esparto-300);      /* el único acento cálido sobre petróleo */
   --color-bleed-rule: var(--rr-sea-700);            /* decorativo: juntas del motivo hilada */
+  --color-bleed-panel: var(--rr-sea-950);           /* paneles dentro del bloque a sangre */
+  --color-bleed-border: var(--rr-sea-700);
+  --color-bleed-text-subtle: var(--rr-sea-300);     /* texto secundario sobre petróleo (5,93:1) */
 
   /* Gesto cálido: uno por pantalla (cifra o subrayado clave) */
   --color-signal: var(--rr-almagra-500);
