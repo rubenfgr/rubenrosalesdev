@@ -22,6 +22,8 @@
 }
 .prose table { border-collapse: collapse; width: 100%; font-variant-numeric: tabular-nums; }
 .prose th, .prose td { padding: var(--space-2) var(--space-3); border: var(--border-width-thin) solid var(--color-border); text-align: start; }
+/* En pantallas estrechas, una tabla ancha se desplaza dentro del artículo en vez de ensanchar la página. */
+@media (max-width: 40rem) { .prose table { display: block; overflow-x: auto; } }
 .prose hr { border: 0; border-top: var(--border-width-thin) solid var(--color-border); }
 
 /* Anclas de encabezado */
