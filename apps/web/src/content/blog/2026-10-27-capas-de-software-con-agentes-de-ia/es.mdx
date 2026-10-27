@@ -307,7 +307,7 @@ No es una recomendación de compra: son opciones muy conocidas en cada capa, y m
 
 <Tools
   usedLabel="la uso"
-  legend="En negrita y con punto, las que uso yo en esta web y su API. El resto son alternativas habituales que no he usado aquí."
+  legend="En negrita y con punto, lo que uso yo en esta web y su API, incluidas piezas propias. El resto son alternativas habituales que no he usado aquí."
   rows={[
     { n: 1, layer: 'Arquitectura', kinds: [
       { label: 'Servidor y validación', tools: [ { name: 'Hono', used: true }, { name: 'Zod', used: true }, { name: 'Express' }, { name: 'FastAPI' }, { name: 'Pydantic' } ] },
@@ -317,12 +317,13 @@ No es una recomendación de compra: son opciones muy conocidas en cada capa, y m
       { label: 'Estado', tools: [ { name: 'PostgreSQL', used: true }, { name: 'Drizzle ORM', used: true }, { name: 'Redis' } ] },
     ]},
     { n: 2, layer: 'Guardarraíles', kinds: [
-      { label: 'Validar salidas', tools: [ { name: 'Zod', used: true }, { name: 'Pydantic' }, { name: 'Guardrails AI' }, { name: 'NeMo Guardrails' } ] },
+      { label: 'Validar salidas', tools: [ { name: 'Zod', used: true }, { name: 'Validador de salida propio', used: true }, { name: 'Pydantic' }, { name: 'Guardrails AI' }, { name: 'NeMo Guardrails' } ] },
       { label: 'Secretos', tools: [ { name: 'Variables de entorno', used: true }, { name: 'Doppler' }, { name: 'HashiCorp Vault' } ] },
       { label: 'Límites y borde', tools: [ { name: 'Límite de ritmo propio', used: true }, { name: 'Cloudflare', used: true } ] },
     ]},
     { n: 3, layer: 'Observabilidad de la automatización', kinds: [
-      { label: 'Registros', tools: [ { name: 'Pino' }, { name: 'Winston' }, { name: 'structlog' } ] },
+      { label: 'Registros', tools: [ { name: 'Registro JSON propio con id de petición', used: true }, { name: 'Pino' }, { name: 'Winston' }, { name: 'structlog' } ] },
+      { label: 'Estado del servicio', tools: [ { name: 'Endpoint de salud', used: true } ] },
       { label: 'Estándar', tools: [ { name: 'OpenTelemetry' } ] },
       { label: 'Métricas y paneles', tools: [ { name: 'Prometheus' }, { name: 'Grafana' } ] },
       { label: 'Trazas', tools: [ { name: 'Jaeger' }, { name: 'Grafana Tempo' } ] },
@@ -330,28 +331,31 @@ No es una recomendación de compra: son opciones muy conocidas en cada capa, y m
       { label: 'Todo en uno', tools: [ { name: 'Datadog' }, { name: 'Grafana Cloud' } ] },
     ]},
     { n: 4, layer: 'Observabilidad del agente', kinds: [
+      { label: 'Propio', tools: [ { name: 'Revisión de conversaciones (solo con consentimiento)', used: true }, { name: 'Informe de gasto mensual', used: true } ] },
       { label: 'Trazas y evaluación de agentes', tools: [ { name: 'Langfuse' }, { name: 'LangSmith' }, { name: 'Arize Phoenix' }, { name: 'Helicone' } ] },
     ]},
     { n: 5, layer: 'Consumo y coste', kinds: [
+      { label: 'Propio', tools: [ { name: 'Tokens y coste del mes en Postgres', used: true }, { name: 'Tope de gasto y kill switch', used: true } ] },
       { label: 'Proxy y presupuestos', tools: [ { name: 'LiteLLM' }, { name: 'Helicone' } ] },
       { label: 'Coste por traza', tools: [ { name: 'Langfuse' } ] },
-      { label: 'Tope de gasto', tools: [ { name: 'Tope y kill switch propios', used: true } ] },
     ]},
     { n: 6, layer: 'Rendimiento', kinds: [
+      { label: 'Propio', tools: [ { name: 'Duración en cada línea del registro', used: true }, { name: 'Tiempo máximo en cada llamada al modelo', used: true } ] },
       { label: 'Pruebas de carga', tools: [ { name: 'k6' }, { name: 'Locust' }, { name: 'Artillery' } ] },
       { label: 'Percentiles', tools: [ { name: 'Prometheus' }, { name: 'Grafana' } ] },
       { label: 'Web', tools: [ { name: 'Lighthouse' } ] },
     ]},
     { n: 7, layer: 'Optimización', kinds: [
       { label: 'Modelos pequeños', tools: [ { name: 'Gemini Flash-Lite', used: true }, { name: 'Claude Haiku' } ] },
-      { label: 'Caché', tools: [ { name: 'Redis' }, { name: 'Caché de prompts del proveedor' } ] },
+      { label: 'Caché', tools: [ { name: 'Caché de respuestas propia', used: true }, { name: 'Redis' }, { name: 'Caché de prompts del proveedor' } ] },
       { label: 'Modelos locales', tools: [ { name: 'Ollama' } ] },
     ]},
     { n: 8, layer: 'Evaluación', kinds: [
+      { label: 'Propias', tools: [ { name: 'Casos y comprobaciones propios', used: true }, { name: 'Pruebas de red team', used: true }, { name: 'Vitest', used: true } ] },
       { label: 'Marcos de evaluación', tools: [ { name: 'Promptfoo' }, { name: 'DeepEval' }, { name: 'Ragas' }, { name: 'Braintrust' } ] },
-      { label: 'Propias', tools: [ { name: 'Casos y comprobaciones propios', used: true }, { name: 'Vitest', used: true } ] },
     ]},
     { n: 9, layer: 'Escalabilidad', kinds: [
+      { label: 'Propio', tools: [ { name: 'Degradación en cadena: Gemini, Ollama, reglas', used: true } ] },
       { label: 'Contenedores', tools: [ { name: 'Docker', used: true }, { name: 'Kubernetes' } ] },
       { label: 'Borde y reparto', tools: [ { name: 'Cloudflare', used: true } ] },
       { label: 'Base de datos', tools: [ { name: 'PostgreSQL', used: true }, { name: 'PgBouncer' } ] },
@@ -365,6 +369,7 @@ No es una recomendación de compra: son opciones muy conocidas en cada capa, y m
       { label: 'Pruebas', tools: [ { name: 'Vitest', used: true }, { name: 'Playwright', used: true } ] },
     ]},
     { n: 11, layer: 'Datos y cumplimiento', kinds: [
+      { label: 'Propio', tools: [ { name: 'IP con hash y sal', used: true }, { name: 'Purga automática de lo caducado', used: true }, { name: 'Registros sin cuerpos ni emails', used: true } ] },
       { label: 'Detectar datos personales', tools: [ { name: 'Presidio' } ] },
       { label: 'Modelos en local', tools: [ { name: 'Ollama' } ] },
       { label: 'Proveedores', tools: [ { name: 'Gemini API (nivel de pago)', used: true }, { name: 'Mistral' } ] },

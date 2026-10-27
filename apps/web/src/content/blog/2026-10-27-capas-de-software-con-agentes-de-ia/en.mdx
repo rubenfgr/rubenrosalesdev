@@ -308,7 +308,7 @@ This is not a buying recommendation: these are well-known options in each layer,
 
 <Tools
   usedLabel="I use it"
-  legend="In bold with a dot, the ones I use on this site and its API. The rest are common alternatives I have not used here."
+  legend="In bold with a dot, what I use on this site and its API, including pieces I built. The rest are common alternatives I have not used here."
   rows={[
     { n: 1, layer: 'Architecture', kinds: [
       { label: 'Server and validation', tools: [ { name: 'Hono', used: true }, { name: 'Zod', used: true }, { name: 'Express' }, { name: 'FastAPI' }, { name: 'Pydantic' } ] },
@@ -318,12 +318,13 @@ This is not a buying recommendation: these are well-known options in each layer,
       { label: 'State', tools: [ { name: 'PostgreSQL', used: true }, { name: 'Drizzle ORM', used: true }, { name: 'Redis' } ] },
     ]},
     { n: 2, layer: 'Guardrails', kinds: [
-      { label: 'Validate outputs', tools: [ { name: 'Zod', used: true }, { name: 'Pydantic' }, { name: 'Guardrails AI' }, { name: 'NeMo Guardrails' } ] },
+      { label: 'Validate outputs', tools: [ { name: 'Zod', used: true }, { name: 'Own output validator', used: true }, { name: 'Pydantic' }, { name: 'Guardrails AI' }, { name: 'NeMo Guardrails' } ] },
       { label: 'Secrets', tools: [ { name: 'Environment variables', used: true }, { name: 'Doppler' }, { name: 'HashiCorp Vault' } ] },
       { label: 'Limits and edge', tools: [ { name: 'Own rate limiter', used: true }, { name: 'Cloudflare', used: true } ] },
     ]},
     { n: 3, layer: 'Automation observability', kinds: [
-      { label: 'Logs', tools: [ { name: 'Pino' }, { name: 'Winston' }, { name: 'structlog' } ] },
+      { label: 'Logs', tools: [ { name: 'Own JSON log with request ID', used: true }, { name: 'Pino' }, { name: 'Winston' }, { name: 'structlog' } ] },
+      { label: 'Service status', tools: [ { name: 'Health endpoint', used: true } ] },
       { label: 'Standard', tools: [ { name: 'OpenTelemetry' } ] },
       { label: 'Metrics and dashboards', tools: [ { name: 'Prometheus' }, { name: 'Grafana' } ] },
       { label: 'Traces', tools: [ { name: 'Jaeger' }, { name: 'Grafana Tempo' } ] },
@@ -331,28 +332,31 @@ This is not a buying recommendation: these are well-known options in each layer,
       { label: 'All in one', tools: [ { name: 'Datadog' }, { name: 'Grafana Cloud' } ] },
     ]},
     { n: 4, layer: 'Agent observability', kinds: [
+      { label: 'Own', tools: [ { name: 'Conversation review (only with consent)', used: true }, { name: 'Monthly spending report', used: true } ] },
       { label: 'Agent traces and evaluation', tools: [ { name: 'Langfuse' }, { name: 'LangSmith' }, { name: 'Arize Phoenix' }, { name: 'Helicone' } ] },
     ]},
     { n: 5, layer: 'Usage and cost', kinds: [
+      { label: 'Own', tools: [ { name: 'Month tokens and cost in Postgres', used: true }, { name: 'Spending cap and kill switch', used: true } ] },
       { label: 'Proxy and budgets', tools: [ { name: 'LiteLLM' }, { name: 'Helicone' } ] },
       { label: 'Cost per trace', tools: [ { name: 'Langfuse' } ] },
-      { label: 'Spending cap', tools: [ { name: 'Own cap and kill switch', used: true } ] },
     ]},
     { n: 6, layer: 'Performance', kinds: [
+      { label: 'Own', tools: [ { name: 'Duration on every log line', used: true }, { name: 'Time limit on every model call', used: true } ] },
       { label: 'Load testing', tools: [ { name: 'k6' }, { name: 'Locust' }, { name: 'Artillery' } ] },
       { label: 'Percentiles', tools: [ { name: 'Prometheus' }, { name: 'Grafana' } ] },
       { label: 'Web', tools: [ { name: 'Lighthouse' } ] },
     ]},
     { n: 7, layer: 'Optimisation', kinds: [
       { label: 'Small models', tools: [ { name: 'Gemini Flash-Lite', used: true }, { name: 'Claude Haiku' } ] },
-      { label: 'Caching', tools: [ { name: 'Redis' }, { name: 'Provider prompt caching' } ] },
+      { label: 'Caching', tools: [ { name: 'Own answer cache', used: true }, { name: 'Redis' }, { name: 'Provider prompt caching' } ] },
       { label: 'Local models', tools: [ { name: 'Ollama' } ] },
     ]},
     { n: 8, layer: 'Evaluation', kinds: [
+      { label: 'Own', tools: [ { name: 'Own cases and checks', used: true }, { name: 'Red-team tests', used: true }, { name: 'Vitest', used: true } ] },
       { label: 'Evaluation frameworks', tools: [ { name: 'Promptfoo' }, { name: 'DeepEval' }, { name: 'Ragas' }, { name: 'Braintrust' } ] },
-      { label: 'Own', tools: [ { name: 'Own cases and checks', used: true }, { name: 'Vitest', used: true } ] },
     ]},
     { n: 9, layer: 'Scalability', kinds: [
+      { label: 'Own', tools: [ { name: 'Degradation chain: Gemini, Ollama, rules', used: true } ] },
       { label: 'Containers', tools: [ { name: 'Docker', used: true }, { name: 'Kubernetes' } ] },
       { label: 'Edge and distribution', tools: [ { name: 'Cloudflare', used: true } ] },
       { label: 'Database', tools: [ { name: 'PostgreSQL', used: true }, { name: 'PgBouncer' } ] },
@@ -366,6 +370,7 @@ This is not a buying recommendation: these are well-known options in each layer,
       { label: 'Testing', tools: [ { name: 'Vitest', used: true }, { name: 'Playwright', used: true } ] },
     ]},
     { n: 11, layer: 'Data and compliance', kinds: [
+      { label: 'Own', tools: [ { name: 'Hashed and salted IPs', used: true }, { name: 'Automatic purge of what expires', used: true }, { name: 'Logs without bodies or emails', used: true } ] },
       { label: 'Detect personal data', tools: [ { name: 'Presidio' } ] },
       { label: 'Local models', tools: [ { name: 'Ollama' } ] },
       { label: 'Providers', tools: [ { name: 'Gemini API (paid tier)', used: true }, { name: 'Mistral' } ] },
