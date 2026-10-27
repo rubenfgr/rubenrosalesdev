@@ -182,7 +182,7 @@ a:hover { color: var(--color-primary-hover); }
   min-height: 3.375rem;
   padding: 0 var(--space-5);
   border-radius: var(--radius-md);
-  border: var(--border-width-thin) solid transparent;
+  border: var(--border-width-thick) solid transparent;
   font: inherit;
   font-size: var(--font-size-body);
   font-weight: var(--font-weight-medium);
@@ -191,25 +191,26 @@ a:hover { color: var(--color-primary-hover); }
   transition: all var(--duration-base) var(--ease-out);
 }
 .btn-primary {
-  background: var(--gradient-brand);
+  background: var(--color-primary);
   color: var(--color-primary-foreground);
   font-weight: var(--font-weight-strong);
-  box-shadow: var(--shadow-cta);
+  border-color: var(--color-primary);
 }
 .btn-primary:hover {
-  background: var(--gradient-brand-hover);
+  background: var(--color-foreground);
+  border-color: var(--color-foreground);
   color: var(--color-primary-foreground);
-  transform: translateY(-1px);
 }
 .btn-secondary {
   background: var(--color-surface);
   color: var(--color-foreground);
-  border-color: var(--color-border);
+  border-color: var(--color-rule);
   font-weight: var(--font-weight-strong);
 }
 .btn-secondary:hover {
+  background: var(--color-foreground);
+  color: var(--color-foreground-inverse);
   border-color: var(--color-foreground);
-  color: var(--color-foreground);
 }
 .btn-inverse {
   background: var(--color-primary-foreground);
@@ -219,7 +220,16 @@ a:hover { color: var(--color-primary-hover); }
   background: var(--color-surface-alt);
   color: var(--color-primary-hover);
 }
-.mono-arrow { font-family: var(--font-family-mono); }
+.mono-arrow { font-family: var(--font-family-mono); display: inline-block; transition: transform var(--duration-base) var(--ease-out); }
+.btn:hover .mono-arrow, .hero-link:hover .mono-arrow { transform: translateX(4px); }
+
+/* Motivo hilada como divisor: máscara del SVG de juntas, coloreable con --hilada-color */
+.hilada {
+  height: var(--hilada-height, 4rem);
+  background-color: var(--hilada-color, var(--color-border-strong));
+  -webkit-mask: url('../assets/motifs/hilada.svg') repeat left top / 360px 144px;
+  mask: url('../assets/motifs/hilada.svg') repeat left top / 360px 144px;
+}
 
 /* Eyebrow de sección: «00 / diagnóstico» + filete */
 .eb { display: flex; align-items: center; gap: var(--space-3); font-family: var(--font-family-mono); font-size: var(--font-size-caption); color: var(--color-foreground-subtle); }
