@@ -25,6 +25,7 @@
     "@astrojs/rss": "4.0.19",
     "@astrojs/sitemap": "3.7.4",
     "@fontsource-variable/archivo": "^5.3.0",
+    "@fontsource-variable/jetbrains-mono": "^5.3.0",
     "@lucide/astro": "^1.61.0",
     "@rr/shared": "workspace:*",
     "astro": "^7.4.2",

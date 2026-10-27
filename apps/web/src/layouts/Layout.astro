@@ -1,6 +1,7 @@
 ---
 import '../styles/global.css';
 import archivoLatin from '@fontsource-variable/archivo/files/archivo-latin-wdth-normal.woff2?url';
+import monoLatin from '@fontsource-variable/jetbrains-mono/files/jetbrains-mono-latin-wght-normal.woff2?url';
 import Footer from '../components/Footer.astro';
 import Header from '../components/Header.astro';
 import Scroll from '../components/Scroll.astro';
@@ -43,6 +44,7 @@ const switchPaths = Object.fromEntries(locales.map((l) => [l, paths ? (paths[l] 
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
     <link rel="preload" href={archivoLatin} as="font" type="font/woff2" crossorigin />
+    <link rel="preload" href={monoLatin} as="font" type="font/woff2" crossorigin />
     <title>{fullTitle}</title>
     <meta name="description" content={metaDescription} />
     <link rel="canonical" href={canonical} />
