@@ -262,9 +262,11 @@ Patrones generales para la web. Los valores salen siempre de los tokens.
 |---|---|
 | **Ritmo de secciones** | Separación vertical `--space-section` (64→128 px). Mucho aire entre secciones, densidad moderada dentro. |
 | **Navegación fija** | Altura `--nav-height`, fondo `--color-background` opaco (sin desenfoque) y regla inferior de 2 px (`--color-rule`) siempre visible. Enlaces con subrayado de 2 px en hover/actual. En la home, anclas a las secciones; en el resto, enlaces a páginas. Respeta safe-area en móvil. |
-| **Apertura de sección** | Titular `h2` y entradilla de 1–2 frases (`--font-size-lead`, `--color-foreground-muted`, máximo `--measure`). Sin etiquetas decorativas encima del titular ni numeración. |
+| **Apertura de sección** | Regla de 2 px (`--color-rule`) con el número de sección en mono (sin etiqueta de texto), titular `h2` y entradilla de 1–2 frases (`--font-size-lead`, `--color-foreground-muted`, máximo `--measure`). La segunda parte del titular va en `--color-primary` (en `--color-bleed-text-muted` sobre petróleo), nunca en gris. El número es estructura, no decoración; no se añade ninguna otra etiqueta. |
+| **Secciones a sangre** | Problema y el bloque 1.2 de Servicios van en petróleo profundo (`--color-bleed`), con paneles en `--color-bleed-panel`, reglas de 2 px en `--color-bleed-text` y el motivo hilada en `--color-bleed-rule`. La calculadora usa el mismo bloque para el resultado; su cifra lleva `--color-bleed-accent`. |
+| **Listas y preguntas** | Filas separadas por regla de 2 px, no tarjetas con borde (FAQ, índice de servicios del hero). El estado abierto o activo se marca con fondo, no con color de borde. |
 | **Demo de proceso** | Componente que muestra un proceso «antes / después» paso a paso (p. ej. pedido por email → extracción → validación → alta en ERP). El usuario avanza con botones; nada se reproduce solo. Siempre marcado como **ejemplo ilustrativo** si no es un caso real. |
-| **Cifras** | Solo datos reales y verificables. Sin cifras, no hay fila de cifras. |
+| **Cifras** | Solo datos reales y verificables. Sin cifras, no hay fila de cifras. En mono (`--font-family-mono`), peso 700. |
 | **Pasos para empezar** | Máximo 3 pasos numerados, en lenguaje de cliente (llamada, propuesta, primera entrega). |
 | **Letra pequeña honesta** | Cuando aplique, una nota breve sobre límites o cuándo no conviene algo. Refuerza la voz. |
 | **Cierre** | Una frase y un único CTA. |

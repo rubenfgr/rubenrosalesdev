@@ -62,8 +62,8 @@
 .more-head { display: flex; flex-wrap: wrap; justify-content: space-between; align-items: center; gap: var(--space-4); }
 .more-head h3 { font-size: clamp(22px, 2.4vw, 30px); font-weight: var(--font-weight-heavy); letter-spacing: var(--letter-spacing-tight); margin: 0; }
 .filters { display: flex; flex-wrap: wrap; gap: var(--space-2); margin-top: var(--space-4); }
-.filter { min-height: var(--target-min); font-size: var(--font-size-small); font-weight: var(--font-weight-strong); padding: 8px 14px; border-radius: var(--radius-full); border: 1px solid var(--color-border-strong); background: var(--color-surface); color: var(--color-foreground); cursor: pointer; transition: all var(--duration-base); }
-.filter.on { background: var(--color-foreground); color: #fff; border-color: var(--color-foreground); }
+.filter { min-height: var(--target-min); font-size: var(--font-size-small); font-weight: var(--font-weight-strong); padding: 8px 14px; border-radius: var(--radius-md); border: var(--border-width-thick) solid var(--color-rule); background: var(--color-surface); color: var(--color-foreground); cursor: pointer; transition: all var(--duration-base); }
+.filter.on { background: var(--color-foreground); color: var(--color-foreground-inverse); border-color: var(--color-foreground); }
 .filter small { opacity: 0.6; margin-left: 6px; font-variant-numeric: tabular-nums; }
 .more-rail { display: flex; gap: var(--space-3); overflow-x: auto; scroll-snap-type: x mandatory; scrollbar-width: none; margin-top: var(--space-5); padding-bottom: 4px; }
 .more-rail::-webkit-scrollbar { display: none; }
