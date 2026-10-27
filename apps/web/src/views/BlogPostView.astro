@@ -64,7 +64,7 @@ const editUrl = `${site.social.find((s) => s.id === 'github')?.url}/rubenrosales
     display: grid;
     grid-template-columns: minmax(0, 1fr);
     gap: var(--space-6);
-    padding-top: var(--space-7);
+    padding-block: var(--space-7) var(--space-section);
     grid-template-areas: 'toc' 'article' 'recent';
   }
   .toc-mobile { grid-area: toc; }

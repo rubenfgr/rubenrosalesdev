@@ -14,6 +14,7 @@ import Cards from '../../../components/blog/Cards.astro';
 import Waterfall from '../../../components/blog/Waterfall.astro';
 import Tail from '../../../components/blog/Tail.astro';
 import Funnel from '../../../components/blog/Funnel.astro';
+import Tools from '../../../components/blog/Tools.astro';
 
 Un agente de IA que funciona en una demostración no es lo mismo que uno que se puede dejar trabajando. La diferencia no está en el modelo, sino en lo que lo rodea: qué pasa cuando falla, cuánto cuesta cada ejecución y cómo sé que seguirá acertando dentro de un mes.
 
@@ -298,6 +299,77 @@ No soy abogado: para un caso concreto, esto se revisa con quien corresponda.
     { title: 'Agente', text: 'Si la entrada varía (correos escritos de mil maneras, documentos distintos) y hay que interpretarla.', tone: 'model' },
   ]}
   caption="Si no hace falta un agente, la opción más sencilla es la buena."
+/>
+
+## Herramientas habituales por capa
+
+No es una recomendación de compra: son opciones muy conocidas en cada capa, y mi lista no es exhaustiva. Elige según tu caso, tu tamaño y lo que ya tengas.
+
+<Tools
+  usedLabel="la uso"
+  legend="En negrita y con punto, las que uso yo en esta web y su API. El resto son alternativas habituales que no he usado aquí."
+  rows={[
+    { n: 1, layer: 'Arquitectura', kinds: [
+      { label: 'Servidor y validación', tools: [ { name: 'Hono', used: true }, { name: 'Zod', used: true }, { name: 'Express' }, { name: 'FastAPI' }, { name: 'Pydantic' } ] },
+      { label: 'Colas', tools: [ { name: 'BullMQ' }, { name: 'pg-boss' }, { name: 'RabbitMQ' }, { name: 'Amazon SQS' } ] },
+      { label: 'Flujos duraderos', tools: [ { name: 'Temporal' }, { name: 'Inngest' } ] },
+      { label: 'Automatización visual', tools: [ { name: 'n8n' }, { name: 'Make' }, { name: 'Zapier' } ] },
+      { label: 'Estado', tools: [ { name: 'PostgreSQL', used: true }, { name: 'Drizzle ORM', used: true }, { name: 'Redis' } ] },
+    ]},
+    { n: 2, layer: 'Guardarraíles', kinds: [
+      { label: 'Validar salidas', tools: [ { name: 'Zod', used: true }, { name: 'Pydantic' }, { name: 'Guardrails AI' }, { name: 'NeMo Guardrails' } ] },
+      { label: 'Secretos', tools: [ { name: 'Variables de entorno', used: true }, { name: 'Doppler' }, { name: 'HashiCorp Vault' } ] },
+      { label: 'Límites y borde', tools: [ { name: 'Límite de ritmo propio', used: true }, { name: 'Cloudflare', used: true } ] },
+    ]},
+    { n: 3, layer: 'Observabilidad de la automatización', kinds: [
+      { label: 'Registros', tools: [ { name: 'Pino' }, { name: 'Winston' }, { name: 'structlog' } ] },
+      { label: 'Estándar', tools: [ { name: 'OpenTelemetry' } ] },
+      { label: 'Métricas y paneles', tools: [ { name: 'Prometheus' }, { name: 'Grafana' } ] },
+      { label: 'Trazas', tools: [ { name: 'Jaeger' }, { name: 'Grafana Tempo' } ] },
+      { label: 'Errores', tools: [ { name: 'Sentry' } ] },
+      { label: 'Todo en uno', tools: [ { name: 'Datadog' }, { name: 'Grafana Cloud' } ] },
+    ]},
+    { n: 4, layer: 'Observabilidad del agente', kinds: [
+      { label: 'Trazas y evaluación de agentes', tools: [ { name: 'Langfuse' }, { name: 'LangSmith' }, { name: 'Arize Phoenix' }, { name: 'Helicone' } ] },
+    ]},
+    { n: 5, layer: 'Consumo y coste', kinds: [
+      { label: 'Proxy y presupuestos', tools: [ { name: 'LiteLLM' }, { name: 'Helicone' } ] },
+      { label: 'Coste por traza', tools: [ { name: 'Langfuse' } ] },
+      { label: 'Tope de gasto', tools: [ { name: 'Tope y kill switch propios', used: true } ] },
+    ]},
+    { n: 6, layer: 'Rendimiento', kinds: [
+      { label: 'Pruebas de carga', tools: [ { name: 'k6' }, { name: 'Locust' }, { name: 'Artillery' } ] },
+      { label: 'Percentiles', tools: [ { name: 'Prometheus' }, { name: 'Grafana' } ] },
+      { label: 'Web', tools: [ { name: 'Lighthouse' } ] },
+    ]},
+    { n: 7, layer: 'Optimización', kinds: [
+      { label: 'Modelos pequeños', tools: [ { name: 'Gemini Flash-Lite', used: true }, { name: 'Claude Haiku' } ] },
+      { label: 'Caché', tools: [ { name: 'Redis' }, { name: 'Caché de prompts del proveedor' } ] },
+      { label: 'Modelos locales', tools: [ { name: 'Ollama' } ] },
+    ]},
+    { n: 8, layer: 'Evaluación', kinds: [
+      { label: 'Marcos de evaluación', tools: [ { name: 'Promptfoo' }, { name: 'DeepEval' }, { name: 'Ragas' }, { name: 'Braintrust' } ] },
+      { label: 'Propias', tools: [ { name: 'Casos y comprobaciones propios', used: true }, { name: 'Vitest', used: true } ] },
+    ]},
+    { n: 9, layer: 'Escalabilidad', kinds: [
+      { label: 'Contenedores', tools: [ { name: 'Docker', used: true }, { name: 'Kubernetes' } ] },
+      { label: 'Borde y reparto', tools: [ { name: 'Cloudflare', used: true } ] },
+      { label: 'Base de datos', tools: [ { name: 'PostgreSQL', used: true }, { name: 'PgBouncer' } ] },
+    ]},
+    { n: 10, layer: 'Despliegue y operación', kinds: [
+      { label: 'Integración continua', tools: [ { name: 'GitHub Actions', used: true }, { name: 'GitLab CI' } ] },
+      { label: 'Imágenes', tools: [ { name: 'GitHub Container Registry', used: true }, { name: 'Docker Hub' } ] },
+      { label: 'Servidor', tools: [ { name: 'Docker Compose', used: true } ] },
+      { label: 'Infraestructura como código', tools: [ { name: 'Terraform' }, { name: 'Ansible' } ] },
+      { label: 'Interruptores', tools: [ { name: 'Unleash' }, { name: 'LaunchDarkly' } ] },
+      { label: 'Pruebas', tools: [ { name: 'Vitest', used: true }, { name: 'Playwright', used: true } ] },
+    ]},
+    { n: 11, layer: 'Datos y cumplimiento', kinds: [
+      { label: 'Detectar datos personales', tools: [ { name: 'Presidio' } ] },
+      { label: 'Modelos en local', tools: [ { name: 'Ollama' } ] },
+      { label: 'Proveedores', tools: [ { name: 'Gemini API (nivel de pago)', used: true }, { name: 'Mistral' } ] },
+    ]},
+  ]}
 />
 
 ## Por dónde empezaría

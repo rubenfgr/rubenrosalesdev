@@ -15,6 +15,7 @@ import Cards from '../../../components/blog/Cards.astro';
 import Waterfall from '../../../components/blog/Waterfall.astro';
 import Tail from '../../../components/blog/Tail.astro';
 import Funnel from '../../../components/blog/Funnel.astro';
+import Tools from '../../../components/blog/Tools.astro';
 
 An AI agent that works in a demo is not the same as one you can leave running. The difference is not the model. It is what surrounds it: what happens when it fails, what each run costs, and how I know it will still be getting things right in a month.
 
@@ -299,6 +300,77 @@ I am not a lawyer: for a specific case, this should be reviewed with the right p
     { title: 'Agent', text: 'When the input varies (emails written a thousand ways, different documents) and has to be interpreted.', tone: 'model' },
   ]}
   caption="If you do not need an agent, the simpler option is the right one."
+/>
+
+## Common tools by layer
+
+This is not a buying recommendation: these are well-known options in each layer, and my list is not exhaustive. Choose based on your case, your size and what you already have.
+
+<Tools
+  usedLabel="I use it"
+  legend="In bold with a dot, the ones I use on this site and its API. The rest are common alternatives I have not used here."
+  rows={[
+    { n: 1, layer: 'Architecture', kinds: [
+      { label: 'Server and validation', tools: [ { name: 'Hono', used: true }, { name: 'Zod', used: true }, { name: 'Express' }, { name: 'FastAPI' }, { name: 'Pydantic' } ] },
+      { label: 'Queues', tools: [ { name: 'BullMQ' }, { name: 'pg-boss' }, { name: 'RabbitMQ' }, { name: 'Amazon SQS' } ] },
+      { label: 'Durable workflows', tools: [ { name: 'Temporal' }, { name: 'Inngest' } ] },
+      { label: 'Visual automation', tools: [ { name: 'n8n' }, { name: 'Make' }, { name: 'Zapier' } ] },
+      { label: 'State', tools: [ { name: 'PostgreSQL', used: true }, { name: 'Drizzle ORM', used: true }, { name: 'Redis' } ] },
+    ]},
+    { n: 2, layer: 'Guardrails', kinds: [
+      { label: 'Validate outputs', tools: [ { name: 'Zod', used: true }, { name: 'Pydantic' }, { name: 'Guardrails AI' }, { name: 'NeMo Guardrails' } ] },
+      { label: 'Secrets', tools: [ { name: 'Environment variables', used: true }, { name: 'Doppler' }, { name: 'HashiCorp Vault' } ] },
+      { label: 'Limits and edge', tools: [ { name: 'Own rate limiter', used: true }, { name: 'Cloudflare', used: true } ] },
+    ]},
+    { n: 3, layer: 'Automation observability', kinds: [
+      { label: 'Logs', tools: [ { name: 'Pino' }, { name: 'Winston' }, { name: 'structlog' } ] },
+      { label: 'Standard', tools: [ { name: 'OpenTelemetry' } ] },
+      { label: 'Metrics and dashboards', tools: [ { name: 'Prometheus' }, { name: 'Grafana' } ] },
+      { label: 'Traces', tools: [ { name: 'Jaeger' }, { name: 'Grafana Tempo' } ] },
+      { label: 'Errors', tools: [ { name: 'Sentry' } ] },
+      { label: 'All in one', tools: [ { name: 'Datadog' }, { name: 'Grafana Cloud' } ] },
+    ]},
+    { n: 4, layer: 'Agent observability', kinds: [
+      { label: 'Agent traces and evaluation', tools: [ { name: 'Langfuse' }, { name: 'LangSmith' }, { name: 'Arize Phoenix' }, { name: 'Helicone' } ] },
+    ]},
+    { n: 5, layer: 'Usage and cost', kinds: [
+      { label: 'Proxy and budgets', tools: [ { name: 'LiteLLM' }, { name: 'Helicone' } ] },
+      { label: 'Cost per trace', tools: [ { name: 'Langfuse' } ] },
+      { label: 'Spending cap', tools: [ { name: 'Own cap and kill switch', used: true } ] },
+    ]},
+    { n: 6, layer: 'Performance', kinds: [
+      { label: 'Load testing', tools: [ { name: 'k6' }, { name: 'Locust' }, { name: 'Artillery' } ] },
+      { label: 'Percentiles', tools: [ { name: 'Prometheus' }, { name: 'Grafana' } ] },
+      { label: 'Web', tools: [ { name: 'Lighthouse' } ] },
+    ]},
+    { n: 7, layer: 'Optimisation', kinds: [
+      { label: 'Small models', tools: [ { name: 'Gemini Flash-Lite', used: true }, { name: 'Claude Haiku' } ] },
+      { label: 'Caching', tools: [ { name: 'Redis' }, { name: 'Provider prompt caching' } ] },
+      { label: 'Local models', tools: [ { name: 'Ollama' } ] },
+    ]},
+    { n: 8, layer: 'Evaluation', kinds: [
+      { label: 'Evaluation frameworks', tools: [ { name: 'Promptfoo' }, { name: 'DeepEval' }, { name: 'Ragas' }, { name: 'Braintrust' } ] },
+      { label: 'Own', tools: [ { name: 'Own cases and checks', used: true }, { name: 'Vitest', used: true } ] },
+    ]},
+    { n: 9, layer: 'Scalability', kinds: [
+      { label: 'Containers', tools: [ { name: 'Docker', used: true }, { name: 'Kubernetes' } ] },
+      { label: 'Edge and distribution', tools: [ { name: 'Cloudflare', used: true } ] },
+      { label: 'Database', tools: [ { name: 'PostgreSQL', used: true }, { name: 'PgBouncer' } ] },
+    ]},
+    { n: 10, layer: 'Deployment and operations', kinds: [
+      { label: 'Continuous integration', tools: [ { name: 'GitHub Actions', used: true }, { name: 'GitLab CI' } ] },
+      { label: 'Images', tools: [ { name: 'GitHub Container Registry', used: true }, { name: 'Docker Hub' } ] },
+      { label: 'Server', tools: [ { name: 'Docker Compose', used: true } ] },
+      { label: 'Infrastructure as code', tools: [ { name: 'Terraform' }, { name: 'Ansible' } ] },
+      { label: 'Switches', tools: [ { name: 'Unleash' }, { name: 'LaunchDarkly' } ] },
+      { label: 'Testing', tools: [ { name: 'Vitest', used: true }, { name: 'Playwright', used: true } ] },
+    ]},
+    { n: 11, layer: 'Data and compliance', kinds: [
+      { label: 'Detect personal data', tools: [ { name: 'Presidio' } ] },
+      { label: 'Local models', tools: [ { name: 'Ollama' } ] },
+      { label: 'Providers', tools: [ { name: 'Gemini API (paid tier)', used: true }, { name: 'Mistral' } ] },
+    ]},
+  ]}
 />
 
 ## Where I would start
