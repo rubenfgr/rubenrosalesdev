@@ -90,3 +90,14 @@
 
 .ct-help { font-size: var(--font-size-small); line-height: 1.4; color: var(--color-dark-text-muted); }
 .ct-count { align-self: flex-end; font-family: var(--font-family-mono); font-size: var(--font-size-mono); letter-spacing: var(--letter-spacing-label); color: var(--color-dark-text-subtle); font-variant-numeric: tabular-nums; }
+
+/* La hoja se queda a la vista mientras se rellena (en dos columnas) y, si no cabe, hace scroll por dentro.
+   Con más de 3 opciones elegidas se compacta: solo los títulos. */
+.ct-route.dense li { padding: 6px 0; align-items: center; }
+.ct-route.dense small { display: none; }
+@media (min-width: 64rem) {
+  .ct { overflow: clip; }
+  .ct-side { position: sticky; top: calc(var(--nav-height) + var(--space-4)); align-self: start; max-height: calc(100vh - var(--nav-height) - var(--space-6)); max-height: calc(100dvh - var(--nav-height) - var(--space-6)); }
+  .ct-sheet { flex: 1 1 auto; min-height: 0; overflow-y: auto; scrollbar-width: thin; }
+  .ct-mail { flex: none; }
+}

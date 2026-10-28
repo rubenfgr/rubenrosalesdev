@@ -335,14 +335,14 @@ export default function Contacto({ labels: L, lang, email: contactEmail }: Props
           </div>
 
           <div class="ct-side">
-            <div class="ct-sheet" aria-live="polite">
+            <div class="ct-sheet" aria-live="polite" tabIndex={0} aria-label={L.sheet.title}>
               <div class="ct-sheet-top">
                 <div><small>{L.sheet.title}</small><b>{head.length ? L.sheet.forPrefix.replace('{names}', head.join(' · ')) : L.sheet.defaultName}</b></div>
                 <span class={`ct-state${sent ? ' sent' : filled ? ' forming' : ''}`}>{sent ? L.sheet.status.sent : filled ? L.sheet.status.forming : L.sheet.status.blank}</span>
               </div>
               <div>
                 <p class="ct-h5">{L.sheet.whereStart}</p>
-                {chosen.length ? <ol class="ct-route">{chosen.map((g, i) => <li><span>{i + 1}</span><span><b>{g.routeTitle}</b><small>{g.routeText}</small></span></li>)}</ol> : <p class="ct-empty">{L.sheet.fillHint}</p>}
+                {chosen.length ? <ol class={`ct-route${chosen.length > 3 ? ' dense' : ''}`}>{chosen.map((g, i) => <li><span>{i + 1}</span><span><b>{g.routeTitle}</b><small>{g.routeText}</small></span></li>)}</ol> : <p class="ct-empty">{L.sheet.fillHint}</p>}
               </div>
               <div class="ct-facts">
                 <div><p class="ct-h5">{L.sheet.team}</p><b style={`color:${f.size ? 'inherit' : 'var(--color-foreground-subtle)'}`}>{f.size ? L.sheet.teamValue.replace('{size}', L.sizes[f.size]!) : L.sheet.empty}</b></div>
