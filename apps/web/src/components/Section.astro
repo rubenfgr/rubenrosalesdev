@@ -33,18 +33,11 @@ const { title, lead, id, as: Tag = 'h2', tone = 'default' } = Astro.props;
   }
   .primary :global(a:not(.btn)) { color: inherit; }
   .head { display: grid; grid-template-columns: minmax(0, 1fr); gap: var(--space-4); margin-bottom: var(--space-7); }
-  .head::before {
-    content: '';
-    width: 100%;
-    height: var(--border-width-thick);
-    background: var(--color-rule);
-  }
   .head h1, .head h2 {
     font-size: var(--font-size-section);
     font-weight: var(--font-weight-heavy);
     line-height: 1;
     letter-spacing: var(--letter-spacing-tighter);
-    margin-top: var(--space-4);
   }
   .lead {
     max-width: var(--measure);
@@ -52,5 +45,4 @@ const { title, lead, id, as: Tag = 'h2', tone = 'default' } = Astro.props;
     color: var(--color-foreground-muted);
   }
   .primary .lead { color: inherit; }
-  .primary .head::before { background: var(--color-primary-foreground); }
 </style>
