@@ -52,6 +52,9 @@ export type Lead = z.infer<typeof leadSchema>;
 
 export * from './assistant/engine';
 
+/** Límites del formulario de contacto: los usa el esquema de abajo y los validadores de la web (maxlength, avisos). */
+export const contactLimits = { name: 100, company: 150, email: 200, phone: 40, phoneDigitsMin: 9, phoneDigitsMax: 15, message: 4000, messageMin: 10, messageGuidedMin: 20, tool: 120, tools: 20 } as const;
+
 /** Formulario de contacto (guiado o directo). */
 export const contactSchema = z.object({
   lang: langSchema,
@@ -59,13 +62,13 @@ export const contactSchema = z.object({
   goals: z.array(z.string().max(120)).max(20).default([]),
   size: z.string().max(20).default(''),
   when: z.string().max(20).default(''),
-  tools: z.array(z.string().max(120)).max(20).default([]),
-  message: z.string().trim().min(10).max(4000),
-  name: z.string().trim().min(1).max(100),
-  company: z.string().trim().max(150).default(''),
-  email: z.email().max(200),
+  tools: z.array(z.string().max(contactLimits.tool)).max(contactLimits.tools).default([]),
+  message: z.string().trim().min(contactLimits.messageMin).max(contactLimits.message),
+  name: z.string().trim().min(1).max(contactLimits.name),
+  company: z.string().trim().max(contactLimits.company).default(''),
+  email: z.email().max(contactLimits.email),
   preference: z.enum(['email', 'call']),
-  phone: z.string().trim().max(40).default(''),
+  phone: z.string().trim().max(contactLimits.phone).default(''),
   consent: z.literal(true),
   /** Antispam: campo señuelo (debe ir vacío) y momento en que se abrió el formulario (ms desde epoch). */
   website: z.string().max(200).optional(),

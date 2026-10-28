@@ -535,6 +535,8 @@
       "goal": "Choose at least one option.",
       "jamShort": "Tell me a bit more.",
       "phone": "Enter a phone number so I can call you.",
+      "phoneInvalid": "Enter a valid phone number (9 to 15 digits).",
+      "tools": "Add 20 tools at most, separated by commas.",
       "send": "It could not be sent. Try again or write to me at {email}."
     },
     "q1": {
@@ -544,7 +546,8 @@
     },
     "q2": {
       "counter": "Question 2 of 4",
-      "title": "A bit of context"
+      "title": "A bit of context",
+      "toolsHint": "If you use others, write them separated by commas (for example: Holded, Sage, Excel)."
     },
     "q3": {
       "counter": "Question 3 of 4",

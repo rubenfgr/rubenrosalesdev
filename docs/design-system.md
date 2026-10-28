@@ -66,6 +66,14 @@ Reglas: cuerpo ≥ 16 px; longitud de línea ≤ 70 caracteres (`--measure`, 66c
 
 `--target-min` (44 px) es el tamaño mínimo de botones, enlaces de listas y controles. Enlaces dentro de un párrafo quedan exentos. Cuando el elemento visual es más pequeño (por ejemplo, los puntos del carrusel de proyectos), la zona pulsable se amplía con padding o `::before`.
 
+## Validación de formularios
+
+Los límites de cada campo viven en `contactLimits` (`packages/shared/src/index.ts`) y los usan tanto el esquema Zod de la API como la web (`maxlength`, avisos). No se duplican números en los componentes.
+
+- Todos los campos llevan `required` o `maxlength` según corresponda, `aria-invalid` y `aria-describedby` apuntando al aviso, y el tipo y `inputmode` adecuados (email, tel).
+- Se avisa al salir del campo (`blur`) y mientras hay aviso se quita en cuanto el valor es válido. Al avanzar de paso o enviar se validan todos los campos del paso.
+- Los textos largos no se recortan: lo que se escribe es lo que se envía, y la vista previa lo muestra entero con scroll.
+
 ## Accesibilidad medida
 
 Lighthouse 13.5.0 sobre el build de producción (`pnpm dlx lighthouse`, Chrome headless): home en móvil 93 de rendimiento, 95–97 de accesibilidad, 100 de buenas prácticas y 100 de SEO, CLS 0 y TBT 0 ms; el blog 98 / 100 / 100 / 100. Los fallos de contraste que quedan son los estados «aún no llegado» de las demos (filas de la maqueta de Proyectos y la tarjeta de espera de Integraciones), que se atenúan a propósito.

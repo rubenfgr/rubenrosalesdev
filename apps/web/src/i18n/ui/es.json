@@ -535,6 +535,8 @@
       "goal": "Elige al menos una opción.",
       "jamShort": "Cuéntame un poco más.",
       "phone": "Indica un teléfono para llamarte.",
+      "phoneInvalid": "Escribe un teléfono válido (entre 9 y 15 dígitos).",
+      "tools": "Pon como máximo 20 programas, separados por comas.",
       "send": "No se ha podido enviar. Inténtalo de nuevo o escríbeme a {email}."
     },
     "q1": {
@@ -544,7 +546,8 @@
     },
     "q2": {
       "counter": "Pregunta 2 de 4",
-      "title": "Un poco de contexto"
+      "title": "Un poco de contexto",
+      "toolsHint": "Si usas otros, escríbelos separados por comas (por ejemplo: Holded, Sage, Excel)."
     },
     "q3": {
       "counter": "Pregunta 3 de 4",

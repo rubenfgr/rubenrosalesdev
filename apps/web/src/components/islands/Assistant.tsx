@@ -1,4 +1,5 @@
 import { useEffect, useRef, useState } from 'preact/hooks';
+import { contactLimits as LIM } from '@rr/shared';
 import { hasPersonalData, matchRule, type Ctx } from '@rr/shared/engine';
 import { LlmUnavailable, sendLead, streamChat } from '../../lib/assistant/api';
 import { summaryLines } from '../../lib/assistant/summary';
@@ -307,8 +308,8 @@ export default function Assistant({ data: D, labels: L, lang, privacyHref, llm =
             {showChips && <div class="as-chips">{options.map((o) => <button type="button" class="as-chip" onClick={() => pick(o.action, o.label)}>{o.label}</button>)}</div>}
             {!typing && step === 'contact' && (
               <div class="as-form">
-                <label>{D.form.name}<input type="text" value={form.name} placeholder={D.form.namePlaceholder} autocomplete="name" onInput={(e) => setForm({ ...form, name: (e.currentTarget as HTMLInputElement).value })} /></label>
-                <label>{D.form.email}<input type="email" value={form.email} placeholder={D.form.emailPlaceholder} autocomplete="email" onInput={(e) => setForm({ ...form, email: (e.currentTarget as HTMLInputElement).value })} /></label>
+                <label>{D.form.name}<input type="text" value={form.name} placeholder={D.form.namePlaceholder} autocomplete="name" maxLength={LIM.name} required onInput={(e) => setForm({ ...form, name: (e.currentTarget as HTMLInputElement).value })} /></label>
+                <label>{D.form.email}<input type="email" value={form.email} placeholder={D.form.emailPlaceholder} autocomplete="email" inputMode="email" maxLength={LIM.email} required onInput={(e) => setForm({ ...form, email: (e.currentTarget as HTMLInputElement).value })} /></label>
                 <label class="as-consent"><input type="checkbox" checked={form.consent} onChange={() => setForm({ ...form, consent: !form.consent })} /><span>{D.form.consent}</span></label>
                 {formError && <div class="as-err" role="alert">{formError}</div>}
                 <button type="button" class="as-submit" disabled={sending} onClick={() => void submitContact()}>{sending ? D.form.sending : D.form.submit}</button>
@@ -316,7 +317,7 @@ export default function Assistant({ data: D, labels: L, lang, privacyHref, llm =
             )}
           </div>
           <form class="as-input" onSubmit={onSend}>
-            <input ref={input} value={draft} disabled={!consent} placeholder={L.inputPlaceholder} aria-label={L.messageAria} onInput={(e) => setDraft((e.currentTarget as HTMLInputElement).value)} />
+            <input ref={input} value={draft} maxLength={500} disabled={!consent} placeholder={L.inputPlaceholder} aria-label={L.messageAria} onInput={(e) => setDraft((e.currentTarget as HTMLInputElement).value)} />
             <button type="submit" aria-label={L.send} disabled={!consent}>{icon('M4 12l16-8-6 16-3-7z', 18)}</button>
           </form>
           <div class="as-foot">{D.panel.disclaimer}</div>

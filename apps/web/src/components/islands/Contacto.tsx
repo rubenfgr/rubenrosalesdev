@@ -1,4 +1,5 @@
 import { useEffect, useRef, useState } from 'preact/hooks';
+import { contactLimits as LIM } from '@rr/shared';
 import { sendContact } from '../../lib/assistant/api';
 import Eyebrow from './Eyebrow';
 import LogoMark from './LogoMark';
@@ -16,8 +17,8 @@ interface Labels {
   fields: Record<'name' | 'email' | 'workEmail' | 'company' | 'optional' | 'message' | 'phone' | 'tools' | 'team' | 'when' | 'howContinue', string>;
   placeholders: Record<'name' | 'email' | 'company' | 'messageDirect' | 'messageGuided' | 'phone' | 'otherTool', string>;
   consent: string;
-  errors: Record<'name' | 'emailInvalid' | 'messageShort' | 'consent' | 'goal' | 'jamShort' | 'phone' | 'send', string>;
-  q1: { counter: string; title: string; hint: string }; q2: { counter: string; title: string };
+  errors: Record<'name' | 'emailInvalid' | 'messageShort' | 'consent' | 'goal' | 'jamShort' | 'phone' | 'phoneInvalid' | 'tools' | 'send', string>;
+  q1: { counter: string; title: string; hint: string }; q2: { counter: string; title: string; toolsHint: string };
   q3: { counter: string; title: string; hint: string; enough: string; notEnough: string; examplesTitle: string; examples: Record<string, string> };
   q4: { counter: string; title: string };
   goals: Record<string, Goal>; sizes: Record<string, string>; whens: Record<string, string>; tools: Record<string, string>; prefs: Record<'email' | 'call', string>;
@@ -30,13 +31,16 @@ interface Labels {
 interface Props { labels: Labels; lang: string; email: string }
 
 const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+const PHONE_RE = /^[+\d\s().-]+$/;
+const parseTools = (s: string) => [...new Set(s.split(',').map((x) => x.trim()).filter(Boolean))];
+type ErrCode = keyof Labels['errors'];
 const BLANK = { goals: [] as string[], size: '', when: '', tools: [] as string[], toolsOther: '', msg: '', name: '', company: '', email: '', pref: 0, phone: '', consent: false };
 
 export default function Contacto({ labels: L, lang, email: contactEmail }: Props) {
   const [mode, setMode] = useState<Mode>('guided');
   const [step, setStep] = useState(0);
   const [f, setF] = useState(BLANK);
-  const [errors, setErrors] = useState<Record<string, boolean>>({});
+  const [errors, setErrors] = useState<Record<string, ErrCode | ''>>({});
   const [stepErr, setStepErr] = useState('');
   const [status, setStatus] = useState<Status>('idle');
   const started = useRef(Date.now());
@@ -53,14 +57,33 @@ export default function Contacto({ labels: L, lang, email: contactEmail }: Props
 
   const toggle = (list: string[], v: string) => (list.includes(v) ? list.filter((x) => x !== v) : [...list, v]);
 
+  // Un único sitio con las reglas de cada campo; los límites salen del esquema compartido con la API.
+  const check = (key: string, v = f, m: Mode = mode): ErrCode | '' => {
+    switch (key) {
+      case 'name': return v.name.trim() ? '' : 'name';
+      case 'email': { const t = v.email.trim(); return EMAIL_RE.test(t) && t.length <= LIM.email ? '' : 'emailInvalid'; }
+      case 'phone': {
+        if (v.pref !== 1) return '';
+        const t = v.phone.trim();
+        if (!t) return 'phone';
+        const digits = t.replace(/\D/g, '').length;
+        return PHONE_RE.test(t) && digits >= LIM.phoneDigitsMin && digits <= LIM.phoneDigitsMax ? '' : 'phoneInvalid';
+      }
+      case 'msg': { const n = v.msg.trim().length; return n >= (m === 'guided' ? LIM.messageGuidedMin : LIM.messageMin) ? '' : m === 'guided' ? 'jamShort' : 'messageShort'; }
+      case 'tools': { const other = parseTools(v.toolsOther); return v.tools.length + other.length <= LIM.tools && other.every((x) => x.length <= LIM.tool) ? '' : 'tools'; }
+      case 'consent': return v.consent ? '' : 'consent';
+    }
+    return '';
+  };
+  const collect = (keys: string[]) => Object.fromEntries(keys.map((k) => [k, check(k)] as const).filter(([, c]) => c)) as Record<string, ErrCode>;
+  /** Validación en vivo: al salir de un campo se avisa; mientras hay aviso, se quita en cuanto el valor es válido. */
+  const live = (key: string, next = f) => setErrors((e) => ({ ...e, [key]: check(key, next) }));
+
   const validateStep = (s: number) => {
     if (s === 0 && !f.goals.length) return { stepErr: L.errors.goal, errors: {} };
-    if (s === 2 && f.msg.trim().length < 20) return { stepErr: L.errors.jamShort, errors: { msg: true } };
-    if (s === 3) {
-      const e = { name: !f.name.trim(), email: !EMAIL_RE.test(f.email), phone: f.pref === 1 && f.phone.replace(/\D/g, '').length < 9, consent: !f.consent };
-      if (Object.values(e).some(Boolean)) return { stepErr: '', errors: e };
-    }
-    return null;
+    const keys = s === 1 ? ['tools'] : s === 2 ? ['msg'] : s === 3 ? ['name', 'email', 'phone', 'consent'] : [];
+    const e = collect(keys);
+    return Object.keys(e).length ? { stepErr: '', errors: e } : null;
   };
 
   const submit = async () => {
@@ -73,13 +96,13 @@ export default function Contacto({ labels: L, lang, email: contactEmail }: Props
         goals: f.goals,
         size: f.size,
         when: f.when,
-        tools: [...f.tools, ...f.toolsOther.split(',').map((x) => x.trim()).filter(Boolean)],
-        message: f.msg,
-        name: f.name,
-        company: f.company,
-        email: f.email,
+        tools: [...new Set([...f.tools, ...parseTools(f.toolsOther)])],
+        message: f.msg.trim(),
+        name: f.name.trim(),
+        company: f.company.trim(),
+        email: f.email.trim(),
         preference: f.pref === 1 ? 'call' : 'email',
-        phone: f.phone,
+        phone: f.pref === 1 ? f.phone.trim() : '',
         consent: true,
       });
       setStatus('sent');
@@ -105,9 +128,9 @@ export default function Contacto({ labels: L, lang, email: contactEmail }: Props
   const sendDirect = (e: Event) => {
     e.preventDefault();
     if (status === 'sending') return;
-    const err = { name: !f.name.trim(), email: !EMAIL_RE.test(f.email), msg: f.msg.trim().length < 10, consent: !f.consent };
+    const err = collect(['name', 'email', 'msg', 'consent']);
     setErrors(err);
-    if (Object.values(err).some(Boolean)) return;
+    if (Object.keys(err).length) return;
     void submit();
   };
   const onKey = (e: KeyboardEvent) => {
@@ -128,27 +151,36 @@ export default function Contacto({ labels: L, lang, email: contactEmail }: Props
 
   const sent = status === 'sent';
   const len = f.msg.trim().length;
-  const toolTags = [...f.tools.map((k) => L.tools[k]!), ...f.toolsOther.split(',').map((x) => x.trim()).filter(Boolean)];
+  const toolTags = [...f.tools.map((k) => L.tools[k]!), ...parseTools(f.toolsOther)];
   const chosen = f.goals.map((id) => L.goals[id]!).filter(Boolean);
   const filled = f.goals.length || f.size || f.when || toolTags.length || len;
   const head = [f.name.trim().split(' ')[0], f.company.trim()].filter(Boolean);
   const first = f.name.trim().split(' ')[0] ?? '';
   const q = f.msg.trim();
 
-  const input = (key: 'name' | 'email' | 'company' | 'phone', label: string, type: string, ph: string, ac: string, ref?: any, opt = false, errMsg?: string) => (
-    <label class="ct-field">
-      <span>{label} {opt && <em>{L.fields.optional}</em>}</span>
-      <input ref={ref} class={`ct-input${errors[key] ? ' err' : ''}`} type={type as 'text'} value={f[key]} placeholder={ph} autocomplete={ac} onInput={(e) => set({ [key]: (e.currentTarget as HTMLInputElement).value } as any)} />
-      {errors[key] && errMsg && <span class="ct-err" role="alert">{errMsg}</span>}
-    </label>
-  );
+  const input = (key: 'name' | 'email' | 'company' | 'phone', label: string, type: string, ph: string, ac: string, ref?: any, opt = false) => {
+    const code = errors[key] || '';
+    const max = { name: LIM.name, email: LIM.email, company: LIM.company, phone: LIM.phone }[key];
+    return (
+      <label class="ct-field">
+        <span>{label} {opt && <em>{L.fields.optional}</em>}</span>
+        <input
+          ref={ref} class={`ct-input${code ? ' err' : ''}`} type={type as 'text'} value={f[key]} placeholder={ph} autocomplete={ac} maxLength={max}
+          inputMode={key === 'email' ? 'email' : key === 'phone' ? 'tel' : undefined} required={!opt} aria-required={!opt} aria-invalid={!!code} aria-describedby={code ? `err-${key}` : undefined}
+          onInput={(e) => { const v = (e.currentTarget as HTMLInputElement).value; set({ [key]: v } as any); if (code) live(key, { ...f, [key]: v }); }}
+          onBlur={() => !opt || f[key] ? live(key) : undefined}
+        />
+        {code && <span class="ct-err" id={`err-${key}`} role="alert">{L.errors[code]}</span>}
+      </label>
+    );
+  };
   const consent = (
     <>
       <label class="ct-consent">
-        <input type="checkbox" checked={f.consent} onChange={() => set({ consent: !f.consent })} />
+        <input type="checkbox" checked={f.consent} required aria-required="true" aria-invalid={!!errors.consent} aria-describedby={errors.consent ? 'err-consent' : undefined} onChange={() => { const consent = !f.consent; set({ consent }); if (errors.consent) live('consent', { ...f, consent }); }} />
         <span>{L.consent}</span>
       </label>
-      {errors.consent && <span class="ct-err" role="alert" style="margin-top:-10px">{L.errors.consent}</span>}
+      {errors.consent && <span class="ct-err" id="err-consent" role="alert" style="margin-top:-10px">{L.errors.consent}</span>}
     </>
   );
   const chips = (map: Record<string, string>, selected: (k: string) => boolean, pick: (k: string) => void, small = false) => (
@@ -209,14 +241,16 @@ export default function Contacto({ labels: L, lang, email: contactEmail }: Props
                 <div class="ct-body">
                   <div><h3 class="ct-h" style="margin:0">{L.direct.title}</h3><p class="ct-sub">{L.direct.lead}</p></div>
                   <div class="ct-two">
-                    {input('name', L.fields.name, 'text', L.placeholders.name, 'name', undefined, false, L.errors.name)}
-                    {input('email', L.fields.email, 'email', L.placeholders.email, 'email', undefined, false, L.errors.emailInvalid)}
+                    {input('name', L.fields.name, 'text', L.placeholders.name, 'name', undefined, false)}
+                    {input('email', L.fields.email, 'email', L.placeholders.email, 'email', undefined, false)}
                   </div>
                   {input('company', L.fields.company, 'text', L.placeholders.company, 'organization', undefined, true)}
                   <label class="ct-field">
                     <span>{L.fields.message}</span>
-                    <textarea class={`ct-text${errors.msg ? ' err' : ''}`} rows={5} value={f.msg} placeholder={L.placeholders.messageDirect} onInput={(e) => set({ msg: (e.currentTarget as HTMLTextAreaElement).value })} />
-                    {errors.msg && <span class="ct-err" role="alert">{L.errors.messageShort}</span>}
+                    <textarea class={`ct-text${errors.msg ? ' err' : ''}`} rows={5} value={f.msg} placeholder={L.placeholders.messageDirect} maxLength={LIM.message} required aria-required="true" aria-invalid={!!errors.msg} aria-describedby={errors.msg ? 'err-msg' : undefined}
+                      onInput={(e) => { const msg = (e.currentTarget as HTMLTextAreaElement).value; set({ msg }); if (errors.msg) live('msg', { ...f, msg }); }} onBlur={() => live('msg')} />
+                    {errors.msg && <span class="ct-err" id="err-msg" role="alert">{L.errors[errors.msg]}</span>}
+                    {f.msg.length >= LIM.message * 0.8 && <span class="ct-count">{f.msg.length} / {LIM.message}</span>}
                   </label>
                   {consent}
                   {status === 'error' && <span class="ct-err" role="alert">{L.errors.send.replace('{email}', contactEmail)}</span>}
@@ -252,7 +286,9 @@ export default function Contacto({ labels: L, lang, email: contactEmail }: Props
                       <div class="ct-group">
                         <span>{L.fields.tools} <em>{L.fields.optional}</em></span>
                         {chips(L.tools, (k) => f.tools.includes(k), (k) => set({ tools: toggle(f.tools, k) }), true)}
-                        <input class="ct-input" type="text" value={f.toolsOther} placeholder={L.placeholders.otherTool} aria-label={L.fields.tools} onInput={(e) => set({ toolsOther: (e.currentTarget as HTMLInputElement).value })} />
+                        <input class={`ct-input${errors.tools ? ' err' : ''}`} type="text" value={f.toolsOther} placeholder={L.placeholders.otherTool} aria-label={L.fields.tools} maxLength={600} aria-invalid={!!errors.tools} aria-describedby={errors.tools ? 'err-tools' : 'hint-tools'}
+                          onInput={(e) => { const toolsOther = (e.currentTarget as HTMLInputElement).value; set({ toolsOther }); if (errors.tools) live('tools', { ...f, toolsOther }); }} onBlur={() => live('tools')} />
+                        {errors.tools ? <span class="ct-err" id="err-tools" role="alert">{L.errors.tools}</span> : <small class="ct-help" id="hint-tools">{L.q2.toolsHint}</small>}
                       </div>
                     </>
                   )}
@@ -260,14 +296,16 @@ export default function Contacto({ labels: L, lang, email: contactEmail }: Props
                     <>
                       <div><span class="ct-q">{L.q3.counter}</span><h3 class="ct-h">{L.q3.title}</h3><p class="ct-sub">{L.q3.hint}</p></div>
                       <div class="ct-field">
-                        <textarea ref={msgRef} class={`ct-text${errors.msg ? ' err' : ''}`} rows={6} value={f.msg} placeholder={L.placeholders.messageGuided} aria-label={L.q3.title}
-                          onInput={(e) => { set({ msg: (e.currentTarget as HTMLTextAreaElement).value }); setStepErr(''); setErrors({}); }} />
+                        <textarea ref={msgRef} class={`ct-text${errors.msg ? ' err' : ''}`} rows={6} value={f.msg} placeholder={L.placeholders.messageGuided} aria-label={L.q3.title} maxLength={LIM.message} required aria-required="true" aria-invalid={!!errors.msg} aria-describedby={errors.msg ? 'err-msg' : undefined}
+                          onInput={(e) => { const msg = (e.currentTarget as HTMLTextAreaElement).value; set({ msg }); setStepErr(''); if (errors.msg) live('msg', { ...f, msg }); }} onBlur={() => f.msg && live('msg')} />
+                        {errors.msg && <span class="ct-err" id="err-msg" role="alert">{L.errors[errors.msg]}</span>}
+                        {f.msg.length >= LIM.message * 0.8 && <span class="ct-count">{f.msg.length} / {LIM.message}</span>}
                         <div class="ct-meter"><i style={`width:${Math.min(100, (len / 20) * 100)}%;background:${len >= 20 ? 'var(--color-ok-strong)' : 'var(--color-primary-on-dark)'}`} /></div>
                         <span style={`font-size: var(--font-size-small);color:${len >= 20 ? 'var(--color-ok-soft)' : 'var(--color-dark-text-subtle)'}`}>{len >= 20 ? L.q3.enough : L.q3.notEnough}</span>
                       </div>
                       <div class="ct-examples">
                         <span>{L.q3.examplesTitle}</span>
-                        {Object.values(L.q3.examples).map((x) => <button type="button" class="ct-ex" onClick={() => { set({ msg: `${x} ` }); setStepErr(''); setErrors({}); }}>{x}</button>)}
+                        {Object.values(L.q3.examples).map((x) => <button type="button" class="ct-ex" onClick={() => { set({ msg: `${x} ` }); setStepErr(''); setErrors((e) => ({ ...e, msg: '' })); }}>{x}</button>)}
                       </div>
                     </>
                   )}
@@ -275,12 +313,12 @@ export default function Contacto({ labels: L, lang, email: contactEmail }: Props
                     <>
                       <div><span class="ct-q">{L.q4.counter}</span><h3 class="ct-h">{L.q4.title}</h3></div>
                       <div class="ct-two">
-                        {input('name', L.fields.name, 'text', L.placeholders.name, 'name', nameRef, false, L.errors.name)}
+                        {input('name', L.fields.name, 'text', L.placeholders.name, 'name', nameRef, false)}
                         {input('company', L.fields.company, 'text', L.placeholders.company, 'organization', undefined, true)}
                       </div>
-                      {input('email', L.fields.workEmail, 'email', L.placeholders.email, 'email', undefined, false, L.errors.emailInvalid)}
+                      {input('email', L.fields.workEmail, 'email', L.placeholders.email, 'email', undefined, false)}
                       <div class="ct-group"><span>{L.fields.howContinue}</span>{chips(L.prefs, (k) => (f.pref === 1) === (k === 'call'), (k) => set({ pref: k === 'call' ? 1 : 0 }))}</div>
-                      {f.pref === 1 && input('phone', L.fields.phone, 'tel', L.placeholders.phone, 'tel', undefined, false, L.errors.phone)}
+                      {f.pref === 1 && input('phone', L.fields.phone, 'tel', L.placeholders.phone, 'tel', undefined, false)}
                       {consent}
                       {status === 'error' && <span class="ct-err" role="alert">{L.errors.send.replace('{email}', contactEmail)}</span>}
                     </>
@@ -310,7 +348,7 @@ export default function Contacto({ labels: L, lang, email: contactEmail }: Props
                 <div><p class="ct-h5">{L.sheet.when}</p><b style={`color:${f.when ? 'inherit' : 'var(--color-foreground-subtle)'}`}>{f.when ? L.whens[f.when] : L.sheet.empty}</b></div>
               </div>
               <div><p class="ct-h5">{L.sheet.tools}</p>{toolTags.length ? <div class="ct-tags">{toolTags.map((x) => <span>{x}</span>)}</div> : <span class="ct-empty">{L.sheet.empty}</span>}</div>
-              <div><p class="ct-h5">{L.sheet.jamTitle}</p><p class="ct-quote" style={`font-style:${q ? 'italic' : 'normal'};color:${q ? 'inherit' : 'var(--color-foreground-subtle)'}`}>{q ? `«${q.length > 180 ? `${q.slice(0, 180)}…` : q}»` : L.sheet.jamEmpty}</p></div>
+              <div><p class="ct-h5">{L.sheet.jamTitle}</p><p class="ct-quote" tabIndex={0} style={`font-style:${q ? 'italic' : 'normal'};color:${q ? 'inherit' : 'var(--color-foreground-subtle)'}`}>{q ? `«${q}»` : L.sheet.jamEmpty}</p></div>
               <div class="ct-by"><span class="ct-by-mark"><LogoMark size={28} /></span><div><b>{L.aside.reviewer}</b><small>{L.aside.reviewerText}</small></div></div>
             </div>
             <div class="ct-mail"><span>{L.aside.preferWrite}</span><a href={`mailto:${contactEmail}`}>{contactEmail}</a><span>{L.aside.location}</span></div>
