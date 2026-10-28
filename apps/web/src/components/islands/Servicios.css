@@ -117,3 +117,12 @@
 .srv-foot { margin-top: var(--space-5); color: var(--color-foreground-muted); font-size: var(--font-size-body); }
 /* En una columna, la factura y la tabla de 1.2 no se estiran más allá de un ancho legible. */
 @media (max-width: 74.99rem) { .srv-b .srv-demo { max-width: 28rem; width: calc(100% - 2 * clamp(24px, 3vw, 36px)); margin-inline: auto; } .srv-d .phone-wrap { margin-top: 24px; } }
+
+/* 1.4: el móvil asoma por el borde inferior de la tarjeta (sin el margen de abajo), en vez de quedar cortado con aire debajo. */
+.srv-card.tint { overflow: hidden; }
+.srv-card.tint .phone-wrap { margin-bottom: 0; align-self: end; }
+@media (min-width: 75rem) {
+  .srv-card.tint { align-items: stretch; padding-bottom: 0; }
+  .srv-card.tint .srv-top { align-self: center; padding-block: clamp(24px, 3vw, 40px); }
+  .srv-card.tint .phone-wrap { margin-block: clamp(24px, 3vw, 40px) 0; }
+}
