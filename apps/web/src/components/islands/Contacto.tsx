@@ -286,9 +286,10 @@ export default function Contacto({ labels: L, lang, email: contactEmail }: Props
                       <div class="ct-group">
                         <span>{L.fields.tools} <em>{L.fields.optional}</em></span>
                         {chips(L.tools, (k) => f.tools.includes(k), (k) => set({ tools: toggle(f.tools, k) }), true)}
-                        <input class={`ct-input${errors.tools ? ' err' : ''}`} type="text" value={f.toolsOther} placeholder={L.placeholders.otherTool} aria-label={L.fields.tools} maxLength={600} aria-invalid={!!errors.tools} aria-describedby={errors.tools ? 'err-tools' : 'hint-tools'}
-                          onInput={(e) => { const toolsOther = (e.currentTarget as HTMLInputElement).value; set({ toolsOther }); if (errors.tools) live('tools', { ...f, toolsOther }); }} onBlur={() => live('tools')} />
+                        <input class={`ct-input${errors.tools ? ' err' : ''}`} type="text" value={f.toolsOther} placeholder={L.placeholders.otherTool} aria-label={L.fields.tools} maxLength={LIM.toolsOtherText} aria-invalid={!!errors.tools} aria-describedby={errors.tools ? 'err-tools' : 'hint-tools'}
+                          onInput={(e) => { const toolsOther = (e.currentTarget as HTMLInputElement).value; set({ toolsOther }); live('tools', { ...f, toolsOther }); }} onBlur={() => live('tools')} />
                         {errors.tools ? <span class="ct-err" id="err-tools" role="alert">{L.errors.tools}</span> : <small class="ct-help" id="hint-tools">{L.q2.toolsHint}</small>}
+                        {f.toolsOther.length >= LIM.toolsOtherText * 0.7 && <span class="ct-count">{f.toolsOther.length} / {LIM.toolsOtherText}</span>}
                       </div>
                     </>
                   )}

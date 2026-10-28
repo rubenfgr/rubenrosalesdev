@@ -53,7 +53,7 @@ export type Lead = z.infer<typeof leadSchema>;
 export * from './assistant/engine';
 
 /** Límites del formulario de contacto: los usa el esquema de abajo y los validadores de la web (maxlength, avisos). */
-export const contactLimits = { name: 100, company: 150, email: 200, phone: 40, phoneDigitsMin: 9, phoneDigitsMax: 15, message: 4000, messageMin: 10, messageGuidedMin: 20, tool: 120, tools: 20 } as const;
+export const contactLimits = { name: 100, company: 150, email: 200, phone: 40, phoneDigitsMin: 9, phoneDigitsMax: 15, message: 4000, messageMin: 10, messageGuidedMin: 20, tool: 120, tools: 20, toolsOtherText: 200 } as const;
 
 /** Formulario de contacto (guiado o directo). */
 export const contactSchema = z.object({
