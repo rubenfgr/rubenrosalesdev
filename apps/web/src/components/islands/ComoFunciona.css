@@ -1,12 +1,12 @@
-.tray { padding: clamp(72px, 10vw, 128px) 0; background: var(--color-surface); border-block: 1px solid var(--color-border); }
+.tray { padding: clamp(48px, 6vw, 80px) 0; background: var(--color-surface); border-block: 1px solid var(--color-border); }
 .tray-inner { max-width: var(--container-max); margin: 0 auto; padding: 0 var(--container-padding); }
-.tray-head { display: flex; flex-wrap: wrap; justify-content: space-between; align-items: end; gap: var(--space-5); margin: 40px 0 48px; }
+.tray-head { display: flex; flex-wrap: wrap; justify-content: space-between; align-items: end; gap: var(--space-5); margin: 32px 0 32px; }
 .tray-title { font-size: var(--font-size-section); line-height: 1; letter-spacing: var(--letter-spacing-tighter); font-weight: var(--font-weight-heavy); margin: 0; text-wrap: balance; }
 .tray-title span { color: var(--color-primary); }
 .tray-lead { max-width: 380px; color: var(--color-foreground-muted); font-size: var(--font-size-body); line-height: 1.55; margin: 0; text-wrap: pretty; }
-.tray-grid { display: grid; grid-template-columns: minmax(0, 1fr); gap: var(--space-4); align-items: stretch; }
+.tray-grid { display: grid; grid-template-columns: minmax(0, 1fr); gap: var(--space-4); align-items: start; }
 @media (min-width: 60rem) { .tray-grid { grid-template-columns: minmax(0, 1.15fr) minmax(0, 1fr); } }
-.tray-ctl { background: var(--color-dark-footer); color: var(--color-dark-text); border-radius: var(--radius-lg); padding: clamp(20px, 3vw, 32px); display: flex; flex-direction: column; gap: 20px; min-width: 0; }
+.tray-ctl { background: var(--color-dark-footer); color: var(--color-dark-text); border-radius: var(--radius-lg); padding: clamp(16px, 2.2vw, 24px); display: flex; flex-direction: column; gap: 14px; min-width: 0; }
 .tray-row { display: flex; flex-wrap: wrap; justify-content: space-between; align-items: center; gap: var(--space-3); }
 .tray-num { display: block; font-size: var(--font-size-small); font-weight: var(--font-weight-strong); color: var(--color-dark-text-subtle); }
 .tray-sub { display: block; font-size: var(--font-size-lead); font-weight: var(--font-weight-bold); }
@@ -14,7 +14,7 @@
 .tray-mode { min-height: var(--target-min); padding: 10px 8px; border-radius: var(--radius-md); border: none; cursor: pointer; font-size: clamp(12.5px, 1.4vw, 14px); font-weight: var(--font-weight-strong); line-height: 1.2; background: transparent; color: var(--color-dark-text-muted); transition: all var(--duration-base) var(--ease-out); }
 .tray-mode.on { background: var(--color-background); color: var(--color-dark-footer); }
 .tray-desc { margin: -8px 0 0; font-size: var(--font-size-label); line-height: 1.5; color: var(--color-dark-text-muted); min-height: 42px; }
-.tray-purpose { display: grid; gap: var(--space-1); min-height: 4.5rem; }
+.tray-purpose { display: grid; gap: var(--space-1); min-height: 4rem; }
 .tray-desc { margin: 0; font-size: var(--font-size-body); line-height: 1.5; color: var(--color-dark-text); }
 .tray-note { margin: 0; font-size: var(--font-size-label); color: var(--color-dark-text-subtle); }
 .tray-reset { padding: var(--space-2) var(--space-3); border-radius: var(--radius-sm); border: 1px solid var(--color-dark-border-strong); background: transparent; color: var(--color-dark-text); font-size: var(--font-size-label); font-weight: var(--font-weight-medium); cursor: pointer; min-height: 2.75rem; }
@@ -25,8 +25,8 @@
 .tray-stat span { font-size: var(--font-size-label); color: var(--color-dark-text-muted); }
 .tray-stat.auto b { color: var(--color-ok); } .tray-stat.review b { color: var(--color-accent-soft); }
 .tray-eg { margin-left: auto; font-family: var(--font-family-mono); font-size: var(--font-size-mono); letter-spacing: var(--letter-spacing-label); color: var(--color-dark-text-faint); }
-.tray-list { list-style: none; margin: 0; padding: 0; display: grid; gap: var(--space-2); }
-.tray-item { background: var(--color-dark-panel); border: 1px solid var(--color-dark-raised); border-left-width: var(--border-width-thick); border-radius: var(--radius-md); padding: var(--space-3) var(--space-4); display: grid; gap: var(--space-2); transition: border-color var(--duration-base) var(--ease-out), background var(--duration-base) var(--ease-out); }
+.tray-list { list-style: none; margin: 0; padding: 0; display: grid; gap: 6px; }
+.tray-item { background: var(--color-dark-panel); border: 1px solid var(--color-dark-raised); border-left-width: var(--border-width-thick); border-radius: var(--radius-md); padding: var(--space-2) var(--space-3); display: grid; gap: 6px; transition: border-color var(--duration-base) var(--ease-out), background var(--duration-base) var(--ease-out); }
 .tray-item.auto, .tray-item.approved { border-left-color: var(--color-ok); }
 .tray-item.review { border-left-color: var(--color-accent-soft); background: var(--color-dark-panel-alt); }
 .tray-item.corrected { border-left-color: var(--color-dark-border-strong); }
@@ -64,3 +64,13 @@
 .tray-why { display: block; font-size: var(--font-size-small); color: var(--color-foreground-muted); margin-top: 3px; line-height: 1.45; }
 .tray-badges { margin-top: auto; padding-top: 20px; border-top: 1px solid var(--color-border); display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 180px), 1fr)); gap: 14px 20px; font-size: var(--font-size-small); line-height: 1.45; color: var(--color-foreground-muted); }
 .tray-badges strong { display: block; color: var(--color-foreground); font-size: var(--font-size-label); }
+
+/* Compacto: la explicación solo se muestra donde hace falta decidir (esperando OK); lo que pasa solo no la repite. */
+.tray-item.auto .tray-item-why, .tray-item.approved .tray-item-why, .tray-item.corrected .tray-item-why { display: none; }
+.tray-log { padding: clamp(16px, 2.2vw, 24px); }
+.tray-entry { padding: 10px 0; }
+.tray-log-list { margin-top: 10px; }
+
+/* Barra de claridad en la misma fila que el título (en pantallas anchas); en estrechas pasa a su propia línea. */
+.tray-item-top .tray-meter { flex: 1 1 100%; order: 3; }
+@media (min-width: 40rem) { .tray-item-top .tray-meter { flex: 0 1 9.5rem; order: 0; } }

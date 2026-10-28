@@ -64,14 +64,14 @@ export default function ComoFunciona({ items, modes, log: seed, labels: L }: Pro
                   <div class="tray-item-top">
                     <span class="tray-tag">{L.tags[item.tag]}</span>
                     <span class="tray-item-main"><b>{item.title}</b><small>{item.from}</small></span>
-                    <span class={`tray-state ${state}`}>{L.state[state]}</span>
-                  </div>
-                  <div class="tray-meter" role="img" aria-label={`${L.clearness}: ${item.confidence} %`}>
-                    <div class="tray-bar">
-                      <div class="tray-track"><div class={`tray-fill ${state}`} style={`width:${item.confidence}%`} /></div>
-                      {m.threshold <= 100 && <i class="tray-mark" style={`left:${m.threshold}%`} title={L.marker} />}
+                    <div class="tray-meter" role="img" aria-label={`${L.clearness}: ${item.confidence} %`}>
+                      <div class="tray-bar">
+                        <div class="tray-track"><div class={`tray-fill ${state}`} style={`width:${item.confidence}%`} /></div>
+                        {m.threshold <= 100 && <i class="tray-mark" style={`left:${m.threshold}%`} title={L.marker} />}
+                      </div>
+                      <span class="tray-pct">{item.confidence} %</span>
                     </div>
-                    <span class="tray-pct">{item.confidence} %</span>
+                    <span class={`tray-state ${state}`}>{L.state[state]}</span>
                   </div>
                   <p class="tray-item-why">{state === 'auto' || state === 'approved' ? item.done : item.why}</p>
                   {state === 'review' && (
