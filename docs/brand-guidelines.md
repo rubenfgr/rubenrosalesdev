@@ -4,13 +4,17 @@ Versión 1.0 · Fundamentos de identidad. Los tokens están en `src/styles/token
 
 ---
 
-## 1. Concepto
+## 1. La marca
 
-**Piedra seca.** Los muros de piedra en seco del Mediterráneo se levantan sin argamasa: cada pieza se elige y se coloca con precisión, y por eso duran siglos. Es la forma de trabajar que transmite la marca: soluciones sólidas, sin nada superfluo, pensadas para mantenerse.
+**La marca es Rubén Rosales.** Una persona que entiende de tecnología y la explica sin jerga: software, automatización e IA para empresas, hecho con criterio y pensado para mantenerse. No hay un nombre comercial ni un concepto por encima de ella; todo lo que se publica va bajo su nombre y en primera persona (ver «Voz y tono»).
+
+La identidad visual (logo «Encaje», motivo «hilada», paleta mineral y mar) es el lenguaje con el que esa persona se presenta, no la marca en sí. Se inspira en los muros de piedra en seco del Mediterráneo: cada pieza se elige y se coloca con precisión, sin nada superfluo. Es un recurso gráfico y no se usa como nombre de producto, de proyecto ni de servicio.
 
 El mar entra como color (azul mar de fondo), no como ilustración. La naturaleza aparece en los materiales (caliza, granito, liquen, esparto), no en hojas ni iconos eco.
 
 Debe transmitir: rigor técnico, claridad, cercanía, fiabilidad y durabilidad.
+
+**Proyectos y ejemplos propios:** se nombran por lo que hacen (por ejemplo, «bandeja de pedidos») y llevan la autoría «Rubén Rosales» en el README o la ficha, no un nombre de marca aparte.
 
 ### Decisiones clave
 
