@@ -727,7 +727,19 @@
     "viewArchive": "View archive",
     "tocTitle": "In this article",
     "tagsIndex": "Tags",
-    "rss": "RSS"
+    "rss": "RSS",
+    "search": "Search the blog",
+    "searchPlaceholder": "Topic, word or tag…",
+    "clearSearch": "Clear search",
+    "filterTags": "Filter by tags (you can pick several)",
+    "clearFilters": "Clear filters",
+    "resultsOne": "{n} article",
+    "resultsMany": "{n} articles",
+    "noResults": "No articles match that search.",
+    "noResultsHint": "Try other words or remove a tag.",
+    "searchLoading": "Searching…",
+    "searchError": "The search could not be loaded. Reload the page.",
+    "pageN": "Page {n}"
   },
   "assistant": {
     "fabAria": "Open assistant",

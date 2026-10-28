@@ -727,7 +727,19 @@
     "viewArchive": "Ver archivo",
     "tocTitle": "En este artículo",
     "tagsIndex": "Etiquetas",
-    "rss": "RSS"
+    "rss": "RSS",
+    "search": "Buscar en el blog",
+    "searchPlaceholder": "Tema, palabra o etiqueta…",
+    "clearSearch": "Borrar búsqueda",
+    "filterTags": "Filtrar por etiquetas (puedes elegir varias)",
+    "clearFilters": "Quitar filtros",
+    "resultsOne": "{n} artículo",
+    "resultsMany": "{n} artículos",
+    "noResults": "No hay artículos con esa búsqueda.",
+    "noResultsHint": "Prueba con otras palabras o quita alguna etiqueta.",
+    "searchLoading": "Buscando…",
+    "searchError": "No se ha podido cargar la búsqueda. Recarga la página.",
+    "pageN": "Página {n}"
   },
   "assistant": {
     "fabAria": "Abrir asistente",
