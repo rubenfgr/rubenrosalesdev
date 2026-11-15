@@ -16,7 +16,7 @@ const { title, summary, stack, context, result, resultVerified } = project.data;
 const contextLabel = { profesional: 'Experiencia profesional', propio: 'Proyecto propio', cliente: 'Cliente' }[context];
 ---
 
-<Layout title={title} description={summary}>
+<Layout title={title} description={summary} paths={{ es: `/proyectos/${project.id}` }}>
   <article class="container wrap">
     <p class="back"><a href="/#proyectos">← Proyectos</a></p>
     <header class="head">

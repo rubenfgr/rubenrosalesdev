@@ -1,12 +1,12 @@
 ---
-import { Image } from 'astro:assets';
+import { getImage, Image } from 'astro:assets';
 import { render } from 'astro:content';
 import PostMeta from '../components/PostMeta.astro';
 import RecentPosts from '../components/RecentPosts.astro';
 import TagList from '../components/TagList.astro';
 import TOC from '../components/TOC.astro';
 import { getData } from '../i18n/content';
-import { t as makeT, type Lang } from '../i18n';
+import { getLocalizedPath, t as makeT, type Lang } from '../i18n';
 import Layout from '../layouts/Layout.astro';
 import { postLang, postUrl, type Post } from '../lib/blog';
 import '../styles/prose.css';
@@ -25,10 +25,21 @@ const lang = postLang(post);
 const t = makeT(lang);
 const site = await getData('site', lang);
 const { Content, headings } = await render(post);
+// Imagen para redes: la portada recortada a 1200×630 en JPEG (formato que aceptan todas las plataformas); sin portada, la genérica del sitio.
+const og = post.data.cover ? await getImage({ src: post.data.cover, width: 1200, height: 630, fit: 'cover', format: 'jpg' }) : undefined;
 const editUrl = `${site.social.find((s) => s.id === 'github')?.url}/rubenrosalesdev/edit/main/apps/web/src/content/blog/${post.id}.mdx`;
 ---
 
-<Layout title={post.data.title} description={post.data.description} ogType="article" paths={paths}>
+<Layout
+  title={post.data.title}
+  description={post.data.description}
+  ogType="article"
+  ogImage={og?.src}
+  ogImageAlt={post.data.coverAlt}
+  article={{ published: post.data.date, modified: post.data.updated, tags: post.data.tags }}
+  breadcrumbs={[{ name: t('blog.title'), path: getLocalizedPath('/blog', lang) }, { name: post.data.title, path: postUrl(post) }]}
+  paths={paths}
+>
   <div class="container shell">
     <div class="toc-mobile"><TOC headings={headings} variant="details" /></div>
 

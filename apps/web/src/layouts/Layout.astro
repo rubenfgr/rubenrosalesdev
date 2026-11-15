@@ -9,23 +9,40 @@ import Assistant from '../components/islands/Assistant';
 import { getData } from '../i18n/content';
 import { cleanPath, getAlternates, getLang, getLocalizedPath, intlLocale, locales, t as makeT, ui, type Lang } from '../i18n';
 
+interface Article {
+  published: Date;
+  modified?: Date | undefined;
+  tags: string[];
+}
+
 interface Props {
   title?: string;
   description?: string;
+  /** `noindex, follow`: la página no entra en el índice ni en el sitemap (ver docs/seo.md). */
   noindex?: boolean;
   ogType?: 'website' | 'article';
+  /** Imagen para redes y buscadores: ruta absoluta del sitio o URL completa. Por defecto, `og-<idioma>.png`. */
+  ogImage?: string | undefined;
+  ogImageAlt?: string | undefined;
+  /** Solo en artículos: fechas y etiquetas para `article:*` y `BlogPosting`. */
+  article?: Article;
+  /** Migas de pan (la home va implícita). Alimenta el `BreadcrumbList`. */
+  breadcrumbs?: { name: string; path: string }[];
   /** Ruta equivalente por idioma cuando no es la misma (p. ej. un artículo con otro slug). Solo idiomas que existen. */
   paths?: Partial<Record<Lang, string>>;
 }
 
-const { title, description, noindex = false, ogType = 'website', paths } = Astro.props;
+const { title, description, noindex = false, ogType = 'website', ogImage, ogImageAlt, article, breadcrumbs = [], paths } = Astro.props;
 const lang = getLang(Astro.url);
 const t = makeT(lang);
 const site = await getData('site', lang);
 const assistant = await getData('assistant', lang);
 const siteUrl = Astro.site ?? new URL('https://rubenrosales.dev');
 
-const fullTitle = title ? `${title} · ${site.name}` : site.seo.title;
+// El sufijo con el nombre solo se añade si el título completo cabe en ~60 caracteres (límite visible en buscadores).
+const TITLE_MAX = 60;
+const withSuffix = title ? `${title} · ${site.name}` : undefined;
+const fullTitle = !title ? site.seo.title : withSuffix!.length <= TITLE_MAX ? withSuffix! : title;
 const metaDescription = description ?? site.seo.description;
 // El asistente está construido pero oculto hasta que se decida implementarlo: PUBLIC_ASSISTANT_ENABLED=1 lo muestra.
 const assistantEnabled = import.meta.env.PUBLIC_ASSISTANT_ENABLED === '1';
@@ -33,10 +50,48 @@ const assistantEnabled = import.meta.env.PUBLIC_ASSISTANT_ENABLED === '1';
 const assistantLlm = import.meta.env.PUBLIC_ASSISTANT_LLM === '1';
 const analyticsToken = import.meta.env.PUBLIC_CF_ANALYTICS_TOKEN;
 const canonical = new URL(cleanPath(Astro.url), siteUrl).href;
-const ogImage = new URL(`/og-${lang}.png`, siteUrl).href;
+const ogImageUrl = new URL(ogImage ?? `/og-${lang}.png`, siteUrl).href;
+const ogAlt = ogImageAlt ?? site.seo.ogImageAlt;
+const abs = (path: string) => new URL(path, siteUrl).href;
 const alternates = getAlternates(Astro.url, siteUrl, paths);
 const currentPath = cleanPath(Astro.url).replace(/^\/en(?=\/|$)/, '') || '/';
 const switchPaths = Object.fromEntries(locales.map((l) => [l, paths ? (paths[l] ?? '/') : currentPath])) as Record<Lang, string>;
+const isHome = cleanPath(Astro.url) === (lang === 'es' ? '/' : '/en');
+const author = { '@type': 'Person', '@id': abs('/#persona'), name: site.name, url: abs('/') };
+const sameAs = site.social.map((s) => s.url);
+const jsonLd: Record<string, unknown>[] = [];
+if (isHome) {
+  jsonLd.push(
+    { '@context': 'https://schema.org', '@type': 'WebSite', '@id': abs('/#web'), name: site.name, url: abs(getLocalizedPath('/', lang)), inLanguage: intlLocale[lang], publisher: { '@id': author['@id'] } },
+    { '@context': 'https://schema.org', ...author, jobTitle: site.role, description: site.seo.description, sameAs },
+  );
+}
+if (breadcrumbs.length) {
+  const trail = [{ name: site.name, path: getLocalizedPath('/', lang) }, ...breadcrumbs];
+  jsonLd.push({
+    '@context': 'https://schema.org',
+    '@type': 'BreadcrumbList',
+    itemListElement: trail.map((c, i) => ({ '@type': 'ListItem', position: i + 1, name: c.name, item: abs(c.path) })),
+  });
+}
+if (article && title) {
+  jsonLd.push({
+    '@context': 'https://schema.org',
+    '@type': 'BlogPosting',
+    headline: title,
+    description: metaDescription,
+    datePublished: article.published.toISOString(),
+    dateModified: (article.modified ?? article.published).toISOString(),
+    inLanguage: intlLocale[lang],
+    keywords: article.tags.join(', '),
+    image: ogImageUrl,
+    mainEntityOfPage: canonical,
+    author: { ...author, sameAs },
+    publisher: { '@id': author['@id'] },
+  });
+}
+// `<` escapado para que ningún texto pueda cerrar el <script>.
+const jsonLdText = (data: unknown) => JSON.stringify(data).replace(/</g, '\\u003c');
 ---
 
 <!doctype html>
@@ -52,8 +107,12 @@ const switchPaths = Object.fromEntries(locales.map((l) => [l, paths ? (paths[l] 
     {alternates.map((a) => <link rel="alternate" hreflang={intlLocale[a.lang]} href={a.href} />)}
     <link rel="alternate" hreflang="x-default" href={alternates.find((a) => a.lang === 'es')?.href} />
     <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+    <link rel="icon" href="/favicon-48.png" type="image/png" sizes="48x48" />
+    <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
+    <link rel="manifest" href="/site.webmanifest" />
+    <meta name="theme-color" content="#F4F5F2" />
     <link rel="alternate" type="application/rss+xml" title={t('meta.rssTitle')} href={getLocalizedPath('/rss.xml', lang)} />
-    {noindex && <meta name="robots" content="noindex" />}
+    {noindex && <meta name="robots" content="noindex, follow" />}
     <meta property="og:type" content={ogType} />
     <meta property="og:locale" content={t('meta.ogLocale')} />
     {alternates.filter((a) => a.lang !== lang).map((a) => <meta property="og:locale:alternate" content={intlLocale[a.lang].replace('-', '_')} />)}
@@ -61,10 +120,26 @@ const switchPaths = Object.fromEntries(locales.map((l) => [l, paths ? (paths[l] 
     <meta property="og:title" content={fullTitle} />
     <meta property="og:description" content={metaDescription} />
     <meta property="og:url" content={canonical} />
-    <meta property="og:image" content={ogImage} />
+    <meta property="og:image" content={ogImageUrl} />
     <meta property="og:image:width" content="1200" />
     <meta property="og:image:height" content="630" />
+    <meta property="og:image:alt" content={ogAlt} />
+    {
+      article && (
+        <>
+          <meta property="article:published_time" content={article.published.toISOString()} />
+          <meta property="article:modified_time" content={(article.modified ?? article.published).toISOString()} />
+          <meta property="article:author" content={abs('/')} />
+          {article.tags.map((tag) => <meta property="article:tag" content={tag} />)}
+        </>
+      )
+    }
     <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content={fullTitle} />
+    <meta name="twitter:description" content={metaDescription} />
+    <meta name="twitter:image" content={ogImageUrl} />
+    <meta name="twitter:image:alt" content={ogAlt} />
+    {jsonLd.map((data) => <script type="application/ld+json" set:html={jsonLdText(data)} />)}
   </head>
   <body>
     <a class="skip-link" href="#contenido">{t('a11y.skipToContent')}</a>

@@ -17,6 +17,6 @@ const { page } = Astro.params;
 const { posts } = Astro.props;
 ---
 
-<Layout title={`Blog, página ${page}`} description="Notas prácticas sobre automatización, IA aplicada y software para negocio.">
+<Layout title={`Blog, página ${page}`} description="Notas prácticas sobre automatización, IA aplicada y software para negocio. Archivo de artículos paginado." noindex paths={{ es: `/blog/pagina/${page}` }}>
   <BlogIndex posts={posts} page={Number(page)} />
 </Layout>

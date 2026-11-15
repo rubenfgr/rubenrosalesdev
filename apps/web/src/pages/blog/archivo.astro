@@ -11,7 +11,7 @@ for (const p of posts) {
 }
 ---
 
-<Layout title="Archivo del blog" description="Todos los artículos del blog agrupados por año.">
+<Layout title="Archivo del blog" description="Todos los artículos del blog agrupados por año, de los más recientes a los más antiguos." noindex paths={{ es: '/blog/archivo' }}>
   <Section as="h1" id="archivo" title="Archivo">
     {posts.length === 0 && <p>Todavía no hay artículos.</p>}
     {

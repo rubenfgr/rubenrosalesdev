@@ -10,6 +10,8 @@ export async function rssFor(lang: Lang, context: APIContext) {
     title: t('meta.rssTitle'),
     description: t('meta.rssDescription'),
     site: context.site ?? 'https://rubenrosales.dev',
+    // Los enlaces del RSS deben coincidir con el canonical (sin barra final).
+    trailingSlash: false,
     items: posts.map((p) => ({
       title: p.data.title,
       description: p.data.description,

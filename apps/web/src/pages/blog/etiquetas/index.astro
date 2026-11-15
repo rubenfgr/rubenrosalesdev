@@ -6,7 +6,7 @@ import { getPosts, tagCounts } from '../../../lib/blog';
 const tags = tagCounts(await getPosts());
 ---
 
-<Layout title="Etiquetas del blog" description="Todas las etiquetas del blog con el número de artículos de cada una.">
+<Layout title="Etiquetas del blog" description="Todas las etiquetas del blog con el número de artículos de cada una, para encontrar los temas que te interesan." noindex paths={{ es: '/blog/etiquetas' }}>
   <Section as="h1" id="etiquetas" title="Etiquetas">
     {
       tags.length === 0 ? (

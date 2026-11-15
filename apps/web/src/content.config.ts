@@ -160,7 +160,7 @@ const site = byLocale(
     cta: z.object({ short: text, long: text }),
     footer: z.object({ tagline: text, motto: text }),
     legal: z.array(link).min(1),
-    seo: z.object({ title: text, description: text, ogImageAlt: text }),
+    seo: z.object({ title: text.max(65), description: text.min(70).max(160), ogImageAlt: text }),
     contact: z.object({ email: z.email(), responseTime: text }),
     social: z.array(z.object({ id, label: text, url: z.url() })).min(1),
   }),
@@ -173,7 +173,7 @@ const blog = defineCollection({
   schema: ({ image }) =>
     z
       .object({
-        title: z.string().max(70),
+        title: z.string().max(65), // el <title> final no debe pasar de ~65 caracteres (ver docs/seo.md)
         description: z.string().min(50).max(160),
         date: z.coerce.date(),
         updated: z.coerce.date().optional(),

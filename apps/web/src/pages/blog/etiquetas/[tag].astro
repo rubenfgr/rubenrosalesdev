@@ -15,10 +15,16 @@ export const getStaticPaths = (async () => {
 
 const { tag } = Astro.params;
 const { posts } = Astro.props;
+const label = (tag ?? '').replace(/-/g, ' ');
 ---
 
-<Layout title={`Artículos con «${tag}»`} description={`Todos los artículos del blog con la etiqueta «${tag}».`}>
-  <Section as="h1" id="etiqueta" title={`Todos los artículos con «${tag}»`}>
+<Layout
+  title={`Artículos sobre ${label}`}
+  description={`Todos los artículos del blog con la etiqueta «${label}»: notas prácticas sobre automatización, IA aplicada y software para negocio.`}
+  noindex
+  paths={{ es: `/blog/etiquetas/${tag}` }}
+>
+  <Section as="h1" id="etiqueta" title={`Artículos sobre ${label}`}>
     <BlogList posts={posts} />
     <p class="back"><a href="/blog/etiquetas">← Etiquetas</a></p>
   </Section>
