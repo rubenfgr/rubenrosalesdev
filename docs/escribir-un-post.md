@@ -109,6 +109,10 @@ Usa `##` y `###`: el índice «En este artículo» los recoge solos. Cada encabe
 
 Reutiliza las existentes cuando puedas: están todas en `/blog/etiquetas`.
 
+## SEO
+
+Antes de publicar, repasa la sección «Reglas para artículos y contenido» de [seo.md](seo.md): título de 65 caracteres como máximo con la palabra clave al principio, descripción de 70 a 160, `cover` con `coverAlt`, slug corto y estable, ambos idiomas con su `urlSlug`, al menos un enlace interno con texto descriptivo. `pnpm build:prod` comprueba lo medible.
+
 ## Borradores
 
 Con `draft: true` el artículo no se publica en producción, no entra en el RSS ni en el sitemap. No lo enlaces desde contenido publicado: el build de producción lo detecta y falla.
