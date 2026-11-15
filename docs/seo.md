@@ -15,7 +15,7 @@ Todo lo que se añada o cambie en la web (página, componente, artículo, proyec
 
 ## Reglas por página
 
-1. **Una sola `<h1>`**, que describe la página. Los encabezados bajan sin saltos (`h2`, `h3`…).
+1. **Una sola `<h1>`**, que describe la página. Los encabezados bajan sin saltos (`h2`, `h3`…); un componente que necesite un título pequeño dentro de otra sección usa un `<p>` con clase, no un `<h4>`. El build falla si hay un salto (p. ej. `h2` → `h4`).
 2. **`title`**: único, descriptivo, con la palabra clave al principio. El `<title>` final no pasa de 60 caracteres (límite duro: 65). `Layout` añade « · Rubén Rosales» solo si cabe; si no, usa solo el título. No pongas el nombre a mano.
 3. **`description`**: entre 70 y 160 caracteres, única por página, escrita para persuadir a hacer clic (no una lista de palabras clave). Toda página la pasa a `Layout`; no se hereda la de la home.
 4. **`canonical`**: lo genera `Layout`. Sin barra final, sin parámetros, `https://rubenrosales.dev`. Un enlace interno, el RSS y el sitemap usan la misma forma.
@@ -29,7 +29,7 @@ Todo lo que se añada o cambie en la web (página, componente, artículo, proyec
    - Artículos: `BlogPosting` y `BreadcrumbList`.
    - Páginas anidadas nuevas: pasan `breadcrumbs`.
    - Un tipo nuevo (`Service`, `FAQPage`, `CreativeWork`…) solo si la página muestra ese contenido al visitante. Nunca se marca contenido que no se ve ni se inventan campos (valoraciones, precios, direcciones).
-8. **Imágenes**: `alt` descriptivo (vacío solo si es decorativa), `width` y `height` siempre, `loading="lazy"` salvo la imagen principal, formato `webp` o `avif` por `astro:assets`. Nada de texto dentro de una imagen que no esté también en el HTML.
+8. **Imágenes**: `alt` descriptivo (vacío solo si es decorativa), `width` y `height` siempre, `loading="lazy"` salvo la imagen principal (esa lleva `loading="eager"` y `fetchpriority="high"`, porque suele ser el LCP), formato `webp` o `avif` por `astro:assets`. Nada de texto dentro de una imagen que no esté también en el HTML.
 9. **Open Graph**: toda página tiene `og:image` absoluta de 1200×630 con su `alt`. Los artículos usan su portada recortada automáticamente; el resto, `og-<idioma>.png`.
 10. **Enlaces**: texto descriptivo (nada de «pulsa aquí»), internos sin dominio y sin barra final, externos con `rel="noopener"`. Una página nueva debe estar enlazada desde otra.
 11. **URLs**: en minúsculas, sin tildes, con guiones, estables. Si una URL cambia, se añade la redirección 301 en `docs/redirecciones.md`.

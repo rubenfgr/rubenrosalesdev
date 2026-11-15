@@ -102,6 +102,16 @@ for (const { file, url, html } of pages) {
   if (canonical !== url) problems.push(`${at} canonical «${canonical}» ≠ «${url}»`);
   if ((html.match(/<h1[\s>]/g) ?? []).length !== 1) problems.push(`${at} debe tener exactamente un <h1>`);
   if (!/<html lang="(es|en)"/.test(html)) problems.push(`${at} <html lang> ausente`);
+  // niveles de encabezado sin saltos hacia abajo (h2 → h4 es un fallo de accesibilidad y de estructura)
+  let prev = 0;
+  for (const m of html.matchAll(/<h([1-6])[\s>]/g)) {
+    const level = Number(m[1]);
+    if (prev && level > prev + 1) {
+      problems.push(`${at} salto de encabezado h${prev} → h${level}`);
+      break;
+    }
+    prev = level;
+  }
   for (const k of ['og:title', 'og:description', 'og:image', 'og:image:alt', 'og:url', 'twitter:card', 'twitter:image']) {
     if (!metaContent(h, k)) problems.push(`${at} falta ${k}`);
   }

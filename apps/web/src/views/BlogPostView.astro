@@ -52,7 +52,7 @@ const editUrl = `${site.social.find((s) => s.id === 'github')?.url}/rubenrosales
 
       {
         post.data.cover && (
-          <Image class="cover" src={post.data.cover} alt={post.data.coverAlt ?? ''} widths={[480, 800, 1200]} sizes="(min-width: 64rem) 42rem, 100vw" />
+          <Image class="cover" src={post.data.cover} alt={post.data.coverAlt ?? ''} widths={[480, 800, 1200]} sizes="(min-width: 64rem) 42rem, 100vw" loading="eager" fetchpriority="high" />
         )
       }
 
