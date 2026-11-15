@@ -7,6 +7,7 @@ import preact from '@astrojs/preact';
 import { defineConfig } from 'astro/config';
 import expressiveCode from 'astro-expressive-code';
 import remarkDirective from 'remark-directive';
+import { sitemapLastmod } from './scripts/sitemap-lastmod.mjs';
 import rehypeHeadingAnchors from './src/plugins/rehype-heading-anchors.ts';
 import remarkAdmonitions from './src/plugins/remark-admonitions.ts';
 
@@ -60,7 +61,16 @@ export default defineConfig({
   trailingSlash: 'never',
   build: { format: 'directory' },
   integrations: [
-    sitemap({ i18n: { defaultLocale: 'es', locales: { es: 'es-ES', en: 'en-GB' } } }),
+    sitemap({
+      i18n: { defaultLocale: 'es', locales: { es: 'es-ES', en: 'en-GB' } },
+      // Fuera del sitemap todo lo que lleva `noindex`: archivo, etiquetas y páginas de paginación (ver docs/seo.md).
+      filter: (page) => !/\/blog\/(archivo|etiquetas|pagina)(\/|$)/.test(new URL(page).pathname),
+      // `lastmod` solo donde es un dato real: la fecha del artículo (o de su última actualización).
+      serialize: (item) => {
+        const lastmod = sitemapLastmod.get(new URL(item.url).pathname);
+        return lastmod ? { ...item, lastmod } : item;
+      },
+    }),
     expressiveCode({
       themes: /** @type {Loose} */ ([light]),
       useDarkModeMediaQuery: false,
