@@ -1,0 +1,7 @@
+User-agent: *
+Allow: /
+Disallow: /api/
+Disallow: /blog/search.json
+Disallow: /en/blog/search.json
+
+Sitemap: https://rubenrosales.dev/sitemap-index.xml
