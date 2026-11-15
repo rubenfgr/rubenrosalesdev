@@ -3,6 +3,8 @@
 //  2. Ningún proyecto publicado con `result` sin `resultVerified: true`.
 //  2b. Tabla de rangos del asistente sin placeholders (solo si el asistente está visible: PUBLIC_ASSISTANT_ENABLED=1).
 //  3. Ningún artículo en borrador enlazado desde contenido publicado.
+//  4. SEO de las páginas generadas (docs/seo.md): título, descripción, canonical, h1, hreflang recíproco,
+//     JSON-LD válido, imágenes con alt y dimensiones, sitemap coherente con `noindex`, robots.txt con Sitemap.
 import fs from 'node:fs';
 import path from 'node:path';
 import { readPosts } from './blog-posts.mjs';
@@ -57,6 +59,85 @@ for (const f of publishedFiles) {
     if (text.includes(`/blog/${slug}`)) problems.push(`borrador «${slug}» enlazado desde ${path.relative(root, f)}`);
   }
 }
+
+// 4. SEO de las páginas generadas
+const SITE = 'https://rubenrosales.dev';
+const pages = walk(out)
+  .filter((f) => f.endsWith('.html'))
+  .map((f) => {
+    const rel = path.relative(out, f).replace(/\\/g, '/');
+    const route = '/' + rel.replace(/(^|\/)index\.html$/, '').replace(/\.html$/, '');
+    return { file: rel, url: SITE + (route === '/' ? '/' : route.replace(/\/$/, '')), html: fs.readFileSync(f, 'utf8') };
+  })
+  .filter((p) => p.file !== '404.html');
+const byUrl = new Map(pages.map((p) => [p.url, p]));
+const head = (html) => html.split('</head>')[0] ?? '';
+const attr = (tag, name) => tag.match(new RegExp(`${name}="([^"]*)"`))?.[1];
+const metas = (h) => h.match(/<meta [^>]*>/g) ?? [];
+const metaContent = (h, key) => {
+  const m = metas(h).find((t) => attr(t, 'name') === key || attr(t, 'property') === key);
+  return m ? attr(m, 'content') : undefined;
+};
+const decode = (t) => t.replace(/&amp;/g, '&').replace(/&quot;/g, '"').replace(/&#39;|&#x27;/g, "'").replace(/&lt;/g, '<').replace(/&gt;/g, '>');
+
+const sitemapUrls = new Set();
+const smDir = out;
+for (const f of walk(smDir).filter((n) => /sitemap-\d+\.xml$/.test(n))) {
+  for (const m of fs.readFileSync(f, 'utf8').matchAll(/<loc>([^<]+)<\/loc>/g)) sitemapUrls.add(m[1]);
+}
+const robotsFile = path.join(out, 'robots.txt');
+if (!fs.existsSync(robotsFile)) problems.push('SEO: falta robots.txt');
+else if (!fs.readFileSync(robotsFile, 'utf8').includes(`Sitemap: ${SITE}/sitemap-index.xml`)) problems.push('SEO: robots.txt sin la línea Sitemap');
+
+for (const { file, url, html } of pages) {
+  const h = head(html);
+  const at = `SEO ${file}:`;
+  const noindex = /noindex/.test(metaContent(h, 'robots') ?? '');
+  const title = decode(h.match(/<title>([\s\S]*?)<\/title>/)?.[1] ?? '');
+  if (!title) problems.push(`${at} sin <title>`);
+  else if (title.length > 65) problems.push(`${at} <title> de ${title.length} caracteres (máx. 65)`);
+  const desc = decode(metaContent(h, 'description') ?? '');
+  if (desc.length < 50 || desc.length > 160) problems.push(`${at} descripción de ${desc.length} caracteres (50–160)`);
+  const canonical = attr(h.match(/<link rel="canonical"[^>]*>/)?.[0] ?? '', 'href');
+  if (canonical !== url) problems.push(`${at} canonical «${canonical}» ≠ «${url}»`);
+  if ((html.match(/<h1[\s>]/g) ?? []).length !== 1) problems.push(`${at} debe tener exactamente un <h1>`);
+  if (!/<html lang="(es|en)"/.test(html)) problems.push(`${at} <html lang> ausente`);
+  for (const k of ['og:title', 'og:description', 'og:image', 'og:image:alt', 'og:url', 'twitter:card', 'twitter:image']) {
+    if (!metaContent(h, k)) problems.push(`${at} falta ${k}`);
+  }
+  if (!/^https:\/\//.test(metaContent(h, 'og:image') ?? '')) problems.push(`${at} og:image no es absoluta`);
+  // hreflang: cada alternativa existe y apunta de vuelta a esta página
+  const alts = (h.match(/<link rel="alternate" hreflang="[^"]*"[^>]*>/g) ?? []).map((t) => ({ lang: attr(t, 'hreflang'), href: attr(t, 'href') }));
+  if (!alts.some((a) => a.href === url && a.lang !== 'x-default')) problems.push(`${at} hreflang sin autorreferencia`);
+  for (const a of alts) {
+    const target = byUrl.get(a.href ?? '');
+    if (!target) problems.push(`${at} hreflang ${a.lang} apunta a una página que no existe: ${a.href}`);
+    else if (!head(target.html).includes(`hreflang="${a.lang}" href="${a.href}"`) && a.lang !== 'x-default') problems.push(`${at} hreflang ${a.lang} no es recíproco con ${a.href}`);
+  }
+  // JSON-LD válido
+  for (const m of html.matchAll(/<script type="application\/ld\+json">([\s\S]*?)<\/script>/g)) {
+    try {
+      const data = JSON.parse(m[1]);
+      if (data['@type'] === 'BlogPosting') {
+        for (const k of ['headline', 'datePublished', 'dateModified', 'author', 'image', 'mainEntityOfPage']) if (!data[k]) problems.push(`${at} BlogPosting sin ${k}`);
+      }
+    } catch {
+      problems.push(`${at} JSON-LD no es JSON válido`);
+    }
+  }
+  if (url === `${SITE}/` || url === `${SITE}/en`) {
+    if (!/"@type":"Person"/.test(html) || !/"@type":"WebSite"/.test(html)) problems.push(`${at} la home necesita JSON-LD Person y WebSite`);
+  }
+  if (/<article/.test(html) && /og:type" content="article"/.test(h) && !/"@type":"BlogPosting"/.test(html)) problems.push(`${at} artículo sin JSON-LD BlogPosting`);
+  // imágenes
+  for (const img of html.match(/<img[^>]*>/g) ?? []) {
+    for (const a of ['alt', 'width', 'height']) if (!new RegExp(`\\s${a}=`).test(img)) problems.push(`${at} <img> sin ${a}: ${img.slice(0, 80)}`);
+  }
+  // sitemap ↔ noindex
+  if (noindex && sitemapUrls.has(url)) problems.push(`${at} tiene noindex pero está en el sitemap`);
+  if (!noindex && !sitemapUrls.has(url)) problems.push(`${at} es indexable pero no está en el sitemap`);
+}
+for (const u of sitemapUrls) if (!byUrl.has(u)) problems.push(`SEO: el sitemap lista una URL que no existe: ${u}`);
 
 if (problems.length) {
   const list = problems.map((p) => `  - ${p}`).join('\n');
