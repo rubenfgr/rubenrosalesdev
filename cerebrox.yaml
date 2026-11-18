@@ -30,3 +30,4 @@ rules: |
   `pnpm e2e` necesita Chrome y levanta servidores: es manual y no forma parte de los checks.
 conversation:
   isolate_user_config: false
+name: Ruben Rosales Dev
