@@ -1,10 +1,14 @@
+---
+kind: architecture
+---
+
 # rubenrosales.dev — Guía de marca
 
 Versión 1.0 · Fundamentos de identidad. Los tokens están en `src/styles/tokens.css`, que es la fuente de verdad; esta guía explica el porqué y las reglas de uso.
 
----
+### web.marca-concepto — La marca es Rubén Rosales
 
-## 1. La marca
+La marca es una persona, no un nombre comercial; la identidad visual (Encaje, hilada, mineral y mar) es su lenguaje y no se usa como nombre de producto.
 
 **La marca es Rubén Rosales.** Una persona que entiende de tecnología y la explica sin jerga: software, automatización e IA para empresas, hecho con criterio y pensado para mantenerse. No hay un nombre comercial ni un concepto por encima de ella; todo lo que se publica va bajo su nombre y en primera persona (ver «Voz y tono»).
 
@@ -16,7 +20,9 @@ Debe transmitir: rigor técnico, claridad, cercanía, fiabilidad y durabilidad.
 
 **Proyectos y ejemplos propios:** se nombran por lo que hacen (por ejemplo, «bandeja de pedidos») y llevan la autoría «Rubén Rosales» en el README o la ficha, no un nombre de marca aparte.
 
-### Decisiones clave
+### web.marca-decisiones — Decisiones clave de la identidad
+
+Cada decisión visual (neutros minerales, azul mar, Archivo con eje de anchura, mono, esquinas rectas, símbolo sin iniciales) tiene un motivo recogido en la tabla.
 
 | Decisión | Motivo |
 |---|---|
@@ -27,11 +33,11 @@ Debe transmitir: rigor técnico, claridad, cercanía, fiabilidad y durabilidad.
 | Esquinas rectas, reglas de 2 px y sin sombras | Piezas talladas: aristas vivas y juntas visibles. La profundidad la dan la regla y el color, no el desenfoque. |
 | Símbolo sin iniciales | Un símbolo con concepto propio es más reconocible y no depende del nombre. |
 
----
+### web.logo-simbolo — Símbolo y wordmark
 
-## 2. Logo
+El símbolo «Encaje» es un muro de tres hiladas con una pieza azul que ocupa el hueco; el wordmark es «Rubén Rosales» en Archivo 118 %, convertido a trazados.
 
-### Símbolo «Encaje»
+#### Símbolo «Encaje»
 
 Un muro de tres hiladas con un hueco en la esquina superior derecha y la pieza azul que llega a ocuparlo. Representa un sistema que coloca cada parte en su sitio: la automatización y la IA como lo que completa un trabajo bien construido, no como protagonistas.
 
@@ -41,11 +47,13 @@ Un muro de tres hiladas con un hueco en la esquina superior derecha y la pieza a
 - Las piezas de cada hilada tienen anchos distintos y juntas desalineadas entre hiladas, como un muro real.
 - La pieza azul mide 22 × 23 u, igual que el hueco, y está desplazada +6 u a la derecha y −6 u hacia arriba respecto a él.
 
-### Wordmark
+#### Wordmark
 
 «Rubén Rosales» en Archivo, anchura 118 %, peso 620, tracking −0,01 em, con el kerning de la fuente. Está convertido a trazados: los SVG no dependen de que la fuente esté cargada.
 
-### Archivos
+### web.logo-archivos — Archivos de logo y descriptor
+
+Qué SVG usar según fondo y tamaño, cómo se regenera la imagen para compartir y por qué el descriptor es texto HTML fuera del logo.
 
 | Archivo | Uso |
 |---|---|
@@ -57,15 +65,19 @@ Un muro de tres hiladas con un hueco en la esquina superior derecha y la pieza a
 | `favicon.svg` | Pestaña del navegador y tamaños por debajo de 24 px. Versión simplificada sobre fondo propio, cuadrado y sin radio (como el resto de la geometría). |
 | `public/og-es.png`, `public/og-en.png` | Imagen para compartir (1200 × 630): titular del hero a 118 %, punto en `--color-signal`, hilada en la esquina. Se regenera con `node scripts/og/render.mjs` desde `apps/web` (plantilla en `scripts/og/og.html`). |
 
-### Descriptor
+#### Descriptor
 
 «Software, automatización e IA» (provisional). **No forma parte de los archivos de logo**: se compone como texto HTML junto al logo, en `--font-size-label` y `--color-foreground-muted`, para poder cambiarlo sin rehacer el logo.
 
-### Área de respeto
+### web.logo-uso — Área de respeto, tamaños, color y usos incorrectos
+
+El logo deja la altura de la pieza azul de margen, no baja de 160 px (horizontal) o 24 px (símbolo), solo colorea la pieza y no admite efectos ni recomposición.
+
+#### Área de respeto
 
 Alrededor de los límites visibles del logo, dejar como mínimo la **altura de la pieza azul** (23 u, unos 27 % de la altura del símbolo) en los cuatro lados.
 
-### Tamaños mínimos
+#### Tamaños mínimos
 
 | Versión | Mínimo |
 |---|---|
@@ -73,13 +85,13 @@ Alrededor de los límites visibles del logo, dejar como mínimo la **altura de l
 | Símbolo completo | 24 px |
 | Por debajo de 24 px | `favicon.svg` |
 
-### Color
+#### Color
 
 - Muro y wordmark: `--color-brand-mark`.
 - Pieza: `--color-brand-piece`. Es la única parte del logo que lleva color.
 - Versión monocolor: todo en un mismo color; la pieza se sigue leyendo por su desplazamiento.
 
-### Usos incorrectos
+#### Usos incorrectos
 
 - Colocar la pieza dentro de su hueco, o moverla a otra posición.
 - Colorear otras piezas del muro, o la pieza en un color distinto al de marca.
@@ -89,11 +101,11 @@ Alrededor de los límites visibles del logo, dejar como mínimo la **altura de l
 - Recomponer el wordmark con otra fuente o en minúsculas.
 - Colocarlo sobre fotografía sin contraste suficiente; usar la versión inversa o mono sobre una zona uniforme.
 
----
+### web.color-reglas — Familias de color y reglas de uso
 
-## 3. Color
+Cinco familias (Stone, Sea, Lichen, Esparto, Almagra); un solo color de acción por vista, tokens semánticos y un gesto cálido por pantalla.
 
-### Familias
+#### Familias
 
 | Familia | Papel | Base |
 |---|---|---|
@@ -103,7 +115,7 @@ Alrededor de los límites visibles del logo, dejar como mínimo la **altura de l
 | Esparto | Acento cálido decorativo y aviso | `#B79E6A` |
 | Almagra | Error y acciones destructivas | `#8E3B26` (claro) / `#D88A72` (oscuro) |
 
-### Reglas
+#### Reglas
 
 - Los componentes usan solo tokens semánticos (`--color-*`), nunca primitivos.
 - Un solo color de acción por vista: `--color-primary`.
@@ -113,7 +125,9 @@ Alrededor de los límites visibles del logo, dejar como mínimo la **altura de l
 - `--color-foreground-subtle` (4,51:1 sobre papel) es el texto más suave admitido, también en tamaños pequeños; `--color-foreground-faint` es solo decorativo (bordes, puntos), nunca texto.
 - El estado nunca se comunica solo con color: siempre acompañado de texto o icono.
 
-### Contraste (WCAG 2.x)
+### web.color-contraste — Contraste WCAG de los pares de color
+
+Ratios calculados a partir de `tokens.css` (tema claro) para texto, superficies, estados, sección a sangre y código; AA ≥ 4,5:1 y elementos de interfaz ≥ 3:1.
 
 Calculado a partir de los valores de `tokens.css` (tema claro, el único). Texto: AA ≥ 4,5:1, AAA ≥ 7:1, texto grande ≥ 3:1. Elementos de interfaz no textuales: ≥ 3:1.
 
@@ -160,12 +174,16 @@ Calculado a partir de los valores de `tokens.css` (tema claro, el único). Texto
 | code-function (#635234) | code-background (#F4F5F2) | 6.89:1 | AA |
 | code-punctuation (#444F4C) | code-background (#F4F5F2) | 7.77:1 | AAA |
 
+### web.color-excepciones-graficos — Pares que no cumplen y colores de gráficos
+
+Esparto y `border-strong` son solo decorativos; los gráficos usan `--chart-1` a `--chart-6` con reglas de adyacencia verificadas para daltonismo.
+
 Pares que **no** cumplen y cómo se usan:
 
 - `accent` (esparto, 2,37:1) y `border-strong` (1,47:1) son solo decorativos. Un campo de formulario necesita un borde de 3:1: usar `--color-rule` o `--color-foreground-muted`, no `--color-border-strong`.
 - El tema oscuro se ha eliminado: la web es solo clara. Las secciones oscuras son paneles (`--color-dark-*`) o la sección a sangre (`--color-bleed-*`), con los pares de arriba.
 
-### Gráficos
+#### Gráficos
 
 Orden de uso: `--chart-1` a `--chart-6` (sea-600, esparto-400, lichen-700, almagra-400, sea-300, stone-500).
 
@@ -174,9 +192,9 @@ Comprobado con simulación de protanopia, deuteranopia y tritanopia (matrices de
 - No colocar `chart-2` y `chart-4` adyacentes.
 - A partir de 4 series, etiquetar directamente en el gráfico en lugar de depender de la leyenda.
 
----
+### web.tipografia — Tipografía
 
-## 4. Tipografía
+Archivo (variable con ejes de peso y anchura) y JetBrains Mono, con una tabla de roles de tamaño, anchura, peso, interlineado y tracking, y los pesos permitidos.
 
 **Archivo** (autoalojada, licencia SIL Open Font License), variable con ejes de peso y anchura (`wdth` 62–125 %). **JetBrains Mono** (autoalojada, OFL), variable con eje de peso, solo para cifras y metadatos.
 
@@ -196,14 +214,16 @@ Comprobado con simulación de protanopia, deuteranopia y tritanopia (matrices de
 | Mono (cifras, metadatos) | `--font-size-mono` (12 px) | — | 400–500 | 1,45 | 0,06 em |
 | Código | `--font-size-label` | — | 400 | 1,6 | 0 |
 
-- Escala fluida con `clamp()` entre 360 y 1440 px (ver `docs/design-system.md`). Los titulares tienen tope en pantallas grandes y el cuerpo nunca baja de 16 px.
+- Escala fluida con `clamp()` entre 360 y 1440 px (ver [[web.ds-escala-tipografica]]). Los titulares tienen tope en pantallas grandes y el cuerpo nunca baja de 16 px.
 - **Por qué 118 % solo en h1 interiores y h2 (no en el hero):** el ancho expandido da carácter a los titulares, pero en tarjetas y demos (h3) ocupa demasiado y parte palabras. Por debajo de 26 rem (416 px) los titulares vuelven a 100 %.
 - Pesos en uso: 400, 500, 620 y 800 (titulares y cifras). No añadir más.
 - Longitud de línea máxima en texto corrido: `--measure` (66 caracteres).
 - Cifras tabulares (`font-variant-numeric: tabular-nums`) en tablas, precios, fechas y cualquier dato que se compare en columna.
 - Nunca mayúsculas sostenidas en titulares. En etiquetas mono cortas (≤ 3 palabras) sí se admiten.
 
-## 5. Espaciado, retícula y geometría
+### web.espaciado-geometria — Espaciado, retícula y geometría
+
+Unidad de 4 px, contenedor de 80 rem, 12 columnas, radios 0, bordes de 1 y 2 px y ninguna sombra: la jerarquía la dan el color, la regla y la escala.
 
 - **Unidad base:** 4 px. Escala `--space-1` (4) a `--space-10` (128).
 - **Contenedor:** máximo 80 rem (1280 px, `--container-max`); columnas de lectura de 42 rem. Margen lateral fluido `--container-padding`.
@@ -216,9 +236,9 @@ Comprobado con simulación de protanopia, deuteranopia y tritanopia (matrices de
 
 **Composición:** mucho espacio entre secciones (`--space-8` a `--space-10`) y densidad moderada dentro de ellas. Alineación a la retícula, sin elementos flotando en ángulos. Como en un muro: piezas de tamaños distintos, juntas regulares.
 
----
+### web.movimiento — Movimiento
 
-## 6. Movimiento
+El movimiento es funcional (CSS o JS mínimo, solo `transform` y `opacity`), se desactiva con `prefers-reduced-motion` y excluye parallax y animaciones en bucle.
 
 | Token | Valor | Uso |
 |---|---|---|
@@ -244,15 +264,15 @@ El movimiento es funcional: confirma una acción, explica un cambio o marca la a
 
 Con `prefers-reduced-motion: reduce` las duraciones funcionales pasan a 0 y no se activa el reveal.
 
----
+### web.iconografia-motivos — Iconos, motivo hilada y fotografía
 
-## 7. Iconografía y motivos
+Iconos Lucide de línea con trazo 1,5; la hilada es estructura (divisores, pie, bloques a sangre) y la fotografía solo muestra materiales y proyectos reales.
 
-### Iconos
+#### Iconos
 
 [Lucide](https://lucide.dev), trazo `--icon-stroke` (1,5), tamaños 16, 20 y 24 px, color `currentColor`. Siempre de línea, sin rellenos. No mezclar con otras librerías.
 
-### Motivo «hilada» (`src/assets/motifs/hilada.svg`)
+#### Motivo «hilada» (`src/assets/motifs/hilada.svg`)
 
 Las juntas de un muro de piedra en seco como textura repetible (tile de 240 × 96).
 
@@ -260,16 +280,14 @@ Las juntas de un muro de piedra en seco como textura repetible (tile de 240 × 9
 - **No:** detrás de texto de lectura, combinado con fotografía, ni en color de marca (los divisores usan `--color-border-strong` o `--color-dark-border`).
 - **Cambio v2:** deja de ser una textura discreta y pasa a ser estructura: la home la usa como divisor al cerrar el hero y como remate del pie. Ya no hay límite de una zona por vista, pero sí de una por transición de sección.
 
-### Fotografía
+#### Fotografía
 
 - **Sí:** luz natural, materiales reales, capturas reales de proyectos propios, espacios de trabajo reales (con permiso de quien aparezca).
 - **No:** stock de robots, cerebros o redes de luces; oficinas corporativas genéricas; personas señalando pantallas; imágenes generadas que simulen proyectos o resultados.
 
----
+### web.patrones-pagina — Patrones de página
 
-## 8. Patrones de página
-
-Patrones generales para la web. Los valores salen siempre de los tokens.
+Reglas de ritmo de secciones, navegación, apertura de sección, secciones a sangre, hero, listas, demos, cifras, pasos y cierre; los valores salen de los tokens.
 
 | Patrón | Regla |
 |---|---|
@@ -285,7 +303,9 @@ Patrones generales para la web. Los valores salen siempre de los tokens.
 | **Letra pequeña honesta** | Cuando aplique, una nota breve sobre límites o cuándo no conviene algo. Refuerza la voz. |
 | **Cierre** | Una frase y un único CTA. |
 
-### Blog
+### web.patrones-blog — Patrones del blog, proyectos y páginas legales
+
+Índice con buscador y filtros por URL, artículo de tres columnas, portada, admoniciones, código, ficha de proyecto y páginas legales sin más recursos gráficos.
 
 Lectura tipo documentación (inspirado en Docusaurus), con carácter editorial en el índice:
 
@@ -303,7 +323,9 @@ Lectura tipo documentación (inspirado en Docusaurus), con carácter editorial e
 - **Ficha de proyecto:** a 64 rem o más, dos columnas: a la izquierda cabecera fija (contexto en mono, titular a `--font-size-display`, entradilla, pila en mono); a la derecha, el contenido con reglas de 2 px sobre cada sección. En móvil, una columna.
 - **Páginas legales:** titular a `--font-size-display` sobre regla de 2 px; los apartados llevan una regla de 1 px. No llevan más recursos gráficos: es texto de lectura.
 
-## 9. Voz y tono
+### web.voz-tono — Voz y tono
+
+Habla una persona en primera persona, con claridad y sin promesas que no se puedan comprobar; nunca se inventan clientes, cifras ni testimonios.
 
 Habla una persona, no una empresa: alguien que entiende de tecnología y la explica sin jerga.
 

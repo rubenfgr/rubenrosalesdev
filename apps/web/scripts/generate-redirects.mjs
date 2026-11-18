@@ -1,4 +1,5 @@
-// Genera src/data/redirects.generated.json (lo aplica src/pages/[...path].ts) y docs/redirecciones.md (en la raíz del repo) a partir de src/data/legacy.json.
+// Genera src/data/redirects.generated.json (lo aplica src/pages/[...path].ts) y docs/web/reference/redirecciones.md (en la raíz del repo) a partir de src/data/legacy.json.
+// Con `--check` no escribe nada: sale 1 si la tabla committed difiere de la generada (la usa `docs.reference_check` de cerebrox.yaml).
 // El destino de cada artículo o proyecto antiguo depende del contenido actual:
 // si sigue publicado, va a su URL nueva; si no, a /blog o /proyectos.
 import fs from 'node:fs';
@@ -43,19 +44,29 @@ rows.sort((a, b) => Number(a[0].includes('*')) - Number(b[0].includes('*')));
 // Resto de rutas con prefijo: /es/x → /x (el español ya no lleva prefijo).
 rows.push(['/es/*', '/:splat']);
 
-fs.writeFileSync(path.join(root, 'src/data/redirects.generated.json'), `${JSON.stringify(rows, null, 1)}\n`);
-
 const md = [
+  '<!-- Generado por `node apps/web/scripts/generate-redirects.mjs` desde `apps/web/src/data/legacy.json`; generado, no editar. Cambia el origen y regenera. -->',
+  '',
   '# Tabla de redirecciones',
   '',
-  'Generada por `scripts/generate-redirects.mjs` desde `src/data/legacy.json` (no editar a mano).',
-  'Todas son 301. El destino de artículos y proyectos depende de qué contenido está publicado.',
+  'Todas son 301. El destino de artículos y proyectos depende de qué contenido está publicado. Cómo funcionan: [[web.redirecciones-301]].',
   '',
   '| Origen | Destino |',
   '|---|---|',
   ...rows.map(([from, to]) => `| \`${from}\` | \`${to}\` |`),
   '',
 ].join('\n');
-fs.mkdirSync(path.join(repoRoot, 'docs'), { recursive: true });
-fs.writeFileSync(path.join(repoRoot, 'docs/redirecciones.md'), md);
+const mdPath = path.join(repoRoot, 'docs/web/reference/redirecciones.md');
+if (process.argv.includes('--check')) {
+  const current = fs.existsSync(mdPath) ? fs.readFileSync(mdPath, 'utf8') : '';
+  if (current !== md) {
+    console.error('docs/web/reference/redirecciones.md no coincide con la tabla generada: ejecuta `node apps/web/scripts/generate-redirects.mjs`.');
+    process.exit(1);
+  }
+  console.log('Redirecciones: tabla al día');
+  process.exit(0);
+}
+fs.writeFileSync(path.join(root, 'src/data/redirects.generated.json'), `${JSON.stringify(rows, null, 1)}\n`);
+fs.mkdirSync(path.dirname(mdPath), { recursive: true });
+fs.writeFileSync(mdPath, md);
 console.log(`Redirecciones: ${rows.length} reglas`);

@@ -1,6 +1,6 @@
 # CONTENT.md — contenido y traducciones
 
-Cómo añadir contenido nuevo (en español e inglés) sin tocar componentes. Complementa `docs/escribir-un-post.md` (blog) y `docs/asistente.md`.
+Cómo añadir contenido nuevo (en español e inglés) sin tocar componentes. Complementa `docs/web/escribir-un-post.md` (blog) y `docs/asistente.md`.
 
 ## Dónde va cada cosa
 
@@ -47,7 +47,7 @@ Si pasan 3 y 4, la entrada está completa y válida en los dos idiomas.
 
 ## Tono
 
-- **Español de España**, primera persona del singular, cercano y directo. Sin jerga ni superlativos, sin emojis (ver «Voz y tono» en `docs/brand-guidelines.md`).
+- **Español de España**, primera persona del singular, cercano y directo. Sin jerga ni superlativos, sin emojis (ver «Voz y tono» en `docs/web/brand-guidelines.md`).
 - **Inglés** natural, no literal: reescribe la frase, no traduzcas palabra por palabra. Mismo registro (cercano, directo, sin superlativos). Inglés británico en cifras y fechas (`Intl` ya usa `en-GB`).
 - Los nombres propios, productos y cifras no se traducen.
 

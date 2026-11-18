@@ -65,4 +65,4 @@ Ver `deploy/.env.example`: base de datos (`POSTGRES_DB`, `POSTGRES_USER`, `POSTG
 
 El deploy falla a propósito mientras queden `[VERIFICAR]` en las páginas (cifras del hero, proveedor del VPS en `/privacidad`…). Resuélvelos o decide qué publicar antes de hacer push a `main`.
 
-Las redirecciones del portal anterior se generan en el build (`apps/web/scripts/generate-redirects.mjs`) y se aplican en la ruta comodín `apps/web/src/pages/[...path].ts`; ver [redirecciones.md](redirecciones.md).
+Las redirecciones del portal anterior se generan en el build (`apps/web/scripts/generate-redirects.mjs`) y se aplican en la ruta comodín `apps/web/src/pages/[...path].ts`; ver [redirecciones.md](web/redirecciones.md).

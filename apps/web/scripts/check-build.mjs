@@ -3,7 +3,7 @@
 //  2. Ningún proyecto publicado con `result` sin `resultVerified: true`.
 //  2b. Tabla de rangos del asistente sin placeholders (solo si el asistente está visible: PUBLIC_ASSISTANT_ENABLED=1).
 //  3. Ningún artículo en borrador enlazado desde contenido publicado.
-//  4. SEO de las páginas generadas (docs/seo.md): título, descripción, canonical, h1, hreflang recíproco,
+//  4. SEO de las páginas generadas (docs/web/seo.md): título, descripción, canonical, h1, hreflang recíproco,
 //     JSON-LD válido, imágenes con alt y dimensiones, sitemap coherente con `noindex`, robots.txt con Sitemap.
 import fs from 'node:fs';
 import path from 'node:path';

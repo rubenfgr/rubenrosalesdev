@@ -63,7 +63,7 @@ export default defineConfig({
   integrations: [
     sitemap({
       i18n: { defaultLocale: 'es', locales: { es: 'es-ES', en: 'en-GB' } },
-      // Fuera del sitemap todo lo que lleva `noindex`: archivo, etiquetas y páginas de paginación (ver docs/seo.md).
+      // Fuera del sitemap todo lo que lleva `noindex`: archivo, etiquetas y páginas de paginación (ver docs/web/seo.md).
       filter: (page) => !/\/blog\/(archivo|etiquetas|pagina)(\/|$)/.test(new URL(page).pathname),
       // `lastmod` solo donde es un dato real: la fecha del artículo (o de su última actualización).
       serialize: (item) => {
