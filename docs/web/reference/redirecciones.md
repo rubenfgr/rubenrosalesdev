@@ -1,7 +1,8 @@
+<!-- Generado por `node apps/web/scripts/generate-redirects.mjs` desde `apps/web/src/data/legacy.json`; generado, no editar. Cambia el origen y regenera. -->
+
 # Tabla de redirecciones
 
-Generada por `scripts/generate-redirects.mjs` desde `src/data/legacy.json` (no editar a mano).
-Todas son 301. El destino de artículos y proyectos depende de qué contenido está publicado.
+Todas son 301. El destino de artículos y proyectos depende de qué contenido está publicado. Cómo funcionan: [[web.redirecciones-301]].
 
 | Origen | Destino |
 |---|---|

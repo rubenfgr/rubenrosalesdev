@@ -1,4 +1,14 @@
+---
+kind: behavior
+---
+
 # Escribir un post
+
+Cómo se escribe, valida y publica un artículo del blog.
+
+### web.blog-estructura — Un artículo es una carpeta con un fichero por idioma
+
+Cada artículo vive en `apps/web/src/content/blog/<AAAA-MM-DD>-<clave>/` con `es.mdx` y `en.mdx`; la clave es el slug de la URL y el prefijo de fecha debe coincidir con `date`.
 
 Un artículo = **una carpeta** con la fecha por delante y un fichero por idioma:
 
@@ -15,14 +25,22 @@ apps/web/src/content/blog/2026-10-27-automatizar-pedidos/
 - No cambies la clave ni `urlSlug` una vez publicado: se rompen los enlaces. La fecha de la carpeta es la de publicación; si revisas el artículo después, usa `updated`, no renombres.
 - Dentro de la carpeta no hay subcarpetas por año: con la fecha en el nombre basta.
 
-## Flujo
+#### Scenario: la fecha de la carpeta no coincide con `date`
+- WHEN el prefijo de fecha de la carpeta difiere de `date` del frontmatter
+- THEN `pnpm i18n:check` y el build fallan
+
+### web.blog-flujo — Flujo para crear y publicar un artículo
+
+Se crea con `pnpm content:new`, se revisa en local, se quita `draft: true` y se hace push; si el frontmatter es inválido el build falla y la web anterior sigue publicada.
 
 1. `pnpm content:new blog <clave> [slug-en]` crea la carpeta de hoy con `es.mdx` y `en.mdx` (o créalos a mano con la plantilla de abajo).
 2. Revisa en local con `pnpm dev` (los borradores se ven en desarrollo). `pnpm content:list` lista los artículos de más nuevo a más antiguo, con su estado.
 3. Quita `draft: true` (o ponlo en `false`) en los dos ficheros, haz commit y `git push`. Si `main` es producción, pide aprobación antes.
 4. El hosting construye y despliega. Si el frontmatter es inválido, el build falla y la web anterior sigue publicada.
 
-## Plantilla
+### web.blog-plantilla — Plantilla y reglas del frontmatter
+
+El frontmatter lo valida el esquema de la colección: título ≤ 70, descripción 50–160, de 1 a 4 etiquetas en kebab-case y `coverAlt` si hay `cover`. Si no se cumple, el build falla.
 
 Copia esto en `es.mdx` (y la versión inglesa en `en.mdx`, de la misma carpeta):
 
@@ -58,7 +76,15 @@ Reglas del frontmatter (si no se cumplen, el build falla):
 - No se admiten campos que no estén en la plantilla (no uses `slug`: Astro lo toma como id de la entrada; para eso está `urlSlug`). El autor es fijo (Rubén Rosales).
 - El tiempo de lectura se calcula solo.
 
-## Imágenes
+#### Scenario: portada sin texto alternativo
+- WHEN un artículo declara `cover` sin `coverAlt`
+- THEN el build falla
+
+### web.blog-contenido — Imágenes, admoniciones, código, encabezados y etiquetas
+
+En el cuerpo se usan imágenes relativas con texto alternativo, admoniciones `note`/`tip`/`warning`/`danger`, bloques de código con título y líneas resaltadas, `##` y `###` y etiquetas existentes.
+
+#### Imágenes
 
 Guárdalas en la carpeta del artículo (p. ej. `portada.webp`, que usan los dos idiomas) y enlázalas con ruta relativa. Astro las optimiza. El texto alternativo es obligatorio:
 
@@ -66,7 +92,7 @@ Guárdalas en la carpeta del artículo (p. ej. `portada.webp`, que usan los dos 
 ![Diagrama del flujo de pedidos](./flujo.png)
 ```
 
-## Admoniciones
+#### Admoniciones
 
 Sintaxis como en Docusaurus. Tipos: `note`, `tip`, `warning` y `danger`. Con título propio entre corchetes:
 
@@ -88,7 +114,7 @@ Una acción que no se puede deshacer.
 :::
 ```
 
-## Bloques de código
+#### Bloques de código
 
 Se indica el lenguaje, y opcionalmente un título de archivo y las líneas a resaltar. Cada bloque lleva botón de copiar:
 
@@ -101,18 +127,26 @@ export function suma(a: number, b: number): number {
 ```
 ````
 
-## Encabezados e índice
+#### Encabezados e índice
 
 Usa `##` y `###`: el índice «En este artículo» los recoge solos. Cada encabezado tiene un enlace ancla. No uses `#` (el título ya es el `h1`).
 
-## Etiquetas
+#### Etiquetas
 
 Reutiliza las existentes cuando puedas: están todas en `/blog/etiquetas`.
 
-## SEO
+### web.blog-seo — Revisión SEO antes de publicar
 
-Antes de publicar, repasa la sección «Reglas para artículos y contenido» de [seo.md](seo.md): título de 65 caracteres como máximo con la palabra clave al principio, descripción de 70 a 160, `cover` con `coverAlt`, slug corto y estable, ambos idiomas con su `urlSlug`, al menos un enlace interno con texto descriptivo. `pnpm build:prod` comprueba lo medible.
+Antes de publicar se repasan las reglas SEO de artículos; `pnpm build:prod` comprueba lo medible.
 
-## Borradores
+Antes de publicar, repasa la sección «Reglas para artículos y contenido» de [[web.seo-articulos]]: título de 65 caracteres como máximo con la palabra clave al principio, descripción de 70 a 160, `cover` con `coverAlt`, slug corto y estable, ambos idiomas con su `urlSlug`, al menos un enlace interno con texto descriptivo. `pnpm build:prod` comprueba lo medible.
+
+### web.blog-borradores — Los borradores no se publican ni se enlazan
+
+Un artículo con `draft: true` no se publica en producción ni entra en el RSS o el sitemap; enlazarlo desde contenido publicado rompe el build de producción.
 
 Con `draft: true` el artículo no se publica en producción, no entra en el RSS ni en el sitemap. No lo enlaces desde contenido publicado: el build de producción lo detecta y falla.
+
+#### Scenario: borrador enlazado
+- WHEN contenido publicado enlaza a un artículo con `draft: true`
+- THEN el build de producción falla
