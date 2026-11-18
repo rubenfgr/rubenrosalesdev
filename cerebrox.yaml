@@ -1,0 +1,7 @@
+key: RUB
+main_branch: main
+autonomy:
+  backlog: auto
+  analysis: auto
+  approve: auto
+  close: auto
