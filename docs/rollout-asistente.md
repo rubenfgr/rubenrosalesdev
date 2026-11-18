@@ -47,4 +47,4 @@ Nada de esto se ha ejecutado. `main` = producción: cada paso que toque `main` o
 
 - **Se agota el tope (80 %):** la API usa Ollama si está configurado; si no, responde 503 al chat y la web usa reglas. Al 100 % no se llama a Gemini.
 - **Falla el email:** el lead queda guardado y el visitante ve el aviso de error con el correo de contacto; busca el lead en la tabla.
-- **Una persona pide borrar sus datos:** `docs/privacidad-operativa.md`.
+- **Una persona pide borrar sus datos:** `docs/api/privacidad-operativa.md`.

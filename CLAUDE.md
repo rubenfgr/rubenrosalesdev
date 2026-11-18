@@ -45,7 +45,7 @@ Desde la raíz (monorepo pnpm; ver `package.json`):
 - `pnpm check` (tipos de todos los paquetes) · `pnpm --filter @rr/api test` · `pnpm build`
 - `pnpm i18n:check` (claves es/en de la interfaz)
 
-Estructura: `apps/web` (Astro), `apps/api` (Hono + Postgres, ver `docs/backend.md`), `packages/shared` (contratos Zod). Antes de dar una tarea por terminada: check de tipos, tests, build (con las guardas de SEO), revisión visual y revisión de SEO según `docs/seo.md`.
+Estructura: `apps/web` (Astro), `apps/api` (Hono + Postgres, ver `docs/api/backend.md`), `packages/shared` (contratos Zod). Antes de dar una tarea por terminada: check de tipos, tests, build (con las guardas de SEO), revisión visual y revisión de SEO según `docs/seo.md`.
 
 ## Blog
 
