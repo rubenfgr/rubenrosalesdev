@@ -57,7 +57,7 @@ Significa que la web no ha podido usar el modelo y ha caído a reglas. Mira la t
 
 ## Pruebas automáticas
 
-`pnpm check`, `pnpm test`, `pnpm build` y `pnpm e2e` (ver [asistente.md](asistente.md)). Los evals contra Gemini real: `pnpm --filter @rr/api eval`.
+`pnpm check`, `pnpm test`, `pnpm build` y `pnpm e2e` (ver [asistente.md](asistente/asistente.md)). Los evals contra Gemini real: `pnpm --filter @rr/api eval`.
 
 ## Gasto de Gemini: cómo funciona (sin sustos)
 

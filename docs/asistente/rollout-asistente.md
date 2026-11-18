@@ -1,8 +1,16 @@
+---
+kind: behavior
+---
+
 # Rollout del asistente (guion para Rubén)
+
+### asistente.rollout-guion — Guion de puesta en producción
 
 Nada de esto se ha ejecutado. `main` = producción: cada paso que toque `main` o el VPS lo decide y lo lanza Rubén.
 
-## 0. Antes de empezar (lista de comprobación)
+### asistente.rollout-checklist — 0. Antes de empezar (lista de comprobación)
+
+Antes de desplegar hay que tener listos el `.env` del VPS, la facturación de Google, los paquetes de GHCR, las copias, las evals y los checks en verde.
 
 - [x] **Sin cifras de precio:** el asistente no da precios (decisión de Rubén), así que ya no hay `pricing.json` ni decisión D-1.
 - [x] **Textos legales:** sección 10 de `/privacidad` redactada con los términos oficiales de Google (sin marcas `[VERIFICAR]`). Opcional: que un profesional la revise. Comprobación: `GUARDS_STRICT=1 pnpm --filter @rr/web build` sin problemas (ya pasa).
@@ -11,13 +19,15 @@ Nada de esto se ha ejecutado. `main` = producción: cada paso que toque `main` o
   - `IP_HASH_SALT` (larga y aleatoria; con ella los hashes sobreviven a reinicios).
   - Gmail: las variables que ya usa la web (`CONTACT_TO`, `GMAIL_*`); la API las lee del mismo fichero.
   - LLM (puede esperar al paso 3): `ASSISTANT_LLM_API_KEY`, `ASSISTANT_LLM_MODEL=gemini-3.5-flash-lite`, `ASSISTANT_LLM_PRICE_IN_PER_MTOK=0.30`, `ASSISTANT_LLM_PRICE_OUT_PER_MTOK=2.50`, `ASSISTANT_LLM_MONTHLY_BUDGET_EUR=1`. **Sin los precios, Gemini no se activa.**
-- [ ] **Google (obligatorio para producción):** facturación de Cloud activa en el proyecto de la clave (el plan gratuito no se puede usar con usuarios del EEE). Recomendado: modo **prepago** con unos 5 USD de crédito y recarga automática desactivada (el saldo es el máximo que se puede gastar) y un tope mensual en AI Studio → *Spend*. Detalle en [pruebas-locales.md](pruebas-locales.md#gasto-de-gemini-cómo-funciona-sin-sustos).
+- [ ] **Google (obligatorio para producción):** facturación de Cloud activa en el proyecto de la clave (el plan gratuito no se puede usar con usuarios del EEE). Recomendado: modo **prepago** con unos 5 USD de crédito y recarga automática desactivada (el saldo es el máximo que se puede gastar) y un tope mensual en AI Studio → *Spend*. Detalle en [pruebas-locales.md](../pruebas-locales.md#gasto-de-gemini-cómo-funciona-sin-sustos).
 - [ ] **Paquetes de GHCR:** `rubenrosalesdev-api` accesible para el VPS (público o `docker login`; ver `docs/despliegue.md`).
 - [ ] **Copias de seguridad:** sin copia externa por decisión D-6 (solo las nocturnas en el VPS; ver riesgo en `docs/restaurar-backup.md`). Restauración ya probada en local.
 - [ ] **Evals y red team:** `pnpm --filter @rr/api eval --out .plan/evidence/evals-1.md` sin fallos graves y la lista manual de `.plan/evidence/red-team.md` pasada con el modelo real.
 - [ ] `pnpm check`, `pnpm test`, `pnpm build`, `pnpm e2e` y las dos imágenes Docker en verde.
 
-## 1. Desplegar la infraestructura sin activar el asistente (T-10.2)
+### asistente.rollout-infraestructura — 1. Desplegar la infraestructura sin activar el asistente (T-10.2)
+
+Paso 1: se despliega la infraestructura con las variables del asistente vacías, para comprobar que la web, el formulario y la API responden antes de activar nada.
 
 1. Merge de `feat/backend-monorepo` a `main` (dispara `deploy.yml`). Antes, repasa el diff con `git diff main...feat/backend-monorepo --stat`.
 2. En GitHub, variables `PUBLIC_ASSISTANT_ENABLED` y `PUBLIC_ASSISTANT_LLM` **vacías** (o inexistentes).
@@ -29,22 +39,39 @@ Nada de esto se ha ejecutado. `main` = producción: cada paso que toque `main` o
    - Que el límite por IP funciona con la IP real (Cloudflare: cabecera `CF-Connecting-IP`). Prueba: 11–12 peticiones seguidas a `/api/v1/chat` con una pregunta de reglas (p. ej. «¿Cuánto cuesta?», sin coste) desde tu IP deben dar un 429 al final. Resultado de la primera prueba en producción (2026-10-26): **no limitaba** (usaba `X-Forwarded-For`, que con Cloudflare es la IP del borde); corregido en `fix/ip-cliente-cloudflare`.
 4. **Vuelta atrás:** en `compose.yml` del VPS, cambia `latest` por la etiqueta (SHA) anterior de cada imagen y `docker compose up -d`. La base de datos es aditiva: no hay migraciones destructivas.
 
-## 2. Activar el asistente solo con reglas (T-10.3, paso 1)
+### asistente.rollout-solo-reglas — 2. Activar el asistente solo con reglas (T-10.3, paso 1)
+
+Paso 2: se activa el asistente con el motor de reglas, sin LLM, y se observa unos días el envío de leads y los logs.
 
 1. Variable de GitHub `PUBLIC_ASSISTANT_ENABLED=1`, `PUBLIC_ASSISTANT_LLM` vacía; vuelve a desplegar (`workflow_dispatch`).
 2. Prueba tú, en es y en: aviso de consentimiento, flujo guiado, estimación y envío del resumen. Debe llegar el email (`Asistente web: <nombre>`) y quedar una fila en `leads`:
    `docker exec rubenrosales-postgres psql -U "$POSTGRES_USER" "$POSTGRES_DB" -c "select name, email, created_at from leads order by created_at desc limit 3"`.
 3. Observa unos días: `docker logs --tail 100 rubenrosales-api` (sin contenido de usuarios; solo método, ruta, estado, id).
 
-## 3. Activar el LLM (T-10.3, paso 2)
+### asistente.rollout-llm — 3. Activar el LLM (T-10.3, paso 2)
+
+Paso 3: se activa el LLM, se observa 48 h y, si hace falta, se apaga con el kill switch sin tocar la web.
 
 1. `ASSISTANT_LLM_ENABLED=1` y la clave en el `.env` del VPS; `docker compose up -d api`.
 2. Variable de GitHub `PUBLIC_ASSISTANT_LLM=1` y nuevo despliegue.
 3. Observa 48 h: errores en logs, `docker exec rubenrosales-api node dist/jobs/usage.js` (gasto del mes) y las respuestas bloqueadas por el validador (`respuesta bloqueada por el validador de cifras` en los logs).
-4. **Kill switch:** deja `ASSISTANT_LLM_ENABLED` vacío en el `.env` y `docker compose up -d api`. La web sigue con reglas. Para ocultar el asistente entero, `PUBLIC_ASSISTANT_ENABLED` vacío y volver a desplegar.
 
-## Qué pasa si…
+#### Scenario: Kill switch
+- WHEN Hay que apagar el LLM (kill switch): deja `ASSISTANT_LLM_ENABLED` vacío en el `.env` y `docker compose up -d api`.
+- THEN La web sigue con reglas. Para ocultar el asistente entero, `PUBLIC_ASSISTANT_ENABLED` vacío y volver a desplegar.
 
-- **Se agota el tope (80 %):** la API usa Ollama si está configurado; si no, responde 503 al chat y la web usa reglas. Al 100 % no se llama a Gemini.
-- **Falla el email:** el lead queda guardado y el visitante ve el aviso de error con el correo de contacto; busca el lead en la tabla.
-- **Una persona pide borrar sus datos:** `docs/privacidad-operativa.md`.
+### asistente.rollout-incidencias — Qué pasa si…
+
+Cuando se agota el tope, falla el email o alguien pide borrar sus datos, cada caso tiene una respuesta fija.
+
+#### Scenario: Se agota el tope (80 %)
+- WHEN Se agota el tope (80 %)
+- THEN la API usa Ollama si está configurado; si no, responde 503 al chat y la web usa reglas. Al 100 % no se llama a Gemini.
+
+#### Scenario: Falla el email
+- WHEN Falla el email
+- THEN el lead queda guardado y el visitante ve el aviso de error con el correo de contacto; busca el lead en la tabla.
+
+#### Scenario: Una persona pide borrar sus datos
+- WHEN Una persona pide borrar sus datos
+- THEN seguir `docs/privacidad-operativa.md`.

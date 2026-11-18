@@ -41,7 +41,7 @@ La web sirve las páginas estáticas y las redirecciones 301 del portal anterior
 | Secreto | `VPS_SSH_KEY` | Clave privada del despliegue |
 | Secreto | `VPS_KNOWN_HOSTS` | Salida de `ssh-keyscan -p <puerto> <host>` (evita aceptar claves de host a ciegas) |
 | Secreto (opcional) | `VPS_PORT` | Puerto SSH si no es el 22 |
-| Variable (opcional) | `PUBLIC_ASSISTANT_ENABLED` | `1` muestra el asistente (ver [asistente.md](asistente.md)) |
+| Variable (opcional) | `PUBLIC_ASSISTANT_ENABLED` | `1` muestra el asistente (ver [asistente.md](asistente/asistente.md)) |
 | Variable (opcional) | `PUBLIC_ASSISTANT_LLM` | `1` envía el texto libre del asistente a la API (LLM); vacío = solo reglas. Requiere `PUBLIC_ASSISTANT_ENABLED=1` |
 | Variable (opcional) | `PUBLIC_CF_ANALYTICS_TOKEN` | Token de Cloudflare Web Analytics (solo si se usa; antes, actualizar `/cookies`) |
 
