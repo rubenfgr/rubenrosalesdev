@@ -1,6 +1,6 @@
 # CONTENT.md — contenido y traducciones
 
-Cómo añadir contenido nuevo (en español e inglés) sin tocar componentes. Complementa `docs/escribir-un-post.md` (blog) y `docs/asistente.md`.
+Cómo añadir contenido nuevo (en español e inglés) sin tocar componentes. Complementa `docs/escribir-un-post.md` (blog) y `docs/asistente/asistente.md`.
 
 ## Dónde va cada cosa
 
