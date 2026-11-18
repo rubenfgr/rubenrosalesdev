@@ -5,3 +5,5 @@ autonomy:
   analysis: auto
   approve: auto
   close: auto
+conversation:
+  isolate_user_config: false
