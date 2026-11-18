@@ -1,10 +1,20 @@
+---
+kind: architecture
+---
+
 # Proyecto insignia: agente de pedidos con revisión humana
 
-Estado: **tarea para más adelante, fuera de este repositorio**. Rubén la hará en otro repo, y solo cuando esta web esté del todo montada. Aquí no se implementa nada: ni `apps/agent` ni ninguna página de este proyecto. Cuando exista el repo con código y capturas reales, entonces se enlazará desde la web; hasta entonces no se escribe ni una línea de contenido sobre él.
+### planificacion.estado — Estado del proyecto
+
+Estado: **tarea para más adelante, fuera de este repositorio**.
+
+Rubén la hará en otro repo, y solo cuando esta web esté del todo montada. Aquí no se implementa nada: ni `apps/agent` ni ninguna página de este proyecto. Cuando exista el repo con código y capturas reales, entonces se enlazará desde la web; hasta entonces no se escribe ni una línea de contenido sobre él.
 
 Pendiente de decidir cuando se retome: el caso y el alcance (§2), si el repo será público, si se empieza sin cuenta de Sentry (§4; por ahora sin cuenta) y el tope de coste (§5; se usaría la clave de Gemini de desarrollo ya existente).
 
-## 1. Objetivo
+### planificacion.objetivo — 1. Objetivo
+
+Qué demuestra el proyecto y con qué datos: un agente de IA que se puede operar, con datos sintéticos.
 
 Una pieza de portfolio que enseñe, con código y capturas reales, cómo construyo un sistema con agentes de IA «que se pueda operar»: se ve qué hace, se sabe cuándo falla, se mide si responde bien y se despliega siempre igual.
 
@@ -12,7 +22,7 @@ Es un **proyecto de demostración propio**: usa datos sintéticos (clientes, art
 
 Encaja con lo que la web ya cuenta: la sección «02 / control» explica que la IA pregunta cuando no está segura. Este proyecto es esa idea hecha de verdad, con umbrales configurables.
 
-## 2. Alcance mínimo del MVP
+### planificacion.alcance-mvp — 2. Alcance mínimo del MVP
 
 **Qué hace el agente.** Recibe un email de pedido (texto, en español) y decide:
 
@@ -49,7 +59,9 @@ El agente **no envía emails ni toca nada fuera de su base de datos**. El límit
 
 **Fuera del MVP** (para no inflarlo): lectura real de buzones, adjuntos PDF, varios agentes, interfaz de usuario elaborada (la cola de revisión será una página mínima), autenticación de usuarios, multiidioma del agente.
 
-## 3. Arquitectura
+### planificacion.arquitectura — 3. Arquitectura
+
+Piezas del sistema, qué se reutiliza del monorepo y dónde viviría el código nuevo, pendiente de decisión.
 
 ```
 email de ejemplo ──▶ API del agente (Node + TypeScript, Hono)
@@ -64,7 +76,7 @@ email de ejemplo ──▶ API del agente (Node + TypeScript, Hono)
 
 Se reutiliza lo que ya hay en el monorepo: Hono, Postgres, Drizzle, Zod en `packages/shared`, el cliente de Gemini con medición de tokens y tope de gasto de `apps/api`, y el arnés de evaluación de `apps/api/evals`. El código nuevo viviría en **`apps/agent`** (decisión tuya, ver §7) con un `docker-compose` propio que añade Jaeger, Prometheus y Grafana.
 
-## 4. Tecnologías propuestas
+### planificacion.tecnologias — 4. Tecnologías propuestas
 
 Solo se mencionará en la web lo que acabe en el repositorio.
 
@@ -87,7 +99,9 @@ Solo se mencionará en la web lo que acabe en el repositorio.
 
 Recomiendo **empezar con B** y dejar A como una línea de configuración: así el proyecto se puede arrancar con un solo comando y sin cuentas.
 
-## 5. Coste
+### planificacion.coste — 5. Coste
+
+Coste previsto: 0 € en producción y un techo de gasto para el desarrollo.
 
 - **Producción: 0 €.** No se despliega nada nuevo en el VPS. El proyecto corre en local y en CI; la web solo publica una página con capturas reales y enlaces. (El VPS tiene 2,7 GiB de RAM libres; Jaeger, Prometheus y Grafana no caben con holgura junto a lo que ya corre, y no es el sitio.)
 - **LLM, estimación (a medir):** con las tarifas verificadas en `docs/backend.md` (0,30 USD por millón de tokens de entrada, 2,50 de salida) y suponiendo unas 3 llamadas por ejecución de ~1.500 tokens de entrada y ~300 de salida, una ejecución cuesta del orden de **0,004 USD**. Una pasada de evaluación en vivo de 30 casos sería de **~0,15 USD**. El desarrollo completo debería quedar por debajo de **5 USD**. Son estimaciones: el coste real se medirá y quedará documentado.
@@ -95,7 +109,7 @@ Recomiendo **empezar con B** y dejar A como una línea de configuración: así e
 - Nivel de pago de la API: como en el asistente, los datos sintéticos permiten incluso usar el nivel gratuito para pruebas locales (nunca con datos reales).
 - Sin dependencias de pago ni cuentas nuevas. GHCR, Actions y Grafana/Jaeger/Prometheus locales no cuestan.
 
-## 6. Plan por pasos
+### planificacion.plan-por-pasos — 6. Plan por pasos
 
 Cada paso es un commit pequeño (o varios) en una rama propia y termina con tipos, tests y build en verde.
 
@@ -110,7 +124,7 @@ Cada paso es un commit pequeño (o varios) en una rama propia y termina con tipo
 
 Orden orientativo de esfuerzo: pasos 1 a 6 son la parte grande; 7 y 8 son contenido.
 
-## 7. Qué necesito de ti
+### planificacion.decisiones-pendientes — 7. Qué necesito de ti
 
 Decisiones:
 
@@ -122,7 +136,9 @@ Decisiones:
 
 Nada de esto lo creo yo: ni cuentas, ni claves, ni servicios.
 
-## 8. Proyectos de ejemplo breves
+### planificacion.proyectos-ejemplo — 8. Proyectos de ejemplo breves
+
+Tres proyectos pequeños que no se escribirán hasta que existan y se aprueben.
 
 Con el mismo criterio de honestidad: cada uno etiquetado «Proyecto de demostración» y descrito solo con lo que exista. Hay que **tener algo construido** antes de contarlo. Propongo tres, pequeños y de bajo coste, que **no escribiré hasta que existan y tú los apruebes**:
 
@@ -132,7 +148,9 @@ Con el mismo criterio de honestidad: cada uno etiquetado «Proyecto de demostrac
 
 Los cuatro proyectos que ya aparecen en la web (pedidos, encuestas, inventario, sensores) están marcados como «en desarrollo» en el contenido actual; **no los toco ni los amplío** sin que me confirmes qué es cierto de cada uno.
 
-## 9. Riesgos y límites
+### planificacion.riesgos — 9. Riesgos y límites
+
+Límites de lo que mide el proyecto con datos sintéticos y de lo que puede salir mal.
 
 - Con datos sintéticos, la precisión medida **no** predice la de un caso real. La página lo dirá.
 - El agente puede equivocarse: por eso lo medido incluye los falsos positivos y por eso lo importante del diseño es la cola de revisión, no la autonomía.
