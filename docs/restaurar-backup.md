@@ -43,4 +43,4 @@ docker compose restart backup                       # fuerza una copia ahora
 
 ## Qué no incluye
 
-Las copias contienen conversaciones y leads, es decir, datos personales: trátalas igual que la base de datos y respeta la caducidad (una conversación borrada sigue en las copias hasta que rotan, 14 días; ver [privacidad-operativa.md](privacidad-operativa.md)).
+Las copias contienen conversaciones y leads, es decir, datos personales: trátalas igual que la base de datos y respeta la caducidad (una conversación borrada sigue en las copias hasta que rotan, 14 días; ver [privacidad-operativa.md](api/privacidad-operativa.md)).

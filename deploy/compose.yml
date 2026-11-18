@@ -78,7 +78,7 @@ services:
 
   # Proveedor alternativo del LLM con modelos open (coste cero). Solo arranca con el profile «llm-local»:
   #   docker compose --profile llm-local up -d ollama
-  # No activar sin comprobar RAM/CPU/disco del VPS (docs/backend.md). Sin puertos expuestos.
+  # No activar sin comprobar RAM/CPU/disco del VPS (docs/api/backend.md). Sin puertos expuestos.
   ollama:
     image: ollama/ollama:latest
     container_name: rubenrosales-ollama

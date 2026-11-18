@@ -1,5 +1,5 @@
 // Pruebas de integración contra un Postgres real. Se saltan si no hay TEST_DATABASE_URL
-// (en CI lo define el servicio postgres de ci.yml; en local: ver docs/backend.md).
+// (en CI lo define el servicio postgres de ci.yml; en local: ver docs/api/backend.md).
 import { sql } from 'drizzle-orm';
 import { migrate } from 'drizzle-orm/postgres-js/migrator';
 import { afterAll, beforeAll, beforeEach, describe, expect, it } from 'vitest';

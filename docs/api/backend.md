@@ -1,8 +1,12 @@
+---
+kind: behavior
+---
+
 # Backend (`apps/api`)
 
-API en TypeScript con Hono sobre Node, Drizzle y Postgres. Cuelga del mismo dominio que la web bajo `/api/v1` (Traefik enruta por prefijo). Los contratos de entrada y salida (Zod) viven en `packages/shared`.
+### api.estructura — Estructura de `apps/api`
 
-## Estructura
+API en TypeScript con Hono sobre Node, Drizzle y Postgres, bajo `/api/v1` en el mismo dominio que la web (Traefik enruta por prefijo). Los contratos Zod viven en `packages/shared`.
 
 ```
 apps/api/
@@ -15,7 +19,9 @@ apps/api/
 packages/shared/      esquemas Zod compartidos con la web
 ```
 
-## Levantar todo en local
+### api.entorno-local — Levantar la API y la web en local
+
+Para trabajar en local hace falta un Postgres en Docker, `DATABASE_URL`, las migraciones aplicadas y los dos servidores de desarrollo.
 
 ```bash
 pnpm install
@@ -26,18 +32,42 @@ pnpm dev:api        # API en http://localhost:3000/api/v1/health
 pnpm dev            # web en http://localhost:4321
 ```
 
-## Cómo añadir…
+Verified by: manual — son comandos de entorno local que ningún test automático ejecuta
 
-- **Una ruta:** crea la ruta en `app.ts` (o, desde la fase 2, un fichero en `src/routes/`), valida la entrada con un esquema de `@rr/shared` y devuelve errores con el formato de abajo.
+### api.extender — Cómo añadir una ruta, una migración o una prueba
+
+Una ruta se crea en `app.ts` o en `src/routes/`, una migración se genera con Drizzle y se revisa a mano, y las pruebas usan vitest con `createApp` recibiendo sus dependencias.
+
+- **Una ruta:** crea la ruta en `app.ts` (o un fichero en `src/routes/`), valida la entrada con un esquema de `@rr/shared` y devuelve errores con el formato de [[api.errores]].
 - **Una migración:** edita `src/db/schema.ts`, ejecuta `pnpm --filter @rr/api db:generate`, **revisa el SQL** generado en `drizzle/` y aplícalo con `pnpm --filter @rr/api db:migrate`. Las migraciones deben ser aditivas (la vuelta atrás a una imagen anterior no deshace la base de datos).
 - **Pruebas con Postgres real:** `src/db/repositories.test.ts` se salta sin `TEST_DATABASE_URL`. En local: `docker run -d --name rr-pg -e POSTGRES_PASSWORD=dev -e POSTGRES_DB=rr_test -p 55432:5432 postgres:17` y `TEST_DATABASE_URL=postgres://postgres:dev@localhost:55432/rr_test pnpm --filter @rr/api test`. En CI lo define un servicio `postgres` de `ci.yml`.
 - **Una prueba:** `src/*.test.ts` con vitest. `createApp` recibe sus dependencias (`db`, `pingDb`), así que se prueba con `app.request(...)` sin red ni base de datos reales. `pnpm --filter @rr/api test`.
 
-## Errores
+### api.errores — Formato de errores y límite de peticiones
 
-Formato único: `{ "error": "<codigo_snake_case>", "message"?: string }`. Códigos: `invalid_request` (400), `not_found` (404), `rate_limited` (429), `internal` (500), `llm_unavailable` (503). Un cuerpo de más de 32 KB devuelve `413 payload_too_large`. El rate limit (`lib/rate-limit.ts`) usa la IP de la cabecera `CF-Connecting-IP` (la web está detrás de Cloudflare; el `X-Forwarded-For` que llega a la API trae la IP del servidor de borde de Cloudflare, distinta en cada petición) y, sin Cloudflare, el primer valor de `X-Forwarded-For`. Devuelve `429 rate_limited` con `Retry-After`; es en memoria, válido con una sola instancia. Los logs nunca contienen cuerpos de petición, emails ni mensajes de usuarios.
+Todos los errores usan el formato `{ "error": "<codigo_snake_case>", "message"?: string }` y el límite de peticiones por IP devuelve `429 rate_limited` con `Retry-After`.
 
-## Variables de entorno
+Códigos: `invalid_request` (400), `not_found` (404), `rate_limited` (429), `internal` (500), `llm_unavailable` (503). Un cuerpo de más de 32 KB devuelve `413 payload_too_large`. El rate limit (`lib/rate-limit.ts`) usa la IP de la cabecera `CF-Connecting-IP` (la web está detrás de Cloudflare; el `X-Forwarded-For` que llega a la API trae la IP del servidor de borde de Cloudflare, distinta en cada petición) y, sin Cloudflare, el primer valor de `X-Forwarded-For`. Devuelve `429 rate_limited` con `Retry-After`; es en memoria, válido con una sola instancia. Los logs nunca contienen cuerpos de petición, emails ni mensajes de usuarios.
+
+#### Scenario: Entrada que no cumple el esquema
+- WHEN una ruta recibe una entrada que no cumple su esquema
+- THEN responde `400 invalid_request`
+
+#### Scenario: Ruta inexistente o fallo interno
+- WHEN se pide una ruta que no existe, o el servidor lanza un error inesperado
+- THEN responde `404 not_found` en JSON, o `500 internal` sin filtrar el mensaje del error
+
+#### Scenario: Se supera el límite de peticiones
+- WHEN una IP supera el límite de la ventana
+- THEN la petición siguiente recibe `429 rate_limited` con `Retry-After` y vuelve a pasar tras la ventana
+
+#### Scenario: Detrás de Cloudflare
+- WHEN llegan peticiones con el mismo `CF-Connecting-IP` y un `X-Forwarded-For` distinto en cada una
+- THEN se cuentan como la misma IP
+
+### api.variables-entorno — Variables de entorno de la API
+
+La API lee su configuración de variables de entorno validadas con Zod; solo `DATABASE_URL` es obligatoria.
 
 | Variable | Obligatoria | Descripción |
 |---|---|---|
@@ -45,27 +75,34 @@ Formato único: `{ "error": "<codigo_snake_case>", "message"?: string }`. Códig
 | `PORT` | no | Puerto (3000 por defecto) |
 | `ALLOWED_ORIGIN` | no | Origen CORS; vacío = mismo origen (lo normal) |
 | `IP_HASH_SALT` | cuando se guarde algo de la IP | Sal para hashear IPs; nunca se guardan en claro. Si falta, se genera una aleatoria en cada arranque (los hashes cambian al reiniciar) |
-| `CONTACT_TO`, `GMAIL_SENDER`, `GMAIL_CLIENT_ID`, `GMAIL_CLIENT_SECRET`, `GMAIL_REFRESH_TOKEN` | para enviar leads | Gmail API (OAuth2); misma configuración que la web (ver [formulario-contacto.md](formulario-contacto.md)). Sin ellas el lead se guarda y la API responde `502 mail_unavailable` |
+| `CONTACT_TO`, `GMAIL_SENDER`, `GMAIL_CLIENT_ID`, `GMAIL_CLIENT_SECRET`, `GMAIL_REFRESH_TOKEN` | para enviar leads | Gmail API (OAuth2); misma configuración que la web (ver [[api.contacto-variables]]). Sin ellas el lead se guarda y la API responde `502 mail_unavailable` |
 | `CONVERSATION_RETENTION_DAYS` / `LEAD_RETENTION_DAYS` | no | Conservación: 90 días las conversaciones, 365 los leads (D-3) |
 | `RATE_LIMIT_CHAT_PER_MIN` | no | Peticiones de chat por IP y minuto (10) |
 | `RATE_LIMIT_LEADS_PER_HOUR` | no | Envíos de lead por IP y hora (5) |
-
 | `ASSISTANT_LLM_ENABLED` | no | `1` activa el LLM (kill switch: cualquier otro valor lo apaga al reiniciar) |
 | `ASSISTANT_LLM_PROVIDER` | no | `gemini` (por defecto) u `ollama` |
 | `ASSISTANT_LLM_API_KEY` | con Gemini | Clave de la Gemini API. Solo en el `.env` del VPS |
 | `ASSISTANT_LLM_MODEL` | con Gemini | Valor inicial `gemini-3.5-flash-lite` |
 | `ASSISTANT_LLM_MAX_OUTPUT_TOKENS` | no | Tope de salida por respuesta (300) |
 | `ASSISTANT_LLM_MONTHLY_BUDGET_EUR` | no | Tope mensual (1) |
-| `ASSISTANT_LLM_PRICE_IN_PER_MTOK` / `_OUT_PER_MTOK` | para el control de coste | Precio por millón de tokens (ver nota) |
+| `ASSISTANT_LLM_PRICE_IN_PER_MTOK` / `_OUT_PER_MTOK` | para el control de coste | Precio por millón de tokens (ver [[api.llm-precios]]) |
 | `OLLAMA_BASE_URL`, `OLLAMA_MODEL` | con Ollama | Proveedor alternativo |
+
+En el VPS las pone `deploy/.env.example` → `.env` (ver [despliegue.md](../despliegue.md)). Las demás variables (límites, LLM…) se documentan aquí al añadirlas.
+
+### api.llm-precios — Precios del LLM, privacidad de Gemini y prueba con clave real
+
+El asistente usa Gemini 3.5 Flash-Lite en nivel de pago: 0,30 USD por millón de tokens de entrada y 2,50 USD de salida, verificado el 2026-10-25 en la documentación oficial.
 
 **Precios y privacidad (verificado el 2026-10-25 en la documentación oficial):** Gemini 3.5 Flash-Lite, nivel de pago, estándar: 0,30 USD por millón de tokens de entrada y 2,50 USD de salida (incluye los tokens de razonamiento). Google indica que en el nivel de pago el contenido **no** se usa para mejorar sus productos (en el gratuito sí). **En producción hay que usar el nivel de pago:** los términos de la Gemini API (ai.google.dev/gemini-api/terms) dicen que para clientes disponibles en el EEE, Suiza o el Reino Unido «solo se pueden usar los servicios de pago» (cuenta de facturación de Cloud activa). El nivel gratuito sirve solo para pruebas locales con datos sintéticos. La tabla está en dólares: se usan las mismas cifras como euros, lo que sobrestima el coste (lado seguro). Revísalo si cambia la tarifa.
 
-**Prueba manual con clave real (local):** `ASSISTANT_LLM_ENABLED=1 ASSISTANT_LLM_API_KEY=<tu clave> ASSISTANT_LLM_MODEL=gemini-3.5-flash-lite pnpm dev:api` y `curl -N -X POST localhost:3000/api/v1/chat ...` (cuando exista T-3.6). La clave solo en tu shell, nunca en el repo.
+**Prueba manual con clave real (local):** `ASSISTANT_LLM_ENABLED=1 ASSISTANT_LLM_API_KEY=<tu clave> ASSISTANT_LLM_MODEL=gemini-3.5-flash-lite pnpm dev:api` y `curl -N -X POST localhost:3000/api/v1/chat ...` (el chat existe: ver [[api.chat-turno]]). La clave solo en tu shell, nunca en el repo.
 
-En el VPS las pone `deploy/.env.example` → `.env` (ver [despliegue.md](despliegue.md)). Las demás variables (límites, LLM…) se documentan aquí al añadirlas.
+Verified by: manual — requiere una clave real de Gemini y una cuenta de pago
 
-## Chat del asistente (`POST /api/v1/chat`)
+### api.chat-turno — Chat del asistente: `POST /api/v1/chat` y orden de un turno
+
+El chat recibe un `ChatRequest` y responde por `text/event-stream`; cada turno gasta lo mínimo: datos personales, reglas, caché, límites y, al final, el LLM.
 
 Entrada: `ChatRequest` de `@rr/shared` (idioma, hasta 20 mensajes y `consent`). Salida: `text/event-stream` con `delta` (`{text}`), `done` (`{conversationId, source: rule|cache|llm}`) y `error`. Si el LLM está apagado, sin clave o falla antes de dar texto: `503 {"error":"llm_unavailable"}` y la web degrada a reglas.
 
@@ -74,16 +111,32 @@ Orden de un turno (`services/chat.ts`), pensado para gastar lo mínimo:
 0. **Datos personales:** si el mensaje lleva un correo o un teléfono, **no se llama al modelo**: se responde con el guion `personalData` (usar el formulario/botón «Enviar resumen a Rubén»). Además, en el historial que sí se envía al modelo, los correos y teléfonos se sustituyen por un marcador. La web hace la misma comprobación antes de enviar.
 1. **Reglas primero:** si `matchRule()` resuelve la pregunta (precio, plazo, quién es Rubén, contacto, cómo trabaja), responde con el guion de `assistant.json` sin llamar al LLM.
 2. **Caché** (`answer_cache`, TTL 30 días): solo preguntas sueltas, sin email ni teléfono y sin importes en la respuesta. Se normaliza (minúsculas, sin tildes ni puntuación).
-3. **Límites:** más de 12 mensajes del usuario en la conversación, 20 llamadas al LLM por IP y día (IP con hash y sal) y, más adelante, el tope mensual → `llm_unavailable` (la web sigue con reglas).
+3. **Límites:** más de 12 mensajes del usuario en la conversación, 20 llamadas al LLM por IP y día (IP con hash y sal) y el tope mensual de gasto ([[api.tope-gasto]]) → `llm_unavailable` (la web sigue con reglas).
 4. **LLM** con system prompt mínimo (reglas + bio + solo las secciones relevantes por palabras clave), últimos 6 mensajes recortados a 500 caracteres, `maxOutputTokens` 300 y temperatura 0,3. **El asistente no da precios**: los fija Rubén en cada propuesta; no hay tabla de precios en el repo ni en la web.
 5. **Reglas del prompt sobre envíos:** el modelo no puede enviar nada; no debe afirmar que ha enviado, anotado o guardado algo ni pedir correo, teléfono o nombre en el chat. Solo el botón «Enviar resumen a Rubén» hace llegar el resumen (que incluye lo que el visitante escribió con sus palabras).
 6. **Validador de cifras** (`services/validator.ts`): ningún importe en euros puede llegar al visitante (tampoco «cinco mil euros» ni «5k €»), ni fragmentos del system prompt. Si el modelo los produce, se sustituye la respuesta por `actions.fallback` (derivar a Rubén) y se avisa en el log sin contenido. Decisión de streaming: la respuesta del LLM se **bufferiza entera** (≤ 300 tokens), se valida y se emite después en frases; así nunca se envía un importe ni hay que retractar texto.
 
-### Coste (objetivo ≤ 1 €/mes)
+#### Scenario: El mensaje lleva un correo o un teléfono
+- WHEN el visitante escribe un correo o un teléfono en el chat
+- THEN no se llama al modelo y se responde con el guion `personalData`
 
-**Medido con Gemini 3.5 Flash-Lite real** (2026-10-26, 37 casos de `pnpm --filter @rr/api eval`, 27 llamadas al LLM): de media **512 tokens de entrada y 81 de salida** por llamada, es decir, unos **0,00036 USD** por llamada con la tarifa de pago (0,30/2,50 USD por millón). El tope de 1 € equivale a **unas 2.800 llamadas al mes**. Las preguntas resueltas por reglas o caché no cuestan nada, y la cuenta de ejemplo del tope está más abajo. Con conversaciones más largas (historial máximo de 6 mensajes) el coste por llamada puede duplicarse.
+#### Scenario: Una regla resuelve la pregunta
+- WHEN `matchRule()` resuelve la pregunta
+- THEN responde con el guion de `assistant.json` sin llamar al LLM
 
-## Proveedor alternativo: Ollama (modelos open)
+#### Scenario: El modelo produce un importe en euros
+- WHEN la respuesta del LLM contiene un importe en euros o un fragmento del system prompt
+- THEN se sustituye por `actions.fallback`
+
+### api.llm-coste — Coste medido del LLM (objetivo ≤ 1 €/mes)
+
+Con Gemini 3.5 Flash-Lite real, una llamada media cuesta unos 0,00036 USD, así que el tope de 1 € equivale a unas 2.800 llamadas al mes.
+
+**Medido con Gemini 3.5 Flash-Lite real** (2026-10-26, 37 casos de `pnpm --filter @rr/api eval`, 27 llamadas al LLM): de media **512 tokens de entrada y 81 de salida** por llamada, es decir, unos **0,00036 USD** por llamada con la tarifa de pago (0,30/2,50 USD por millón). El tope de 1 € equivale a **unas 2.800 llamadas al mes**. Las preguntas resueltas por reglas o caché no cuestan nada, y la cuenta de ejemplo del tope está en [[api.tope-gasto]]. Con conversaciones más largas (historial máximo de 6 mensajes) el coste por llamada puede duplicarse.
+
+### api.ollama — Proveedor alternativo Ollama (modelos open)
+
+El proveedor alternativo `ollama` existe en el código y en el compose (profile `llm-local`), pero no debe activarse en el VPS actual por falta de RAM.
 
 `ASSISTANT_LLM_PROVIDER=ollama`, `OLLAMA_BASE_URL` (por defecto `http://ollama:11434`) y `OLLAMA_MODEL`. Coste del proveedor: 0. API verificada en la documentación oficial (`POST /api/chat`, NDJSON). El cliente **no usa function calling**: la estimación se calcula en código a partir de `ctx` y se entrega al modelo como dato en el prompt. Sin `ctx` completo, el modelo no recibe cifras y el validador bloquea cualquiera que invente.
 
@@ -91,14 +144,24 @@ El servicio `ollama` del compose está bajo el profile `llm-local` (no arranca p
 
 **Recursos del VPS (medidos el 2026-10-26 en `rr-core-prod-01`):** 2 vCPU Intel Xeon Skylake, 3,7 GiB de RAM (2,7 GiB disponibles con la web, la API y Postgres en marcha), sin swap, sin GPU, 27 GB de disco libres. **Conclusión: no activar Ollama en este VPS.** Un modelo pequeño multilingüe (1–3B cuantizado) necesita 1,5–3 GB de RAM sin contar el contexto; con 2,7 GiB libres y sin swap, el riesgo es que el sistema mate procesos (incluida la base de datos), y en 2 vCPU sin GPU la velocidad sería de unos pocos tokens por segundo (estimación, no medida: no se ha instalado nada en el servidor). Si algún día se cambia a un servidor con más RAM (≥ 8 GB), el cliente, la factoría y el servicio bajo el profile `llm-local` ya están listos; entonces habría que elegir el modelo con los evals (`pnpm --filter @rr/api eval`, con `ASSISTANT_LLM_PROVIDER=ollama`). Mientras tanto, la degradación al llegar al 80 % del tope es la de siempre: solo reglas.
 
-## Persistencia y leads
+Verified by: manual — depende del servidor real y de un modelo descargado
+
+### api.persistencia — Persistencia y leads
+
+La API guarda conversaciones solo con consentimiento y leads con caducidad, y borra lo caducado al arrancar y una vez al día.
 
 - **Conversaciones:** solo se guardan si la petición lleva `consent: true` (D-3). Sin consentimiento no se escribe nada. Se identifican por un UUID aleatorio y un hash con sal de la IP; caducan a los 90 días.
 - **Leads (`POST /api/v1/leads`):** valida con `leadSchema`, antispam (señuelo `website` y tiempo mínimo de 3 s desde `startedAt`), guarda el lead (caduca a los 12 meses) y envía el email a Rubén con `Reply-To` del visitante. Límite: `RATE_LIMIT_LEADS_PER_HOUR` por IP.
 - **Contacto (`POST /api/v1/contact`):** mismo antispam y límite que los leads; no se guarda, solo se envía el email (formato en `services/contact-email.ts`, con las etiquetas en español que `scripts/export-knowledge.mjs` toma de la web).
 - **Borrado:** `jobs/purge.ts` borra al arrancar y una vez al día lo caducado. Al borrar una conversación caen sus mensajes (`ON DELETE CASCADE`); los leads se purgan por su propia fecha y su `conversation_id` pasa a nulo. Solo se registran recuentos.
 
-## Tope de gasto del LLM (1 €/mes) y kill switch
+#### Scenario: Purga de lo caducado
+- WHEN arranca la API o pasa un día
+- THEN `jobs/purge.ts` borra lo caducado y registra solo los recuentos de conversaciones y leads
+
+### api.tope-gasto — Tope de gasto del LLM (1 €/mes) y kill switch
+
+El gasto de Gemini se acumula por mes y, al 80 % del tope, la API pasa a Ollama o a reglas; al 100 % no vuelve a llamar a Gemini.
 
 - Cada respuesta de Gemini devuelve sus tokens; `services/budget.ts` calcula el coste con `ASSISTANT_LLM_PRICE_IN/OUT_PER_MTOK` y lo acumula en memoria y en la tabla `llm_usage_monthly` (clave `YYYY-MM` + proveedor; el mes se reinicia solo y el contador se sincroniza al arrancar).
 - **Degradación en cadena** (`services/llm-router.ts`): hasta el 80 % del tope, Gemini. Entre el 80 % y el 100 %, Ollama si está configurado; si no, `503 llm_unavailable` y la web sigue con reglas (que no cuestan nada). Al 100 % no se llama a Gemini bajo ningún concepto. Lo que gasta Ollama no cuenta.
@@ -107,3 +170,15 @@ El servicio `ollama` del compose está bajo el profile `llm-local` (no arranca p
 - **Ver el gasto del mes** (solo lectura, no hay endpoint público): `docker exec rubenrosales-api node dist/jobs/usage.js`.
 - Cuenta de ejemplo (usada en las pruebas): 1.000.000 de tokens de entrada × 0,30 + 200.000 de salida × 2,50, por millón = 0,30 + 0,50 = **0,80 €**, el 80 % del tope.
 - La alerta de presupuesto de Google en 1 € es una segunda red de seguridad: avisa, no corta.
+
+#### Scenario: Se alcanza el 80 % del tope
+- WHEN el gasto del mes llega al 80 % y hay Ollama configurado
+- THEN las llamadas pasan a Ollama y su uso no cuenta; sin Ollama no hay LLM y la web sigue con reglas
+
+#### Scenario: Se alcanza el 100 % del tope
+- WHEN el gasto del mes llega al 100 %
+- THEN no hay ninguna llamada a Gemini, aunque haya Ollama
+
+#### Scenario: Cambia el mes
+- WHEN empieza un mes nuevo
+- THEN el contador de gasto se reinicia
