@@ -11,9 +11,9 @@ Nada de esto se ha ejecutado. `main` = producción: cada paso que toque `main` o
   - `IP_HASH_SALT` (larga y aleatoria; con ella los hashes sobreviven a reinicios).
   - Gmail: las variables que ya usa la web (`CONTACT_TO`, `GMAIL_*`); la API las lee del mismo fichero.
   - LLM (puede esperar al paso 3): `ASSISTANT_LLM_API_KEY`, `ASSISTANT_LLM_MODEL=gemini-3.5-flash-lite`, `ASSISTANT_LLM_PRICE_IN_PER_MTOK=0.30`, `ASSISTANT_LLM_PRICE_OUT_PER_MTOK=2.50`, `ASSISTANT_LLM_MONTHLY_BUDGET_EUR=1`. **Sin los precios, Gemini no se activa.**
-- [ ] **Google (obligatorio para producción):** facturación de Cloud activa en el proyecto de la clave (el plan gratuito no se puede usar con usuarios del EEE). Recomendado: modo **prepago** con unos 5 USD de crédito y recarga automática desactivada (el saldo es el máximo que se puede gastar) y un tope mensual en AI Studio → *Spend*. Detalle en [pruebas-locales.md](pruebas-locales.md#gasto-de-gemini-cómo-funciona-sin-sustos).
-- [ ] **Paquetes de GHCR:** `rubenrosalesdev-api` accesible para el VPS (público o `docker login`; ver `docs/despliegue.md`).
-- [ ] **Copias de seguridad:** sin copia externa por decisión D-6 (solo las nocturnas en el VPS; ver riesgo en `docs/restaurar-backup.md`). Restauración ya probada en local.
+- [ ] **Google (obligatorio para producción):** facturación de Cloud activa en el proyecto de la clave (el plan gratuito no se puede usar con usuarios del EEE). Recomendado: modo **prepago** con unos 5 USD de crédito y recarga automática desactivada (el saldo es el máximo que se puede gastar) y un tope mensual en AI Studio → *Spend*. Detalle en [pruebas-locales.md](operaciones/pruebas-locales.md#gasto-de-gemini-cómo-funciona-sin-sustos).
+- [ ] **Paquetes de GHCR:** `rubenrosalesdev-api` accesible para el VPS (público o `docker login`; ver `docs/operaciones/despliegue.md`).
+- [ ] **Copias de seguridad:** sin copia externa por decisión D-6 (solo las nocturnas en el VPS; ver riesgo en `docs/operaciones/restaurar-backup.md`). Restauración ya probada en local.
 - [ ] **Evals y red team:** `pnpm --filter @rr/api eval --out .plan/evidence/evals-1.md` sin fallos graves y la lista manual de `.plan/evidence/red-team.md` pasada con el modelo real.
 - [ ] `pnpm check`, `pnpm test`, `pnpm build`, `pnpm e2e` y las dos imágenes Docker en verde.
 

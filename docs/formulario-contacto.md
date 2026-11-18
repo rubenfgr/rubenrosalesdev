@@ -17,7 +17,7 @@ Las lee la **API**, no la web (la web ya no usa secretos). Resend ya no está so
 
 Sin ellas, la API responde `502 mail_unavailable` (los resúmenes del asistente quedan guardados igualmente) y el formulario muestra el aviso de error con el email de contacto.
 
-En producción se definen en `/opt/apps/projects/rubenrosalesdev/.env` del VPS (ver [despliegue.md](despliegue.md)). En local, copia `apps/api/.env.example` a `apps/api/.env`.
+En producción se definen en `/opt/apps/projects/rubenrosalesdev/.env` del VPS (ver [despliegue.md](operaciones/despliegue.md)). En local, copia `apps/api/.env.example` a `apps/api/.env`.
 
 ## Cómo obtener las credenciales
 
