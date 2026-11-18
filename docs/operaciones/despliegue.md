@@ -1,3 +1,7 @@
+---
+kind: behavior
+---
+
 # Despliegue en el VPS
 
 El proyecto es un monorepo pnpm con tres piezas desplegadas en el VPS con Docker Compose, detrás de Traefik:
@@ -9,16 +13,26 @@ Traefik ─┬─ rubenrosales.dev                  → web      (Astro + @astro
                                                   └─ postgres (red interna, sin puertos expuestos, volumen pgdata)
 ```
 
-La web sirve las páginas estáticas y las redirecciones 301 del portal anterior (ya no tiene rutas `/api`). La API cuelga del mismo dominio bajo `/api/v1` (sin DNS ni CORS nuevos); ver [backend.md](backend.md). Un cuarto contenedor, `backup`, hace copias nocturnas de Postgres (ver [restaurar-backup.md](restaurar-backup.md)).
+La web sirve las páginas estáticas y las redirecciones 301 del portal anterior (ya no tiene rutas `/api`). La API cuelga del mismo dominio bajo `/api/v1` (sin DNS ni CORS nuevos); ver [backend.md](../backend.md). Un cuarto contenedor, `backup`, hace copias nocturnas de Postgres (ver [restaurar-backup.md](restaurar-backup.md)).
 
 **`main` = producción.** Cada push a `main` construye las imágenes y las despliega (`.github/workflows/deploy.yml`). Las demás ramas solo pasan por `ci.yml` (tipos + build). Trabaja en ramas y no hagas push ni merge a `main` sin aprobación de Rubén.
 
-## Flujo
+### operaciones.despliegue-flujo — Cada push a `main` construye las imágenes y despliega en el VPS
+
+Un push a `main` construye las imágenes de web y API con `GUARDS_STRICT=1`, las publica en ghcr.io y ejecuta `docker compose pull && up -d` en el VPS; si queda un `[VERIFICAR]`, no se despliega.
 
 1. Push a `main` → GitHub Actions construye la imagen de la web con `GUARDS_STRICT=1` (si queda un `[VERIFICAR]` o un borrador enlazado, el build falla y **no se despliega nada**).
 2. Construye también la imagen de la API y publica `ghcr.io/rubenfgr/rubenrosalesdev-web` y `ghcr.io/rubenfgr/rubenrosalesdev-api` (`latest` y el SHA del commit).
 3. Copia `deploy/compose.yml` al VPS (`/opt/apps/projects/rubenrosalesdev/`) y ejecuta `docker compose pull && docker compose up -d`.
 4. Traefik enruta `rubenrosales.dev` (y redirige `www` y HTTP a `https://rubenrosales.dev`) con el certificado de Let's Encrypt.
+
+#### Scenario: queda un `[VERIFICAR]`
+- WHEN el build de la web con `GUARDS_STRICT=1` encuentra un `[VERIFICAR]` o un borrador enlazado
+- THEN el build falla y no se despliega nada
+
+### operaciones.despliegue-vps — Preparar el VPS, secretos de GitHub y `.env` del servidor
+
+Preparación única del VPS (directorio, red `proxy`, acceso a ghcr.io, clave SSH), secretos y variables de GitHub Actions y variables del `.env` del servidor.
 
 ## Preparar el VPS (una sola vez)
 
@@ -41,13 +55,17 @@ La web sirve las páginas estáticas y las redirecciones 301 del portal anterior
 | Secreto | `VPS_SSH_KEY` | Clave privada del despliegue |
 | Secreto | `VPS_KNOWN_HOSTS` | Salida de `ssh-keyscan -p <puerto> <host>` (evita aceptar claves de host a ciegas) |
 | Secreto (opcional) | `VPS_PORT` | Puerto SSH si no es el 22 |
-| Variable (opcional) | `PUBLIC_ASSISTANT_ENABLED` | `1` muestra el asistente (ver [asistente.md](asistente.md)) |
+| Variable (opcional) | `PUBLIC_ASSISTANT_ENABLED` | `1` muestra el asistente (ver [asistente.md](../asistente.md)) |
 | Variable (opcional) | `PUBLIC_ASSISTANT_LLM` | `1` envía el texto libre del asistente a la API (LLM); vacío = solo reglas. Requiere `PUBLIC_ASSISTANT_ENABLED=1` |
 | Variable (opcional) | `PUBLIC_CF_ANALYTICS_TOKEN` | Token de Cloudflare Web Analytics (solo si se usa; antes, actualizar `/cookies`) |
 
 ## Variables del servidor (`/opt/apps/projects/rubenrosalesdev/.env`, nunca en el repo)
 
-Ver `deploy/.env.example`: base de datos (`POSTGRES_DB`, `POSTGRES_USER`, `POSTGRES_PASSWORD`, `DATABASE_URL` coherente con ellos, `ALLOWED_ORIGIN` vacío), email por Gmail (`CONTACT_TO`, `GMAIL_*`; los lee la API) y, si se activa, el LLM del asistente. Detalles en [formulario-contacto.md](formulario-contacto.md). Tras editar el `.env`: `cd /opt/apps/projects/rubenrosalesdev && docker compose up -d`.
+Ver `deploy/.env.example`: base de datos (`POSTGRES_DB`, `POSTGRES_USER`, `POSTGRES_PASSWORD`, `DATABASE_URL` coherente con ellos, `ALLOWED_ORIGIN` vacío), email por Gmail (`CONTACT_TO`, `GMAIL_*`; los lee la API) y, si se activa, el LLM del asistente. Detalles en [formulario-contacto.md](../formulario-contacto.md). Tras editar el `.env`: `cd /opt/apps/projects/rubenrosalesdev && docker compose up -d`.
+
+### operaciones.despliegue-operacion — Operación diaria y qué revisar antes de producción
+
+Logs, salud, migraciones, restauración de copias, apagado del LLM, vuelta a una versión anterior y los `[VERIFICAR]` que bloquean el despliegue.
 
 ## Operación
 
@@ -65,4 +83,4 @@ Ver `deploy/.env.example`: base de datos (`POSTGRES_DB`, `POSTGRES_USER`, `POSTG
 
 El deploy falla a propósito mientras queden `[VERIFICAR]` en las páginas (cifras del hero, proveedor del VPS en `/privacidad`…). Resuélvelos o decide qué publicar antes de hacer push a `main`.
 
-Las redirecciones del portal anterior se generan en el build (`apps/web/scripts/generate-redirects.mjs`) y se aplican en la ruta comodín `apps/web/src/pages/[...path].ts`; ver [redirecciones.md](redirecciones.md).
+Las redirecciones del portal anterior se generan en el build (`apps/web/scripts/generate-redirects.mjs`) y se aplican en la ruta comodín `apps/web/src/pages/[...path].ts`; ver [redirecciones.md](../redirecciones.md).
