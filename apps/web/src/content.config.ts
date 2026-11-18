@@ -173,7 +173,7 @@ const blog = defineCollection({
   schema: ({ image }) =>
     z
       .object({
-        title: z.string().max(65), // el <title> final no debe pasar de ~65 caracteres (ver docs/seo.md)
+        title: z.string().max(65), // el <title> final no debe pasar de ~65 caracteres (ver docs/web/seo.md)
         description: z.string().min(50).max(160),
         date: z.coerce.date(),
         updated: z.coerce.date().optional(),

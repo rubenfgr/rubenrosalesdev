@@ -20,7 +20,7 @@ Web pública de rubenrosales.dev: servicios, proyectos y blog. Astro estático, 
 
 ## SEO (obligatorio en todo cambio)
 
-Lo que se añada o modifique en la web (página, componente, ruta, artículo, proyecto, texto) cumple `docs/seo.md` **sin excepciones y sin dejarlo para después**. Resumen:
+Lo que se añada o modifique en la web (página, componente, ruta, artículo, proyecto, texto) cumple `docs/web/seo.md` **sin excepciones y sin dejarlo para después**. Resumen:
 
 - Todo `<head>` sale de `Layout.astro`; no escribas metadatos a mano en una página.
 - Título (≤ 60 caracteres, límite duro 65) y descripción (70–160) únicos por página. Una sola `<h1>`.
@@ -45,8 +45,8 @@ Desde la raíz (monorepo pnpm; ver `package.json`):
 - `pnpm check` (tipos de todos los paquetes) · `pnpm --filter @rr/api test` · `pnpm build`
 - `pnpm i18n:check` (claves es/en de la interfaz)
 
-Estructura: `apps/web` (Astro), `apps/api` (Hono + Postgres, ver `docs/backend.md`), `packages/shared` (contratos Zod). Antes de dar una tarea por terminada: check de tipos, tests, build (con las guardas de SEO), revisión visual y revisión de SEO según `docs/seo.md`.
+Estructura: `apps/web` (Astro), `apps/api` (Hono + Postgres, ver `docs/backend.md`), `packages/shared` (contratos Zod). Antes de dar una tarea por terminada: check de tipos, tests, build (con las guardas de SEO), revisión visual y revisión de SEO según `docs/web/seo.md`.
 
 ## Blog
 
-Ver `docs/escribir-un-post.md` y, para título, descripción, portada y URL, `docs/seo.md`. Un artículo = una carpeta `apps/web/src/content/blog/<AAAA-MM-DD>-<clave>/` con `es.mdx` y `en.mdx`. `pnpm content:list` los lista.
+Ver `docs/web/escribir-un-post.md` y, para título, descripción, portada y URL, `docs/web/seo.md`. Un artículo = una carpeta `apps/web/src/content/blog/<AAAA-MM-DD>-<clave>/` con `es.mdx` y `en.mdx`. `pnpm content:list` los lista.
