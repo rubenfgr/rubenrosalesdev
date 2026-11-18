@@ -4,7 +4,7 @@ Web pública de rubenrosales.dev: servicios, proyectos y blog. Astro estático, 
 
 ## Fuentes de verdad
 
-- **Diseño:** `apps/web/src/styles/tokens.css` y `docs/brand-guidelines.md`. Los componentes usan solo tokens semánticos (`--color-*`, `--space-*`, `--font-*`…), nunca primitivos (`--rr-*`) ni valores sueltos.
+- **Diseño:** `apps/web/src/styles/tokens.css` y `docs/web/brand-guidelines.md`. Los componentes usan solo tokens semánticos (`--color-*`, `--space-*`, `--font-*`…), nunca primitivos (`--rr-*`) ni valores sueltos.
 - **Contenido:** colecciones en `apps/web/src/content/` con esquema validado. Un frontmatter inválido debe romper el build.
 - **Requisitos del rediseño:** `redesign-kit/specs/web-spec.md` (mientras exista el kit).
 
