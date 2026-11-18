@@ -17,6 +17,7 @@ runner:
     - pnpm check
     - pnpm test
     - pnpm build:prod
+  max_parallel: 5
 docs:
   language: es
   domains:
