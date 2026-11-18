@@ -96,7 +96,7 @@ services:
 
   # Copia nocturna de Postgres: pg_dump -Fc en el volumen «backups», con retención de 14 (BACKUP_KEEP).
   # Hace una copia al arrancar y otra cada 24 h. Forzar una ahora: `docker compose restart backup`.
-  # Restaurar: docs/restaurar-backup.md. La copia externa (T-8.2) se añadirá cuando se elija el destino.
+  # Restaurar: docs/operaciones/restaurar-backup.md. La copia externa (T-8.2) se añadirá cuando se elija el destino.
   backup:
     image: postgres:17
     container_name: rubenrosales-backup

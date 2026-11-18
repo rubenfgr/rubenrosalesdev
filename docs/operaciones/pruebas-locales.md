@@ -1,8 +1,14 @@
+---
+kind: behavior
+---
+
 # Pruebas en local, con todo levantado
 
 Nada de esto toca el VPS ni producción. Tu `apps/api/.env` ya tiene la clave de Gemini (fuera de git).
 
-## Arrancar (3 terminales)
+### operaciones.pruebas-arranque — Tres terminales levantan Postgres, API y web en local
+
+`pnpm dev:db`, `pnpm dev:api` y `pnpm dev:web` arrancan todo en local; los emails se guardan en `apps/api/.dev-mail/` y no se envían.
 
 ```bash
 pnpm dev:db          # 1) Postgres local (contenedor rr-pg) + migraciones. Se puede repetir sin problema.
@@ -14,7 +20,9 @@ La web reenvía `/api/v1` a la API, así que todo se ve desde una sola URL. Para
 
 **Los emails no se envían:** sin Gmail configurado, en desarrollo se guardan como ficheros en `apps/api/.dev-mail/` (ignorada por git). Ahí ves exactamente lo que recibiría Rubén. En producción esto no existe: sin Gmail, responde error.
 
-## Qué probar (lista)
+### operaciones.pruebas-checklist — Lista de comprobaciones manuales del asistente y el formulario
+
+Diez comprobaciones manuales (consentimiento, reglas, texto libre, abuso, flujo guiado, formulario, idioma, móvil, degradación y kill switch) más cómo ver conversaciones y gasto guardados.
 
 1. Abrir el asistente: aparece el aviso de privacidad; hasta elegir no hay chat. Probar «Aceptar y continuar» y, en otra sesión, «Continuar sin guardar». La elección se recuerda al refrescar, durante la sesión de la pestaña; para ver el aviso otra vez, cierra la pestaña (o borra la clave `rr-assistant-consent` en DevTools → Application → Session Storage).
 2. **Pregunta cubierta por reglas** (gratis): «¿Cuánto cuesta una web?», «¿Quién es Rubén?». Responde con el guion y **sin cifras**.
@@ -39,14 +47,18 @@ Gasto del mes (en la base de datos local):
 pnpm --filter @rr/api exec tsx --env-file=.env src/jobs/usage.ts
 ```
 
-## Si al enviar el resumen sale «No se ha podido enviar»
+### operaciones.pruebas-problemas — Qué mirar si falla el envío del resumen o el asistente cae a reglas
+
+Dos avisos frecuentes en local («No se ha podido enviar» y «Reintentar con el asistente») y cómo diagnosticarlos con los logs de la API.
+
+#### Si al enviar el resumen sale «No se ha podido enviar»
 
 Mira la terminal de la API:
 - Errores de base de datos (`chat: no se pudo crear la conversación`, `leads: fallo al guardar el lead (ECONNREFUSED)`): el contenedor de Postgres está parado. `pnpm dev:db` y vuelve a probar (la API se reconecta sola). Aun así el email a Rubén sale, aunque la base de datos falle.
 - `leads: fallo al enviar el email`: en local no debería pasar (los emails van a `apps/api/.dev-mail/`).
 - Si ves `undefined:` en una fila del resumen, es que la web de desarrollo tiene el contenido o el esquema antiguos (Astro descarta los campos que no conoce): para `pnpm dev:web` con `Ctrl+C` y vuelve a arrancarlo. No se puede arrancar una segunda web de desarrollo mientras la primera siga viva.
 
-## Si el asistente responde «Buena pregunta. Prefiero no inventarme la respuesta» y sale «Reintentar con el asistente»
+#### Si el asistente responde «Buena pregunta. Prefiero no inventarme la respuesta» y sale «Reintentar con el asistente»
 
 Significa que la web no ha podido usar el modelo y ha caído a reglas. Mira la terminal de `pnpm dev:api`: ahora escribe `chat: llm_unavailable (motivo)`:
 - `limite_diario_ip`: has gastado las respuestas del LLM de hoy para tu IP (20 por defecto; en tu `apps/api/.env` ya está en 500). Reinicia la API para poner el contador a cero.
@@ -55,11 +67,13 @@ Significa que la web no ha podido usar el modelo y ha caído a reglas. Mira la t
 - `proveedor 4xx/5xx`: Gemini ha rechazado la petición (clave, facturación, cuota). El número es el estado HTTP.
 - Si no aparece nada en esa terminal, la API no está arrancada o no es la que usa la web (comprueba el puerto 3000).
 
-## Pruebas automáticas
+#### Pruebas automáticas
 
-`pnpm check`, `pnpm test`, `pnpm build` y `pnpm e2e` (ver [asistente.md](asistente.md)). Los evals contra Gemini real: `pnpm --filter @rr/api eval`.
+`pnpm check`, `pnpm test`, `pnpm build` y `pnpm e2e` (ver [asistente.md](../asistente.md)). Los evals contra Gemini real: `pnpm --filter @rr/api eval`.
 
-## Gasto de Gemini: cómo funciona (sin sustos)
+### operaciones.pruebas-gasto-gemini — El gasto de Gemini tiene tope: saldo prepagado, AI Studio y 1 €/mes en la API
+
+La clave hereda la facturación de su proyecto; en prepago lo máximo gastable es el crédito cargado, y la API añade un tope de 1 €/mes y límites por conversación e IP.
 
 Según la [documentación oficial de facturación](https://ai.google.dev/gemini-api/docs/billing) (consultada el 2026-10-26):
 

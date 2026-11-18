@@ -1,6 +1,12 @@
+---
+kind: behavior
+---
+
 # Copias de seguridad de Postgres y restauración
 
-## Cómo se hacen
+### operaciones.backup-nocturno — El servicio `backup` hace un `pg_dump` cada 24 h y guarda 14 copias
+
+El servicio `backup` ejecuta `pg_dump -Fc` al arrancar y cada 24 h en el volumen `backups`, conserva las 14 más recientes (`BACKUP_KEEP`) y registra en el log si salió bien.
 
 El servicio `backup` del compose (`rubenrosales-backup`, imagen `postgres:17`) ejecuta `pg_dump -Fc` al arrancar y cada 24 h y deja el fichero `rr-AAAAMMDD-HHMM.dump` en el volumen `backups`. Guarda los 14 más recientes (`BACKUP_KEEP`) y borra el resto. El log dice si salió bien.
 
@@ -12,7 +18,11 @@ docker compose restart backup                       # fuerza una copia ahora
 
 **Copia externa:** el volumen vive en el mismo VPS, así que no protege de perder el servidor. La copia externa cifrada está pendiente de elegir el destino (decisión D-6 del plan, T-8.2). Hasta entonces, descarga alguna copia de vez en cuando con `docker cp`.
 
-## Restaurar (probado en local con estos comandos)
+### operaciones.backup-restaurar — Restaurar una copia: probar en un Postgres limpio y luego producción
+
+Se saca el `.dump` con `docker cp`, se prueba en un Postgres limpio y solo con decisión de Rubén se restaura en producción; las copias contienen datos personales.
+
+Comandos probados en local:
 
 1. Saca el `.dump` que quieras del contenedor de copias (en el VPS, desde `/opt/apps/projects/rubenrosalesdev`):
    ```bash
@@ -41,6 +51,6 @@ docker compose restart backup                       # fuerza una copia ahora
    ```
    (`POSTGRES_USER` y `POSTGRES_DB` salen del `.env`: `set -a; . ./.env; set +a`.)
 
-## Qué no incluye
+#### Qué no incluye
 
-Las copias contienen conversaciones y leads, es decir, datos personales: trátalas igual que la base de datos y respeta la caducidad (una conversación borrada sigue en las copias hasta que rotan, 14 días; ver [privacidad-operativa.md](privacidad-operativa.md)).
+Las copias contienen conversaciones y leads, es decir, datos personales: trátalas igual que la base de datos y respeta la caducidad (una conversación borrada sigue en las copias hasta que rotan, 14 días; ver [privacidad-operativa.md](../privacidad-operativa.md)).

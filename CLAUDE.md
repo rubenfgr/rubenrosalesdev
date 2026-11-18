@@ -7,6 +7,7 @@ Web pública de rubenrosales.dev: servicios, proyectos y blog. Astro estático, 
 - **Diseño:** `apps/web/src/styles/tokens.css` y `docs/brand-guidelines.md`. Los componentes usan solo tokens semánticos (`--color-*`, `--space-*`, `--font-*`…), nunca primitivos (`--rr-*`) ni valores sueltos.
 - **Contenido:** colecciones en `apps/web/src/content/` con esquema validado. Un frontmatter inválido debe romper el build.
 - **Requisitos del rediseño:** `redesign-kit/specs/web-spec.md` (mientras exista el kit).
+- **Operaciones:** `docs/operaciones/` (despliegue en el VPS con `main` = producción, copias y restauración de Postgres, pruebas en local).
 
 ## Reglas de trabajo
 

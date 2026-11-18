@@ -63,7 +63,7 @@ Formato único: `{ "error": "<codigo_snake_case>", "message"?: string }`. Códig
 
 **Prueba manual con clave real (local):** `ASSISTANT_LLM_ENABLED=1 ASSISTANT_LLM_API_KEY=<tu clave> ASSISTANT_LLM_MODEL=gemini-3.5-flash-lite pnpm dev:api` y `curl -N -X POST localhost:3000/api/v1/chat ...` (cuando exista T-3.6). La clave solo en tu shell, nunca en el repo.
 
-En el VPS las pone `deploy/.env.example` → `.env` (ver [despliegue.md](despliegue.md)). Las demás variables (límites, LLM…) se documentan aquí al añadirlas.
+En el VPS las pone `deploy/.env.example` → `.env` (ver [despliegue.md](operaciones/despliegue.md)). Las demás variables (límites, LLM…) se documentan aquí al añadirlas.
 
 ## Chat del asistente (`POST /api/v1/chat`)
 
