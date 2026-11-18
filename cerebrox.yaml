@@ -10,7 +10,7 @@ autonomy:
   phase_review: auto
   review: auto
 workflow:
-  mode: pr
+  mode: main
 runner:
   setup_command: pnpm install --frozen-lockfile
   checks:
