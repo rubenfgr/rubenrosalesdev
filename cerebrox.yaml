@@ -1,9 +1,32 @@
 key: RUB
 main_branch: main
 autonomy:
-  backlog: auto
-  analysis: auto
-  approve: auto
-  close: auto
+  backlog: manual
+  analysis: manual
+  approve: manual
+  close: manual
+  implement: auto
+  phases: auto
+  phase_review: auto
+  review: auto
+workflow:
+  mode: pr
+runner:
+  setup_command: pnpm install --frozen-lockfile
+  checks:
+    - pnpm check
+    - pnpm test
+    - pnpm build:prod
+docs:
+  language: es
+  domains:
+    web: SEO, marca, sistema de diseño, blog y redirecciones de la web pública
+    api: Backend, formulario de contacto y privacidad operativa
+    asistente: El asistente y su despliegue progresivo (rollout)
+    operaciones: Despliegue, restauración de backups y pruebas locales
+    planificacion: Proyecto insignia y planificación que no describe comportamiento actual
+rules: |
+  Los tests de la API (`pnpm test`) necesitan `TEST_DATABASE_URL` apuntando a un Postgres; sin ella fallan.
+  `pnpm e2e` necesita Chrome y levanta servidores: es manual y no forma parte de los checks.
 conversation:
   isolate_user_config: false
